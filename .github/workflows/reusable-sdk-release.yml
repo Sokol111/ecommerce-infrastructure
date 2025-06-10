@@ -53,6 +53,11 @@ jobs:
         with:
           go-version: ${{ inputs.go-version }}
 
+      - name: Install gettext (envsubst)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext
+
       - name: Install codegens
         run: make install-tools
 
