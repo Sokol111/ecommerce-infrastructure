@@ -23,6 +23,10 @@ on:
         description: "Directory for generated Go code"
         required: true
         type: string
+      template-dir:
+        description: "Directory for template files (package.json, tsconfig.json)"
+        required: true
+        type: string
     secrets:
       NPM_TOKEN:
         description: "NPM token for publishing"
@@ -49,7 +53,7 @@ jobs:
         with:
           go-version: ${{ inputs.go-version }}
 
-      - name: Install oapi-codegen
+      - name: Install codegens
         run: make install-tools
 
       - name: Generate Go SDK
@@ -63,14 +67,13 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
-      - name: Install OpenAPI Generator CLI
-        run: npm install --global @openapitools/openapi-generator-cli
-
       - name: Generate JavaScript SDK
-        run: make js VERSION=${{ steps.get_version.outputs.version }}
+        run: make js
         env:
+          VERSION: ${{ steps.get_version.outputs.version }}
           JS_CLIENT_DIR: ${{ inputs.js-client-dir }}
           OPENAPI_FILE: ${{ inputs.openapi-file }}
+          TEMPLATE_DIR: ${{ inputs.template-dir }}
 
       - name: Publish JavaScript SDK to npm
         run: |
