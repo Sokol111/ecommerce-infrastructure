@@ -1,0 +1,104 @@
+name: Reusable SDK Generate and Release
+
+on:
+  workflow_call:
+    inputs:
+      go-version:
+        description: "Go version to use"
+        required: true
+        type: string
+      node-version:
+        description: "Node.js version to use"
+        required: true
+        type: string
+      openapi-file:
+        description: "Path to OpenAPI YAML file"
+        required: true
+        type: string
+      js-client-dir:
+        description: "Directory for JavaScript client"
+        required: true
+        type: string
+      gen-dir:
+        description: "Directory for generated Go code"
+        required: true
+        type: string
+    secrets:
+      NPM_TOKEN:
+        description: "NPM token for publishing"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-release-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # To allow tag creation
+
+      - name: Get version with v prefix from OpenAPI
+        id: get_version
+        run: echo "version=v$(yq e '.info.version' ${{ inputs.openapi-file }})" >> $GITHUB_OUTPUT
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Install oapi-codegen
+        run: make install-tools
+
+      - name: Generate Go SDK
+        run: make types server client
+        env:
+          GEN_DIR: ${{ inputs.gen-dir }}
+          OPENAPI_FILE: ${{ inputs.openapi-file }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install OpenAPI Generator CLI
+        run: npm install --global @openapitools/openapi-generator-cli
+
+      - name: Generate JavaScript SDK
+        run: make js VERSION=${{ steps.get_version.outputs.version }}
+        env:
+          JS_CLIENT_DIR: ${{ inputs.js-client-dir }}
+          OPENAPI_FILE: ${{ inputs.openapi-file }}
+
+      - name: Publish JavaScript SDK to npm
+        run: |
+          cd ${{ inputs.js-client-dir }}
+          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit to `generated` branch
+        run: |
+          git checkout -B generated
+          git add ${{ inputs.gen-dir }}/
+          git commit -m "chore: generate SDK for release ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
+          git push origin generated --force
+
+      - name: Create tag on generated branch
+        run: |
+          git tag ${{ steps.get_version.outputs.version }}
+          git push origin ${{ steps.get_version.outputs.version }}
+
+      - name: Create GitHub Release with generated code
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: Release ${{ steps.get_version.outputs.version }}
