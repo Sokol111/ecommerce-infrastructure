@@ -53,7 +53,17 @@ jobs:
         with:
           go-version: ${{ inputs.go-version }}
 
-      - name: Install codegens
+      - name: Cache Go and Node tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/go-build
+            ~/go/pkg/mod
+            ~/go/bin
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
+
+      - name: Install tools
         run: make install-tools
 
       - name: Generate Go SDK
