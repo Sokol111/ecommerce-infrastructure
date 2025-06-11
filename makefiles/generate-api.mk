@@ -9,11 +9,11 @@ VERSION ?= 0.0.1
 VERSION_NO_V := $(VERSION:v%=%)
 TEMPLATE_DIR ?= templates
 
-PACKAGE_JSON_TEMPLATE_URL=https://raw.githubusercontent.com/Sokol111/ecommerce-ci-templates/templates/master/package.json.template
+PACKAGE_JSON_TEMPLATE_URL=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/package.json.template
 PACKAGE_JSON_TEMPLATE_LOCAL_PATH=$(TEMPLATE_DIR)/package.json.template
 
-TSCONFIG_TEMPLATE_URL=https://raw.githubusercontent.com/Sokol111/ecommerce-ci-templates/templates/master/tsconfig.json.template
-TSCONFIG_TEMPLATE_LOCAL=$(TEMPLATE_DIR)/tsconfig.json.template
+TSCONFIG_TEMPLATE_URL=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/tsconfig.json.template
+TSCONFIG_TEMPLATE_LOCAL_PATH=$(TEMPLATE_DIR)/tsconfig.json.template
 
 .PHONY: install-tools types server client js-generate js-package js-tsconfig js-build js clean
 
@@ -64,10 +64,10 @@ js-package:
 
 js-tsconfig:
 	echo "Downloading tsconfig.json.template from GitHub..."
-	curl -sSfL $(TSCONFIG_TEMPLATE_URL) -o $(TSCONFIG_TEMPLATE_LOCAL)
+	curl -sSfL $(TSCONFIG_TEMPLATE_URL) -o $(TSCONFIG_TEMPLATE_LOCAL_PATH)
 
 	echo "Generating tsconfig.json..."
-	cp $(TSCONFIG_TEMPLATE_LOCAL) $(JS_CLIENT_DIR)/tsconfig.json
+	cp $(TSCONFIG_TEMPLATE_LOCAL_PATH) $(JS_CLIENT_DIR)/tsconfig.json
 
 js-build:
 	echo "Installing dependencies..."

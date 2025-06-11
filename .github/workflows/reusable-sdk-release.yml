@@ -57,7 +57,7 @@ jobs:
           go-version: 1.24.2
 
       - name: Download generate-api.mk
-        run: curl -sSL https://raw.githubusercontent.com/Sokol111/ecommerce-makefiles/master/generate-api.mk -o generate-api.mk
+        run: curl -sSL https://raw.githubusercontent.com/Sokol111/ecommerce-makefiles/master/makefiles/generate-api.mk -o generate-api.mk
 
       - name: Install tools
         run: make -f generate-api.mk install-tools
