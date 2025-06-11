@@ -58,7 +58,7 @@ jobs:
 
       - name: Download generate-api.mk
         run: |
-          curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-makefiles/master/makefiles/generate-api.mk -o generate-api.mk
+          curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/makefiles/generate-api.mk -o generate-api.mk
           if [ ! -s generate-api.mk ]; then
             echo "Failed to download or file is empty!"
             exit 1
