@@ -7,7 +7,7 @@ GEN_DIR ?= $(GEN_PKG)
 JS_CLIENT_DIR ?= js-client
 VERSION ?= 0.0.1
 VERSION_NO_V := $(VERSION:v%=%)
-TEMPLATE_DIR ?= template
+TEMPLATE_DIR ?= templates
 
 PACKAGE_JSON_TEMPLATE_URL=https://raw.githubusercontent.com/Sokol111/ecommerce-ci-templates/templates/master/package.json.template
 PACKAGE_JSON_TEMPLATE_LOCAL_PATH=$(TEMPLATE_DIR)/package.json.template
@@ -48,7 +48,7 @@ js-generate:
 		--additional-properties=useSingleRequestParameter=true
 
 js-package:
-	@echo "Ensuring template and output directories exist..."
+	@echo "Ensuring $(TEMPLATE_DIR) and output directories exist..."
 	mkdir -p $(TEMPLATE_DIR)
 
 	@echo "Downloading package.json.template from GitHub..."
