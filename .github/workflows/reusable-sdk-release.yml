@@ -51,7 +51,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ inputs.go-version }}
+          go-version: 1.24.2
 
       - name: Cache Go and Node tools
         uses: actions/cache@v4
@@ -69,6 +69,11 @@ jobs:
       - name: Install tools
         run: make -f generate-api.mk install-tools
 
+      - name: Init Go module
+        run: |
+          go mod init github.com/${{ github.repository }} || true
+          go mod tidy
+
       - name: Generate Go SDK
         run: make -f generate-api.mk types server client
         env:
@@ -78,11 +83,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: 20
 
       - name: Generate JavaScript SDK
         run: make -f generate-api.mk js
         env:
+          PROJECT_NAME: ${{ github.repository.split('/')[1] }}
+          PACKAGE_NAME: ${{ toLower(github.repository) }}
+          AUTHOR: ${{ github.repository_owner }}
+          REPOSITORY_URL: "https://github.com/${{ github.repository }}.git"
           VERSION: ${{ steps.get_version.outputs.version }}
           JS_CLIENT_DIR: ${{ inputs.js-client-dir }}
           OPENAPI_FILE: ${{ inputs.openapi-file }}
