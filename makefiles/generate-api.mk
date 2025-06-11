@@ -24,17 +24,17 @@ install-tools:
 	@which envsub >/dev/null || npm install -g envsub@4.1.0
 
 types:
-	@echo "Generating types (models)..."
+	echo "Generating types (models)..."
 	mkdir -p $(GEN_DIR)
 	$(OAPI_GEN) -generate types -package $(GEN_PKG) -o $(GEN_DIR)/models.gen.go $(OPENAPI_FILE)
 
 server:
-	@echo "Generating Go server..."
+	echo "Generating Go server..."
 	mkdir -p $(GEN_DIR)
 	$(OAPI_GEN) -generate gin-server,strict-server -package $(GEN_PKG) -o $(GEN_DIR)/server.gen.go $(OPENAPI_FILE)
 
 client:
-	@echo "Generating Go client..."
+	echo "Generating Go client..."
 	mkdir -p $(GEN_DIR)
 	$(OAPI_GEN) -generate client -package $(GEN_PKG) -o $(GEN_DIR)/client.gen.go $(OPENAPI_FILE)
 
@@ -48,13 +48,13 @@ js-generate:
 		--additional-properties=useSingleRequestParameter=true
 
 js-package:
-	@echo "Ensuring $(TEMPLATE_DIR) and output directories exist..."
+	echo "Ensuring $(TEMPLATE_DIR) and output directories exist..."
 	mkdir -p $(TEMPLATE_DIR)
 
-	@echo "Downloading package.json.template from GitHub..."
+	echo "Downloading package.json.template from GitHub..."
 	curl -sSfL $(PACKAGE_JSON_TEMPLATE_URL) -o $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH)
 
-	@echo "Generating package.json..."
+	echo "Generating package.json..."
 	PACKAGE_NAME="$(PACKAGE_NAME)" \
 	VERSION_NO_V="$(VERSION_NO_V)" \
 	PROJECT_NAME="$(PROJECT_NAME)" \
@@ -63,24 +63,24 @@ js-package:
 	envsub $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH) $(JS_CLIENT_DIR)/package.json
 
 js-tsconfig:
-	@echo "Downloading tsconfig.json.template from GitHub..."
+	echo "Downloading tsconfig.json.template from GitHub..."
 	curl -sSfL $(TSCONFIG_TEMPLATE_URL) -o $(TSCONFIG_TEMPLATE_LOCAL)
 
-	@echo "Generating tsconfig.json..."
+	echo "Generating tsconfig.json..."
 	cp $(TSCONFIG_TEMPLATE_LOCAL) $(JS_CLIENT_DIR)/tsconfig.json
 
 js-build:
-	@echo "Installing dependencies..."
+	echo "Installing dependencies..."
 	cd $(JS_CLIENT_DIR) && npm install
-	@echo "Building package..."
+	echo "Building package..."
 	cd $(JS_CLIENT_DIR) && npm run build
-	@echo "JS client ready in $(JS_CLIENT_DIR)/dist"
-	@echo "Generated package.json:"
+	echo "JS client ready in $(JS_CLIENT_DIR)/dist"
+	echo "Generated package.json:"
 	cat $(JS_CLIENT_DIR)/package.json
 
 js: js-generate js-package js-tsconfig js-build
 
 clean:
-	@echo "Cleaning generated files..."
+	echo "Cleaning generated files..."
 	rm -rf $(GEN_DIR)
 	rm -rf $(JS_CLIENT_DIR)
