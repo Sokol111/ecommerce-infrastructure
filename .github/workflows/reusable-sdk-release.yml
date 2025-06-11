@@ -63,11 +63,14 @@ jobs:
             ~/go/bin
           key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
 
+      - name: Download generate-api.mk
+        run: curl -sSL https://raw.githubusercontent.com/Sokol111/ecommerce-makefiles/master/generate-api.mk -o generate-api.mk
+
       - name: Install tools
-        run: make install-tools
+        run: make -f generate-api.mk install-tools
 
       - name: Generate Go SDK
-        run: make types server client
+        run: make -f generate-api.mk types server client
         env:
           GEN_DIR: ${{ inputs.gen-dir }}
           OPENAPI_FILE: ${{ inputs.openapi-file }}
@@ -78,7 +81,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
 
       - name: Generate JavaScript SDK
-        run: make js
+        run: make -f generate-api.mk js
         env:
           VERSION: ${{ steps.get_version.outputs.version }}
           JS_CLIENT_DIR: ${{ inputs.js-client-dir }}
