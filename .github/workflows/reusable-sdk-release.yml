@@ -57,7 +57,12 @@ jobs:
           go-version: 1.24.2
 
       - name: Download generate-api.mk
-        run: curl -sSL https://raw.githubusercontent.com/Sokol111/ecommerce-makefiles/master/makefiles/generate-api.mk -o generate-api.mk
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-makefiles/master/makefiles/generate-api.mk -o generate-api.mk
+          if [ ! -s generate-api.mk ]; then
+            echo "Failed to download or file is empty!"
+            exit 1
+          fi
 
       - name: Install tools
         run: make -f generate-api.mk install-tools
