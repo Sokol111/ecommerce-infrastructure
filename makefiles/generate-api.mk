@@ -52,7 +52,7 @@ js-package:
 	mkdir -p $(TEMPLATE_DIR)
 
 	echo "Downloading package.json.template from GitHub..."
-	curl -sSfL $(PACKAGE_JSON_TEMPLATE_URL) -o $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH)
+	curl -sSfL $(PACKAGE_JSON_TEMPLATE_URL) -o $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH) || { echo "Failed to download package.json.template"; exit 1; }
 
 	echo "Generating package.json..."
 	PACKAGE_NAME="$(PACKAGE_NAME)" \
@@ -64,7 +64,7 @@ js-package:
 
 js-tsconfig:
 	echo "Downloading tsconfig.json.template from GitHub..."
-	curl -sSfL $(TSCONFIG_TEMPLATE_URL) -o $(TSCONFIG_TEMPLATE_LOCAL_PATH)
+	curl -sSfL $(TSCONFIG_TEMPLATE_URL) -o $(TSCONFIG_TEMPLATE_LOCAL_PATH) || { echo "Failed to download tsconfig.json.template"; exit 1; }
 
 	echo "Generating tsconfig.json..."
 	cp $(TSCONFIG_TEMPLATE_LOCAL_PATH) $(JS_CLIENT_DIR)/tsconfig.json
