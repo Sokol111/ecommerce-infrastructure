@@ -1,17 +1,10 @@
-export PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
+export GEN_DIR OPENAPI_FILE PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
 
-REQUIRED_VARS := PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
+REQUIRED_VARS := GEN_DIR OPENAPI_FILE PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
 
-OPENAPI_FILE := openapi/openapi.yml
-GEN_DIR := js-client
 VERSION_NO_V := $(VERSION:v%=%)
-TEMPLATE_DIR := templates
 
-PACKAGE_JSON_TEMPLATE_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/package.json.template
-PACKAGE_JSON_TEMPLATE_LOCAL_PATH:=$(TEMPLATE_DIR)/package.json.template
-
-TSCONFIG_TEMPLATE_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/tsconfig.json.template
-TSCONFIG_TEMPLATE_LOCAL_PATH:=$(TEMPLATE_DIR)/tsconfig.json.template
+TEMPLATES_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/
 
 .PHONY: check-vars print-vars install-tools create-gen-dir js-generate js-package js-tsconfig js-build generate-js-api clean
 
@@ -29,12 +22,14 @@ check-vars:
 	fi
 
 print-vars:
-	@echo "📦 PACKAGE_NAME      = $(PACKAGE_NAME)"
-	@echo "🧪 VERSION           = $(VERSION)"
-	@echo "🔢 VERSION_NO_V      = $(VERSION_NO_V)"
-	@echo "📁 PROJECT_NAME      = $(PROJECT_NAME)"
-	@echo "👤 AUTHOR            = $(AUTHOR)"
-	@echo "🌐 REPOSITORY_URL    = $(REPOSITORY_URL)"
+	@echo "GEN_DIR           = $(GEN_DIR)"
+	@echo "OPENAPI_FILE      = $(OPENAPI_FILE)"
+	@echo "PACKAGE_NAME      = $(PACKAGE_NAME)"
+	@echo "VERSION           = $(VERSION)"
+	@echo "VERSION_NO_V      = $(VERSION_NO_V)"
+	@echo "PROJECT_NAME      = $(PROJECT_NAME)"
+	@echo "AUTHOR            = $(AUTHOR)"
+	@echo "REPOSITORY_URL	 = $(REPOSITORY_URL)"
 
 install-tools:
 	@which openapi-generator-cli >/dev/null || (echo "Installing openapi-generator-cli..."; \
@@ -55,17 +50,14 @@ js-generate: install-tools create-gen-dir
 
 js-package: install-tools create-gen-dir
 	@echo "Downloading package.json.template from GitHub..."
-	curl -sSfL $(PACKAGE_JSON_TEMPLATE_URL) -o $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH) || { echo "Failed to download package.json.template"; exit 1; }
+	curl -sSfL $(TEMPLATES_URL)package.json.template -o package.json.template || { echo "Failed to download package.json.template"; exit 1; }
 
 	@echo "Generating package.json..."
-	envsub $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH) $(GEN_DIR)/package.json
+	envsub package.json.template $(GEN_DIR)/package.json
 
 js-tsconfig: install-tools
-	@echo "Downloading tsconfig.json.template from GitHub..."
-	curl -sSfL $(TSCONFIG_TEMPLATE_URL) -o $(TSCONFIG_TEMPLATE_LOCAL_PATH) || { echo "Failed to download tsconfig.json.template"; exit 1; }
-
-	@echo "Generating tsconfig.json..."
-	cp $(TSCONFIG_TEMPLATE_LOCAL_PATH) $(GEN_DIR)/tsconfig.json
+	@echo "Downloading tsconfig.json from GitHub..."
+	curl -sSfL $(TEMPLATES_URL)tsconfig.json.template -o $(GEN_DIR)/tsconfig.json || { echo "Failed to download tsconfig.json"; exit 1; }
 
 js-build: install-tools
 	@echo "Installing JS dependencies and building JS package..."

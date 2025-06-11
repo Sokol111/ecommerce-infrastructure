@@ -1,0 +1,72 @@
+name: Generate and Release GO and JS API
+
+on:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      openapi_file: ${{ steps.openapi.outputs.openapi_file }}
+      version: ${{ steps.ver.outputs.version }}
+      lowercase_repo_name: ${{ steps.repo.outputs.lowercase_repo_name }}
+      project_name: ${{ steps.proj.outputs.project_name }}
+      go_gen_dir: api
+      go_package: api
+      js_gen_dir: js-client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: openapi
+        run: echo "openapi_file=openapi/openapi.yml" >> $GITHUB_OUTPUT
+
+      - id: ver
+        env:
+          OPENAPI_FILE: ${{ steps.openapi.outputs.openapi_file }}
+        run: echo "version=v$(yq e '.info.version' $OPENAPI_FILE)" >> $GITHUB_OUTPUT
+
+      - id: repo
+        run: echo "lowercase_repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
+      - id: proj
+        run: echo "project_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
+
+  generate-go-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/generate-go-api.yml@master
+    needs: prepare
+    with:
+      openapi_file: ${{ needs.prepare.outputs.openapi_file }}
+      gen_dir: ${{ needs.prepare.outputs.go_gen_dir }}
+      package: ${{ needs.prepare.outputs.go_package }}
+
+  generate-js-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/generate-js-api.yml@master
+    needs: prepare
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    with:
+      gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
+      openapi_file: ${{ needs.prepare.outputs.openapi_file }}
+      version: ${{ needs.prepare.outputs.version }}
+      repo_name: ${{ needs.prepare.outputs.lowercase_repo_name }}
+      project_name: ${{ needs.prepare.outputs.project_name }}
+
+  release-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-api.yml@master
+    needs: [generate-go-api, generate-js-api]
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      paths_to_commit: ${{ needs.prepare.outputs.go_gen_dir }}
+
+  publish-js-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js-api.yml@master
+    needs: release-api
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}

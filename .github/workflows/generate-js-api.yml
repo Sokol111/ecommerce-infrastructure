@@ -1,0 +1,48 @@
+name: Generate JS API
+
+on:
+  workflow_call:
+    inputs:
+      gen_dir:
+        required: true
+        type: string
+      openapi_file:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      repo_name:
+        required: true
+        type: string
+      project_name:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download generate-js-api.mk
+        run: curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/makefiles/generate-js-api.mk -o generate-js-api.mk
+
+      - name: Generate JavaScript SDK
+        run: make -f generate-js-api.mk generate-js-api
+        env:
+          GEN_DIR: ${{ inputs.gen_dir }}
+          OPENAPI_FILE: ${{ inputs.openapi_file }}
+          PROJECT_NAME: ${{ inputs.project_name }}
+          PACKAGE_NAME: ${{ inputs.repo_name }}
+          AUTHOR: ${{ github.repository_owner }}
+          REPOSITORY_URL: "https://github.com/${{ github.repository }}.git"
+          VERSION: ${{ inputs.version }}
