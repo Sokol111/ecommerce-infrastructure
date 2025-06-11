@@ -3,14 +3,6 @@ name: Reusable SDK Generate and Release
 on:
   workflow_call:
     inputs:
-      go-version:
-        description: "Go version to use"
-        required: true
-        type: string
-      node-version:
-        description: "Node.js version to use"
-        required: true
-        type: string
       openapi-file:
         description: "Path to OpenAPI YAML file"
         required: true
