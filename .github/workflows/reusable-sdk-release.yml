@@ -41,12 +41,12 @@ jobs:
         run: echo "version=v$(yq e '.info.version' ${{ inputs.openapi-file }})" >> $GITHUB_OUTPUT
 
       - name: Get lowercase full repository name
-        id: repo_info
+        id: get_lowercase_repo_name
         run: |
-          echo "lower_repo=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+          echo "repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
 
       - name: Extract project name
-        id: project_name
+        id: get_project_name
         run: |
           project_name=$(basename "${GITHUB_REPOSITORY}")
           echo "project_name=$project_name" >> $GITHUB_OUTPUT
@@ -81,8 +81,8 @@ jobs:
       - name: Generate JavaScript SDK
         run: make -f generate-api.mk js
         env:
-          PROJECT_NAME: ${{ steps.extract_repo.outputs.project_name }}
-          PACKAGE_NAME: ${{ steps.repo_info.outputs.lower_repo }}
+          PROJECT_NAME: ${{ steps.get_project_name.outputs.project_name }}
+          PACKAGE_NAME: ${{ steps.get_lowercase_repo_name.outputs.repo_name }}
           AUTHOR: ${{ github.repository_owner }}
           REPOSITORY_URL: "https://github.com/${{ github.repository }}.git"
           VERSION: ${{ steps.get_version.outputs.version }}
