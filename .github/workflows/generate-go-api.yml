@@ -1,0 +1,45 @@
+name: Generate Go API
+
+on:
+  workflow_call:
+    outputs:
+      go_success:
+        description: "Was Go API generated successfully?"
+        value: ${{ jobs.generate-go.outcome }}
+    inputs:
+      openapi_file:
+        required: true
+        type: string
+      gen_dir:
+        required: true
+        type: string
+      package:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.2
+
+      - name: Download generate-go-api.mk
+        run: curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/makefiles/generate-go-api.mk -o generate-go-api.mk
+
+      - name: Init Go module
+        run: go mod init github.com/${{ github.repository }}
+
+      - name: Generate Go API
+        run: make -f generate-go-api.mk generate-go-api
+        env:
+          OPENAPI_FILE: ${{ inputs.openapi_file }}
+          GEN_DIR: ${{ inputs.gen_dir }}
+          PACKAGE: ${{ inputs.package }}

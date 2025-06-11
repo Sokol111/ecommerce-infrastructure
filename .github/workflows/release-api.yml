@@ -1,0 +1,54 @@
+name: Release API
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      paths_to_commit:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if tag already exists
+        run: |
+          if git rev-parse "refs/tags/${{ inputs.version }}" >/dev/null 2>&1; then
+            echo "❌ Tag ${{ inputs.version }} already exists"
+            exit 1
+          fi
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit to `generated` branch
+        run: |
+          git checkout -B generated
+          git add ${{ inputs.paths_to_commit }}
+          git commit -m "chore: generate SDK for release ${{ inputs.version }}" || echo "No changes to commit"
+          git push origin generated --force
+
+      - name: Tag release
+        run: |
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.version }}
+          name: Release ${{ inputs.version }}
+          body: |
+            API generated automatically for version ${{ inputs.version }}.
