@@ -60,7 +60,7 @@ js-package:
 	PROJECT_NAME="$(PROJECT_NAME)" \
 	AUTHOR="$(AUTHOR)" \
 	REPOSITORY_URL="$(REPOSITORY_URL)" \
-	envsub $(TEMPLATE_LOCAL_PATH) $(JS_CLIENT_DIR)/package.json
+	envsub $(PACKAGE_JSON_TEMPLATE_LOCAL_PATH) $(JS_CLIENT_DIR)/package.json
 
 js-tsconfig:
 	@echo "Downloading tsconfig.json.template from GitHub..."
