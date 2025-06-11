@@ -2,23 +2,6 @@ name: Reusable SDK Generate and Release
 
 on:
   workflow_call:
-    inputs:
-      openapi-file:
-        description: "Path to OpenAPI YAML file"
-        required: true
-        type: string
-      js-client-dir:
-        description: "Directory for JavaScript client"
-        required: true
-        type: string
-      gen-dir:
-        description: "Directory for generated Go code"
-        required: true
-        type: string
-      template-dir:
-        description: "Directory for template files (package.json, tsconfig.json)"
-        required: true
-        type: string
     secrets:
       NPM_TOKEN:
         description: "NPM token for publishing"
@@ -38,7 +21,7 @@ jobs:
 
       - name: Get version with v prefix from OpenAPI
         id: get_version
-        run: echo "version=v$(yq e '.info.version' ${{ inputs.openapi-file }})" >> $GITHUB_OUTPUT
+        run: echo "version=v$(yq e '.info.version' openapi/openapi.yml)" >> $GITHUB_OUTPUT
 
       - name: Get lowercase full repository name
         id: get_lowercase_repo_name
@@ -74,9 +57,6 @@ jobs:
 
       - name: Generate Go SDK
         run: make -f generate-api.mk types server client
-        env:
-          GEN_DIR: ${{ inputs.gen-dir }}
-          OPENAPI_FILE: ${{ inputs.openapi-file }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -91,13 +71,10 @@ jobs:
           AUTHOR: ${{ github.repository_owner }}
           REPOSITORY_URL: "https://github.com/${{ github.repository }}.git"
           VERSION: ${{ steps.get_version.outputs.version }}
-          JS_CLIENT_DIR: ${{ inputs.js-client-dir }}
-          OPENAPI_FILE: ${{ inputs.openapi-file }}
-          TEMPLATE_DIR: ${{ inputs.template-dir }}
 
       - name: Publish JavaScript SDK to npm
         run: |
-          cd ${{ inputs.js-client-dir }}
+          cd js-client
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           npm publish --access public
         env:
@@ -111,7 +88,7 @@ jobs:
       - name: Commit to `generated` branch
         run: |
           git checkout -B generated
-          git add ${{ inputs.gen-dir }}/
+          git add api/
           git commit -m "chore: generate SDK for release ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
           git push origin generated --force
 
