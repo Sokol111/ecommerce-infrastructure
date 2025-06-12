@@ -46,8 +46,8 @@ jobs:
         run: |
           git checkout -B generated
           git add ${{ inputs.go_gen_dir }}
-          git commit -m "Ggenerate API for release ${{ inputs.version }}" || echo "No changes to commit"
-          git push origin generated --force
+          git commit -m "Generate API for release ${{ inputs.version }}" || echo "No changes to commit"
+          git push -u origin generated --force
 
       - name: Tag release
         run: |

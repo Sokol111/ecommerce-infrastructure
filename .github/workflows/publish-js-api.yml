@@ -9,6 +9,9 @@ on:
       js_gen_dir:
         required: true
         type: string
+      js_artifact:
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -20,6 +23,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Download JS API
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.js_artifact }}
+          path: ${{ inputs.js_gen_dir }}
 
       - name: Publish to npm
         run: |

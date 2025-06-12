@@ -6,6 +6,9 @@ on:
       js_gen_dir:
         required: true
         type: string
+      js_artifact:
+        required: true
+        type: string
       openapi_file:
         required: true
         type: string
@@ -50,5 +53,5 @@ jobs:
       - name: Upload generated JS API
         uses: actions/upload-artifact@v4
         with:
-          name: js-api
+          name: ${{ inputs.js_artifact }}
           path: ${{ inputs.js_gen_dir }}
