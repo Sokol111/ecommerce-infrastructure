@@ -4,10 +4,11 @@ REQUIRED_VARS := OPENAPI_FILE GO_GEN_DIR PACKAGE
 
 OAPI_GEN := $(HOME)/go/bin/oapi-codegen
 
-.PHONY: check-vars print-vars install-tools create-gen-dir types server client generate-go-api clean
+.PHONY: check-go-vars print-go-vars install-go-tools create-go-gen-dir types server client generate-go-api clean-go
 
-check-vars:
-	@missing=""; \
+check-go-vars:
+	@bash -c '\
+	missing=""; \
 	for var in $(REQUIRED_VARS); do \
 		if [ -z "$${!var}" ]; then \
 			echo "❌ ERROR: $$var is not set"; \
@@ -17,35 +18,35 @@ check-vars:
 	if [ "$$missing" = "1" ]; then \
 		echo "💡 Tip: you can set variables via environment"; \
 		exit 1; \
-	fi
+	fi'
 
-print-vars:
+print-go-vars:
 	@echo "OPENAPI_FILE		= $(OPENAPI_FILE)"
 	@echo "GO_GEN_DIR       = $(GO_GEN_DIR)"
 	@echo "PACKAGE      	= $(PACKAGE)"
 
-install-tools:
+install-go-tools:
 	@which oapi-codegen >/dev/null || (echo "Installing Go tools..."; \
 		go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.4.1)
 
-create-gen-dir:
+create-go-gen-dir:
 	@mkdir -p $(GO_GEN_DIR)
 
-types: install-tools create-gen-dir
+types: install-go-tools create-go-gen-dir
 	@echo "Generating Go types (models)..."
 	$(OAPI_GEN) -generate types -package $(PACKAGE) -o $(GO_GEN_DIR)/models.gen.go $(OPENAPI_FILE)
 
-server: install-tools create-gen-dir
+server: install-go-tools create-go-gen-dir
 	@echo "Generating Go server..."
 	$(OAPI_GEN) -generate gin-server,strict-server -package $(PACKAGE) -o $(GO_GEN_DIR)/server.gen.go $(OPENAPI_FILE)
 
-client: install-tools create-gen-dir
+client: install-go-tools create-go-gen-dir
 	@echo "Generating Go client..."
 	$(OAPI_GEN) -generate client -package $(PACKAGE) -o $(GO_GEN_DIR)/client.gen.go $(OPENAPI_FILE)
 
-generate-go-api: check-vars print-vars clean types server client
+generate-go-api: check-go-vars print-go-vars clean-go types server client
 	@echo "Go API generated successfully."
 
-clean:
+clean-go:
 	@echo "Cleaning Go generated files..."
 	@rm -rf $(GO_GEN_DIR)
