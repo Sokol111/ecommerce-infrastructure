@@ -45,10 +45,13 @@ js-generate: create-js-gen-dir
 
 js-package: create-js-gen-dir
 	@echo "Downloading package.json.template from GitHub..."
-	curl -sSfL $(TEMPLATES_URL)package.json.template -o package.json.template || { echo "Failed to download package.json.template"; exit 1; }
+	curl -sSfL $(TEMPLATES_URL)package.json.template -o $(JS_GEN_DIR)/package.json.template || { echo "Failed to download package.json.template"; exit 1; }
 
 	@echo "Generating package.json..."
-	npx envsub@4.1.0 package.json.template $(JS_GEN_DIR)/package.json
+	npx envsub@4.1.0 $(JS_GEN_DIR)/package.json.template $(JS_GEN_DIR)/package.json
+
+	@echo "Cleaning up..."
+	rm -f $(JS_GEN_DIR)/package.json.template
 
 js-tsconfig:
 	@echo "Downloading tsconfig.json from GitHub..."
