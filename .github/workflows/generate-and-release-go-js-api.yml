@@ -34,6 +34,7 @@ jobs:
       go_package: api
       go_artifact: go-api
       js_gen_dir: js-client
+      js_artifact: js-api
 
     steps:
       - uses: actions/checkout@v4
@@ -86,6 +87,7 @@ jobs:
     needs: prepare
     with:
       js_gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
+      js_artifact: ${{ needs.prepare.outputs.js_artifact }}
       openapi_file: ${{ needs.prepare.outputs.openapi_file }}
       version: ${{ needs.prepare.outputs.version }}
       npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
@@ -106,3 +108,4 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
       js_gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
+      js_artifact: ${{ needs.prepare.outputs.js_artifact }}
