@@ -60,7 +60,7 @@ jobs:
       - id: repo
         run: |
           if [ -z "${{ inputs.npm_repo_name }}" ]; then
-            echo "npm_repo_name=\"@${GITHUB_REPOSITORY,,}\"" >> $GITHUB_OUTPUT
+            echo "npm_repo_name=@${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
           else
             echo "npm_repo_name=${{ inputs.npm_repo_name }}" >> $GITHUB_OUTPUT
           fi
