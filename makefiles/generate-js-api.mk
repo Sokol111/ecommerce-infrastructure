@@ -37,7 +37,7 @@ create-js-gen-dir:
 
 js-generate: create-js-gen-dir
 	@echo "Generating JS client..."
-	npx @openapitools/openapi-generator-cli@2.20.2 \
+	npx @openapitools/openapi-generator-cli@2.20.2 generate \
 		-i $(OPENAPI_FILE) \
 		-g typescript-axios \
 		-o $(JS_GEN_DIR) \
