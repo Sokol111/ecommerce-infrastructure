@@ -1,6 +1,6 @@
-export GEN_DIR OPENAPI_FILE NPM_PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
+export JS_GEN_DIR OPENAPI_FILE NPM_PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
 
-REQUIRED_VARS := GEN_DIR OPENAPI_FILE NPM_PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
+REQUIRED_VARS := JS_GEN_DIR OPENAPI_FILE NPM_PACKAGE_NAME VERSION PROJECT_NAME AUTHOR REPOSITORY_URL
 
 VERSION_NO_V := $(VERSION:v%=%)
 
@@ -22,7 +22,7 @@ check-vars:
 	fi
 
 print-vars:
-	@echo "GEN_DIR           = $(GEN_DIR)"
+	@echo "JS_GEN_DIR        = $(JS_GEN_DIR)"
 	@echo "OPENAPI_FILE      = $(OPENAPI_FILE)"
 	@echo "NPM_PACKAGE_NAME  = $(NPM_PACKAGE_NAME)"
 	@echo "VERSION           = $(VERSION)"
@@ -38,14 +38,14 @@ install-tools:
 		npm install -g envsub@4.1.0)
 
 create-gen-dir:
-	@mkdir -p $(GEN_DIR)
+	@mkdir -p $(JS_GEN_DIR)
 
 js-generate: install-tools create-gen-dir
 	@echo "Generating JS client..."
 	openapi-generator-cli generate \
 		-i $(OPENAPI_FILE) \
 		-g typescript-axios \
-		-o $(GEN_DIR) \
+		-o $(JS_GEN_DIR) \
 		--additional-properties=useSingleRequestParameter=true
 
 js-package: install-tools create-gen-dir
@@ -53,22 +53,22 @@ js-package: install-tools create-gen-dir
 	curl -sSfL $(TEMPLATES_URL)package.json.template -o package.json.template || { echo "Failed to download package.json.template"; exit 1; }
 
 	@echo "Generating package.json..."
-	envsub package.json.template $(GEN_DIR)/package.json
+	envsub package.json.template $(JS_GEN_DIR)/package.json
 
 js-tsconfig: install-tools
 	@echo "Downloading tsconfig.json from GitHub..."
-	curl -sSfL $(TEMPLATES_URL)tsconfig.json.template -o $(GEN_DIR)/tsconfig.json || { echo "Failed to download tsconfig.json"; exit 1; }
+	curl -sSfL $(TEMPLATES_URL)tsconfig.json.template -o $(JS_GEN_DIR)/tsconfig.json || { echo "Failed to download tsconfig.json"; exit 1; }
 
 js-build: install-tools
 	@echo "Installing JS dependencies and building JS package..."
-	cd $(GEN_DIR) && npm install && npm run build
+	cd $(JS_GEN_DIR) && npm install && npm run build
 	@echo "JS client is ready"
 	@echo "Generated package.json:"
-	@cat $(GEN_DIR)/package.json
+	@cat $(JS_GEN_DIR)/package.json
 
 generate-js-api: check-vars print-vars clean js-generate js-package js-tsconfig js-build
 	@echo "JS API generated successfully."
 
 clean:
 	@echo "Cleaning JS client files..."
-	@rm -rf $(GEN_DIR)
+	@rm -rf $(JS_GEN_DIR)

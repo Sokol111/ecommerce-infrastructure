@@ -10,7 +10,7 @@ on:
       openapi_file:
         required: true
         type: string
-      gen_dir:
+      go_gen_dir:
         required: true
         type: string
       package:
@@ -41,5 +41,5 @@ jobs:
         run: make -f generate-go-api.mk generate-go-api
         env:
           OPENAPI_FILE: ${{ inputs.openapi_file }}
-          GEN_DIR: ${{ inputs.gen_dir }}
+          GO_GEN_DIR: ${{ inputs.go_gen_dir }}
           PACKAGE: ${{ inputs.package }}

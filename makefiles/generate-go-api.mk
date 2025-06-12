@@ -1,6 +1,6 @@
-export OPENAPI_FILE GEN_DIR PACKAGE
+export OPENAPI_FILE GO_GEN_DIR PACKAGE
 
-REQUIRED_VARS := OPENAPI_FILE GEN_DIR PACKAGE
+REQUIRED_VARS := OPENAPI_FILE GO_GEN_DIR PACKAGE
 
 OAPI_GEN := $(HOME)/go/bin/oapi-codegen
 
@@ -21,7 +21,7 @@ check-vars:
 
 print-vars:
 	@echo "OPENAPI_FILE		= $(OPENAPI_FILE)"
-	@echo "GEN_DIR        	= $(GEN_DIR)"
+	@echo "GO_GEN_DIR       = $(GO_GEN_DIR)"
 	@echo "PACKAGE      	= $(PACKAGE)"
 
 install-tools:
@@ -29,23 +29,23 @@ install-tools:
 		go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.4.1)
 
 create-gen-dir:
-	@mkdir -p $(GEN_DIR)
+	@mkdir -p $(GO_GEN_DIR)
 
 types: install-tools create-gen-dir
 	@echo "Generating Go types (models)..."
-	$(OAPI_GEN) -generate types -package $(PACKAGE) -o $(GEN_DIR)/models.gen.go $(OPENAPI_FILE)
+	$(OAPI_GEN) -generate types -package $(PACKAGE) -o $(GO_GEN_DIR)/models.gen.go $(OPENAPI_FILE)
 
 server: install-tools create-gen-dir
 	@echo "Generating Go server..."
-	$(OAPI_GEN) -generate gin-server,strict-server -package $(PACKAGE) -o $(GEN_DIR)/server.gen.go $(OPENAPI_FILE)
+	$(OAPI_GEN) -generate gin-server,strict-server -package $(PACKAGE) -o $(GO_GEN_DIR)/server.gen.go $(OPENAPI_FILE)
 
 client: install-tools create-gen-dir
 	@echo "Generating Go client..."
-	$(OAPI_GEN) -generate client -package $(PACKAGE) -o $(GEN_DIR)/client.gen.go $(OPENAPI_FILE)
+	$(OAPI_GEN) -generate client -package $(PACKAGE) -o $(GO_GEN_DIR)/client.gen.go $(OPENAPI_FILE)
 
 generate-go-api: check-vars print-vars clean types server client
 	@echo "Go API generated successfully."
 
 clean:
 	@echo "Cleaning Go generated files..."
-	@rm -rf $(GEN_DIR)
+	@rm -rf $(GO_GEN_DIR)
