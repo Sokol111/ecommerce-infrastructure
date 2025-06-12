@@ -32,6 +32,7 @@ jobs:
       project_name: ${{ steps.proj.outputs.project_name }}
       go_gen_dir: api
       go_package: api
+      go_artifact: go-api
       js_gen_dir: js-client
 
     steps:
@@ -78,6 +79,7 @@ jobs:
       openapi_file: ${{ needs.prepare.outputs.openapi_file }}
       go_gen_dir: ${{ needs.prepare.outputs.go_gen_dir }}
       package: ${{ needs.prepare.outputs.go_package }}
+      go_artifact: ${{ needs.prepare.outputs.go_artifact }}
 
   generate-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/generate-js-api.yml@master
@@ -89,12 +91,13 @@ jobs:
       npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
       project_name: ${{ needs.prepare.outputs.project_name }}
 
-  release-api:
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-api.yml@master
+  release-go-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-go-api.yml@master
     needs: [generate-go-api, generate-js-api]
     with:
       version: ${{ needs.prepare.outputs.version }}
-      paths_to_commit: ${{ needs.prepare.outputs.go_gen_dir }}
+      go_gen_dir: ${{ needs.prepare.outputs.go_gen_dir }}
+      go_artifact: ${{ needs.prepare.outputs.go_artifact }}
 
   publish-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js-api.yml@master

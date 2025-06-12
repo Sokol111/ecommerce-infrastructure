@@ -46,3 +46,9 @@ jobs:
           AUTHOR: ${{ github.repository_owner }}
           REPOSITORY_URL: "https://github.com/${{ github.repository }}.git"
           VERSION: ${{ inputs.version }}
+
+      - name: Upload generated JS API
+        uses: actions/upload-artifact@v4
+        with:
+          name: js-api
+          path: ${{ inputs.js_gen_dir }}
