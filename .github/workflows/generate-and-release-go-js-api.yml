@@ -73,6 +73,22 @@ jobs:
             echo "project_name=${{ inputs.project_name }}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Debug outputs
+        run: |
+          echo "Final version: ${{ steps.ver.outputs.version }}"
+          echo "Final openapi_file: ${{ steps.openapi.outputs.openapi_file }}"
+
+  debug-outputs:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print outputs
+        run: |
+          echo "version: ${{ needs.prepare.outputs.version }}"
+          echo "openapi_file: ${{ needs.prepare.outputs.openapi_file }}"
+          echo "npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}"
+          echo "project_name: ${{ needs.prepare.outputs.project_name }}"
+
   generate-go-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/generate-go-api.yml@master
     needs: prepare
