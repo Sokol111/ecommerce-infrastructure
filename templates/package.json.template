@@ -1,5 +1,5 @@
 {
-  "name": "${PACKAGE_NAME}",
+  "name": "${NPM_PACKAGE_NAME}",
   "description": "Generated TypeScript Axios client from OpenAPI for ${PROJECT_NAME}",
   "version": "${VERSION}",
   "main": "dist/index.js",
