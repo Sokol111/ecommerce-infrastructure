@@ -51,7 +51,7 @@ jobs:
       - name: Commit GO API to `generated` branch
         run: |
           git checkout -B generated
-          git add ${{ inputs.go_gen_dir }}
+          git add -f ${{ inputs.go_gen_dir }}
           git commit -m "Generate API for release ${{ inputs.version }}" || echo "No changes to commit"
           git push -u origin generated --force
 
