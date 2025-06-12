@@ -16,6 +16,9 @@ on:
       package:
         required: true
         type: string
+      go_artifact:
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -43,3 +46,9 @@ jobs:
           OPENAPI_FILE: ${{ inputs.openapi_file }}
           GO_GEN_DIR: ${{ inputs.go_gen_dir }}
           PACKAGE: ${{ inputs.package }}
+
+      - name: Upload generated Go API
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.go_artifact }}
+          path: ${{ inputs.go_gen_dir }}
