@@ -101,7 +101,7 @@ jobs:
 
   publish-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js-api.yml@master
-    needs: release-api
+    needs: release-go-api
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
