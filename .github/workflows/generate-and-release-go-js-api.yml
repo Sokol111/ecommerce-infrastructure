@@ -102,5 +102,4 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
-      version: ${{ needs.prepare.outputs.version }}
       js_gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
