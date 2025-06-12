@@ -6,7 +6,7 @@ on:
       NPM_TOKEN:
         required: true
     inputs:
-      gen_dir:
+      js_gen_dir:
         required: true
         type: string
 
@@ -23,7 +23,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          cd ${{ inputs.gen_dir }}
+          cd ${{ inputs.js_gen_dir }}
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           npm publish --access public
         env:

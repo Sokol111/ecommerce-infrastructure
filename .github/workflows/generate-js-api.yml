@@ -3,7 +3,7 @@ name: Generate JS API
 on:
   workflow_call:
     inputs:
-      gen_dir:
+      js_gen_dir:
         required: true
         type: string
       openapi_file:
@@ -39,7 +39,7 @@ jobs:
       - name: Generate JavaScript SDK
         run: make -f generate-js-api.mk generate-js-api
         env:
-          GEN_DIR: ${{ inputs.gen_dir }}
+          JS_GEN_DIR: ${{ inputs.js_gen_dir }}
           OPENAPI_FILE: ${{ inputs.openapi_file }}
           PROJECT_NAME: ${{ inputs.project_name }}
           NPM_PACKAGE_NAME: ${{ inputs.npm_repo_name }}

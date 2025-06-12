@@ -73,7 +73,7 @@ jobs:
     needs: prepare
     with:
       openapi_file: ${{ needs.prepare.outputs.openapi_file }}
-      gen_dir: ${{ needs.prepare.outputs.go_gen_dir }}
+      go_gen_dir: ${{ needs.prepare.outputs.go_gen_dir }}
       package: ${{ needs.prepare.outputs.go_package }}
 
   generate-js-api:
@@ -82,7 +82,7 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
-      gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
+      js_gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
       openapi_file: ${{ needs.prepare.outputs.openapi_file }}
       version: ${{ needs.prepare.outputs.version }}
       npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
@@ -102,4 +102,4 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
       version: ${{ needs.prepare.outputs.version }}
-      gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
+      js_gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
