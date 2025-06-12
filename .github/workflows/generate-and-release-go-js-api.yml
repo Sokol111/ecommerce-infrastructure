@@ -82,8 +82,6 @@ jobs:
   generate-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/generate-js-api.yml@master
     needs: prepare
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
       js_gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
       openapi_file: ${{ needs.prepare.outputs.openapi_file }}
