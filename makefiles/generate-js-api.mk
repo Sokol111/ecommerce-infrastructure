@@ -60,6 +60,8 @@ js-tsconfig:
 js-build:
 	@echo "Installing JS dependencies and building JS package..."
 	cd $(JS_GEN_DIR) && npm install && npm run build
+	@echo "Cleaning up..."
+	rm -f openapitools.json
 	@echo "JS client is ready"
 	@echo "Generated package.json:"
 	@cat $(JS_GEN_DIR)/package.json
