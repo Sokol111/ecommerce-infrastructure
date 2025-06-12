@@ -6,10 +6,11 @@ VERSION_NO_V := $(VERSION:v%=%)
 
 TEMPLATES_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/
 
-.PHONY: check-vars print-vars install-tools create-gen-dir js-generate js-package js-tsconfig js-build generate-js-api clean
+.PHONY: check-js-vars print-js-vars install-js-tools create-js-gen-dir js-generate js-package js-tsconfig js-build generate-js-api clean-js
 
-check-vars:
-	@missing=""; \
+check-js-vars:
+	@bash -c '\
+	missing=""; \
 	for var in $(REQUIRED_VARS); do \
 		if [ -z "$${!var}" ]; then \
 			echo "❌ ERROR: $$var is not set"; \
@@ -19,9 +20,9 @@ check-vars:
 	if [ "$$missing" = "1" ]; then \
 		echo "💡 Tip: you can set variables via environment"; \
 		exit 1; \
-	fi
+	fi'
 
-print-vars:
+print-js-vars:
 	@echo "JS_GEN_DIR        = $(JS_GEN_DIR)"
 	@echo "OPENAPI_FILE      = $(OPENAPI_FILE)"
 	@echo "NPM_PACKAGE_NAME  = $(NPM_PACKAGE_NAME)"
@@ -31,16 +32,16 @@ print-vars:
 	@echo "AUTHOR            = $(AUTHOR)"
 	@echo "REPOSITORY_URL	 = $(REPOSITORY_URL)"
 
-install-tools:
+install-js-tools:
 	@which openapi-generator-cli >/dev/null || (echo "Installing openapi-generator-cli..."; \
 		npm install -g @openapitools/openapi-generator-cli@2.20.2)
 	@which envsub >/dev/null || (echo "Installing envsub..."; \
 		npm install -g envsub@4.1.0)
 
-create-gen-dir:
+create-js-gen-dir:
 	@mkdir -p $(JS_GEN_DIR)
 
-js-generate: install-tools create-gen-dir
+js-generate: install-js-tools create-js-gen-dir
 	@echo "Generating JS client..."
 	openapi-generator-cli generate \
 		-i $(OPENAPI_FILE) \
@@ -48,27 +49,27 @@ js-generate: install-tools create-gen-dir
 		-o $(JS_GEN_DIR) \
 		--additional-properties=useSingleRequestParameter=true
 
-js-package: install-tools create-gen-dir
+js-package: install-js-tools create-js-gen-dir
 	@echo "Downloading package.json.template from GitHub..."
 	curl -sSfL $(TEMPLATES_URL)package.json.template -o package.json.template || { echo "Failed to download package.json.template"; exit 1; }
 
 	@echo "Generating package.json..."
 	envsub package.json.template $(JS_GEN_DIR)/package.json
 
-js-tsconfig: install-tools
+js-tsconfig: install-js-tools
 	@echo "Downloading tsconfig.json from GitHub..."
 	curl -sSfL $(TEMPLATES_URL)tsconfig.json.template -o $(JS_GEN_DIR)/tsconfig.json || { echo "Failed to download tsconfig.json"; exit 1; }
 
-js-build: install-tools
+js-build: install-js-tools
 	@echo "Installing JS dependencies and building JS package..."
 	cd $(JS_GEN_DIR) && npm install && npm run build
 	@echo "JS client is ready"
 	@echo "Generated package.json:"
 	@cat $(JS_GEN_DIR)/package.json
 
-generate-js-api: check-vars print-vars clean js-generate js-package js-tsconfig js-build
+generate-js-api: check-js-vars print-js-vars clean-js js-generate js-package js-tsconfig js-build
 	@echo "JS API generated successfully."
 
-clean:
+clean-js:
 	@echo "Cleaning JS client files..."
 	@rm -rf $(JS_GEN_DIR)
