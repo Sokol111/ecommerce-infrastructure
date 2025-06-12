@@ -24,6 +24,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Debug Inputs
+        run: |
+          echo "version: ${{ inputs.version }}"
+          echo "go_gen_dir: ${{ inputs.go_gen_dir }}"
+          echo "go_artifact: ${{ inputs.go_artifact }}"
+
       - name: Check if tag already exists
         run: |
           if git rev-parse "refs/tags/${{ inputs.version }}" >/dev/null 2>&1; then
@@ -51,8 +57,13 @@ jobs:
 
       - name: Tag release
         run: |
+          if [ -z "${{ inputs.version }}" ]; then
+            echo "❌ No version provided"
+            exit 1
+          fi
+
           git tag ${{ inputs.version }}
-          git push origin refs/tags/${{ inputs.version }}
+          git push origin ${{ inputs.version }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
