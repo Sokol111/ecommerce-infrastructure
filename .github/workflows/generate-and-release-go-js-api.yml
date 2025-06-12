@@ -2,6 +2,19 @@ name: Generate and Release GO and JS API
 
 on:
   workflow_call:
+    inputs:
+      openapi_file:
+        required: false
+        type: string
+      version:
+        required: false
+        type: string
+      npm_repo_name:
+        required: false
+        type: string
+      project_name:
+        required: false
+        type: string
     secrets:
       NPM_TOKEN:
         required: true
@@ -12,7 +25,7 @@ jobs:
     outputs:
       openapi_file: ${{ steps.openapi.outputs.openapi_file }}
       version: ${{ steps.ver.outputs.version }}
-      lowercase_repo_name: ${{ steps.repo.outputs.lowercase_repo_name }}
+      npm_repo_name: ${{ steps.repo.outputs.npm_repo_name }}
       project_name: ${{ steps.proj.outputs.project_name }}
       go_gen_dir: api
       go_package: api
@@ -22,18 +35,38 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: openapi
-        run: echo "openapi_file=openapi/openapi.yml" >> $GITHUB_OUTPUT
+        run: |
+          if [ -z "${{ inputs.openapi_file }}" ]; then
+            echo "openapi_file=openapi/openapi.yml" >> $GITHUB_OUTPUT
+          else
+            echo "openapi_file=${{ inputs.openapi_file }}" >> $GITHUB_OUTPUT
+          fi
 
       - id: ver
         env:
           OPENAPI_FILE: ${{ steps.openapi.outputs.openapi_file }}
-        run: echo "version=v$(yq e '.info.version' $OPENAPI_FILE)" >> $GITHUB_OUTPUT
+        run: |
+          if [ -z "${{ inputs.version }}" ]; then
+            echo "version=v$(yq e '.info.version' $OPENAPI_FILE)" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          fi
 
       - id: repo
-        run: echo "lowercase_repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+        run: |
+          if [ -z "${{ inputs.npm_repo_name }}" ]; then
+            echo "npm_repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+          else
+            echo "npm_repo_name=${{ inputs.npm_repo_name }}" >> $GITHUB_OUTPUT
+          fi
 
       - id: proj
-        run: echo "project_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
+        run: |
+          if [ -z "${{ inputs.project_name }}" ]; then
+            echo "project_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
+          else
+            echo "project_name=${{ inputs.project_name }}" >> $GITHUB_OUTPUT
+          fi
 
   generate-go-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/generate-go-api.yml@master
@@ -52,7 +85,7 @@ jobs:
       gen_dir: ${{ needs.prepare.outputs.js_gen_dir }}
       openapi_file: ${{ needs.prepare.outputs.openapi_file }}
       version: ${{ needs.prepare.outputs.version }}
-      repo_name: ${{ needs.prepare.outputs.lowercase_repo_name }}
+      npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
       project_name: ${{ needs.prepare.outputs.project_name }}
 
   release-api:
