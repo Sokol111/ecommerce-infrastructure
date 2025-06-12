@@ -6,7 +6,7 @@ VERSION_NO_V := $(VERSION:v%=%)
 
 TEMPLATES_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/
 
-.PHONY: check-js-vars print-js-vars install-js-tools create-js-gen-dir js-generate js-package js-tsconfig js-build generate-js-api clean-js
+.PHONY: check-js-vars print-js-vars create-js-gen-dir js-generate js-package js-tsconfig js-build generate-js-api clean-js
 
 check-js-vars:
 	@bash -c '\
@@ -32,35 +32,29 @@ print-js-vars:
 	@echo "AUTHOR            = $(AUTHOR)"
 	@echo "REPOSITORY_URL	 = $(REPOSITORY_URL)"
 
-install-js-tools:
-	@which openapi-generator-cli >/dev/null || (echo "Installing openapi-generator-cli..."; \
-		npm install -g @openapitools/openapi-generator-cli@2.20.2)
-	@which envsub >/dev/null || (echo "Installing envsub..."; \
-		npm install -g envsub@4.1.0)
-
 create-js-gen-dir:
 	@mkdir -p $(JS_GEN_DIR)
 
-js-generate: install-js-tools create-js-gen-dir
+js-generate: create-js-gen-dir
 	@echo "Generating JS client..."
-	openapi-generator-cli generate \
+	npx @openapitools/openapi-generator-cli@2.20.2 \
 		-i $(OPENAPI_FILE) \
 		-g typescript-axios \
 		-o $(JS_GEN_DIR) \
 		--additional-properties=useSingleRequestParameter=true
 
-js-package: install-js-tools create-js-gen-dir
+js-package: create-js-gen-dir
 	@echo "Downloading package.json.template from GitHub..."
 	curl -sSfL $(TEMPLATES_URL)package.json.template -o package.json.template || { echo "Failed to download package.json.template"; exit 1; }
 
 	@echo "Generating package.json..."
-	envsub package.json.template $(JS_GEN_DIR)/package.json
+	npx envsub@4.1.0 package.json.template $(JS_GEN_DIR)/package.json
 
-js-tsconfig: install-js-tools
+js-tsconfig:
 	@echo "Downloading tsconfig.json from GitHub..."
 	curl -sSfL $(TEMPLATES_URL)tsconfig.json.template -o $(JS_GEN_DIR)/tsconfig.json || { echo "Failed to download tsconfig.json"; exit 1; }
 
-js-build: install-js-tools
+js-build:
 	@echo "Installing JS dependencies and building JS package..."
 	cd $(JS_GEN_DIR) && npm install && npm run build
 	@echo "JS client is ready"
