@@ -10,6 +10,9 @@ on:
       DOCKER_PASSWORD:
         required: true
 
+permissions:
+  contents: write
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
