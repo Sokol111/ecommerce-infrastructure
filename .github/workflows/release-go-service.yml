@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: image
-        run: echo "image_name=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
+        run: echo "image_name=sokol111/$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
 
       - id: tag
         run: echo "image_tag=${GITHUB_EVENT_INPUTS_VERSION#v}" >> $GITHUB_OUTPUT
