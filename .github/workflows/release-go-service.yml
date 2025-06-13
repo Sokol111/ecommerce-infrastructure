@@ -1,0 +1,49 @@
+name: Release GO service
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+    secrets:
+      registry_password:
+        required: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      image_name: ${{ steps.image.outputs.image_name }}
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: image
+        run: echo "image_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
+
+      - id: tag
+        run: echo "tag=${{ github.event.inputs.version#v }}" >> $GITHUB_OUTPUT
+
+  build:
+    needs: prepare
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-go-docker-image.yml@master
+    with:
+      image_name: sokol111/${{ needs.prepare.outputs.image_name }}
+    secrets:
+      registry_password: ${{ secrets.REGISTRY_PASSWORD }}
+
+  release:
+    needs: [prepare, build]
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
+    with:
+      version: ${{ github.event.inputs.version }}
+
+  publish:
+    needs: [prepare, build, release]
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-docker-image.yml@master
+    with:
+      image_name: sokol111/${{ needs.prepare.outputs.image_name }}
+      tag: ${{ needs.prepare.outputs.tag }}
+    secrets:
+      registry_password: ${{ secrets.REGISTRY_PASSWORD }}
