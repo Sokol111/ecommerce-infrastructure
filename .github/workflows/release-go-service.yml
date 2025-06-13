@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      registry_password:
+      REGISTRY_PASSWORD:
         required: true
 
 jobs:
@@ -23,7 +23,9 @@ jobs:
         run: echo "image_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
 
       - id: tag
-        run: echo "image_tag=${{ github.event.inputs.version#v }}" >> $GITHUB_OUTPUT
+        run: echo "image_tag=${GITHUB_EVENT_INPUTS_VERSION#v}" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_EVENT_INPUTS_VERSION: ${{ github.event.inputs.version }}
 
   build:
     needs: prepare
@@ -31,7 +33,7 @@ jobs:
     with:
       image_name: sokol111/${{ needs.prepare.outputs.image_name }}
     secrets:
-      registry_password: ${{ secrets.REGISTRY_PASSWORD }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
 
   release:
     needs: [prepare, build]
@@ -46,4 +48,4 @@ jobs:
       image_name: sokol111/${{ needs.prepare.outputs.image_name }}
       tag: ${{ needs.prepare.outputs.image_tag }}
     secrets:
-      registry_password: ${{ secrets.REGISTRY_PASSWORD }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
