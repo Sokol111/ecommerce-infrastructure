@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image_name: ${{ steps.image.outputs.image_name }}
-      tag: ${{ steps.tag.outputs.tag }}
+      image_tag: ${{ steps.tag.outputs.image_tag }}
     steps:
       - uses: actions/checkout@v4
 
@@ -23,7 +23,7 @@ jobs:
         run: echo "image_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
 
       - id: tag
-        run: echo "tag=${{ github.event.inputs.version#v }}" >> $GITHUB_OUTPUT
+        run: echo "image_tag=${{ github.event.inputs.version#v }}" >> $GITHUB_OUTPUT
 
   build:
     needs: prepare
@@ -44,6 +44,6 @@ jobs:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-docker-image.yml@master
     with:
       image_name: sokol111/${{ needs.prepare.outputs.image_name }}
-      tag: ${{ needs.prepare.outputs.tag }}
+      tag: ${{ needs.prepare.outputs.image_tag }}
     secrets:
       registry_password: ${{ secrets.REGISTRY_PASSWORD }}
