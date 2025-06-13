@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      registry_password:
+      REGISTRY_PASSWORD:
         required: true
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: sokol111
-          password: ${{ secrets.registry_password }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image (no push)
         run: |

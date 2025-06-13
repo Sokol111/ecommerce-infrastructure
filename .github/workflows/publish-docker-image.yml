@@ -10,7 +10,7 @@ on:
         required: true
         type: string
     secrets:
-      registry_password:
+      REGISTRY_PASSWORD:
         required: true
 
 jobs:
