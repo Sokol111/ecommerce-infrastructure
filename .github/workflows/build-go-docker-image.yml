@@ -25,14 +25,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set up Docker cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
       - name: Login to Docker Registry (for cache only)
         uses: docker/login-action@v3
         with:
@@ -44,9 +36,6 @@ jobs:
           docker buildx build \
             -f infra/docker/Dockerfile.buildkit \
             -t ${{ inputs.image_name }}:temp \
-            --build-arg BUILDKIT_INLINE_CACHE=1 \
-            --cache-from type=local,src=/tmp/.buildx-cache \
-            --cache-to type=local,dest=/tmp/.buildx-cache \
             --load .
 
       - name: Save Docker image to tarball
