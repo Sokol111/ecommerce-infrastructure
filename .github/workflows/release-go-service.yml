@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      REGISTRY_PASSWORD:
+      DOCKER_PASSWORD:
         required: true
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
     with:
       image_name: sokol111/${{ needs.prepare.outputs.image_name }}
     secrets:
-      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   release:
     needs: [prepare, build]
@@ -48,4 +48,4 @@ jobs:
       image_name: sokol111/${{ needs.prepare.outputs.image_name }}
       tag: ${{ needs.prepare.outputs.image_tag }}
     secrets:
-      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
