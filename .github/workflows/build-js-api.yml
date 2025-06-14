@@ -1,12 +1,12 @@
-name: Generate JS API
+name: Build JS API
 
 on:
   workflow_call:
     inputs:
-      js_gen_dir:
+      artifact_dir:
         required: true
         type: string
-      js_artifact:
+      artifact:
         required: true
         type: string
       openapi_file:
@@ -26,7 +26,7 @@ permissions:
   contents: write
 
 jobs:
-  generate-js:
+  build-js:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,13 +36,13 @@ jobs:
         with:
           node-version: 20
 
-      - name: Download generate-js-api.mk
-        run: curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/makefiles/generate-js-api.mk -o generate-js-api.mk
+      - name: Download build-js-api.mk
+        run: curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/makefiles/build-js-api.mk -o build-js-api.mk
 
-      - name: Generate JavaScript SDK
-        run: make -f generate-js-api.mk generate-js-api
+      - name: Build JavaScript SDK
+        run: make -f build-js-api.mk build-js-api
         env:
-          JS_GEN_DIR: ${{ inputs.js_gen_dir }}
+          JS_GEN_DIR: ${{ inputs.artifact_dir }}
           OPENAPI_FILE: ${{ inputs.openapi_file }}
           PROJECT_NAME: ${{ inputs.project_name }}
           NPM_PACKAGE_NAME: ${{ inputs.npm_repo_name }}
@@ -50,8 +50,8 @@ jobs:
           REPOSITORY_URL: "https://github.com/${{ github.repository }}.git"
           VERSION: ${{ inputs.version }}
 
-      - name: Upload generated JS API
+      - name: Upload built JS API
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.js_artifact }}
-          path: ${{ inputs.js_gen_dir }}
+          name: ${{ inputs.artifact }}
+          path: ${{ inputs.artifact_dir }}

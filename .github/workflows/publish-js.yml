@@ -1,4 +1,4 @@
-name: Publish JS API to npm
+name: Publish JS to npm
 
 on:
   workflow_call:
@@ -6,15 +6,15 @@ on:
       NPM_TOKEN:
         required: true
     inputs:
-      js_gen_dir:
+      artifact_dir:
         required: true
         type: string
-      js_artifact:
+      artifact:
         required: true
         type: string
 
 jobs:
-  publish:
+  publish-js:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,15 +24,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Download JS API
+      - name: Download JS artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.js_artifact }}
-          path: ${{ inputs.js_gen_dir }}
+          name: ${{ inputs.artifact }}
+          path: ${{ inputs.artifact_dir }}
 
       - name: Publish to npm
         run: |
-          cd ${{ inputs.js_gen_dir }}
+          cd ${{ inputs.artifact_dir }}
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           npm publish --access public
         env:

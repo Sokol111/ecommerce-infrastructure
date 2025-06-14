@@ -1,4 +1,4 @@
-name: Release GO service
+name: Build and release GO service
 
 on:
   workflow_call:
@@ -39,23 +39,23 @@ jobs:
           echo "image_name: ${{ needs.prepare.outputs.image_name }}"
           echo "image_tag: ${{ needs.prepare.outputs.image_tag }}"
 
-  build:
+  build-docker-image:
     needs: prepare
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-go-docker-image.yml@master
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-docker-image.yml@master
     with:
-      image_name: ${{ needs.prepare.outputs.image_name }}
+      dockerfile: Dockerfile.go
     secrets:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-  release:
+  release-tag:
     needs: [prepare, build]
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
     with:
       version: ${{ github.event.inputs.version }}
 
-  publish:
+  publish-docker:
     needs: [prepare, build, release]
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-docker-image.yml@master
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-docker.yml@master
     with:
       image_name: ${{ needs.prepare.outputs.image_name }}
       tag: ${{ needs.prepare.outputs.image_tag }}
