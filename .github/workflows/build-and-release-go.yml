@@ -48,13 +48,13 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   release-tag:
-    needs: [prepare, build]
+    needs: [prepare, build-docker-image]
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
     with:
       version: ${{ github.event.inputs.version }}
 
   publish-docker:
-    needs: [prepare, build, release]
+    needs: [prepare, build-docker-image, release-tag]
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-docker.yml@master
     with:
       image_name: ${{ needs.prepare.outputs.image_name }}
