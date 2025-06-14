@@ -1,10 +1,16 @@
-name: Create GitHub Release
+name: Release tag
 
 on:
   workflow_call:
     inputs:
       version:
         required: true
+        type: string
+      artifact_dir:
+        required: false
+        type: string
+      artifact:
+        required: false
         type: string
 
 permissions:
@@ -14,8 +20,58 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Release
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Debug Inputs
+        run: |
+          echo "version: ${{ inputs.version }}"
+          echo "artifact_dir: ${{ inputs.artifact_dir }}"
+          echo "artifact: ${{ inputs.artifact }}"
+
+      - name: Check if tag already exists
+        run: |
+          if git rev-parse "refs/tags/${{ inputs.version }}" >/dev/null 2>&1; then
+            echo "❌ Tag ${{ inputs.version }} already exists"
+            exit 1
+          fi
+
+      - name: Configure Git
+        if: ${{ inputs.artifact != '' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Download artifact
+        if: ${{ inputs.artifact != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact }}
+          path: ${{ inputs.artifact_dir }}
+
+      - name: Commit artifact to `release` branch
+        if: ${{ inputs.artifact != '' }}
+        run: |
+          git checkout -B release
+          git add -f ${{ inputs.artifact_dir }}
+          git commit -m "Add ${{ inputs.artifact_dir }} folder to release ${{ inputs.version }}" || echo "No changes to commit"
+          git push -u origin release --force
+
+      - name: Tag release
+        run: |
+          if [ -z "${{ inputs.version }}" ]; then
+            echo "❌ No version provided"
+            exit 1
+          fi
+
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.version }}
           name: Release ${{ inputs.version }}
+          body: |
+            API generated automatically for version ${{ inputs.version }}.
