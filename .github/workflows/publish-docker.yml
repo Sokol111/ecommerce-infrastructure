@@ -28,7 +28,7 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag ${{ inputs.image_name }}:temp ${{ inputs.image_name }}:${{ inputs.tag }}
+          docker tag image:temp ${{ inputs.image_name }}:${{ inputs.tag }}
 
       - name: Login to Docker Registry
         uses: docker/login-action@v3
