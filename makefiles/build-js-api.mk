@@ -6,7 +6,7 @@ VERSION_NO_V := $(VERSION:v%=%)
 
 TEMPLATES_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/templates/
 
-.PHONY: check-js-vars print-js-vars create-js-gen-dir js-generate js-package js-tsconfig js-build generate-js-api clean-js
+.PHONY: check-js-vars print-js-vars create-js-gen-dir js-generate js-package js-tsconfig js-build build-js-api clean-js
 
 check-js-vars:
 	@bash -c '\
@@ -66,7 +66,7 @@ js-build:
 	@echo "Generated package.json:"
 	@cat $(JS_GEN_DIR)/package.json
 
-generate-js-api: check-js-vars print-js-vars clean-js js-generate js-package js-tsconfig js-build
+build-js-api: check-js-vars print-js-vars clean-js js-generate js-package js-tsconfig js-build
 	@echo "JS API generated successfully."
 
 clean-js:
