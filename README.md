@@ -1,1 +1,1 @@
-# ecommerce-ci-templates
+# ecommerce-infrastructure
