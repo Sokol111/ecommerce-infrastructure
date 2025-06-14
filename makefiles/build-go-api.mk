@@ -4,7 +4,7 @@ REQUIRED_VARS := OPENAPI_FILE GO_GEN_DIR PACKAGE
 
 OAPI_GEN := $(HOME)/go/bin/oapi-codegen
 
-.PHONY: check-go-vars print-go-vars install-go-tools create-go-gen-dir types server client generate-go-api clean-go
+.PHONY: check-go-vars print-go-vars install-go-tools create-go-gen-dir types server client build-go-api clean-go
 
 check-go-vars:
 	@bash -c '\
@@ -44,7 +44,7 @@ client: install-go-tools create-go-gen-dir
 	@echo "Generating Go client..."
 	$(OAPI_GEN) -generate client -package $(PACKAGE) -o $(GO_GEN_DIR)/client.gen.go $(OPENAPI_FILE)
 
-generate-go-api: check-go-vars print-go-vars clean-go types server client
+build-go-api: check-go-vars print-go-vars clean-go types server client
 	@echo "Go API generated successfully."
 
 clean-go:
