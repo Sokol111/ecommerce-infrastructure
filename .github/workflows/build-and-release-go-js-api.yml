@@ -68,7 +68,7 @@ jobs:
       - id: proj
         run: |
           if [ -z "${{ inputs.project_name }}" ]; then
-            echo "project_name=$(basename '${GITHUB_REPOSITORY}')" >> $GITHUB_OUTPUT
+            echo "project_name=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
           else
             echo "project_name=${{ inputs.project_name }}" >> $GITHUB_OUTPUT
           fi
