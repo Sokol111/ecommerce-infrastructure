@@ -111,7 +111,7 @@ jobs:
 
   release-go-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
-    needs: [prepare, generate-go-api, generate-js-api]
+    needs: [prepare, build-go-api, build-js-api]
     with:
       version: ${{ needs.prepare.outputs.version }}
       artifact_dir: ${{ needs.prepare.outputs.go_gen_dir }}
@@ -119,7 +119,7 @@ jobs:
 
   publish-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js.yml@master
-    needs: [prepare, generate-go-api, generate-js-api, release-go-api]
+    needs: [prepare, build-go-api, build-js-api, release-go-api]
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
