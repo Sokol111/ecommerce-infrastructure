@@ -39,3 +39,5 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ inputs.image_name }}:${{ inputs.tag }}
+          docker tag ${{ inputs.image_name }}:${{ inputs.tag }} ${{ inputs.image_name }}:latest
+          docker push ${{ inputs.image_name }}:latest
