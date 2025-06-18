@@ -36,6 +36,7 @@ jobs:
     steps:
       - name: Print outputs
         run: |
+          echo "version: ${{ needs.prepare.outputs.version }}"
           echo "image_name: ${{ needs.prepare.outputs.image_name }}"
           echo "image_tag: ${{ needs.prepare.outputs.image_tag }}"
 
