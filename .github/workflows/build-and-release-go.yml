@@ -26,9 +26,9 @@ jobs:
         run: echo "image_name=sokol111/$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
 
       - id: tag
-        run: echo "image_tag=${GITHUB_EVENT_INPUTS_VERSION#v}" >> $GITHUB_OUTPUT
-        env:
-          GITHUB_EVENT_INPUTS_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          VERSION_INPUT="${{ inputs.version }}"
+          echo "image_tag=${VERSION_INPUT#v}" >> $GITHUB_OUTPUT
 
   debug-outputs:
     needs: prepare
