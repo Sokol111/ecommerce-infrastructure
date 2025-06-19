@@ -1,0 +1,39 @@
+additionalArguments:
+  - "--entryPoints.web.address=:80"
+  - "--entryPoints.websecure.address=:443"
+  - "--entryPoints.mongodb.address=:27017/tcp"
+  - "--api.dashboard=true"
+  - "--providers.kubernetescrd"
+  - "--providers.kubernetesingress"
+
+ports:
+  web:
+    expose:
+      default: true
+    port: 80
+    exposedPort: 80
+    protocol: TCP
+
+  websecure:
+    expose:
+      default: true
+    port: 443
+    exposedPort: 443
+    protocol: TCP
+
+  mongodb:
+    expose:
+      default: true
+    port: 27017
+    exposedPort: 27017
+    protocol: TCP
+
+service:
+  enabled: true
+  type: LoadBalancer
+
+ingressRoute:
+  dashboard:
+    enabled: true
+    entryPoints:
+      - web
