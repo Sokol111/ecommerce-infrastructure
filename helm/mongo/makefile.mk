@@ -17,8 +17,6 @@ install-mongo: create-dev-namespace
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo update
 	helm install $(RELEASE) $(CHART) -f $(VALUES) --namespace $(NAMESPACE)
-
-install-mongo-svc:
 	kubectl apply -f $(SERVICE)
 
 upgrade-mongo:
