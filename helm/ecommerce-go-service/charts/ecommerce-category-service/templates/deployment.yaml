@@ -1,0 +1,8 @@
+{{ include "shared.deployment" (dict
+  "name" (include "ecommerce-category-service.fullname" .)
+  "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
+  "SelectorLabels" (include "ecommerce-category-service.selectorLabels" . | fromYaml)
+  "Values" .Values
+  "ServiceAccountName" (include "ecommerce-category-service.serviceAccountName" .)
+  "Chart" .Chart
+) }}

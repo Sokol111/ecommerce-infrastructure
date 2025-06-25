@@ -1,0 +1,5 @@
+image:
+  repository: sokol111/ecommerce-product-service
+  tag: "0.0.7"
+ingress:
+  host: ecommerce-product-service.local

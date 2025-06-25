@@ -1,0 +1,45 @@
+# ========================
+# Helm
+# ========================
+*.tgz
+charts/*.tgz
+**/charts/*.tgz
+
+**/tmpcharts
+**/.helm-package-cache
+**/Chart.lock~
+**/values.yaml~
+
+# ========================
+# Kubernetes
+# ========================
+**/*.yaml~
+**/*.bak
+**/*.tmp
+k8s/*.generated.yaml
+
+# ========================
+# IDEs & OS
+# ========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.iml
+
+# ========================
+# Build artifacts
+# ========================
+*.out
+*.bin
+*.tar
+*.tar.gz
+*.zip
+*.gz
+*.tmp

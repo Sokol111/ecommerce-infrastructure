@@ -1,0 +1,5 @@
+{{ include "shared.ingress" (dict
+  "name" (include "ecommerce-category-service.fullname" .)
+  "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
+  "Values" .Values
+) }}

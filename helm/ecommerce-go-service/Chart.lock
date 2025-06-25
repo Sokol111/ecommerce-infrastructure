@@ -1,0 +1,9 @@
+dependencies:
+- name: ecommerce-product-service
+  repository: file://charts/ecommerce-product-service
+  version: 0.0.2
+- name: ecommerce-category-service
+  repository: file://charts/ecommerce-category-service
+  version: 0.0.2
+digest: sha256:abcc084024d9028625637916ae274058eb0a6ed8f10482d93383f5c7fdd05224
+generated: "2025-06-25T17:38:05.701475928+02:00"

@@ -1,0 +1,19 @@
+global:
+  image:
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+  ingress:
+    enabled: true
+    className: traefik
+    annotations: {}
+  livenessProbe:
+    httpGet:
+      path: /health/live
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /health/live
+      port: http
