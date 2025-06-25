@@ -1,0 +1,5 @@
+image:
+  repository: sokol111/ecommerce-category-service
+  tag: "0.0.7"
+ingress:
+  host: ecommerce-category-service.local

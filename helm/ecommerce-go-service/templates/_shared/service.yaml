@@ -1,0 +1,30 @@
+{{/*
+  Shared Service Template
+
+  Usage:
+    {{ include "shared.service" (dict
+      "name" (include "ecommerce-category-service.fullname" .)
+      "Values" .Values
+      "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
+      "SelectorLabels" (include "ecommerce-category-service.selectorLabels" . | fromYaml)
+    ) }}
+
+*/}}
+
+{{- define "shared.service" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- .Labels | nindent 4 }}
+spec:
+  type: {{ .Values.service.type | default .Values.global.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ .Values.service.port | default .Values.global.service.port | default 80 }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- .SelectorLabels | nindent 4 }}
+{{- end }}

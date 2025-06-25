@@ -1,5 +1,5 @@
-include helm/mongo/makefile.mk
-include helm/traefik/makefile.mk
-include k3d/makefile.mk
-
-setup-cluster: create-k3d install-traefik install-mongo
+all:
+	make -C docker all
+	make -C k3d all
+	make -C helm/traefik all
+	make -C helm/ecommerce-go-service all

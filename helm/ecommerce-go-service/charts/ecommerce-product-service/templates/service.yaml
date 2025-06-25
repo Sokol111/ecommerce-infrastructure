@@ -1,0 +1,6 @@
+{{ include "shared.service" (dict
+  "name" (include "ecommerce-product-service.fullname" .)
+  "Values" .Values
+  "Labels" (include "ecommerce-product-service.labels" . | fromYaml)
+  "SelectorLabels" (include "ecommerce-product-service.selectorLabels" . | fromYaml)
+) }}

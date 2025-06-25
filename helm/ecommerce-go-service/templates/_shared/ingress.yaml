@@ -1,0 +1,41 @@
+{{/*
+  shared.ingress — template for Ingress
+
+  Usage:
+    {{ include "shared.ingress" (dict
+      "name" (include "ecommerce-category-service.fullname" .)
+      "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
+      "Values" .Values
+    ) }}
+
+*/}}
+
+{{- define "shared.ingress" -}}
+{{- if (.Values.ingress.enabled | default .Values.global.ingress.enabled) }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- .Labels | nindent 4 }}
+  annotations:
+    {{- if .Values.ingress.annotations }}
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    {{- else }}
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.rule: "Host(`{{ .Values.ingress.host }}`)"
+    {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.path | default "/" }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .name }}
+                port:
+                  number: {{ .Values.service.port | default .Values.global.service.port }}
+{{- end }}
+{{- end }}
