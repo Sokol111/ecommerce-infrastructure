@@ -3,8 +3,7 @@ CHART_PATH   := $(THIS_DIR)
 
 APP_NAME     := ecommerce-go-service
 NAMESPACE    := dev
-VALUES_FILE  := $(THIS_DIR)/values.yaml
-KUBECONFIG   := ~/.k3d/kubeconfig-default.yaml
+VALUES_FILE  := $(THIS_DIR)values.yaml
 
 .PHONY: all
 all: update deploy
@@ -15,11 +14,10 @@ deploy:
 		-n $(NAMESPACE) \
 		--create-namespace \
 		-f $(VALUES_FILE) \
-		--kubeconfig $(KUBECONFIG)
 
 .PHONY: uninstall
 uninstall:
-	helm uninstall $(APP_NAME) -n $(NAMESPACE) --kubeconfig $(KUBECONFIG)
+	helm uninstall $(APP_NAME) -n $(NAMESPACE)
 
 .PHONY: lint
 lint:

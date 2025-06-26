@@ -15,15 +15,20 @@
 */}}
 
 {{- define "shared.deployment" -}}
+{{- $autoscalingEnabled := and (.Values.autoscaling) (.Values.autoscaling.enabled) | default (.Values.global.autoscaling.enabled) }}
+{{- $replicaCount := or .Values.replicaCount .Values.global.replicaCount }}
+{{- $imagePullPolicy := and (.Values.image) (.Values.image.pullPolicy) | default .Values.global.image.pullPolicy }}
+{{- $containerPort := and (.Values.service) (.Values.service.port) | default .Values.global.service.port }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .name }}
   labels:
-    {{- .Labels | nindent 4 }}
+    {{- toYaml .Labels | nindent 4 }}
 spec:
-  {{- if not (or .Values.autoscaling.enabled .Values.global.autoscaling.enabled) }}
-  replicas: {{ .Values.replicaCount | default .Values.global.replicaCount }}
+  {{- if not $autoscalingEnabled }}
+  replicas: {{ $replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -35,7 +40,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- .Labels | nindent 8 }}
+        {{- toYaml .Labels | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -44,22 +49,31 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ .ServiceAccountName }}
+      serviceAccountName: {{ .ServiceAccountName | quote }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Values.nameOverride | default .Values.chartName | default "app" }}
+          {{- with .Values.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy | default .Values.global.image.pullPolicy }}
+          imagePullPolicy: {{ $imagePullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port | default .Values.global.service.port }}
+              containerPort: {{ $containerPort }}
               protocol: TCP
           {{- with (.Values.livenessProbe | default .Values.global.livenessProbe) }}
           livenessProbe:

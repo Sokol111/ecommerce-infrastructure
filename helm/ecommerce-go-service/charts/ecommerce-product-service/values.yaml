@@ -1,5 +1,11 @@
 image:
   repository: sokol111/ecommerce-product-service
-  tag: "0.0.7"
+  tag: "0.0.8"
 ingress:
   host: ecommerce-product-service.local
+serviceAccount:
+  create: false
+
+envFrom:
+  - configMapRef:
+      name: ecommerce-product-service-config

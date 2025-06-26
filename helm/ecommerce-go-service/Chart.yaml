@@ -2,12 +2,12 @@ apiVersion: v2
 name: ecommerce-go-service
 description: Umbrella chart for Golang microservices
 type: application
-version: 0.0.3
+version: 0.0.11
 
 dependencies:
   - name: ecommerce-product-service
-    version: 0.0.2
+    version: 0.0.9
     repository: "file://charts/ecommerce-product-service"
   - name: ecommerce-category-service
-    version: 0.0.2
+    version: 0.0.9
     repository: "file://charts/ecommerce-category-service"

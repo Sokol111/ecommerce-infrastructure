@@ -1,10 +1,14 @@
 global:
+  autoscaling:
+    enabled: false
   image:
     pullPolicy: IfNotPresent
   replicaCount: 1
   service:
     type: ClusterIP
     port: 8080
+  serviceAccount:
+    create: false
   ingress:
     enabled: true
     className: traefik
@@ -17,3 +21,11 @@ global:
     httpGet:
       path: /health/live
       port: http
+  
+  config:
+    env: "production"
+    mongo:
+      host: "mongo"
+      password: "pass"
+    kafka:
+      brokers: "kafka:9092"

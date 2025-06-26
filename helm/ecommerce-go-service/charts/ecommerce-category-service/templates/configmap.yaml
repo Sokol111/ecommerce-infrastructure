@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecommerce-category-service-config
+data:
+  APP_ENV: {{ .Values.global.config.env | b64enc }}
+  DB_HOST: {{ .Values.global.config.mongo.host | b64enc }}
+  KAKFA_BROKERS: {{ .Values.global.config.kafka.brokers | b64enc }}
