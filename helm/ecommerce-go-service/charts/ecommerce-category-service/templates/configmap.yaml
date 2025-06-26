@@ -4,5 +4,5 @@ metadata:
   name: ecommerce-category-service-config
 data:
   APP_ENV: {{ .Values.global.config.env }}
-  DB_HOST: {{ .Values.global.config.mongo.host }}
+  MONGO_HOST: {{ .Values.global.config.mongo.host }}
   KAKFA_BROKERS: {{ .Values.global.config.kafka.brokers }}
