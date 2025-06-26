@@ -8,7 +8,7 @@ ensure-network:
 	docker network inspect shared-network > /dev/null 2>&1 || docker network create shared-network
 
 .PHONY: start-mongo
-start-mongo: ensure-network stop-mongo
+start-mongo: ensure-network
 	docker compose -f $(THIS_DIR)docker-compose/mongo.yml up -d
 
 .PHONY: stop-mongo
@@ -16,7 +16,7 @@ stop-mongo:
 	docker compose -f $(THIS_DIR)docker-compose/mongo.yml down
 
 .PHONY: start-kafka
-start-kafka: ensure-network stop-kafka
+start-kafka: ensure-network
 	docker compose -f $(THIS_DIR)docker-compose/kafka.yml up -d
 
 .PHONY: stop-kafka
