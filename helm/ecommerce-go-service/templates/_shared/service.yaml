@@ -8,23 +8,30 @@
       "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
       "SelectorLabels" (include "ecommerce-category-service.selectorLabels" . | fromYaml)
     ) }}
-
 */}}
 
 {{- define "shared.service" -}}
+
+{{- $values := .Values }}
+{{- $global := .Values.global }}
+{{- $service := or $values.service $global.service }}
+
+{{- $type := and $service $service.type | default "ClusterIP" }}
+{{- $port := and $service $service.port | default 80 }}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .name }}
   labels:
-    {{- .Labels | nindent 4 }}
+    {{- toYaml .Labels | nindent 4 }}
 spec:
-  type: {{ .Values.service.type | default .Values.global.service.type | default "ClusterIP" }}
+  type: {{ $type }}
   ports:
-    - port: {{ .Values.service.port | default .Values.global.service.port | default 80 }}
+    - port: {{ $port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- .SelectorLabels | nindent 4 }}
+    {{- toYaml .SelectorLabels | nindent 4 }}
 {{- end }}

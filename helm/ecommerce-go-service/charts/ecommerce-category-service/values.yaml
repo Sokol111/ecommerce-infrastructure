@@ -1,5 +1,22 @@
 image:
   repository: sokol111/ecommerce-category-service
-  tag: "0.0.7"
+  tag: "0.0.8"
 ingress:
   host: ecommerce-category-service.local
+serviceAccount:
+  create: false
+
+# env:
+#   - name: APP_ENV
+#     value: "production"
+  # - name: DB_PASSWORD
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: db-secret
+  #       key: password
+
+envFrom:
+  - configMapRef:
+      name: ecommerce-category-service-config
+  # - secretRef:
+  #     name: mongo-secret
