@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: ecommerce-product-service-config
 data:
-  APP_ENV: {{ .Values.global.config.env | b64enc }}
-  DB_HOST: {{ .Values.global.config.mongo.host | b64enc }}
-  KAKFA_BROKERS: {{ .Values.global.config.kafka.brokers | b64enc }}
+  APP_ENV: {{ .Values.global.config.env }}
+  MONGO_HOST: {{ .Values.global.config.mongo.host }}
+  KAKFA_BROKERS: {{ .Values.global.config.kafka.brokers }}

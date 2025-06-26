@@ -5,6 +5,10 @@ all:
 	make -C helm/traefik all
 	make -C helm/ecommerce-go-service all
 
+.PHONY: update-ecommerce-go-service
+update-ecommerce-go-service:
+	make -C helm/ecommerce-go-service all
+
 .PHONY: clean
 clean:
 	make -C k3d clean
