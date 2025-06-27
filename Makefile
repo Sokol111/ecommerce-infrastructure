@@ -1,3 +1,5 @@
+NAMESPACE ?= dev
+
 .PHONY: all
 all:
 	make -C docker all
@@ -5,9 +7,13 @@ all:
 	make -C helm/traefik all
 	make -C helm/ecommerce-go-service all
 
-.PHONY: update-ecommerce-go-service
-update-ecommerce-go-service:
+.PHONY: update-services
+update-services:
 	make -C helm/ecommerce-go-service all
+
+.PHONY: docker-all
+docker-all:
+	make -C docker all
 
 .PHONY: clean
 clean:
@@ -15,16 +21,22 @@ clean:
 
 .PHONY: helm-list
 helm-list:
-	helm list -n dev
+	helm list -n $(NAMESPACE)
 
 .PHONY: get-pods
 get-pods:
-	kubectl get pods -n dev
+	kubectl get pods -n $(NAMESPACE)
 
 .PHONY: describe-pod
 describe-pod:
-	kubectl describe pod $(POD) -n dev
+ifndef POD
+	$(error You must specify POD=<pod-name>)
+endif
+	kubectl describe pod $(POD) -n $(NAMESPACE)
 
-.PHONY: pod-logs
-pod-logs:
-	kubectl logs $(POD) -n dev
+.PHONY: logs
+logs:
+ifndef SERVICE
+	$(error You must specify SERVICE=<partial-pod-name>)
+endif
+	stern $(SERVICE) -n $(NAMESPACE)
