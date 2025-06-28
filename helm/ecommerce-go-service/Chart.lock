@@ -1,9 +1,12 @@
 dependencies:
+- name: shared-helpers
+  repository: file://charts/shared-helpers
+  version: 0.1.0
 - name: ecommerce-product-service
   repository: file://charts/ecommerce-product-service
-  version: 0.0.9
+  version: 0.0.12
 - name: ecommerce-category-service
   repository: file://charts/ecommerce-category-service
-  version: 0.0.9
-digest: sha256:286830ba75044ad401dbf556db52494c21b4f92843cab63cec7887f2369bfe01
-generated: "2025-06-26T18:02:35.338817502+02:00"
+  version: 0.0.12
+digest: sha256:bb9c10b92800d928190e3d4a873c80467d9368f1a29cb37d8281e3f718640155
+generated: "2025-06-28T11:58:25.777867879+02:00"

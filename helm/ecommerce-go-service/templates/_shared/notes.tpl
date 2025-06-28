@@ -6,8 +6,8 @@
         "Values" .Values
         "Release" .Release
         "Chart" .Chart
-        "fullname" (include "ecommerce-category-service.fullname" .)
-        "appName" (include "ecommerce-category-service.name" .)
+        "fullname" (include "template.fullname" .)
+        "appName" (include "template.name" .)
     ) }}
 */}}
 
