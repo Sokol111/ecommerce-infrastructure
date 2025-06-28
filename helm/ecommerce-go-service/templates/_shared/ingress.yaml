@@ -3,8 +3,8 @@
 
   Usage:
     {{ include "shared.ingress" (dict
-      "name" (include "ecommerce-category-service.fullname" .)
-      "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
+      "name" (include "template.fullname" .)
+      "Labels" (include "template.labels" . | fromYaml)
       "Values" .Values
     ) }}
 */}}

@@ -1,6 +1,6 @@
 {{ include "shared.service" (dict
-  "name" (include "ecommerce-category-service.fullname" .)
+  "name" (include "template.fullname" .)
   "Values" .Values
-  "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
-  "SelectorLabels" (include "ecommerce-category-service.selectorLabels" . | fromYaml)
+  "Labels" (include "template.labels" . | fromYaml)
+  "SelectorLabels" (include "template.selectorLabels" . | fromYaml)
 ) }}

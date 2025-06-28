@@ -1,6 +1,6 @@
 image:
   repository: sokol111/ecommerce-product-service
-  tag: "0.0.8"
+  tag: "0.0.11"
 ingress:
   host: ecommerce-product-service.local
 serviceAccount:

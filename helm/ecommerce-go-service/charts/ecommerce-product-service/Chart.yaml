@@ -2,5 +2,10 @@ apiVersion: v2
 name: ecommerce-product-service
 description: A Helm chart for ecommerce-product-service
 type: application
-version: 0.0.9
-appVersion: "0.0.8"
+version: 0.0.12
+appVersion: "0.0.11"
+
+dependencies:
+  - name: shared-helpers
+    version: 0.1.0
+    repository: "file://../shared-helpers"

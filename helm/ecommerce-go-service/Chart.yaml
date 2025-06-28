@@ -2,12 +2,15 @@ apiVersion: v2
 name: ecommerce-go-service
 description: Umbrella chart for Golang microservices
 type: application
-version: 0.0.12
+version: 0.0.14
 
 dependencies:
+  - name: shared-helpers
+    version: 0.1.0
+    repository: "file://charts/shared-helpers"
   - name: ecommerce-product-service
-    version: 0.0.9
+    version: 0.0.12
     repository: "file://charts/ecommerce-product-service"
   - name: ecommerce-category-service
-    version: 0.0.9
+    version: 0.0.12
     repository: "file://charts/ecommerce-category-service"

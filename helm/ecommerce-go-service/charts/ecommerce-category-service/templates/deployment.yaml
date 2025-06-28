@@ -1,8 +1,8 @@
 {{ include "shared.deployment" (dict
-  "name" (include "ecommerce-category-service.fullname" .)
-  "Labels" (include "ecommerce-category-service.labels" . | fromYaml)
-  "SelectorLabels" (include "ecommerce-category-service.selectorLabels" . | fromYaml)
+  "name" (include "template.fullname" .)
+  "Labels" (include "template.labels" . | fromYaml)
+  "SelectorLabels" (include "template.selectorLabels" . | fromYaml)
   "Values" .Values
-  "ServiceAccountName" (include "ecommerce-category-service.serviceAccountName" .)
+  "ServiceAccountName" (include "template.serviceAccountName" .)
   "Chart" .Chart
 ) }}
