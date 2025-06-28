@@ -5,7 +5,3 @@ ingress:
   host: ecommerce-product-service.local
 serviceAccount:
   create: false
-
-envFrom:
-  - configMapRef:
-      name: ecommerce-product-service-config

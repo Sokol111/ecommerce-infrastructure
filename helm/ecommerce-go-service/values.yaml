@@ -28,7 +28,8 @@ global:
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 2
-  
+  configSuffix: "-config"
+
   config:
     env: "production"
     mongo:
