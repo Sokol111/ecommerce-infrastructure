@@ -1,9 +1,13 @@
-THIS_DIR     := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-CHART_PATH   := $(THIS_DIR)
+THIS_DIR       := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+CHART_PATH     := $(THIS_DIR)
 
-APP_NAME     := ecommerce-go-service
-NAMESPACE    := dev
-VALUES_FILE  := $(THIS_DIR)values.yaml
+APP_NAME       := ecommerce-go-service
+NAMESPACE      := dev
+VALUES_FILE    := $(THIS_DIR)values.yaml
+
+HOST_IP        := 127.0.0.1
+HOSTS_FILE     := /etc/hosts
+TEMPLATE_FILE  := $(CHART_PATH)rendered.yaml
 
 .PHONY: all
 all: update deploy
@@ -13,7 +17,7 @@ deploy:
 	helm upgrade --install $(APP_NAME) $(CHART_PATH) \
 		-n $(NAMESPACE) \
 		--create-namespace \
-		-f $(VALUES_FILE) \
+		-f $(VALUES_FILE)
 
 .PHONY: uninstall
 uninstall:

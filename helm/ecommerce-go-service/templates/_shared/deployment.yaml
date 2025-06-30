@@ -15,10 +15,34 @@
 */}}
 
 {{- define "shared.deployment" -}}
-{{- $autoscalingEnabled := and (.Values.autoscaling) (.Values.autoscaling.enabled) | default (.Values.global.autoscaling.enabled) }}
-{{- $replicaCount := or .Values.replicaCount .Values.global.replicaCount }}
-{{- $imagePullPolicy := and (.Values.image) (.Values.image.pullPolicy) | default .Values.global.image.pullPolicy }}
-{{- $containerPort := and (.Values.service) (.Values.service.port) | default .Values.global.service.port }}
+
+{{- $autoscalingEnabled := false }}
+{{- if and .Values.autoscaling .Values.autoscaling.enabled }}
+  {{- $autoscalingEnabled = .Values.autoscaling.enabled }}
+{{- else if and .Values.global.autoscaling .Values.global.autoscaling.enabled }}
+  {{- $autoscalingEnabled = .Values.global.autoscaling.enabled }}
+{{- end }}
+
+{{- $replicaCount := 1 }}
+{{- if .Values.replicaCount }}
+  {{- $replicaCount = .Values.replicaCount }}
+{{- else if .Values.global.replicaCount }}
+  {{- $replicaCount = .Values.global.replicaCount }}
+{{- end }}
+
+{{- $imagePullPolicy := "IfNotPresent" }}
+{{- if and .Values.image .Values.image.pullPolicy }}
+  {{- $imagePullPolicy = .Values.image.pullPolicy }}
+{{- else if and .Values.global.image .Values.global.image.pullPolicy }}
+  {{- $imagePullPolicy = .Values.global.image.pullPolicy }}
+{{- end }}
+
+{{- $containerPort := 80 }}
+{{- if and .Values.service .Values.service.port }}
+  {{- $containerPort = .Values.service.port }}
+{{- else if and .Values.global.service .Values.global.service.port }}
+  {{- $containerPort = .Values.global.service.port }}
+{{- end }}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -55,7 +79,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ .Values.nameOverride | default .Values.chartName | default "app" }}
+        - name: {{ or .Values.nameOverride .Values.chartName "app" }}
           {{- with .Values.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -63,23 +87,23 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: {{ printf "%s%s" (include "template.name" .) .Values.global.configSuffix }}
+                name: {{ printf "%s%s" (include "template.name" .) (or .Values.global.configSuffix "-config") }}
           
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ or .Values.image.tag .Chart.AppVersion }}"
           imagePullPolicy: {{ $imagePullPolicy }}
           ports:
             - name: http
               containerPort: {{ $containerPort }}
               protocol: TCP
-          {{- with (.Values.livenessProbe | default .Values.global.livenessProbe) }}
+          {{- with or .Values.livenessProbe .Values.global.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with (.Values.readinessProbe | default .Values.global.readinessProbe) }}
+          {{- with or .Values.readinessProbe .Values.global.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}

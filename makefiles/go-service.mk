@@ -1,4 +1,4 @@
-DOMAIN = $(PROJECT_NAME).localhost
+DOMAIN = $(PROJECT_NAME).test
 DOCKERFILE_URL:=https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/docker/Dockerfile.buildkit
 
 .PHONY: generate-mocks build-docker-image start-docker-compose stop-docker-compose update-dependencies test init-git show-container-logs ensure-network

@@ -1,18 +1,12 @@
 global:
   autoscaling:
     enabled: false
-  image:
-    pullPolicy: IfNotPresent
   replicaCount: 1
   service:
     type: ClusterIP
     port: 8080
   serviceAccount:
     create: false
-  ingress:
-    enabled: true
-    className: traefik
-    annotations: {}
   livenessProbe:
     httpGet:
       path: /health/live
@@ -37,3 +31,27 @@ global:
       password: "pass"
     kafka:
       brokers: "kafka:9092"
+
+ecommerce-product-service:
+  image:
+    repository: sokol111/ecommerce-product-service
+    tag: "0.0.11"
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    host: ecommerce-product-service.localhost
+    annotations: {}
+  serviceAccount:
+    create: false
+
+ecommerce-category-service:
+  image:
+    repository: sokol111/ecommerce-category-service
+    tag: "0.0.11"
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    host: ecommerce-category-service.localhost
+    annotations: {}
+  serviceAccount:
+    create: false
