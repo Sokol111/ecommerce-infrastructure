@@ -44,7 +44,18 @@ client: install-go-tools create-go-gen-dir
 	@echo "Generating Go client..."
 	$(OAPI_GEN) -generate client -package $(PACKAGE) -o $(GO_GEN_DIR)/client.gen.go $(OPENAPI_FILE)
 
-build-go-api: check-go-vars print-go-vars clean-go types server client
+embed-openapi: install-go-tools create-go-gen-dir
+	@echo "Copying $(OPENAPI_FILE) to $(GO_GEN_DIR)/openapi.yml"
+	cp $(OPENAPI_FILE) $(GO_GEN_DIR)/openapi.yml
+	@echo "Generating Go embedded openapi.go..."
+	@echo 'package $(PACKAGE)' > $(GO_GEN_DIR)/openapi.go
+	@echo '' >> $(GO_GEN_DIR)/openapi.go
+	@echo 'import _ "embed"' >> $(GO_GEN_DIR)/openapi.go
+	@echo '' >> $(GO_GEN_DIR)/openapi.go
+	@echo '//go:embed openapi.yml' >> $(GO_GEN_DIR)/openapi.go
+	@echo 'var OpenAPIDoc []byte' >> $(GO_GEN_DIR)/openapi.go
+
+build-go-api: check-go-vars print-go-vars clean-go types server client embed-openapi
 	@echo "Go API generated successfully."
 
 clean-go:

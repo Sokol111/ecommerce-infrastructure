@@ -16,8 +16,15 @@
 {{- $global := .Values.global }}
 {{- $service := or $values.service $global.service }}
 
-{{- $type := and $service $service.type | default "ClusterIP" }}
-{{- $port := and $service $service.port | default 80 }}
+{{- $type := "ClusterIP" }}
+{{- if and $service $service.type }}
+  {{- $type = $service.type }}
+{{- end }}
+
+{{- $port := 80 }}
+{{- if and $service $service.port }}
+  {{- $port = $service.port }}
+{{- end }}
 
 apiVersion: v1
 kind: Service

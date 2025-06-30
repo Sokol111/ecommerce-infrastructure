@@ -10,17 +10,39 @@
 */}}
 
 {{- define "shared.ingress" -}}
-
 {{- $values := .Values }}
 {{- $global := .Values.global }}
 {{- $ingress := or $values.ingress $global.ingress }}
 {{- $service := or $values.service $global.service }}
 
-{{- $enabled := and $ingress $ingress.enabled | default false }}
-{{- $host := and $ingress $ingress.host | default "example.com" }}
-{{- $path := and $ingress $ingress.path | default "/" }}
-{{- $annotations := and $ingress $ingress.annotations }}
-{{- $port := and $service $service.port | default 80 }}
+{{- $enabled := false }}
+{{- if $ingress }}
+  {{- if $ingress.enabled }}
+    {{- $enabled = $ingress.enabled }}
+  {{- else }}
+    {{- $enabled = false }}
+  {{- end }}
+{{- end }}
+
+{{- $host := "example.com" }}
+{{- if and $ingress $ingress.host }}
+  {{- $host = $ingress.host }}
+{{- end }}
+
+{{- $path := "/" }}
+{{- if and $ingress $ingress.path }}
+  {{- $path = $ingress.path }}
+{{- end }}
+
+{{- $annotations := dict }}
+{{- if and $ingress $ingress.annotations }}
+  {{- $annotations = $ingress.annotations }}
+{{- end }}
+
+{{- $port := 80 }}
+{{- if and $service $service.port }}
+  {{- $port = $service.port }}
+{{- end }}
 
 {{- if $enabled }}
 apiVersion: networking.k8s.io/v1
