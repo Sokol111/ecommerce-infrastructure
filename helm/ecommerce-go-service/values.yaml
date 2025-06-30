@@ -35,7 +35,7 @@ global:
 ecommerce-product-service:
   image:
     repository: sokol111/ecommerce-product-service
-    tag: "0.0.11"
+    tag: "0.0.13"
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
@@ -47,7 +47,7 @@ ecommerce-product-service:
 ecommerce-category-service:
   image:
     repository: sokol111/ecommerce-category-service
-    tag: "0.0.11"
+    tag: "0.0.13"
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
