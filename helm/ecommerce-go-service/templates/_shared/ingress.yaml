@@ -56,7 +56,6 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     {{- else }}
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.rule: "Host(`{{ $host }}`)"
     {{- end }}
 spec:
   rules:

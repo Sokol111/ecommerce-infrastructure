@@ -30,3 +30,9 @@ lint:
 .PHONY: update
 update:
 	helm dependency update $(CHART_PATH)
+
+.PHONY: render
+render:
+	helm template $(APP_NAME) $(CHART_PATH) \
+		-n $(NAMESPACE) \
+		-f $(VALUES_FILE) > $(TEMPLATE_FILE)
