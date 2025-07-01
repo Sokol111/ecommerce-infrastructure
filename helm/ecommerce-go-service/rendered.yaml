@@ -7,7 +7,7 @@ metadata:
 data:
   APP_ENV: production
   MONGO_HOST: mongo
-  KAKFA_BROKERS: kafka:9092
+  KAFKA_BROKERS: kafka:29092
 ---
 # Source: ecommerce-go-service/charts/ecommerce-product-service/templates/configmap.yaml
 apiVersion: v1
@@ -17,7 +17,7 @@ metadata:
 data:
   APP_ENV: production
   MONGO_HOST: mongo
-  KAKFA_BROKERS: kafka:9092
+  KAFKA_BROKERS: kafka:29092
 ---
 # Source: ecommerce-go-service/charts/ecommerce-category-service/templates/service.yaml
 apiVersion: v1
@@ -28,8 +28,8 @@ metadata:
     app.kubernetes.io/instance: ecommerce-go-service
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ecommerce-category-service
-    app.kubernetes.io/version: 0.0.13
-    helm.sh/chart: ecommerce-category-service-0.0.18
+    app.kubernetes.io/version: 0.0.14
+    helm.sh/chart: ecommerce-category-service-0.0.20
 spec:
   type: ClusterIP
   ports:
@@ -50,8 +50,8 @@ metadata:
     app.kubernetes.io/instance: ecommerce-go-service
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ecommerce-product-service
-    app.kubernetes.io/version: 0.0.13
-    helm.sh/chart: ecommerce-product-service-0.0.18
+    app.kubernetes.io/version: 0.0.14
+    helm.sh/chart: ecommerce-product-service-0.0.20
 spec:
   type: ClusterIP
   ports:
@@ -72,8 +72,8 @@ metadata:
     app.kubernetes.io/instance: ecommerce-go-service
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ecommerce-category-service
-    app.kubernetes.io/version: 0.0.13
-    helm.sh/chart: ecommerce-category-service-0.0.18
+    app.kubernetes.io/version: 0.0.14
+    helm.sh/chart: ecommerce-category-service-0.0.20
 spec:
   replicas: 1
   selector:
@@ -86,8 +86,8 @@ spec:
         app.kubernetes.io/instance: ecommerce-go-service
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: ecommerce-category-service
-        app.kubernetes.io/version: 0.0.13
-        helm.sh/chart: ecommerce-category-service-0.0.18
+        app.kubernetes.io/version: 0.0.14
+        helm.sh/chart: ecommerce-category-service-0.0.20
     spec:
       serviceAccountName: "default"
       containers:
@@ -96,7 +96,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: ecommerce-category-service-config
-          image: "sokol111/ecommerce-category-service:0.0.13"
+          image: "sokol111/ecommerce-category-service:0.0.14"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -127,8 +127,8 @@ metadata:
     app.kubernetes.io/instance: ecommerce-go-service
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ecommerce-product-service
-    app.kubernetes.io/version: 0.0.13
-    helm.sh/chart: ecommerce-product-service-0.0.18
+    app.kubernetes.io/version: 0.0.14
+    helm.sh/chart: ecommerce-product-service-0.0.20
 spec:
   replicas: 1
   selector:
@@ -141,8 +141,8 @@ spec:
         app.kubernetes.io/instance: ecommerce-go-service
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: ecommerce-product-service
-        app.kubernetes.io/version: 0.0.13
-        helm.sh/chart: ecommerce-product-service-0.0.18
+        app.kubernetes.io/version: 0.0.14
+        helm.sh/chart: ecommerce-product-service-0.0.20
     spec:
       serviceAccountName: "default"
       containers:
@@ -151,7 +151,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: ecommerce-product-service-config
-          image: "sokol111/ecommerce-product-service:0.0.13"
+          image: "sokol111/ecommerce-product-service:0.0.14"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -182,11 +182,10 @@ metadata:
     app.kubernetes.io/instance: ecommerce-go-service
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ecommerce-category-service
-    app.kubernetes.io/version: 0.0.13
-    helm.sh/chart: ecommerce-category-service-0.0.18
+    app.kubernetes.io/version: 0.0.14
+    helm.sh/chart: ecommerce-category-service-0.0.20
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.rule: "Host(`ecommerce-category-service.localhost`)"
 spec:
   rules:
     - host: ecommerce-category-service.localhost
@@ -209,11 +208,10 @@ metadata:
     app.kubernetes.io/instance: ecommerce-go-service
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ecommerce-product-service
-    app.kubernetes.io/version: 0.0.13
-    helm.sh/chart: ecommerce-product-service-0.0.18
+    app.kubernetes.io/version: 0.0.14
+    helm.sh/chart: ecommerce-product-service-0.0.20
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.rule: "Host(`ecommerce-product-service.localhost`)"
 spec:
   rules:
     - host: ecommerce-product-service.localhost

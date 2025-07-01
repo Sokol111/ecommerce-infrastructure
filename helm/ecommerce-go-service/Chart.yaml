@@ -9,8 +9,8 @@ dependencies:
     version: 0.1.0
     repository: "file://charts/shared-helpers"
   - name: ecommerce-product-service
-    version: 0.0.19
+    version: 0.0.20
     repository: "file://charts/ecommerce-product-service"
   - name: ecommerce-category-service
-    version: 0.0.19
+    version: 0.0.20
     repository: "file://charts/ecommerce-category-service"
