@@ -30,12 +30,12 @@ global:
       host: "mongo"
       password: "pass"
     kafka:
-      brokers: "kafka:9092"
+      brokers: "kafka:29092"
 
 ecommerce-product-service:
   image:
     repository: sokol111/ecommerce-product-service
-    tag: "0.0.13"
+    tag: "0.0.14"
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
@@ -47,7 +47,7 @@ ecommerce-product-service:
 ecommerce-category-service:
   image:
     repository: sokol111/ecommerce-category-service
-    tag: "0.0.13"
+    tag: "0.0.14"
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
