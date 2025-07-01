@@ -33,5 +33,5 @@ ingressRoute:
 
 ingressClass:
   enabled: true
-  isDefaultClass: false
+  isDefaultClass: true
   name: traefik

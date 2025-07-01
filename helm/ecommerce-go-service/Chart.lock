@@ -4,9 +4,9 @@ dependencies:
   version: 0.1.0
 - name: ecommerce-product-service
   repository: file://charts/ecommerce-product-service
-  version: 0.0.17
+  version: 0.0.18
 - name: ecommerce-category-service
   repository: file://charts/ecommerce-category-service
-  version: 0.0.17
-digest: sha256:af33da5100958d0e3672938363e1ec36bacf920253fbca275c162f6cbbd15a98
-generated: "2025-06-30T23:24:46.31361625+02:00"
+  version: 0.0.18
+digest: sha256:7161e6b7b54594f22e6c7f819fc8116facb18a08737fdd56f074f7ec823586d8
+generated: "2025-07-01T00:30:53.929952198+02:00"
