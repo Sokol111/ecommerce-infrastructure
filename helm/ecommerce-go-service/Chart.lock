@@ -8,5 +8,11 @@ dependencies:
 - name: ecommerce-category-service
   repository: file://charts/ecommerce-category-service
   version: 0.0.20
-digest: sha256:b16470793f7f712b8c5a01d8183ef9166b98a71bfdae77c4022995f8223f5ce7
-generated: "2025-07-01T12:40:25.183067739+02:00"
+- name: ecommerce-product-query-service
+  repository: file://charts/ecommerce-product-query-service
+  version: 0.0.2
+- name: ecommerce-category-query-service
+  repository: file://charts/ecommerce-category-query-service
+  version: 0.0.2
+digest: sha256:c319cb5f159d1f2585369bba95f5ba2c735b969521109b88e7624a86bb5bfb7f
+generated: "2025-07-02T16:17:44.815109633+02:00"

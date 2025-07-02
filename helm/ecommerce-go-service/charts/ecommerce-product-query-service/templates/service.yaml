@@ -1,0 +1,6 @@
+{{ include "shared.service" (dict
+  "name" (include "template.fullname" .)
+  "Values" .Values
+  "Labels" (include "template.labels" . | fromYaml)
+  "SelectorLabels" (include "template.selectorLabels" . | fromYaml)
+) }}
