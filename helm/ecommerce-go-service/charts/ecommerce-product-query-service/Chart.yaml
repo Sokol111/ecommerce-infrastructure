@@ -1,0 +1,11 @@
+apiVersion: v2
+name: ecommerce-product-query-service
+description: A Helm chart for ecommerce-product-query-service
+type: application
+version: 0.0.2
+appVersion: "0.0.7"
+
+dependencies:
+  - name: shared-helpers
+    version: 0.1.0
+    repository: "file://../shared-helpers"

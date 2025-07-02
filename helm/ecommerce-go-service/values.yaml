@@ -55,3 +55,27 @@ ecommerce-category-service:
     annotations: {}
   serviceAccount:
     create: false
+
+ecommerce-product-query-service:
+  image:
+    repository: sokol111/ecommerce-product-query-service
+    tag: "0.0.7"
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    host: ecommerce-product-query-service.localhost
+    annotations: {}
+  serviceAccount:
+    create: false
+
+ecommerce-category-query-service:
+  image:
+    repository: sokol111/ecommerce-category-query-service
+    tag: "0.0.9"
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    host: ecommerce-category-query-service.localhost
+    annotations: {}
+  serviceAccount:
+    create: false
