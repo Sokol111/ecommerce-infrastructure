@@ -30,3 +30,11 @@ status-k3d:
 .PHONY: logs-k3d
 logs-k3d:
 	k3d cluster list
+
+.PHONY: stop-k3d
+stop-k3d:
+	k3d cluster stop $(CLUSTER_NAME)
+
+.PHONY: start-k3d
+start-k3d:
+	k3d cluster start $(CLUSTER_NAME)
