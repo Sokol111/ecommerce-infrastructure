@@ -5,6 +5,7 @@ metadata:
 servers: 1
 agents: 2
 network: "shared-network"
+
 ports:
   - port: "80:80"
     nodeFilters:
@@ -12,6 +13,7 @@ ports:
   - port: "443:443"
     nodeFilters:
       - loadbalancer
+
 options:
   k3s:
     extraArgs:

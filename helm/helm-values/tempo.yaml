@@ -1,0 +1,18 @@
+# grafana/tempo (single binary)
+# Приймає OTLP (4317/4318) і віддає API на 3200
+replicaCount: 1
+
+tempo:
+  persistence:
+    enabled: true
+    storageClassName: local-path
+    size: 10Gi
+
+# Дев-ресурси
+resources:
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
