@@ -1,0 +1,59 @@
+deploymentMode: SingleBinary
+
+# Обов'язково обнулити simple-scalable репліки (дефолт = 3)
+read:     { replicas: 0 }
+write:    { replicas: 0 }
+backend:  { replicas: 0 }
+
+singleBinary:
+  replicas: 1
+  persistence:
+    enabled: true
+    storageClassName: local-path
+    size: 10Gi
+
+loki:
+  # Сказати чарту, що ми НА файловому сховищі
+  storage:
+    type: filesystem
+    # на всяк випадок зафіксуємо, що НЕ thanos objstore
+    # (деякі хелпери читають це поле)
+    use_thanos_objstore: false
+
+  # Вимикаємо шаблонний шлях і даємо свій loki.yaml
+  config: ""
+  commonConfig: null
+
+  structuredConfig:
+    auth_enabled: false
+    server:
+      http_listen_port: 3100
+
+    common:
+      path_prefix: /var/loki
+      replication_factor: 1
+      storage:
+        filesystem:
+          chunks_directory: /var/loki/chunks
+          rules_directory: /var/loki/rules
+          admin_api_directory: /var/loki/admin
+
+    schema_config:
+      configs:
+        - from: "2024-01-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+
+    ruler:
+      storage:
+        type: local
+        local:
+          directory: /var/loki/rules
+
+  # Для OTLP-логів у Loki 3.x
+  limits_config:
+    allow_structured_metadata: true

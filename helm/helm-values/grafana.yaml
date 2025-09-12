@@ -1,0 +1,40 @@
+adminUser: admin
+adminPassword: admin
+service:
+  type: ClusterIP
+
+# Для dev можна без збереження (або вмикни persistence.enabled: true)
+persistence:
+  enabled: false
+
+# Готові data sources для Loki + Tempo
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        uid: loki
+        access: proxy
+        url: http://loki.observability.svc:3100
+        isDefault: true
+        jsonData:
+          # Автолінк на трейси з логів, якщо є поле trace_id у JSON
+          derivedFields:
+            - name: trace_id
+              matcherRegex: '"trace[_-]?id":"?([a-fA-F0-9]{32})"?'
+              datasourceUid: tempo
+
+      - name: Tempo
+        type: tempo
+        uid: tempo
+        access: proxy
+        url: http://tempo.observability.svc:3200
+        jsonData:
+          tracesToLogs:
+            datasourceUid: loki
+            spanStartTimeShift: "1m"
+            spanEndTimeShift: "1m"
+            tags: ["job", "instance", "pod", "namespace"]
+            filterByTraceID: true
+            filterBySpanID: false

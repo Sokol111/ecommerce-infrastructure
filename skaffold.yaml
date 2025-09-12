@@ -1,0 +1,92 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: ecommerce-go-dev
+
+build:
+  tagPolicy: { sha256: {} }
+  local: { push: false }
+  artifacts:
+    - image: sokol111/ecommerce-product-service
+      context: ../ecommerce-product-service
+      docker: { dockerfile: Dockerfile }
+    - image: sokol111/ecommerce-category-service
+      context: ../ecommerce-category-service
+      docker: { dockerfile: Dockerfile }
+    - image: sokol111/ecommerce-product-query-service
+      context: ../ecommerce-product-query-service
+      docker: { dockerfile: Dockerfile }
+    - image: sokol111/ecommerce-category-query-service
+      context: ../ecommerce-category-query-service
+      docker: { dockerfile: Dockerfile }
+
+deploy:
+  kubeContext: k3d-dev-cluster
+  helm:
+    releases:
+      - name: traefik-crds
+        remoteChart: traefik-crds
+        repo: https://traefik.github.io/charts
+        version: "1.11.0"
+        namespace: traefik
+        createNamespace: true
+        wait: true
+        upgradeOnChange: false
+
+      - name: traefik
+        remoteChart: traefik
+        repo: https://traefik.github.io/charts
+        version: "37.1.0"
+        namespace: traefik
+        valuesFiles: [helm/helm-values/traefik.yaml]
+        wait: true
+        upgradeOnChange: false
+        dependsOn: ["traefik-crds"]
+
+      - name: loki
+        remoteChart: loki
+        repo: https://grafana.github.io/helm-charts
+        namespace: observability
+        createNamespace: true
+        version: "6.40.0"
+        valuesFiles: [helm/helm-values/loki.yaml]
+        wait: true
+        upgradeOnChange: false
+
+      - name: tempo
+        remoteChart: tempo
+        repo: https://grafana.github.io/helm-charts
+        namespace: observability
+        version: "1.23.3"
+        valuesFiles: [helm/helm-values/tempo.yaml]
+        wait: true
+        upgradeOnChange: false
+
+      - name: grafana
+        remoteChart: grafana
+        repo: https://grafana.github.io/helm-charts
+        namespace: observability
+        version: "9.4.4"
+        valuesFiles: [helm/helm-values/grafana.yaml]
+        wait: true
+        upgradeOnChange: false
+
+      - name: otel-collector
+        remoteChart: opentelemetry-collector
+        repo: https://open-telemetry.github.io/opentelemetry-helm-charts
+        namespace: observability
+        version: "0.133.0"
+        valuesFiles: [helm/helm-values/otelcol.yaml]
+        wait: true
+        upgradeOnChange: false
+
+      - name: ecommerce
+        chartPath: helm/ecommerce-go-service
+        namespace: dev
+        createNamespace: true
+        skipBuildDependencies: false
+        setValueTemplates:
+          ecommerce-product-service.image.tag:               "{{.IMAGE_TAG_sokol111_ecommerce_product_service}}"
+          ecommerce-category-service.image.tag:              "{{.IMAGE_TAG_sokol111_ecommerce_category_service}}"
+          ecommerce-product-query-service.image.tag:         "{{.IMAGE_TAG_sokol111_ecommerce_product_query_service}}"
+          ecommerce-category-query-service.image.tag:        "{{.IMAGE_TAG_sokol111_ecommerce_category_query_service}}"

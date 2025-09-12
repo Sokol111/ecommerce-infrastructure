@@ -1,18 +1,18 @@
 dependencies:
 - name: shared-helpers
-  repository: file://charts/shared-helpers
+  repository: file://../shared-helpers
   version: 0.1.0
 - name: ecommerce-product-service
-  repository: file://charts/ecommerce-product-service
+  repository: file://../ecommerce-product-service
   version: 0.0.20
 - name: ecommerce-category-service
-  repository: file://charts/ecommerce-category-service
+  repository: file://../ecommerce-category-service
   version: 0.0.20
 - name: ecommerce-product-query-service
-  repository: file://charts/ecommerce-product-query-service
+  repository: file://../ecommerce-product-query-service
   version: 0.0.2
 - name: ecommerce-category-query-service
-  repository: file://charts/ecommerce-category-query-service
+  repository: file://../ecommerce-category-query-service
   version: 0.0.2
-digest: sha256:c319cb5f159d1f2585369bba95f5ba2c735b969521109b88e7624a86bb5bfb7f
-generated: "2025-07-02T16:17:44.815109633+02:00"
+digest: sha256:1ff555a7d59d4905476b1c2ac547b553592d9ed6be11f8d305d0ab21ef3fe909
+generated: "2025-09-10T19:19:03.792605095+02:00"

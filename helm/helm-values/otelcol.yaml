@@ -1,0 +1,42 @@
+mode: daemonset
+
+# Для filelog потрібен contrib-образ
+image:
+  repository: otel/opentelemetry-collector-contrib
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Увімкнути збір логів із /var/log/pods та збагачення K8s-атрибутами
+presets:
+  logsCollection:
+    enabled: true
+    # includeCollectorLogs: true  # опційно: збирати логи самого колектора
+  kubernetesAttributes:
+    enabled: true
+
+# Тільки те, що нам треба: логи -> Loki (OTLP/HTTP), трейси -> Tempo (OTLP/gRPC)
+config:
+  exporters:
+    otlphttp/logs:
+      endpoint: http://loki.observability.svc:3100/otlp
+      tls:
+        insecure: true
+    otlp/tempo:
+      endpoint: tempo.observability.svc:4317
+      tls:
+        insecure: true
+    debug: null  # приберемо дефолтний debug, щоб не зациклювати логи
+
+  processors:
+    batch: {}
+
+  service:
+    pipelines:
+      logs:
+        # Не перелічуємо receivers — пресет додасть filelog; залишаємо лише експортери
+        processors: [batch]
+        exporters: [otlphttp/logs]
+      traces:
+        # За замовчуванням є otlp receiver; просто міняємо експортер
+        processors: [batch]
+        exporters: [otlp/tempo]
