@@ -25,12 +25,13 @@ global:
   configSuffix: "-config"
 
   config:
-    env: "production"
+    env: "dev"
     mongo:
       host: "mongo"
       password: "pass"
     kafka:
       brokers: "kafka:29092"
+    otel-collector-endpoint: "otelcol.observability.svc:4317"
 
 ecommerce-product-service:
   image:
