@@ -1,42 +1,52 @@
 mode: daemonset
 
-# Для filelog потрібен contrib-образ
 image:
   repository: otel/opentelemetry-collector-contrib
   tag: latest
   pullPolicy: IfNotPresent
 
-# Увімкнути збір логів із /var/log/pods та збагачення K8s-атрибутами
 presets:
   logsCollection:
-    enabled: true
-    # includeCollectorLogs: true  # опційно: збирати логи самого колектора
+    enabled: true          # додає filelog + маунти /var/log/pods
   kubernetesAttributes:
-    enabled: true
+    enabled: true          # додає k8sattributes + потрібні RBAC
 
-# Тільки те, що нам треба: логи -> Loki (OTLP/HTTP), трейси -> Tempo (OTLP/gRPC)
 config:
-  exporters:
-    otlphttp/logs:
-      endpoint: http://loki.observability.svc:3100/otlp
-      tls:
-        insecure: true
-    otlp/tempo:
-      endpoint: tempo.observability.svc:4317
-      tls:
-        insecure: true
-    debug: null  # приберемо дефолтний debug, щоб не зациклювати логи
+  receivers:
+    # прийом трейcів від сервісів (OTLP)
+    otlp:
+      protocols:
+        grpc: {}
+        http: {}
 
   processors:
     batch: {}
 
+  exporters:
+    # ЛОГИ → Loki (нативний OTLP/HTTP)
+    otlphttp/logs:
+      endpoint: http://loki.observability.svc:3100/otlp
+      tls:
+        insecure: true
+    # ТРЕЙСИ → Tempo (OTLP/gRPC)
+    otlp/tempo:
+      endpoint: tempo.observability.svc:4317
+      tls:
+        insecure: true
+    # Щоб не падала metrics-пайплайна (відправимо в debug)
+    debug: {}
+
   service:
     pipelines:
       logs:
-        # Не перелічуємо receivers — пресет додасть filelog; залишаємо лише експортери
+        receivers:  [filelog]           # filelog додається пресетом logsCollection
         processors: [batch]
-        exporters: [otlphttp/logs]
+        exporters:  [otlphttp/logs]
       traces:
-        # За замовчуванням є otlp receiver; просто міняємо експортер
+        receivers:  [otlp]
         processors: [batch]
-        exporters: [otlp/tempo]
+        exporters:  [otlp/tempo]
+      metrics:
+        receivers:  [otlp]              # базові метрики з OTLP
+        processors: [batch]
+        exporters:  [debug]             # в debug, щоб не потрібні були зовнішні експортери

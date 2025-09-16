@@ -24,6 +24,11 @@ MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
 KAFKA_COMPOSE := $(COMPOSE_DIR)/kafka.yml
 DOCKER_NETWORK := shared-network
 
+OBS_NS ?= observability
+GRAFANA_SVC ?= grafana
+GRAFANA_LOCAL_PORT ?= 3000
+GRAFANA_SVC_PORT ?= 80
+
 .DEFAULT_GOAL := help
 
 # ---- Utils ----
@@ -121,3 +126,8 @@ ifndef SERVICE
 	$(error You must specify SERVICE=<partial-pod-name>)
 endif
 	stern "$(SERVICE)" -n "$(NAMESPACE)"
+
+.PHONY: k8s-port-forward-grafana
+k8s-port-forward-grafana: tools-check ## Port-forward Grafana to http://localhost:3001 (Ctrl+C to stop)
+	@echo "→ Forwarding http://localhost:$(GRAFANA_LOCAL_PORT) → svc/$(GRAFANA_SVC):$(GRAFANA_SVC_PORT) in $(OBS_NS) (Ctrl+C to stop)"
+	exec kubectl -n "$(OBS_NS)" port-forward "svc/$(GRAFANA_SVC)" "$(GRAFANA_LOCAL_PORT):$(GRAFANA_SVC_PORT)"
