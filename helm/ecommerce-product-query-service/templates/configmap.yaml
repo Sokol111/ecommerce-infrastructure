@@ -3,7 +3,4 @@ kind: ConfigMap
 metadata:
   name: {{ include "template.name" . }}{{ .Values.global.configSuffix }}
 data:
-  APP_ENV: {{ .Values.global.config.env }}
-  MONGO_HOST: {{ .Values.global.config.mongo.host }}
-  KAFKA_BROKERS: {{ .Values.global.config.kafka.brokers }}
-  OBSERVABILITY_OTEL_COLLECTOR_ENDPOINT: {{ .Values.global.config.otel-collector-endpoint }}
+  # APP_ENV: {{ .Values.global.config.env }}
