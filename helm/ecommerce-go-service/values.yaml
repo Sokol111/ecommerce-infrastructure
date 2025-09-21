@@ -33,7 +33,13 @@ global:
   #     brokers: "kafka:29092"
   #   otel-collector-endpoint: "otelcol.observability.svc:4317"
 
+  mongo:
+    host: "mongo:27017"
+    params: "replicaSet=rs0&w=majority&retryWrites=true&x-migrations-collection=schema_migrations&x-advisory-locking=true"
+
 ecommerce-product-service:
+  podLabels:
+    app.kubernetes.io/name: ecommerce-product-service
   image:
     repository: sokol111/ecommerce-product-service
     tag: "0.0.14"
@@ -44,8 +50,14 @@ ecommerce-product-service:
     annotations: {}
   serviceAccount:
     create: false
+  mongo:
+    db: "product"
+  migrator:
+    image: "sokol111/ecommerce-product-service-migrator:dev"
 
 ecommerce-category-service:
+  podLabels:
+    app.kubernetes.io/name: ecommerce-category-service
   image:
     repository: sokol111/ecommerce-category-service
     tag: "0.0.14"
@@ -56,8 +68,14 @@ ecommerce-category-service:
     annotations: {}
   serviceAccount:
     create: false
+  # mongo:
+  #   db: "category"
+  # migrator:
+  #   image: "sokol111/ecommerce-category-service-migrator:dev"
 
 ecommerce-product-query-service:
+  podLabels:
+    app.kubernetes.io/name: ecommerce-product-query-service
   image:
     repository: sokol111/ecommerce-product-query-service
     tag: "0.0.7"
@@ -70,6 +88,8 @@ ecommerce-product-query-service:
     create: false
 
 ecommerce-category-query-service:
+  podLabels:
+    app.kubernetes.io/name: ecommerce-category-query-service
   image:
     repository: sokol111/ecommerce-category-query-service
     tag: "0.0.9"

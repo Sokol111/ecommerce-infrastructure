@@ -9,7 +9,7 @@ presets:
   logsCollection:
     enabled: true          # додає filelog + маунти /var/log/pods
   kubernetesAttributes:
-    enabled: true          # додає k8sattributes + потрібні RBAC
+    enabled: false
 
 config:
   receivers:
@@ -20,6 +20,46 @@ config:
         http: {}
 
   processors:
+    k8sattributes:
+      extract:
+        metadata:
+          - k8s.namespace.name
+          - k8s.pod.name
+        labels:
+          - key: app.kubernetes.io/name
+            from: pod
+            tag_name: service.name
+          - key: app.kubernetes.io/version
+            from: pod
+            tag_name: service.version
+          - key: app.kubernetes.io/environment
+            from: pod
+            tag_name: deployment.environment
+
+    # 2) Прибрати зайві resource-атрибути (вони стають лейблами в Loki)
+    resource/cleanup:
+      attributes:
+        - action: delete
+          key: k8s.container.name
+        - action: delete
+          key: k8s.deployment.name
+        - action: delete
+          key: k8s.pod.uid
+        - action: delete
+          key: k8s.pod.start_time
+        - action: delete
+          key: k8s.node.name
+
+    # 3) Прибрати зайві атрибути запису (CRI-похідні)
+    attributes/cleanup:
+      actions:
+        - action: delete
+          key: log.file.path
+        - action: delete
+          key: log.iostream
+        - action: delete
+          key: logtag
+
     batch: {}
 
   exporters:
@@ -40,7 +80,7 @@ config:
     pipelines:
       logs:
         receivers:  [filelog]           # filelog додається пресетом logsCollection
-        processors: [batch]
+        processors: [k8sattributes, resource/cleanup, attributes/cleanup, batch]
         exporters:  [otlphttp/logs]
       traces:
         receivers:  [otlp]
