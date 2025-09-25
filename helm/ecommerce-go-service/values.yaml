@@ -35,11 +35,9 @@ global:
 
   mongo:
     host: "mongo:27017"
-    params: "replicaSet=rs0&w=majority&retryWrites=true&x-migrations-collection=schema_migrations&x-advisory-locking=true"
+    params: "replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true"
 
 ecommerce-product-service:
-  # podLabels:
-  #   app.kubernetes.io/name: ecommerce-product-service
   image:
     repository: sokol111/ecommerce-product-service
     tag: "0.0.14"
@@ -54,10 +52,13 @@ ecommerce-product-service:
     db: "product"
   migrator:
     image: "sokol111/ecommerce-product-service-migrator:dev"
+    hookWeight: -5
+  commonsMigrator:
+    image: "sokol111/ecommerce-commons-migrator:dev"
+    hookWeight: -20
+    collection: "schema_migrations_commons"
 
 ecommerce-category-service:
-  # podLabels:
-  #   app.kubernetes.io/name: ecommerce-category-service
   image:
     repository: sokol111/ecommerce-category-service
     tag: "0.0.14"
@@ -68,14 +69,17 @@ ecommerce-category-service:
     annotations: {}
   serviceAccount:
     create: false
-  # mongo:
-  #   db: "category"
-  # migrator:
-  #   image: "sokol111/ecommerce-category-service-migrator:dev"
+  mongo:
+    db: "category"
+  migrator:
+    image: "sokol111/ecommerce-category-service-migrator:dev"
+    hookWeight: -5
+  commonsMigrator:
+    image: "sokol111/ecommerce-commons-migrator:dev"
+    hookWeight: -20
+    collection: "schema_migrations_commons"
 
 ecommerce-product-query-service:
-  # podLabels:
-  #   app.kubernetes.io/name: ecommerce-product-query-service
   image:
     repository: sokol111/ecommerce-product-query-service
     tag: "0.0.7"
@@ -86,10 +90,17 @@ ecommerce-product-query-service:
     annotations: {}
   serviceAccount:
     create: false
+  mongo:
+    db: "product-query"
+  migrator:
+    image: "sokol111/ecommerce-product-query-service-migrator:dev"
+    hookWeight: -5
+  commonsMigrator:
+    image: "sokol111/ecommerce-commons-migrator:dev"
+    hookWeight: -20
+    collection: "schema_migrations_commons"
 
 ecommerce-category-query-service:
-  # podLabels:
-  #   app.kubernetes.io/name: ecommerce-category-query-service
   image:
     repository: sokol111/ecommerce-category-query-service
     tag: "0.0.9"
@@ -100,3 +111,12 @@ ecommerce-category-query-service:
     annotations: {}
   serviceAccount:
     create: false
+  mongo:
+    db: "category-query"
+  migrator:
+    image: "sokol111/ecommerce-category-query-service-migrator:dev"
+    hookWeight: -5
+  commonsMigrator:
+    image: "sokol111/ecommerce-commons-migrator:dev"
+    hookWeight: -20
+    collection: "schema_migrations_commons"

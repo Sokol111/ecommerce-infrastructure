@@ -11,9 +11,7 @@ WORKDIR /src
 
 # Параметри для різних сервісів
 ARG SERVICE_DIR=service-dir
-ARG COMMONS_DIR=ecommerce-commons-dir
-ARG MAIN=./cmd/main.go
-ARG BINARY_NAME=server
+ARG COMMONS_DIR=ecommerce-commons
 
 # 1) Спочатку тільки go.mod/go.sum для кешу модулів
 COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
@@ -33,7 +31,7 @@ COPY ${SERVICE_DIR} ./svc
 # 4) Збірка бінарника
 WORKDIR /src/svc
 # Якщо CGO не потрібен, краще CGO_ENABLED=0 і інший рантайм (див. нижче)
-RUN CGO_ENABLED=1 GOOS=linux go build -v -o /server ${MAIN}
+RUN CGO_ENABLED=1 GOOS=linux go build -v -o /server ./cmd/main.go
 
 ############################
 # Runtime stage
