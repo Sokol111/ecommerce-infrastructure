@@ -1,5 +1,9 @@
 mode: daemonset
 
+service:
+  enabled: true
+  type: ClusterIP
+
 image:
   repository: otel/opentelemetry-collector-contrib
   tag: latest
