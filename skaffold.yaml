@@ -5,11 +5,19 @@ metadata:
 
 build:
   tagPolicy: { sha256: {} }
-  local: { push: false }
+  local:
+    push: false
+    useBuildkit: false
   artifacts:
     - image: sokol111/ecommerce-product-service
-      context: ../ecommerce-product-service
-      docker: { dockerfile: Dockerfile }
+      context: ..
+      docker:
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
+        buildArgs:
+          SERVICE_DIR: ecommerce-product-service
+          COMMONS_DIR: ecommerce-commons
+          MAIN: ./cmd/main.go
+          BINARY_NAME: server
     - image: sokol111/ecommerce-category-service
       context: ../ecommerce-category-service
       docker: { dockerfile: Dockerfile }
@@ -91,7 +99,7 @@ deploy:
         version: "0.133.0"
         valuesFiles: [helm/helm-values/otelcol.yaml]
         wait: true
-        upgradeOnChange: false
+        upgradeOnChange: true
 
       - name: ecommerce
         chartPath: helm/ecommerce-go-service
