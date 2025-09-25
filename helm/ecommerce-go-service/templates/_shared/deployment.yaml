@@ -68,7 +68,7 @@ spec:
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-        app.kubernetes.io/version: {{ .Values.image.tag | quote }}
+        # app.kubernetes.io/version: {{ .Values.image.tag | quote }}
         app.kubernetes.io/environment: {{ .Values.global.config.env | quote }}
     spec:
       {{- with .Values.imagePullSecrets }}

@@ -1,0 +1,48 @@
+# syntax=docker/dockerfile:1.4
+
+ARG GO_IMAGE=golang:1.24.2
+ARG RUNTIME_IMAGE=ubuntu:24.04
+
+############################
+# Build stage
+############################
+FROM ${GO_IMAGE} AS builder
+WORKDIR /src
+
+# Параметри для різних сервісів
+ARG SERVICE_DIR=service-dir
+ARG COMMONS_DIR=ecommerce-commons-dir
+ARG MAIN=./cmd/main.go
+ARG BINARY_NAME=server
+
+# 1) Спочатку тільки go.mod/go.sum для кешу модулів
+COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
+COPY ${COMMONS_DIR}/go.mod ./${COMMONS_DIR}/go.mod
+
+# 2) Завантаження залежностей (replace у svc/go.mod на ../commons)
+WORKDIR /src/svc
+# Можна вимкнути proxy, якщо був timeout:
+# ENV GOPROXY=direct
+RUN go mod download && go mod verify
+
+# 3) Копіюємо код обох репо
+WORKDIR /src
+COPY ${COMMONS_DIR} ./${COMMONS_DIR}
+COPY ${SERVICE_DIR} ./svc
+
+# 4) Збірка бінарника
+WORKDIR /src/svc
+# Якщо CGO не потрібен, краще CGO_ENABLED=0 і інший рантайм (див. нижче)
+RUN CGO_ENABLED=1 GOOS=linux go build -v -o /server ${MAIN}
+
+############################
+# Runtime stage
+############################
+FROM ${RUNTIME_IMAGE} AS release
+WORKDIR /
+
+COPY --from=builder /server /server
+COPY --from=builder /src/svc/configs/ /configs/
+
+EXPOSE 8080
+ENTRYPOINT ["/server"]

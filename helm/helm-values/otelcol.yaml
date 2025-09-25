@@ -9,7 +9,7 @@ presets:
   logsCollection:
     enabled: true          # додає filelog + маунти /var/log/pods
   kubernetesAttributes:
-    enabled: false
+    enabled: true
 
 config:
   receivers:
@@ -25,18 +25,41 @@ config:
         metadata:
           - k8s.namespace.name
           - k8s.pod.name
+          - k8s.deployment.name
         labels:
           - key: app.kubernetes.io/name
-            from: pod
             tag_name: service.name
           - key: app.kubernetes.io/version
-            from: pod
             tag_name: service.version
           - key: app.kubernetes.io/environment
-            from: pod
             tag_name: deployment.environment
+      filter:
+        node_from_env_var: K8S_NODE_NAME
+      passthrough: false
+      pod_association:
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.ip
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.uid
+        - sources:
+            - from: connection
+        - sources:                       # <-- ключ: додаткове правило
+            - from: resource_attribute
+              name: k8s.pod.name
+            - from: resource_attribute
+              name: k8s.namespace.name
 
-    # 2) Прибрати зайві resource-атрибути (вони стають лейблами в Loki)
+    attributes/derive-service:
+      actions:
+        - action: insert
+          key: service.name
+          from_attribute: k8s.deployment.name
+        - action: insert
+          key: service.name
+          from_attribute: k8s.container.name
+
     resource/cleanup:
       attributes:
         - action: delete
@@ -63,6 +86,8 @@ config:
     batch: {}
 
   exporters:
+    debug/logs:
+      verbosity: detailed
     # ЛОГИ → Loki (нативний OTLP/HTTP)
     otlphttp/logs:
       endpoint: http://loki.observability.svc:3100/otlp
@@ -80,8 +105,8 @@ config:
     pipelines:
       logs:
         receivers:  [filelog]           # filelog додається пресетом logsCollection
-        processors: [k8sattributes, resource/cleanup, attributes/cleanup, batch]
-        exporters:  [otlphttp/logs]
+        processors: [k8sattributes, attributes/derive-service, resource/cleanup, attributes/cleanup, batch]
+        exporters:  [otlphttp/logs, debug/logs]
       traces:
         receivers:  [otlp]
         processors: [batch]
