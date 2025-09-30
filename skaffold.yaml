@@ -123,7 +123,17 @@ deploy:
         version: "0.133.0"
         valuesFiles: [helm/helm-values/otelcol.yaml]
         wait: true
-        upgradeOnChange: true
+        upgradeOnChange: false
+
+      - name: prometheus
+        remoteChart: prometheus
+        repo: https://prometheus-community.github.io/helm-charts
+        namespace: observability
+        version: "27.39.0"
+        valuesFiles: [helm/helm-values/prometheus.yaml]
+        wait: true
+        upgradeOnChange: false
+        dependsOn: ["otel-collector"]
 
       - name: ecommerce
         chartPath: helm/ecommerce-go-service
