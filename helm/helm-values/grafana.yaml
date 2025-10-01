@@ -3,6 +3,16 @@ adminPassword: admin
 service:
   type: ClusterIP
 
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - grafana.127.0.0.1.nip.io
+  path: /
+  pathType: Prefix
+
 # Для dev можна без збереження (або вмикни persistence.enabled: true)
 persistence:
   enabled: false
