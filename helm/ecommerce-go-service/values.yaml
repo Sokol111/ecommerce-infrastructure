@@ -44,7 +44,7 @@ ecommerce-product-service:
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
-    host: ecommerce-product-service.localhost
+    host: ecommerce-product-service.127.0.0.1.nip.io
     annotations: {}
   serviceAccount:
     create: false
@@ -65,7 +65,7 @@ ecommerce-category-service:
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
-    host: ecommerce-category-service.localhost
+    host: ecommerce-category-service.127.0.0.1.nip.io
     annotations: {}
   serviceAccount:
     create: false
@@ -86,7 +86,7 @@ ecommerce-product-query-service:
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
-    host: ecommerce-product-query-service.localhost
+    host: ecommerce-product-query-service.127.0.0.1.nip.io
     annotations: {}
   serviceAccount:
     create: false
@@ -107,7 +107,7 @@ ecommerce-category-query-service:
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
-    host: ecommerce-category-query-service.localhost
+    host: ecommerce-category-query-service.127.0.0.1.nip.io
     annotations: {}
   serviceAccount:
     create: false
