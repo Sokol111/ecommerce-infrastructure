@@ -1,6 +1,12 @@
 server:
-  extraScrapeConfigs: |
-    - job_name: 'otel-collector'
-      scrape_interval: 15s
-      static_configs:
-        - targets: ['otel-collector.observability.svc:9464']
+  extraFlags:
+    - web.enable-otlp-receiver
+
+global:
+  otlp:
+    promote_resource_attributes:
+      - service.name
+      - service.version
+      - deployment.environment.name
+      - k8s.namespace.name
+      - k8s.pod.name

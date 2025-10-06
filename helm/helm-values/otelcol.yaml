@@ -17,7 +17,6 @@ presets:
 
 config:
   receivers:
-    # прийом трейcів від сервісів (OTLP)
     otlp:
       protocols:
         grpc: {}
@@ -92,12 +91,6 @@ config:
   exporters:
     debug/logs:
       verbosity: detailed
-    # ЛОГИ → Loki (нативний OTLP/HTTP)
-    prometheus:
-      endpoint: "0.0.0.0:9464"
-      enable_open_metrics: true
-      resource_to_telemetry_conversion:
-        enabled: true
     otlphttp/logs:
       endpoint: http://loki.observability.svc:3100/otlp
       tls:
@@ -123,11 +116,4 @@ config:
       metrics:
         receivers:  [otlp]              # базові метрики з OTLP
         processors: [batch]
-        exporters:  [debug, prometheus]             # в debug, щоб не потрібні були зовнішні експортери
-
-ports:
-  prometheus:
-    enabled: true
-    containerPort: 9464
-    servicePort: 9464
-    protocol: TCP
+        exporters:  [debug]             # в debug, щоб не потрібні були зовнішні експортери
