@@ -1,0 +1,20 @@
+env:
+  # Увімкнути джерело S3 (MinIO)
+  IMGPROXY_USE_S3: "true"
+  IMGPROXY_S3_REGION: "us-east-1"
+  # Сервіс MinIO у неймспейсі minio (назва сервісу = назва релізу = "minio")
+  IMGPROXY_S3_ENDPOINT: "http://minio.minio.svc.cluster.local:9000"
+  IMGPROXY_S3_ENDPOINT_USE_PATH_STYLE: "true"  # для MinIO
+
+  # Креденшіали доступу до MinIO
+  AWS_ACCESS_KEY_ID: "minioadmin"
+  AWS_SECRET_ACCESS_KEY: "minioadmin123"
+
+  # Корисні дрібниці
+  IMGPROXY_ENABLE_WEBP_DETECTION: "true"  # віддавати WebP якщо браузер вміє
+
+resources:
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
