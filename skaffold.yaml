@@ -135,13 +135,33 @@ deploy:
         upgradeOnChange: false
         dependsOn: ["otel-collector"]
 
+      - name: minio
+        remoteChart: minio
+        repo: https://charts.min.io
+        version: "5.4.0"
+        namespace: minio
+        createNamespace: true
+        valuesFiles: [helm/helm-values/minio.yaml]
+        wait: true
+        upgradeOnChange: true
+
+      - name: imgproxy
+        remoteChart: imgproxy
+        repo: https://helm.imgproxy.net
+        version: "1.1.0"
+        namespace: imgproxy
+        createNamespace: true
+        valuesFiles: [helm/helm-values/imgproxy.yaml]
+        wait: true
+        upgradeOnChange: true
+
       - name: ecommerce
         chartPath: helm/ecommerce-go-service
         namespace: dev
         createNamespace: true
         skipBuildDependencies: false
         wait: true
-        upgradeOnChange: true
+        upgradeOnChange: false
         setValueTemplates:
           ecommerce-product-service.image.tag:               "{{.IMAGE_TAG_sokol111_ecommerce_product_service}}"
           ecommerce-category-service.image.tag:              "{{.IMAGE_TAG_sokol111_ecommerce_category_service}}"

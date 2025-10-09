@@ -1,0 +1,19 @@
+rootUser: minioadmin
+rootPassword: minioadmin123
+
+mode: standalone
+replicas: 1
+
+# авто-створення бакета "products" (аналог твоєму defaultBuckets)
+buckets:
+  - name: products
+    policy: none     # none|download|upload|public
+    purge: false
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+service:
+  type: ClusterIP
+  # У MinIO: API на 9000, консоль на 9001 (обидва відкриває один Service)
