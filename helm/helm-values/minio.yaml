@@ -17,3 +17,11 @@ persistence:
 service:
   type: ClusterIP
   # У MinIO: API на 9000, консоль на 9001 (обидва відкриває один Service)
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi

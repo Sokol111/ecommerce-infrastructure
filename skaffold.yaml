@@ -143,7 +143,7 @@ deploy:
         createNamespace: true
         valuesFiles: [helm/helm-values/minio.yaml]
         wait: true
-        upgradeOnChange: true
+        upgradeOnChange: false
 
       - name: imgproxy
         remoteChart: imgproxy
@@ -161,7 +161,7 @@ deploy:
         createNamespace: true
         skipBuildDependencies: false
         wait: true
-        upgradeOnChange: false
+        upgradeOnChange: true
         setValueTemplates:
           ecommerce-product-service.image.tag:               "{{.IMAGE_TAG_sokol111_ecommerce_product_service}}"
           ecommerce-category-service.image.tag:              "{{.IMAGE_TAG_sokol111_ecommerce_category_service}}"
