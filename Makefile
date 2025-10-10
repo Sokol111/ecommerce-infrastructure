@@ -90,7 +90,7 @@ skaffold-dev: k3d-cluster-create ## Dev loop (rebuild/deploy/logs)
 
 .PHONY: skaffold-deploy
 skaffold-deploy: k3d-cluster-create ## One-off deploy
-	skaffold run -f "$(SKAFFOLD_CONFIG)"
+	skaffold run -f "$(SKAFFOLD_CONFIG)" --status-check
 
 .PHONY: skaffold-undeploy
 skaffold-undeploy: ## Delete releases created by skaffold
