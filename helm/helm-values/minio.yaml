@@ -25,3 +25,26 @@ resources:
   limits:
     cpu: 500m
     memory: 1Gi
+
+# Ingress for MinIO API (exposes port 9000 via Traefik)
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - minio.127.0.0.1.nip.io
+  paths:
+    - /
+  pathType: Prefix
+
+consoleIngress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - console-minio.127.0.0.1.nip.io
+  paths:
+    - /
+  pathType: Prefix
