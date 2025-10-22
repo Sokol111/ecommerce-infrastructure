@@ -27,7 +27,7 @@ print-go-vars:
 
 install-go-tools:
 	@which oapi-codegen >/dev/null || (echo "Installing Go tools..."; \
-		go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.4.1)
+		go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest)
 
 create-go-gen-dir:
 	@mkdir -p $(GO_GEN_DIR)
