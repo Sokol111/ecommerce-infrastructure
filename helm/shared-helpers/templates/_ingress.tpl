@@ -11,7 +11,10 @@
 
 {{- define "shared.ingress" -}}
 {{- $values := .Values }}
-{{- $global := .Values.global }}
+{{- $global := dict }}
+{{- if .Values.global }}
+  {{- $global = .Values.global }}
+{{- end }}
 {{- $ingress := or $values.ingress $global.ingress }}
 {{- $service := or $values.service $global.service }}
 

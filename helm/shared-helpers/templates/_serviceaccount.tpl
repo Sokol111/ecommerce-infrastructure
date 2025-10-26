@@ -12,9 +12,8 @@
 {{- define "shared.serviceAccount" -}}
 
 {{- $sa := .Values.serviceAccount | default dict }}
-{{- $gsa := .Values.global.serviceAccount | default dict }}
 
-{{- $create := (hasKey .Values "serviceAccount") | ternary $sa.create $gsa.create }}
+{{- $create := $sa.create | default false }}
 {{- if $create }}
 apiVersion: v1
 kind: ServiceAccount
@@ -22,11 +21,11 @@ metadata:
   name: {{ .name }}
   labels:
     {{- toYaml .Labels | nindent 4 }}
-  {{- with ($sa.annotations | default $gsa.annotations) }}
+  {{- with $sa.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-automountServiceAccountToken: {{ $sa.automount | default $gsa.automount | default true }}
+automountServiceAccountToken: {{ $sa.automount | default true }}
 {{- end }}
 
 {{- end }}

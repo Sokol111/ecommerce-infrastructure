@@ -5,4 +5,5 @@
   "Values" .Values
   "ServiceAccountName" (include "template.serviceAccountName" .)
   "Chart" .Chart
+  "Context" .
 ) }}

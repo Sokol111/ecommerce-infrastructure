@@ -19,29 +19,23 @@
 {{- $autoscalingEnabled := false }}
 {{- if and .Values.autoscaling .Values.autoscaling.enabled }}
   {{- $autoscalingEnabled = .Values.autoscaling.enabled }}
-{{- else if and .Values.global.autoscaling .Values.global.autoscaling.enabled }}
-  {{- $autoscalingEnabled = .Values.global.autoscaling.enabled }}
 {{- end }}
 
 {{- $replicaCount := 1 }}
 {{- if .Values.replicaCount }}
   {{- $replicaCount = .Values.replicaCount }}
-{{- else if .Values.global.replicaCount }}
-  {{- $replicaCount = .Values.global.replicaCount }}
 {{- end }}
 
 {{- $imagePullPolicy := "IfNotPresent" }}
 {{- if and .Values.image .Values.image.pullPolicy }}
   {{- $imagePullPolicy = .Values.image.pullPolicy }}
-{{- else if and .Values.global.image .Values.global.image.pullPolicy }}
+{{- else if and .Values.global (and .Values.global.image .Values.global.image.pullPolicy) }}
   {{- $imagePullPolicy = .Values.global.image.pullPolicy }}
 {{- end }}
 
 {{- $containerPort := 80 }}
 {{- if and .Values.service .Values.service.port }}
   {{- $containerPort = .Values.service.port }}
-{{- else if and .Values.global.service .Values.global.service.port }}
-  {{- $containerPort = .Values.global.service.port }}
 {{- end }}
 
 apiVersion: apps/v1
@@ -69,7 +63,6 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
         # app.kubernetes.io/version: {{ .Values.image.tag | quote }}
-        app.kubernetes.io/environment: {{ .Values.global.config.env | quote }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -80,27 +73,16 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ or .Values.nameOverride .Values.chartName "app" }}
+          {{- with .Values.env }}
           env:
-            - name: APP_ENV
-              value: {{ .Values.global.config.env | quote }}
-
-            - name: APP_SERVICE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels['app.kubernetes.io/name']
-
-            - name: APP_SERVICE_VERSION
-              value: {{ .Values.image.tag | quote }}
-              
-            {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
-            {{- end }}
-
-          envFrom:
-            - configMapRef:
-                name: {{ printf "%s%s" (include "template.name" .) (or .Values.global.configSuffix "-config") }}
+          {{- end }}
           
           {{- with .Values.securityContext }}
           securityContext:
@@ -116,11 +98,11 @@ spec:
             - name: http
               containerPort: {{ $containerPort }}
               protocol: TCP
-          {{- with or .Values.livenessProbe .Values.global.livenessProbe }}
+          {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with or .Values.readinessProbe .Values.global.readinessProbe }}
+          {{- with .Values.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}

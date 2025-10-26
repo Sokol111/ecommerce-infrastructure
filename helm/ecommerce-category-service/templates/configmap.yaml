@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "template.name" . }}{{ .Values.global.configSuffix }}
-data:
-  # APP_ENV: {{ .Values.global.config.env }}
-  

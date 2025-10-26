@@ -1,122 +1,99 @@
-global:
-  autoscaling:
-    enabled: false
-  replicaCount: 1
-  service:
-    type: ClusterIP
-    port: 8080
-  serviceAccount:
-    create: false
-  livenessProbe:
-    httpGet:
-      path: /health/live
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 2
-    failureThreshold: 2
-  readinessProbe:
-    httpGet:
-      path: /health/ready
-      port: http
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 2
-  configSuffix: "-config"
-
-  config:
-    env: "dev"
-  #   mongo:
-  #     host: "mongo"
-  #     password: "pass"
-  #   kafka:
-  #     brokers: "kafka:29092"
-  #   otel-collector-endpoint: "otelcol.observability.svc:4317"
-
-  mongo:
-    host: "mongo:27017"
-    params: "replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true"
-
 ecommerce-product-service:
   image:
     repository: sokol111/ecommerce-product-service
     tag: "0.0.14"
-    pullPolicy: IfNotPresent
   ingress:
     enabled: true
     host: ecommerce-product-service.127.0.0.1.nip.io
-    annotations: {}
-  serviceAccount:
-    create: false
-  mongo:
-    db: "product"
-  migrator:
-    image: "sokol111/ecommerce-product-service-migrator:dev"
-    hookWeight: -5
-  commonsMigrator:
-    image: "sokol111/ecommerce-commons-migrator:dev"
-    hookWeight: -20
-    collection: "schema_migrations_commons"
+  env:
+    - name: APP_ENV
+      value: "dev"
+    - name: APP_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/name']
+    - name: APP_SERVICE_VERSION
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/version']
+  initContainers:
+    - name: migrate
+      image: "sokol111/ecommerce-product-service-migrator:dev"
+      command: ["/bin/sh", "-c"]
+      args:
+        - migrate -path=/migrations -database "mongodb://mongo:27017/product?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
 
 ecommerce-category-service:
   image:
     repository: sokol111/ecommerce-category-service
     tag: "0.0.14"
-    pullPolicy: IfNotPresent
   ingress:
     enabled: true
     host: ecommerce-category-service.127.0.0.1.nip.io
-    annotations: {}
-  serviceAccount:
-    create: false
-  mongo:
-    db: "category"
-  migrator:
-    image: "sokol111/ecommerce-category-service-migrator:dev"
-    hookWeight: -5
-  commonsMigrator:
-    image: "sokol111/ecommerce-commons-migrator:dev"
-    hookWeight: -20
-    collection: "schema_migrations_commons"
+  env:
+    - name: APP_ENV
+      value: "dev"
+    - name: APP_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/name']
+    - name: APP_SERVICE_VERSION
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/version']
+  initContainers:
+    - name: migrate
+      image: "sokol111/ecommerce-category-service-migrator:dev"
+      command: ["/bin/sh", "-c"]
+      args:
+        - migrate -path=/migrations -database "mongodb://mongo:27017/category?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
 
 ecommerce-product-query-service:
   image:
     repository: sokol111/ecommerce-product-query-service
     tag: "0.0.7"
-    pullPolicy: IfNotPresent
   ingress:
     enabled: true
     host: ecommerce-product-query-service.127.0.0.1.nip.io
-    annotations: {}
-  serviceAccount:
-    create: false
-  mongo:
-    db: "product-query"
-  migrator:
-    image: "sokol111/ecommerce-product-query-service-migrator:dev"
-    hookWeight: -5
-  commonsMigrator:
-    image: "sokol111/ecommerce-commons-migrator:dev"
-    hookWeight: -20
-    collection: "schema_migrations_commons"
+  env:
+    - name: APP_ENV
+      value: "dev"
+    - name: APP_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/name']
+    - name: APP_SERVICE_VERSION
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/version']
+  initContainers:
+    - name: migrate
+      image: "sokol111/ecommerce-product-query-service-migrator:dev"
+      command: ["/bin/sh", "-c"]
+      args:
+        - migrate -path=/migrations -database "mongodb://mongo:27017/product-query?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
 
 ecommerce-category-query-service:
   image:
     repository: sokol111/ecommerce-category-query-service
     tag: "0.0.9"
-    pullPolicy: IfNotPresent
   ingress:
     enabled: true
     host: ecommerce-category-query-service.127.0.0.1.nip.io
-    annotations: {}
-  serviceAccount:
-    create: false
-  mongo:
-    db: "category-query"
-  migrator:
-    image: "sokol111/ecommerce-category-query-service-migrator:dev"
-    hookWeight: -5
-  commonsMigrator:
-    image: "sokol111/ecommerce-commons-migrator:dev"
-    hookWeight: -20
-    collection: "schema_migrations_commons"
+  env:
+    - name: APP_ENV
+      value: "dev"
+    - name: APP_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/name']
+    - name: APP_SERVICE_VERSION
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/version']
+  initContainers:
+    - name: migrate
+      image: "sokol111/ecommerce-category-query-service-migrator:dev"
+      command: ["/bin/sh", "-c"]
+      args:
+        - migrate -path=/migrations -database "mongodb://mongo:27017/category-query?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
