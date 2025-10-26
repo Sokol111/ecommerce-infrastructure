@@ -30,18 +30,41 @@ jobs:
         with:
           go-version: 1.24.2
 
-      - name: Download build-go-api.mk
-        run: curl -sSfL https://raw.githubusercontent.com/Sokol111/ecommerce-infrastructure/master/makefiles/build-go-api.mk -o build-go-api.mk
-
       - name: Init Go module
         run: go mod init github.com/${{ github.repository }}
 
-      - name: Build Go API
-        run: make -f build-go-api.mk build-go-api
-        env:
-          OPENAPI_FILE: ${{ inputs.openapi_file }}
-          GO_GEN_DIR: ${{ inputs.artifact_dir }}
-          PACKAGE: ${{ inputs.package }}
+      - name: Install oapi-codegen
+        run: go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+
+      - name: Create output directory
+        run: mkdir -p ${{ inputs.artifact_dir }}
+
+      - name: Generate Go types (models)
+        run: |
+          echo "Generating Go types (models)..."
+          $HOME/go/bin/oapi-codegen -generate types -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/models.gen.go ${{ inputs.openapi_file }}
+
+      - name: Generate Go server
+        run: |
+          echo "Generating Go server..."
+          $HOME/go/bin/oapi-codegen -generate gin-server,strict-server -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/server.gen.go ${{ inputs.openapi_file }}
+
+      - name: Generate Go client
+        run: |
+          echo "Generating Go client..."
+          $HOME/go/bin/oapi-codegen -generate client -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/client.gen.go ${{ inputs.openapi_file }}
+
+      - name: Embed OpenAPI spec
+        run: |
+          echo "Copying OpenAPI spec to ${{ inputs.artifact_dir }}/openapi.yml"
+          cp ${{ inputs.openapi_file }} ${{ inputs.artifact_dir }}/openapi.yml
+          echo "Generating Go embedded openapi.gen.go..."
+          echo "package ${{ inputs.package }}" > ${{ inputs.artifact_dir }}/openapi.gen.go
+          echo "" >> ${{ inputs.artifact_dir }}/openapi.gen.go
+          echo "import _ \"embed\"" >> ${{ inputs.artifact_dir }}/openapi.gen.go
+          echo "" >> ${{ inputs.artifact_dir }}/openapi.gen.go
+          echo "//go:embed openapi.yml" >> ${{ inputs.artifact_dir }}/openapi.gen.go
+          echo "var OpenAPIDoc []byte" >> ${{ inputs.artifact_dir }}/openapi.gen.go
 
       - name: Upload built Go API
         uses: actions/upload-artifact@v4
