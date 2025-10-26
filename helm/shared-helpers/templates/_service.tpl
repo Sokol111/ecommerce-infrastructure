@@ -13,7 +13,10 @@
 {{- define "shared.service" -}}
 
 {{- $values := .Values }}
-{{- $global := .Values.global }}
+{{- $global := dict }}
+{{- if .Values.global }}
+  {{- $global = .Values.global }}
+{{- end }}
 {{- $service := or $values.service $global.service }}
 
 {{- $type := "ClusterIP" }}

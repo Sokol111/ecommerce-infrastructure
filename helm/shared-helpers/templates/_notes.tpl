@@ -14,9 +14,8 @@
 {{- define "shared.notes" -}}
 
 {{- $svc := .Values.service | default dict }}
-{{- $globalSvc := .Values.global.service | default dict }}
-{{- $svcType := $svc.type | default $globalSvc.type | default "ClusterIP" }}
-{{- $svcPort := $svc.port | default $globalSvc.port | default 80 }}
+{{- $svcType := $svc.type | default "ClusterIP" }}
+{{- $svcPort := $svc.port | default 80 }}
 {{- $ingress := .Values.ingress | default dict }}
 
 1. Get the application URL by running these commands:
