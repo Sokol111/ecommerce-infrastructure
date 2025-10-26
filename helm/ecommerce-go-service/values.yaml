@@ -1,7 +1,7 @@
 ecommerce-product-service:
   image:
     repository: sokol111/ecommerce-product-service
-    tag: "0.0.14"
+    tag: ""
   ingress:
     enabled: true
     host: ecommerce-product-service.127.0.0.1.nip.io
@@ -18,7 +18,7 @@ ecommerce-product-service:
           fieldPath: metadata.labels['app.kubernetes.io/version']
   initContainers:
     - name: migrate
-      image: "sokol111/ecommerce-product-service-migrator:dev"
+      image: "sokol111/ecommerce-product-service-migrator"
       command: ["/bin/sh", "-c"]
       args:
         - migrate -path=/migrations -database "mongodb://mongo:27017/product?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
@@ -26,7 +26,7 @@ ecommerce-product-service:
 ecommerce-category-service:
   image:
     repository: sokol111/ecommerce-category-service
-    tag: "0.0.14"
+    tag: ""
   ingress:
     enabled: true
     host: ecommerce-category-service.127.0.0.1.nip.io
@@ -43,7 +43,7 @@ ecommerce-category-service:
           fieldPath: metadata.labels['app.kubernetes.io/version']
   initContainers:
     - name: migrate
-      image: "sokol111/ecommerce-category-service-migrator:dev"
+      image: "sokol111/ecommerce-category-service-migrator"
       command: ["/bin/sh", "-c"]
       args:
         - migrate -path=/migrations -database "mongodb://mongo:27017/category?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
@@ -51,7 +51,7 @@ ecommerce-category-service:
 ecommerce-product-query-service:
   image:
     repository: sokol111/ecommerce-product-query-service
-    tag: "0.0.7"
+    tag: ""
   ingress:
     enabled: true
     host: ecommerce-product-query-service.127.0.0.1.nip.io
@@ -68,7 +68,7 @@ ecommerce-product-query-service:
           fieldPath: metadata.labels['app.kubernetes.io/version']
   initContainers:
     - name: migrate
-      image: "sokol111/ecommerce-product-query-service-migrator:dev"
+      image: "sokol111/ecommerce-product-query-service-migrator"
       command: ["/bin/sh", "-c"]
       args:
         - migrate -path=/migrations -database "mongodb://mongo:27017/product-query?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
@@ -76,7 +76,7 @@ ecommerce-product-query-service:
 ecommerce-category-query-service:
   image:
     repository: sokol111/ecommerce-category-query-service
-    tag: "0.0.9"
+    tag: ""
   ingress:
     enabled: true
     host: ecommerce-category-query-service.127.0.0.1.nip.io
@@ -93,7 +93,7 @@ ecommerce-category-query-service:
           fieldPath: metadata.labels['app.kubernetes.io/version']
   initContainers:
     - name: migrate
-      image: "sokol111/ecommerce-category-query-service-migrator:dev"
+      image: "sokol111/ecommerce-category-query-service-migrator"
       command: ["/bin/sh", "-c"]
       args:
         - migrate -path=/migrations -database "mongodb://mongo:27017/category-query?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
