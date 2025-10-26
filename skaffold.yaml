@@ -39,7 +39,7 @@ build:
         dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-image-service
-    
+
     - image: sokol111/ecommerce-product-service-migrator
       context: ..
       docker:
@@ -169,18 +169,13 @@ deploy:
         wait: true
         upgradeOnChange: true
         setValueTemplates:
-          ecommerce-product-service.image.tag:               "{{.IMAGE_TAG_sokol111_ecommerce_product_service}}"
-          ecommerce-category-service.image.tag:              "{{.IMAGE_TAG_sokol111_ecommerce_category_service}}"
-          ecommerce-product-query-service.image.tag:         "{{.IMAGE_TAG_sokol111_ecommerce_product_query_service}}"
-          ecommerce-category-query-service.image.tag:        "{{.IMAGE_TAG_sokol111_ecommerce_category_query_service}}"
-          ecommerce-image-service.image.tag:                 "{{.IMAGE_TAG_sokol111_ecommerce_image_service}}"
+          ecommerce-product-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_product_service}}"
+          ecommerce-category-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_category_service}}"
+          ecommerce-product-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_product_query_service}}"
+          ecommerce-category-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_category_query_service}}"
+          ecommerce-image-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_image_service}}"
 
-          ecommerce-product-service.migrator.image:          "{{.IMAGE_REPO_sokol111_ecommerce_product_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_service_migrator}}"
-          ecommerce-category-service.migrator.image:         "{{.IMAGE_REPO_sokol111_ecommerce_category_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_service_migrator}}"
-          ecommerce-product-query-service.migrator.image:    "{{.IMAGE_REPO_sokol111_ecommerce_product_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_query_service_migrator}}"
-          ecommerce-category-query-service.migrator.image:   "{{.IMAGE_REPO_sokol111_ecommerce_category_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_query_service_migrator}}"
-
-          ecommerce-product-service.commonsMigrator.image:   "{{.IMAGE_REPO_sokol111_ecommerce_commons_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_commons_migrator}}"
-          ecommerce-category-service.commonsMigrator.image:  "{{.IMAGE_REPO_sokol111_ecommerce_commons_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_commons_migrator}}"
-          ecommerce-product-query-service.commonsMigrator.image: "{{.IMAGE_REPO_sokol111_ecommerce_commons_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_commons_migrator}}"
-          ecommerce-category-query-service.commonsMigrator.image: "{{.IMAGE_REPO_sokol111_ecommerce_commons_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_commons_migrator}}"
+          ecommerce-product-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_product_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_service_migrator}}"
+          ecommerce-category-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_category_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_service_migrator}}"
+          ecommerce-product-query-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_product_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_query_service_migrator}}"
+          ecommerce-category-query-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_category_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_query_service_migrator}}"
