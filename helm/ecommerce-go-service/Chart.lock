@@ -15,4 +15,4 @@ dependencies:
   repository: file://../ecommerce-category-query-service
   version: 0.0.5
 digest: sha256:9b6671c88a7d4815b191ba887fe3ede80316f7e78b451a0504e5bc9dd63f4ac5
-generated: "2025-10-27T00:44:34.676749915+01:00"
+generated: "2025-10-27T00:54:23.159975376+01:00"
