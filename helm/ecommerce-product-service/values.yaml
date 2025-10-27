@@ -2,6 +2,9 @@
 nameOverride: ""
 fullnameOverride: ""
 
+migratorImage: "sokol111/ecommerce-product-service-migrator:dev"
+dbName: "product"
+
 image:
   repository: sokol111/ecommerce-product-service
   tag: "dev"
@@ -87,11 +90,3 @@ volumes: []
 volumeMounts: []
 
 env: []
-
-# Init containers configuration
-initContainers:
-  - name: migrate
-    image: "sokol111/ecommerce-product-service-migrator:dev"
-    command: ["/bin/sh", "-c"]
-    args:
-      - migrate -path=/migrations -database "mongodb://mongo:27017/product?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up

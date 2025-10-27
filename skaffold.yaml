@@ -174,8 +174,7 @@ deploy:
           ecommerce-product-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_product_query_service}}"
           ecommerce-category-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_category_query_service}}"
           ecommerce-image-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_image_service}}"
-
-          ecommerce-product-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_product_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_service_migrator}}"
-          ecommerce-category-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_category_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_service_migrator}}"
-          ecommerce-product-query-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_product_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_query_service_migrator}}"
-          ecommerce-category-query-service.initContainers[0].image: "{{.IMAGE_REPO_sokol111_ecommerce_category_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_query_service_migrator}}"
+          ecommerce-product-service.migratorImage: "{{.IMAGE_REPO_sokol111_ecommerce_product_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_service_migrator}}"
+          ecommerce-category-service.migratorImage: "{{.IMAGE_REPO_sokol111_ecommerce_category_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_service_migrator}}"
+          ecommerce-product-query-service.migratorImage: "{{.IMAGE_REPO_sokol111_ecommerce_product_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_product_query_service_migrator}}"
+          ecommerce-category-query-service.migratorImage: "{{.IMAGE_REPO_sokol111_ecommerce_category_query_service_migrator}}:{{.IMAGE_TAG_sokol111_ecommerce_category_query_service_migrator}}"
