@@ -73,18 +73,9 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.migratorImage }}
-      initContainers:
-        - name: migrate
-          image: {{ .Values.migratorImage | quote }}
-          command: ["/bin/sh", "-c"]
-          args:
-            - migrate -path=/migrations -database "mongodb://mongo:27017/{{ .Values.dbName | default .Chart.Name }}?replicaSet=rs0&w=majority&retryWrites=true&x-advisory-locking=true&x-migrations-collection=schema_migrations" up
-      {{- else }}
       {{- with .Values.initContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}
-      {{- end }}
       {{- end }}
       containers:
         - name: {{ or .Values.nameOverride .Values.chartName "app" }}

@@ -2,9 +2,6 @@
 nameOverride: ""
 fullnameOverride: ""
 
-migratorImage: "sokol111/ecommerce-product-service-migrator:dev"
-dbName: "product"
-
 image:
   repository: sokol111/ecommerce-product-service
   tag: "dev"

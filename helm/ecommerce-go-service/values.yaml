@@ -2,8 +2,6 @@ ecommerce-product-service:
   image:
     repository: sokol111/ecommerce-product-service
     tag: "latest"
-  migratorImage: "sokol111/ecommerce-product-service-migrator:latest"
-  dbName: "product"
   ingress:
     enabled: true
     host: ecommerce-product-service.127.0.0.1.nip.io
@@ -23,8 +21,6 @@ ecommerce-category-service:
   image:
     repository: sokol111/ecommerce-category-service
     tag: "latest"
-  migratorImage: "sokol111/ecommerce-category-service-migrator:latest"
-  dbName: "category"
   ingress:
     enabled: true
     host: ecommerce-category-service.127.0.0.1.nip.io
@@ -44,8 +40,6 @@ ecommerce-product-query-service:
   image:
     repository: sokol111/ecommerce-product-query-service
     tag: "latest"
-  migratorImage: "sokol111/ecommerce-product-query-service-migrator:latest"
-  dbName: "product-query"
   ingress:
     enabled: true
     host: ecommerce-product-query-service.127.0.0.1.nip.io
@@ -65,8 +59,6 @@ ecommerce-category-query-service:
   image:
     repository: sokol111/ecommerce-category-query-service
     tag: "latest"
-  migratorImage: "sokol111/ecommerce-category-query-service-migrator:latest"
-  dbName: "category-query"
   ingress:
     enabled: true
     host: ecommerce-category-query-service.127.0.0.1.nip.io
