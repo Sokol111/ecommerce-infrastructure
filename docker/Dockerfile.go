@@ -19,6 +19,7 @@ WORKDIR /
 
 COPY --from=base-build /server /server
 COPY --from=base-build /app/configs/ /configs/
+COPY --from=base-build /app/db/ /db/
 
 EXPOSE 8080
 
