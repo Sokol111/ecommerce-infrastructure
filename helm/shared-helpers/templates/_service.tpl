@@ -42,6 +42,12 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if $values.debugPort }}
+    - port: {{ $values.debugPort }}
+      targetPort: debug
+      protocol: TCP
+      name: debug
+    {{- end }}
   selector:
     {{- toYaml .SelectorLabels | nindent 4 }}
 {{- end }}
