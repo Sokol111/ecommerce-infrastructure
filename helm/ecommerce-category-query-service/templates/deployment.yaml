@@ -1,9 +1,12 @@
-{{ include "shared.deployment" (dict
-  "name" (include "template.fullname" .)
-  "Labels" (include "template.labels" . | fromYaml)
-  "SelectorLabels" (include "template.selectorLabels" . | fromYaml)
-  "Values" .Values
-  "ServiceAccountName" (include "template.serviceAccountName" .)
-  "Chart" .Chart
-  "Context" .
-) }}
+{
+  {
+    include "shared.deployment" (dict
+    "name" (include "template.fullname" .)
+    "Labels" (include "template.labels" . | fromYaml)
+    "SelectorLabels" (include "template.selectorLabels" . | fromYaml)
+    "Values" .Values
+    "ServiceAccountName" (include "template.serviceAccountName" .)
+    "Chart" .Chart
+    ),
+  },
+}
