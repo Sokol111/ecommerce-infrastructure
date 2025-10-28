@@ -1,0 +1,18 @@
+dependencies:
+- name: shared-helpers
+  repository: file://../shared-helpers
+  version: 0.6.0
+- name: ecommerce-product-service
+  repository: file://../ecommerce-product-service
+  version: 0.0.24
+- name: ecommerce-category-service
+  repository: file://../ecommerce-category-service
+  version: 0.0.24
+- name: ecommerce-product-query-service
+  repository: file://../ecommerce-product-query-service
+  version: 0.0.6
+- name: ecommerce-category-query-service
+  repository: file://../ecommerce-category-query-service
+  version: 0.0.6
+digest: sha256:160c90285689c968c9e8b2b524710a08a7f2b14bcb07e0ab6060094b03cce7bb
+generated: "2025-10-28T13:34:51.657656042+01:00"
