@@ -39,12 +39,23 @@ GRAFANA_SVC_PORT ?= 80
 
 .DEFAULT_GOAL := help
 
-# ---- Utils ----
+# =============================================================================
+# Help & Information
+# =============================================================================
+
 .PHONY: help
-help: ## List available targets
-	@echo ""
-	@echo -e "\033[36mAvailable targets:\033[0m"
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS=":.*?## "}; {printf "  \033[32m%-30s\033[0m %s\n", $$1, $$2}'
+help: ## Show this help message
+	@printf "\033[1m%s - Available targets:\033[0m\n\n" "ecommerce-infrastructure"
+	@awk 'BEGIN {FS = ":.*?## "; category = ""} \
+		/^# =+$$/ {getline; if ($$0 ~ /^# /) {gsub(/^# /, "", $$0); gsub(/ *$$/, "", $$0); category = $$0}} \
+		/^[a-zA-Z_-]+:.*?## / { \
+			if (category != last_category) { \
+				if (last_category != "") printf "\n"; \
+				printf "\033[1;33m%s:\033[0m\n", category; \
+				last_category = category \
+			} \
+			printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2 \
+		}' $(MAKEFILE_LIST)
 	@echo ""
 
 .PHONY: tools-check
@@ -90,7 +101,10 @@ status: ## Show cluster and deployment status
 		echo "  \033[33mCluster '$(CLUSTER_NAME)' not found\033[0m"; \
 	fi
 
-# ---- K3d Cluster Management ----
+# =============================================================================
+# K3d Cluster Management
+# =============================================================================
+
 .PHONY: cluster-create
 cluster-create: tools-check ## Create k3d cluster from config
 	@if [ ! -f "$(K3D_CONFIG)" ]; then \
@@ -135,7 +149,10 @@ cluster-start: ## Start k3d cluster
 cluster-reset: cluster-delete cluster-create ## Delete and recreate cluster
 	@echo -e "\033[32m✓ Cluster reset complete\033[0m"
 
-# ---- Skaffold Deployment ----
+# =============================================================================
+# Skaffold Deployment
+# =============================================================================
+
 .PHONY: dev
 dev: cluster-create ## Start development loop (rebuild/deploy/logs)
 	@echo -e "\033[36m→ Starting Skaffold dev mode\033[0m"
@@ -173,7 +190,10 @@ undeploy: ## Delete all Skaffold-managed releases
 .PHONY: redeploy
 redeploy: undeploy deploy ## Undeploy and deploy again
 
-# ---- Local Infrastructure (Docker Compose) ----
+# =============================================================================
+# Local Infrastructure (Docker Compose)
+# =============================================================================
+
 .PHONY: infra-up
 infra-up: tools-check ## Start local infrastructure (MongoDB + Kafka)
 	@echo -e "\033[36m→ Starting local infrastructure\033[0m"
@@ -207,7 +227,10 @@ infra-clean: infra-down ## Stop and remove volumes
 	@docker compose -f "$(KAFKA_COMPOSE)" down -v
 	@echo -e "\033[32m✓ Volumes removed\033[0m"
 
-# ---- Kubernetes Helpers ----
+# =============================================================================
+# Kubernetes Helpers
+# =============================================================================
+
 .PHONY: pods
 pods: ## List all pods in dev namespace
 	@kubectl get pods -n "$(NAMESPACE)" -o wide
@@ -273,7 +296,10 @@ endif
 events: ## Show recent events in dev namespace
 	@kubectl get events -n "$(NAMESPACE)" --sort-by='.lastTimestamp' | tail -20
 
-# ---- Observability & Port Forwarding ----
+# =============================================================================
+# Observability & Port Forwarding
+# =============================================================================
+
 .PHONY: grafana
 grafana: ## Port-forward Grafana to http://localhost:3000
 	@echo -e "\033[36m→ Forwarding Grafana: http://localhost:$(GRAFANA_LOCAL_PORT)\033[0m"
@@ -308,7 +334,10 @@ forward-all: ## Port-forward all observability services (requires multiple termi
 	@echo ""
 	@echo -e "\033[33mRun each in a separate terminal\033[0m"
 
-# ---- Debug Helpers ----
+# =============================================================================
+# Debug Helpers
+# =============================================================================
+
 .PHONY: debug-info
 debug-info: ## Show debug port forwarding information
 	@echo -e "\033[36mDebug Port Mappings:\033[0m"
@@ -337,7 +366,10 @@ debug-check: ## Check if debug ports are accessible
 		fi; \
 	done
 
-# ---- Development Workflows ----
+# =============================================================================
+# Development Workflows
+# =============================================================================
+
 .PHONY: init
 init: tools-check cluster-create infra-up deploy ## Complete initialization (cluster + infra + deploy)
 	@echo ""
@@ -357,7 +389,10 @@ clean: undeploy infra-clean cluster-delete ## Complete cleanup (cluster + infra 
 reset: clean init ## Complete reset (clean + init)
 	@echo -e "\033[32m✓ Environment reset complete\033[0m"
 
-# ---- Helm Management ----
+# =============================================================================
+# Helm Management
+# =============================================================================
+
 .PHONY: helm-list
 helm-list: ## List all Helm releases
 	@helm list -A
@@ -380,7 +415,10 @@ helm-upgrade: ## Manually upgrade Helm chart
 	@helm upgrade --install ecommerce "$(CHART_PATH)" -n "$(NAMESPACE)" --create-namespace
 	@echo -e "\033[32m✓ Helm release upgraded\033[0m"
 
-# ---- Quick Commands (Aliases) ----
+# =============================================================================
+# Quick Commands (Aliases)
+# =============================================================================
+
 .PHONY: up
 up: cluster-start infra-up ## Quick start: cluster + infrastructure
 
@@ -393,7 +431,10 @@ ps: pods ## Alias for 'pods'
 .PHONY: svc
 svc: services ## Alias for 'services'
 
-# ---- Monitoring & Health Checks ----
+# =============================================================================
+# Monitoring & Health Checks
+# =============================================================================
+
 .PHONY: health
 health: ## Check health of all services
 	@echo -e "\033[36m→ Checking service health...\033[0m"
