@@ -170,3 +170,12 @@ deploy:
           ecommerce-product-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_product_query_service}}"
           ecommerce-category-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_category_query_service}}"
           ecommerce-image-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_image_service}}"
+
+profiles:
+  - name: debug
+    deploy:
+      helm:
+        releases:
+          - name: ecommerce
+            valuesFiles:
+              - helm/ecommerce-go-service/values.debug.yaml

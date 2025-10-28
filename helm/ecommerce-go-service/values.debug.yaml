@@ -1,0 +1,58 @@
+# Debug configuration for all services
+# Usage: skaffold dev -f skaffold.yaml --profile debug
+# Or manually: helm upgrade --install -f values.yaml -f values.debug.yaml ...
+
+ecommerce-product-service:
+  debugPort: 2345
+  command: ["/dlv"]
+  args:
+    - "--listen=:2345"
+    - "--headless=true"
+    - "--api-version=2"
+    - "--accept-multiclient"
+    - "exec"
+    - "/server"
+
+ecommerce-category-service:
+  debugPort: 2345
+  command: ["/dlv"]
+  args:
+    - "--listen=:2345"
+    - "--headless=true"
+    - "--api-version=2"
+    - "--accept-multiclient"
+    - "exec"
+    - "/server"
+
+ecommerce-product-query-service:
+  debugPort: 2345
+  command: ["/dlv"]
+  args:
+    - "--listen=:2345"
+    - "--headless=true"
+    - "--api-version=2"
+    - "--accept-multiclient"
+    - "exec"
+    - "/server"
+
+ecommerce-category-query-service:
+  debugPort: 2345
+  command: ["/dlv"]
+  args:
+    - "--listen=:2345"
+    - "--headless=true"
+    - "--api-version=2"
+    - "--accept-multiclient"
+    - "exec"
+    - "/server"
+
+ecommerce-image-service:
+  debugPort: 2345
+  command: ["/dlv"]
+  args:
+    - "--listen=:2345"
+    - "--headless=true"
+    - "--api-version=2"
+    - "--accept-multiclient"
+    - "exec"
+    - "/server"
