@@ -2,9 +2,6 @@
 nameOverride: ""
 fullnameOverride: ""
 
-migratorImage: "sokol111/ecommerce-category-query-service-migrator:dev"
-dbName: "category-query"
-
 image:
   repository: sokol111/ecommerce-category-query-service
   tag: "dev"

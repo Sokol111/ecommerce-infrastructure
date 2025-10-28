@@ -1,7 +1,0 @@
-FROM migrate/migrate:latest
-
-ARG SERVICE_DIR=service-dir
-
-COPY ${SERVICE_DIR}/db/migrations/ /migrations
-
-ENTRYPOINT ["migrate"]
