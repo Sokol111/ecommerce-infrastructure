@@ -26,7 +26,12 @@ check_tool() {
 }
 
 check_tool docker
-check_tool docker-compose
+if docker compose version &> /dev/null; then
+  echo -e "  ${GREEN}✓${NC} docker compose ($(docker compose version --short 2>/dev/null || echo 'version unknown'))"
+else
+  echo -e "  ${RED}✗${NC} docker compose - NOT AVAILABLE"
+  MISSING=1
+fi
 check_tool k3d
 check_tool kubectl
 check_tool skaffold
@@ -50,11 +55,12 @@ fi
 
 echo -e "\n${CYAN}Checking k3d cluster:${NC}"
 if k3d cluster list 2>/dev/null | grep -q "dev-cluster"; then
-  STATUS=$(k3d cluster list | grep "dev-cluster" | awk '{print $6}')
-  if [ "$STATUS" = "running" ]; then
+  # Check if cluster is actually running by trying to get nodes
+  if kubectl get nodes --context k3d-dev-cluster &> /dev/null; then
     echo -e "  ${GREEN}✓${NC} Cluster 'dev-cluster' is running"
   else
-    echo -e "  ${YELLOW}⚠${NC} Cluster 'dev-cluster' exists but is $STATUS"
+    echo -e "  ${YELLOW}⚠${NC} Cluster 'dev-cluster' exists but is stopped"
+    echo -e "  ${CYAN}Run:${NC} make cluster-start"
   fi
 else
   echo -e "  ${YELLOW}⚠${NC} Cluster 'dev-cluster' not found"
