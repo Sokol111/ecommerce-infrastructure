@@ -40,6 +40,33 @@ build:
         buildArgs:
           SERVICE_DIR: ecommerce-image-service
 
+portForward:
+  - resourceType: service
+    resourceName: ecommerce-product-service
+    namespace: dev
+    port: 2345
+    localPort: 2345
+  - resourceType: service
+    resourceName: ecommerce-category-service
+    namespace: dev
+    port: 2345
+    localPort: 2346
+  - resourceType: service
+    resourceName: ecommerce-product-query-service
+    namespace: dev
+    port: 2345
+    localPort: 2347
+  - resourceType: service
+    resourceName: ecommerce-category-query-service
+    namespace: dev
+    port: 2345
+    localPort: 2348
+  - resourceType: service
+    resourceName: ecommerce-image-service
+    namespace: dev
+    port: 2345
+    localPort: 2349
+
 deploy:
   kubeContext: k3d-dev-cluster
   helm:
