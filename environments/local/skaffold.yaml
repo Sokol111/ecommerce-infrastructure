@@ -10,35 +10,40 @@ build:
     useBuildkit: false
   artifacts:
     - image: sokol111/ecommerce-product-service
-      context: ..
+      context: /home/ihsokolo/projects/ecommerce
       docker:
         dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-product-service
+          COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-category-service
-      context: ..
+      context: /home/ihsokolo/projects/ecommerce
       docker:
         dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-category-service
+          COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-product-query-service
-      context: ..
+      context: /home/ihsokolo/projects/ecommerce
       docker:
         dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-product-query-service
+          COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-category-query-service
-      context: ..
+      context: /home/ihsokolo/projects/ecommerce
       docker:
         dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-category-query-service
+          COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-image-service
-      context: ..
+      context: /home/ihsokolo/projects/ecommerce
       docker:
         dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-image-service
+          COMMONS_DIR: ecommerce-commons
 
 portForward:
   - resourceType: service
@@ -85,7 +90,7 @@ deploy:
         repo: https://traefik.github.io/charts
         version: "37.1.0"
         namespace: traefik
-        valuesFiles: [helm/helm-values/traefik.yaml]
+        valuesFiles: [helm/values/infrastructure/traefik.yaml]
         wait: true
         upgradeOnChange: false
         dependsOn: ["traefik-crds"]
@@ -96,7 +101,7 @@ deploy:
         namespace: observability
         createNamespace: true
         version: "6.40.0"
-        valuesFiles: [helm/helm-values/loki.yaml]
+        valuesFiles: [helm/values/observability/loki.yaml]
         wait: true
         upgradeOnChange: false
 
@@ -105,7 +110,7 @@ deploy:
         repo: https://grafana.github.io/helm-charts
         namespace: observability
         version: "1.23.3"
-        valuesFiles: [helm/helm-values/tempo.yaml]
+        valuesFiles: [helm/values/observability/tempo.yaml]
         wait: true
         upgradeOnChange: false
 
@@ -114,7 +119,7 @@ deploy:
         repo: https://grafana.github.io/helm-charts
         namespace: observability
         version: "9.4.4"
-        valuesFiles: [helm/helm-values/grafana.yaml]
+        valuesFiles: [helm/values/observability/grafana.yaml]
         wait: true
         upgradeOnChange: false
 
@@ -123,7 +128,7 @@ deploy:
         repo: https://open-telemetry.github.io/opentelemetry-helm-charts
         namespace: observability
         version: "0.133.0"
-        valuesFiles: [helm/helm-values/otelcol.yaml]
+        valuesFiles: [helm/values/observability/otelcol.yaml]
         wait: true
         upgradeOnChange: false
 
@@ -132,7 +137,7 @@ deploy:
         repo: https://prometheus-community.github.io/helm-charts
         namespace: observability
         version: "27.39.0"
-        valuesFiles: [helm/helm-values/prometheus.yaml]
+        valuesFiles: [helm/values/observability/prometheus.yaml]
         wait: true
         upgradeOnChange: false
         dependsOn: ["otel-collector"]
@@ -143,7 +148,7 @@ deploy:
         version: "5.4.0"
         namespace: minio
         createNamespace: true
-        valuesFiles: [helm/helm-values/minio.yaml]
+        valuesFiles: [helm/values/storage/minio.yaml]
         wait: true
         upgradeOnChange: false
 
@@ -153,7 +158,7 @@ deploy:
         version: "1.1.0"
         namespace: imgproxy
         createNamespace: true
-        valuesFiles: [helm/helm-values/imgproxy.yaml]
+        valuesFiles: [helm/values/misc/imgproxy.yaml]
         wait: true
         upgradeOnChange: true
 
@@ -173,6 +178,38 @@ deploy:
 
 profiles:
   - name: debug
+    build:
+      artifacts:
+        - image: sokol111/ecommerce-product-service
+          docker:
+            dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+            buildArgs:
+              SERVICE_DIR: ecommerce-product-service
+              COMMONS_DIR: ecommerce-commons
+        - image: sokol111/ecommerce-category-service
+          docker:
+            dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+            buildArgs:
+              SERVICE_DIR: ecommerce-category-service
+              COMMONS_DIR: ecommerce-commons
+        - image: sokol111/ecommerce-product-query-service
+          docker:
+            dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+            buildArgs:
+              SERVICE_DIR: ecommerce-product-query-service
+              COMMONS_DIR: ecommerce-commons
+        - image: sokol111/ecommerce-category-query-service
+          docker:
+            dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+            buildArgs:
+              SERVICE_DIR: ecommerce-category-query-service
+              COMMONS_DIR: ecommerce-commons
+        - image: sokol111/ecommerce-image-service
+          docker:
+            dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+            buildArgs:
+              SERVICE_DIR: ecommerce-image-service
+              COMMONS_DIR: ecommerce-commons
     deploy:
       helm:
         releases:

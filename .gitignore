@@ -19,6 +19,15 @@ charts/*.tgz
 k8s/*.generated.yaml
 
 # ========================
+# Environments & Secrets
+# ========================
+environments/**/secrets/
+environments/**/*.secret.yaml
+**/.env
+.env.local
+.env.*.local
+
+# ========================
 # IDEs & OS
 # ========================
 .idea/
