@@ -26,16 +26,22 @@ WORKDIR /src
 COPY ${COMMONS_DIR} ./${COMMONS_DIR}
 COPY ${SERVICE_DIR} ./svc
 
-# 4) Збірка бінарника (dev mode)
+# 4) Встановлення Delve debugger
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
+
+# 5) Збірка бінарника з debug символами
 WORKDIR /src/svc
-RUN echo "Building in DEV mode (optimized, CGO enabled for confluent-kafka-go)..." && \
-    CGO_ENABLED=1 GOOS=linux go build -v -o /server ./cmd/main.go
+RUN echo "Building in DEBUG mode with symbols..." && \
+    CGO_ENABLED=1 GOOS=linux go build -gcflags="all=-N -l" -v -o /server ./cmd/main.go
 
 ############################
 # Runtime stage
 ############################
 FROM ${RUNTIME_IMAGE} AS release
 WORKDIR /
+
+# Копіюємо Delve debugger
+COPY --from=builder /go/bin/dlv /dlv
 
 # Копіюємо бінарник сервісу та конфігурації
 COPY --from=builder /server /server
@@ -44,5 +50,8 @@ COPY --from=builder /src/svc/db/ /db/
 
 # Основний порт сервісу
 EXPOSE 8080
+
+# Debug порт для Delve
+EXPOSE 2345
 
 ENTRYPOINT ["/server"]

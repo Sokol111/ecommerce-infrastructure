@@ -8,13 +8,17 @@ MAKEFLAGS += --no-builtin-rules
 
 THIS_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
+# Environment
+ENV ?= local
+ENV_DIR := $(THIS_DIR)environments/$(ENV)
+
 # K3d
-K3D_CONFIG ?= $(THIS_DIR)k3d-cluster.yaml
+K3D_CONFIG ?= $(ENV_DIR)/k3d-cluster.yaml
 CLUSTER_NAME ?= dev-cluster
 K3D_CONTEXT := k3d-$(CLUSTER_NAME)
 
 # Skaffold
-SKAFFOLD_CONFIG ?= $(THIS_DIR)skaffold.yaml
+SKAFFOLD_CONFIG ?= $(ENV_DIR)/skaffold.yaml
 SKAFFOLD_PROFILE ?=
 
 # Namespaces
@@ -27,7 +31,7 @@ MINIO_NS ?= minio
 CHART_PATH ?= $(THIS_DIR)helm/ecommerce-go-service
 
 # Docker compose
-COMPOSE_DIR := $(THIS_DIR)docker/docker-compose
+COMPOSE_DIR := $(THIS_DIR)docker/compose
 MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
 KAFKA_COMPOSE := $(COMPOSE_DIR)/kafka.yml
 DOCKER_NETWORK := shared-network
@@ -84,7 +88,7 @@ tools-check: ## Перевірити наявність усіх необхід�
 
 .PHONY: check-env
 check-env: ## Запустити комплексну перевірку середовища розробки (інструменти, конфіги, доступність портів)
-	@bash $(THIS_DIR)scripts/check-env.sh
+	@bash $(THIS_DIR)scripts/setup/check-env.sh
 
 .PHONY: status
 status: ## Показати статус кластера, нод, деплойментів та сервісів у namespace 'dev'
@@ -289,7 +293,7 @@ logs-all: ## Показати логи всіх сервісів у namespace 'd
 
 .PHONY: logs-select
 logs-select: ## Інтерактивний вибір сервісу для перегляду логів (меню з доступними сервісами)
-	@bash $(THIS_DIR)scripts/logs.sh
+	@bash $(THIS_DIR)scripts/monitoring/logs.sh
 
 .PHONY: exec
 exec: ## Підключитися до shell у поді для інтерактивної роботи: make exec POD=<pod-name>
