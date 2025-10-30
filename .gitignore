@@ -31,7 +31,6 @@ environments/**/*.secret.yaml
 # IDEs & OS
 # ========================
 .idea/
-.vscode/
 *.swp
 *.swo
 *.swn

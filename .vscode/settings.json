@@ -1,0 +1,12 @@
+{
+  // Вимкнути автоформатування для YAML файлів з Helm templates
+  "[yaml]": {
+    "editor.formatOnSave": false
+  },
+
+  // Або використовувати Prettier, але він тепер буде враховувати .prettierignore
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Важливо: Prettier повинен шукати конфігурацію від кореня workspace
+  "prettier.ignorePath": ".prettierignore"
+}
