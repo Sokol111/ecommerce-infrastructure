@@ -6,53 +6,58 @@ ecommerce-product-service:
   debugPort: 2345
   command: ["/dlv"]
   args:
+    - "exec"
+    - "/server"
     - "--listen=:2345"
     - "--headless=true"
     - "--api-version=2"
     - "--accept-multiclient"
-    - "exec"
-    - "/server"
+    - "--continue"
 
 ecommerce-category-service:
   debugPort: 2345
   command: ["/dlv"]
   args:
+    - "exec"
+    - "/server"
     - "--listen=:2345"
     - "--headless=true"
     - "--api-version=2"
     - "--accept-multiclient"
-    - "exec"
-    - "/server"
+    - "--continue"
 
 ecommerce-product-query-service:
   debugPort: 2345
   command: ["/dlv"]
   args:
+    - "exec"
+    - "/server"
     - "--listen=:2345"
     - "--headless=true"
     - "--api-version=2"
     - "--accept-multiclient"
-    - "exec"
-    - "/server"
+    - "--continue"
 
 ecommerce-category-query-service:
   debugPort: 2345
   command: ["/dlv"]
   args:
+    - "exec"
+    - "/server"
     - "--listen=:2345"
     - "--headless=true"
     - "--api-version=2"
     - "--accept-multiclient"
-    - "exec"
-    - "/server"
+    - "--continue"
 
 ecommerce-image-service:
   debugPort: 2345
   command: ["/dlv"]
   args:
+    - "exec"
+    - "/server"
     - "--listen=:2345"
     - "--headless=true"
     - "--api-version=2"
     - "--accept-multiclient"
-    - "exec"
-    - "/server"
+    - "--continue"
