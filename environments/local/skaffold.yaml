@@ -40,22 +40,22 @@ build:
 
 portForward:
   - resourceType: service
-    resourceName: ecommerce-product-service
+    resourceName: ecommerce-ecommerce-product-service
     namespace: dev
     port: 2345
     localPort: 2345
   - resourceType: service
-    resourceName: ecommerce-category-service
+    resourceName: ecommerce-ecommerce-category-service
     namespace: dev
     port: 2345
     localPort: 2346
   - resourceType: service
-    resourceName: ecommerce-product-query-service
+    resourceName: ecommerce-ecommerce-product-query-service
     namespace: dev
     port: 2345
     localPort: 2347
   - resourceType: service
-    resourceName: ecommerce-category-query-service
+    resourceName: ecommerce-ecommerce-category-query-service
     namespace: dev
     port: 2345
     localPort: 2348

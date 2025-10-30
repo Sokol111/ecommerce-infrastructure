@@ -188,7 +188,7 @@ deploy: cluster-create ## Одноразовий деплой всіх серв�
 .PHONY: deploy-debug
 deploy-debug: cluster-create ## Одноразовий деплой з активованим режимом дебагу (Delve debugger у всіх сервісах)
 	@printf "\033[36m→ Deploying in DEBUG mode\033[0m\n"
-	@skaffold run -f "$(SKAFFOLD_CONFIG)" -p debug --status-check
+	@skaffold run -f "$(SKAFFOLD_CONFIG)" -p debug --status-check --port-forward
 	@printf "\033[32m✓ Debug deployment complete\033[0m\n"
 
 .PHONY: undeploy
@@ -368,6 +368,21 @@ forward-all: ## Показати список всіх доступних port-f
 # Debug Helpers
 # =============================================================================
 
+.PHONY: debug-forward
+debug-forward: ## Запустити port-forwarding для всіх debug портів (2345-2348) - використовується після deploy-debug
+	@printf "\033[36m→ Starting debug port-forwarding\033[0m\n"
+	@printf "  localhost:2345 → ecommerce-product-service\n"
+	@printf "  localhost:2346 → ecommerce-category-service\n"
+	@printf "  localhost:2347 → ecommerce-product-query-service\n"
+	@printf "  localhost:2348 → ecommerce-category-query-service\n"
+	@printf "\n\033[33mPress Ctrl+C to stop\033[0m\n\n"
+	@bash -c 'trap "exit" INT TERM; \
+		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-product-service 2345:2345 & \
+		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-category-service 2346:2345 & \
+		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-product-query-service 2347:2345 & \
+		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-category-query-service 2348:2345 & \
+		wait'
+
 .PHONY: debug-info
 debug-info: ## Показати інформацію про порти для підключення дебагера та інструкції по налаштуванню VS Code
 	@printf "\033[36mDebug Port Mappings:\033[0m\n"
@@ -381,9 +396,15 @@ debug-info: ## Показати інформацію про порти для п
 	@printf "  Use 'Attach to K3D' configurations in launch.json\n"
 	@printf "\n"
 	@printf "\033[36mTo start debugging:\033[0m\n"
-	@printf "  1. Run: \033[32mmake dev-debug\033[0m\n"
-	@printf "  2. Wait for services to start\n"
-	@printf "  3. In VS Code, select 'Attach to K3D' config and press F5\n"
+	@printf "  \033[1mOption 1 (dev mode with auto-reload):\033[0m\n"
+	@printf "    1. Run: \033[32mmake dev-debug\033[0m\n"
+	@printf "    2. Wait for services to start\n"
+	@printf "    3. In VS Code, select 'Attach to K3D' config and press F5\n"
+	@printf "\n"
+	@printf "  \033[1mOption 2 (deploy mode without auto-reload):\033[0m\n"
+	@printf "    1. Run: \033[32mmake deploy-debug\033[0m (auto-starts port-forwarding)\n"
+	@printf "    2. Or run separately: \033[32mmake debug-forward\033[0m\n"
+	@printf "    3. In VS Code, select 'Attach to K3D' config and press F5\n"
 
 .PHONY: debug-check
 debug-check: ## Перевірити доступність debug портів 2345-2349 (чи запущені сервіси в debug режимі)
