@@ -7,7 +7,8 @@ build:
   tagPolicy: { sha256: {} }
   local:
     push: false
-    useBuildkit: false
+    useBuildkit: true
+    concurrency: 4
   artifacts:
     - image: sokol111/ecommerce-product-service
       context: /home/ihsokolo/projects/ecommerce
