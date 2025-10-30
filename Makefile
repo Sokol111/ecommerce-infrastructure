@@ -164,15 +164,12 @@ cluster-reset: cluster-delete cluster-create ## Повністю видалит�
 # =============================================================================
 
 .PHONY: dev
-dev: cluster-create ## Запустити режим розробки з автоматичною пересборкою, деплоєм та показом логів при змінах коду
-	@printf "\033[36m→ Starting Skaffold dev mode\033[0m\n"
+dev: cluster-create ## Запустити режим розробки з автоматичною пересборкою, деплоєм та показом логів при змінах коду (включає debug режим з Delve)
+	@printf "\033[36m→ Starting Skaffold dev mode (debug-enabled)\033[0m\n"
+	@printf "\033[33m  Debug ports: 2345-2348 (product, category, product-query, category-query)\033[0m\n"
 	@skaffold dev -f "$(SKAFFOLD_CONFIG)" $(if $(SKAFFOLD_PROFILE),-p $(SKAFFOLD_PROFILE),)
 
-.PHONY: dev-debug
-dev-debug: cluster-create ## Запустити режим розробки з підтримкою дебагу через Delve (порти 2345-2349 для різних сервісів)
-	@printf "\033[36m→ Starting Skaffold dev mode with DEBUG profile\033[0m\n"
-	@printf "\033[33m  Debug ports: 2345-2349 (product, category, product-query, category-query, image)\033[0m\n"
-	@skaffold dev -f "$(SKAFFOLD_CONFIG)" -p debug
+
 
 .PHONY: build
 build: cluster-create ## Побудувати Docker образи для всіх сервісів без деплою в кластер
@@ -180,16 +177,12 @@ build: cluster-create ## Побудувати Docker образи для всі�
 	@skaffold build -f "$(SKAFFOLD_CONFIG)"
 
 .PHONY: deploy
-deploy: cluster-create ## Одноразовий деплой всіх сервісів в кластер через Skaffold та Helm
-	@printf "\033[36m→ Deploying to cluster\033[0m\n"
+deploy: cluster-create ## Одноразовий деплой всіх сервісів в кластер через Skaffold та Helm (debug-enabled з Delve)
+	@printf "\033[36m→ Deploying to cluster (debug-enabled)\033[0m\n"
 	@skaffold run -f "$(SKAFFOLD_CONFIG)" --status-check $(if $(SKAFFOLD_PROFILE),-p $(SKAFFOLD_PROFILE),)
 	@printf "\033[32m✓ Deployment complete\033[0m\n"
 
-.PHONY: deploy-debug
-deploy-debug: cluster-create ## Одноразовий деплой з активованим режимом дебагу (Delve debugger у всіх сервісах)
-	@printf "\033[36m→ Deploying in DEBUG mode\033[0m\n"
-	@skaffold run -f "$(SKAFFOLD_CONFIG)" -p debug --status-check --port-forward
-	@printf "\033[32m✓ Debug deployment complete\033[0m\n"
+
 
 .PHONY: undeploy
 undeploy: ## Видалити всі сервіси та Helm релізи, які були задеплоєні через Skaffold
@@ -369,7 +362,7 @@ forward-all: ## Показати список всіх доступних port-f
 # =============================================================================
 
 .PHONY: debug-forward
-debug-forward: ## Запустити port-forwarding для всіх debug портів (2345-2348) - використовується після deploy-debug
+debug-forward: ## Запустити port-forwarding для всіх debug портів (2345-2348) для підключення дебагера
 	@printf "\033[36m→ Starting debug port-forwarding\033[0m\n"
 	@printf "  localhost:2345 → ecommerce-product-service\n"
 	@printf "  localhost:2346 → ecommerce-category-service\n"
@@ -390,26 +383,25 @@ debug-info: ## Показати інформацію про порти для п
 	@printf "  localhost:2346 → ecommerce-category-service\n"
 	@printf "  localhost:2347 → ecommerce-product-query-service\n"
 	@printf "  localhost:2348 → ecommerce-category-query-service\n"
-	@printf "  localhost:2349 → ecommerce-image-service\n"
 	@printf "\n"
 	@printf "\033[36mVS Code Debug Configuration:\033[0m\n"
 	@printf "  Use 'Attach to K3D' configurations in launch.json\n"
 	@printf "\n"
 	@printf "\033[36mTo start debugging:\033[0m\n"
 	@printf "  \033[1mOption 1 (dev mode with auto-reload):\033[0m\n"
-	@printf "    1. Run: \033[32mmake dev-debug\033[0m\n"
+	@printf "    1. Run: \033[32mmake dev\033[0m\n"
 	@printf "    2. Wait for services to start\n"
 	@printf "    3. In VS Code, select 'Attach to K3D' config and press F5\n"
 	@printf "\n"
 	@printf "  \033[1mOption 2 (deploy mode without auto-reload):\033[0m\n"
-	@printf "    1. Run: \033[32mmake deploy-debug\033[0m (auto-starts port-forwarding)\n"
-	@printf "    2. Or run separately: \033[32mmake debug-forward\033[0m\n"
+	@printf "    1. Run: \033[32mmake deploy\033[0m\n"
+	@printf "    2. Run: \033[32mmake debug-forward\033[0m\n"
 	@printf "    3. In VS Code, select 'Attach to K3D' config and press F5\n"
 
 .PHONY: debug-check
-debug-check: ## Перевірити доступність debug портів 2345-2349 (чи запущені сервіси в debug режимі)
+debug-check: ## Перевірити доступність debug портів 2345-2348 (чи запущені сервіси в debug режимі)
 	@printf "\033[36m→ Checking debug ports...\033[0m\n"
-	@for port in 2345 2346 2347 2348 2349; do \
+	@for port in 2345 2346 2347 2348; do \
 		if timeout 1 bash -c "echo >/dev/tcp/localhost/$$port" 2>/dev/null; then \
 			printf "  \033[32m✓ Port $$port\033[0m - accessible\n"; \
 		else \
@@ -427,10 +419,10 @@ init: tools-check cluster-create infra-up deploy ## Повна ініціалі�
 	@printf "\033[32m✓ Development environment ready!\033[0m\n"
 	@echo ""
 	@printf "\033[36mNext steps:\033[0m\n"
-	@echo "  - Run \033[32mmake dev\033[0m to start development mode"
-	@echo "  - Run \033[32mmake dev-debug\033[0m for debugging"
+	@echo "  - Run \033[32mmake dev\033[0m to start development mode (debug-enabled)"
 	@echo "  - Run \033[32mmake status\033[0m to check cluster status"
 	@echo "  - Run \033[32mmake grafana\033[0m to access observability"
+	@echo "  - Run \033[32mmake debug-info\033[0m for debugging instructions"
 
 .PHONY: clean
 clean: undeploy infra-clean cluster-delete ## Повне очищення: видалення кластера, інфраструктури та всіх volumes з даними
