@@ -7,6 +7,7 @@ ARG RUNTIME_IMAGE=ubuntu:24.04
 # Build stage
 ############################
 FROM ${GO_IMAGE} AS builder
+
 WORKDIR /src
 
 # Параметри для різних сервісів
@@ -19,7 +20,8 @@ COPY ${COMMONS_DIR}/go.mod ./${COMMONS_DIR}/go.mod
 
 # 2) Завантаження залежностей (replace у svc/go.mod на ../commons)
 WORKDIR /src/svc
-RUN go mod download && go mod verify
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download && go mod verify
 
 # 3) Копіюємо код обох репо
 WORKDIR /src
@@ -27,11 +29,14 @@ COPY ${COMMONS_DIR} ./${COMMONS_DIR}
 COPY ${SERVICE_DIR} ./svc
 
 # 4) Встановлення Delve debugger
-RUN go install github.com/go-delve/delve/cmd/dlv@latest
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go install github.com/go-delve/delve/cmd/dlv@latest
 
 # 5) Збірка бінарника з debug символами
 WORKDIR /src/svc
-RUN echo "Building in DEBUG mode with symbols..." && \
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    echo "Building in DEBUG mode with symbols..." && \
     CGO_ENABLED=1 GOOS=linux go build -gcflags="all=-N -l" -v -o /server ./cmd/main.go
 
 ############################
