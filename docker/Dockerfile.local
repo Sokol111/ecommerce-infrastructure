@@ -7,6 +7,7 @@ ARG RUNTIME_IMAGE=ubuntu:24.04
 # Build stage
 ############################
 FROM ${GO_IMAGE} AS builder
+
 WORKDIR /src
 
 # Параметри для різних сервісів
@@ -19,17 +20,24 @@ COPY ${COMMONS_DIR}/go.mod ./${COMMONS_DIR}/go.mod
 
 # 2) Завантаження залежностей (replace у svc/go.mod на ../commons)
 WORKDIR /src/svc
-RUN go mod download && go mod verify
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download && go mod verify
 
 # 3) Копіюємо код обох репо
 WORKDIR /src
 COPY ${COMMONS_DIR} ./${COMMONS_DIR}
 COPY ${SERVICE_DIR} ./svc
 
-# 4) Збірка бінарника (dev mode)
+# 4) Встановлення Delve debugger
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go install github.com/go-delve/delve/cmd/dlv@latest
+
+# 5) Збірка бінарника з debug символами
 WORKDIR /src/svc
-RUN echo "Building in DEV mode (optimized, CGO enabled for confluent-kafka-go)..." && \
-    CGO_ENABLED=1 GOOS=linux go build -v -o /server ./cmd/main.go
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    echo "Building in DEBUG mode with symbols..." && \
+    CGO_ENABLED=1 GOOS=linux go build -gcflags="all=-N -l" -v -o /server ./cmd/main.go
 
 ############################
 # Runtime stage
@@ -37,12 +45,22 @@ RUN echo "Building in DEV mode (optimized, CGO enabled for confluent-kafka-go)..
 FROM ${RUNTIME_IMAGE} AS release
 WORKDIR /
 
+# Копіюємо Delve debugger
+COPY --from=builder /go/bin/dlv /dlv
+
 # Копіюємо бінарник сервісу та конфігурації
 COPY --from=builder /server /server
 COPY --from=builder /src/svc/configs/ /configs/
 COPY --from=builder /src/svc/db/ /db/
 
+# Копіюємо вихідний код для debugging (щоб Delve міг мапити breakpoints)
+COPY --from=builder /src/svc /app
+COPY --from=builder /src/ecommerce-commons /ecommerce-commons
+
 # Основний порт сервісу
 EXPOSE 8080
+
+# Debug порт для Delve
+EXPOSE 2345
 
 ENTRYPOINT ["/server"]
