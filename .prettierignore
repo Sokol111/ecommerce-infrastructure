@@ -1,0 +1,6 @@
+# Helm templates (містять Go templating syntax)
+**/helm/**/templates/**/*.yaml
+**/helm/**/templates/**/*.yml
+
+# Можливі інші файли для ігнорування
+*.md

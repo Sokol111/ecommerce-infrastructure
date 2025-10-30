@@ -1,0 +1,5 @@
+{{ include "shared.ingress" (dict
+  "name" (include "template.fullname" .)
+  "Labels" (include "template.labels" . | fromYaml)
+  "Values" .Values
+) }}

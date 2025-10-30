@@ -73,3 +73,22 @@ ecommerce-category-query-service:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['app.kubernetes.io/version']
+
+ecommerce-image-service:
+  image:
+    repository: sokol111/ecommerce-image-service
+    tag: "latest"
+  ingress:
+    enabled: true
+    host: ecommerce-image-service.127.0.0.1.nip.io
+  env:
+    - name: APP_ENV
+      value: "dev"
+    - name: APP_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/name']
+    - name: APP_SERVICE_VERSION
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app.kubernetes.io/version']

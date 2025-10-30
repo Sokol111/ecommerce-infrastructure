@@ -38,6 +38,13 @@ build:
         buildArgs:
           SERVICE_DIR: ecommerce-category-query-service
           COMMONS_DIR: ecommerce-commons
+    - image: sokol111/ecommerce-image-service
+      context: /home/ihsokolo/projects/ecommerce
+      docker:
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+        buildArgs:
+          SERVICE_DIR: ecommerce-image-service
+          COMMONS_DIR: ecommerce-commons
 
 portForward:
   - resourceType: service
@@ -60,6 +67,11 @@ portForward:
     namespace: dev
     port: 2345
     localPort: 2348
+  - resourceType: service
+    resourceName: ecommerce-ecommerce-image-service
+    namespace: dev
+    port: 2345
+    localPort: 2349
 
 deploy:
   kubeContext: k3d-dev-cluster
@@ -165,3 +177,4 @@ deploy:
           ecommerce-category-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_category_service}}"
           ecommerce-product-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_product_query_service}}"
           ecommerce-category-query-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_category_query_service}}"
+          ecommerce-image-service.image.tag: "{{.IMAGE_TAG_sokol111_ecommerce_image_service}}"

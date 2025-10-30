@@ -166,7 +166,7 @@ cluster-reset: cluster-delete cluster-create ## Повністю видалит�
 .PHONY: dev
 dev: cluster-create ## Запустити режим розробки з автоматичною пересборкою, деплоєм та показом логів при змінах коду (включає debug режим з Delve)
 	@printf "\033[36m→ Starting Skaffold dev mode (debug-enabled)\033[0m\n"
-	@printf "\033[33m  Debug ports: 2345-2348 (product, category, product-query, category-query)\033[0m\n"
+	@printf "\033[33m  Debug ports: 2345-2349 (product, category, product-query, category-query, image)\033[0m\n"
 	@skaffold dev -f "$(SKAFFOLD_CONFIG)" $(if $(SKAFFOLD_PROFILE),-p $(SKAFFOLD_PROFILE),)
 
 
@@ -362,18 +362,20 @@ forward-all: ## Показати список всіх доступних port-f
 # =============================================================================
 
 .PHONY: debug-forward
-debug-forward: ## Запустити port-forwarding для всіх debug портів (2345-2348) для підключення дебагера
+debug-forward: ## Запустити port-forwarding для всіх debug портів (2345-2349) для підключення дебагера
 	@printf "\033[36m→ Starting debug port-forwarding\033[0m\n"
 	@printf "  localhost:2345 → ecommerce-product-service\n"
 	@printf "  localhost:2346 → ecommerce-category-service\n"
 	@printf "  localhost:2347 → ecommerce-product-query-service\n"
 	@printf "  localhost:2348 → ecommerce-category-query-service\n"
+	@printf "  localhost:2349 → ecommerce-image-service\n"
 	@printf "\n\033[33mPress Ctrl+C to stop\033[0m\n\n"
 	@bash -c 'trap "exit" INT TERM; \
 		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-product-service 2345:2345 & \
 		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-category-service 2346:2345 & \
 		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-product-query-service 2347:2345 & \
 		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-category-query-service 2348:2345 & \
+		kubectl port-forward -n $(NAMESPACE) svc/ecommerce-ecommerce-image-service 2349:2345 & \
 		wait'
 
 .PHONY: debug-info
@@ -383,6 +385,7 @@ debug-info: ## Показати інформацію про порти для п
 	@printf "  localhost:2346 → ecommerce-category-service\n"
 	@printf "  localhost:2347 → ecommerce-product-query-service\n"
 	@printf "  localhost:2348 → ecommerce-category-query-service\n"
+	@printf "  localhost:2349 → ecommerce-image-service\n"
 	@printf "\n"
 	@printf "\033[36mVS Code Debug Configuration:\033[0m\n"
 	@printf "  Use 'Attach to K3D' configurations in launch.json\n"
@@ -399,9 +402,9 @@ debug-info: ## Показати інформацію про порти для п
 	@printf "    3. In VS Code, select 'Attach to K3D' config and press F5\n"
 
 .PHONY: debug-check
-debug-check: ## Перевірити доступність debug портів 2345-2348 (чи запущені сервіси в debug режимі)
+debug-check: ## Перевірити доступність debug портів 2345-2349 (чи запущені сервіси в debug режимі)
 	@printf "\033[36m→ Checking debug ports...\033[0m\n"
-	@for port in 2345 2346 2347 2348; do \
+	@for port in 2345 2346 2347 2348 2349; do \
 		if timeout 1 bash -c "echo >/dev/tcp/localhost/$$port" 2>/dev/null; then \
 			printf "  \033[32m✓ Port $$port\033[0m - accessible\n"; \
 		else \
