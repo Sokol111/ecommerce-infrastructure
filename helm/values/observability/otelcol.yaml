@@ -1,5 +1,9 @@
 mode: daemonset
 
+# Підключення до shared-network для доступу до docker-compose сервісів
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
+
 service:
   enabled: true
   type: ClusterIP
@@ -10,8 +14,6 @@ image:
   pullPolicy: IfNotPresent
 
 presets:
-  logsCollection:
-    enabled: true          # додає filelog + маунти /var/log/pods
   kubernetesAttributes:
     enabled: true
 
@@ -76,44 +78,28 @@ config:
         - action: delete
           key: k8s.node.name
 
-    # 3) Прибрати зайві атрибути запису (CRI-похідні)
-    attributes/cleanup:
-      actions:
-        - action: delete
-          key: log.file.path
-        - action: delete
-          key: log.iostream
-        - action: delete
-          key: logtag
-
     batch: {}
 
   exporters:
-    debug/logs:
-      verbosity: detailed
-    otlphttp/logs:
-      endpoint: http://loki.observability.svc:3100/otlp
-      tls:
-        insecure: true
-    # ТРЕЙСИ → Tempo (OTLP/gRPC)
+    # ТРЕЙСИ → Tempo в docker-compose (через shared-network)
     otlp/tempo:
-      endpoint: tempo.observability.svc:4317
+      endpoint: tempo:4317
       tls:
         insecure: true
-    # Щоб не падала metrics-пайплайна (відправимо в debug)
+    # МЕТРИКИ → Prometheus в docker-compose (через remote write receiver)
+    otlphttp/metrics:
+      endpoint: http://prometheus:9090/api/v1/otlp
+      tls:
+        insecure: true
     debug: {}
 
   service:
     pipelines:
-      logs:
-        receivers:  [filelog]           # filelog додається пресетом logsCollection
-        processors: [k8sattributes, attributes/derive-service, resource/cleanup, attributes/cleanup, batch]
-        exporters:  [otlphttp/logs, debug/logs]
       traces:
         receivers:  [otlp]
         processors: [batch]
         exporters:  [otlp/tempo]
       metrics:
-        receivers:  [otlp]              # базові метрики з OTLP
+        receivers:  [otlp]
         processors: [batch]
-        exporters:  [debug]             # в debug, щоб не потрібні були зовнішні експортери
+        exporters:  [otlphttp/metrics, debug]

@@ -96,52 +96,15 @@ deploy:
         upgradeOnChange: false
         dependsOn: ["traefik-crds"]
 
-      - name: loki
-        remoteChart: loki
-        repo: https://grafana.github.io/helm-charts
-        namespace: observability
-        createNamespace: true
-        version: "6.40.0"
-        valuesFiles: [helm/values/observability/loki.yaml]
-        wait: true
-        upgradeOnChange: false
-
-      - name: tempo
-        remoteChart: tempo
-        repo: https://grafana.github.io/helm-charts
-        namespace: observability
-        version: "1.23.3"
-        valuesFiles: [helm/values/observability/tempo.yaml]
-        wait: true
-        upgradeOnChange: false
-
-      - name: grafana
-        remoteChart: grafana
-        repo: https://grafana.github.io/helm-charts
-        namespace: observability
-        version: "9.4.4"
-        valuesFiles: [helm/values/observability/grafana.yaml]
-        wait: true
-        upgradeOnChange: false
-
       - name: otel-collector
         remoteChart: opentelemetry-collector
         repo: https://open-telemetry.github.io/opentelemetry-helm-charts
         namespace: observability
+        createNamespace: true
         version: "0.133.0"
         valuesFiles: [helm/values/observability/otelcol.yaml]
         wait: true
         upgradeOnChange: false
-
-      - name: prometheus
-        remoteChart: prometheus
-        repo: https://prometheus-community.github.io/helm-charts
-        namespace: observability
-        version: "27.39.0"
-        valuesFiles: [helm/values/observability/prometheus.yaml]
-        wait: true
-        upgradeOnChange: false
-        dependsOn: ["otel-collector"]
 
       - name: minio
         remoteChart: minio

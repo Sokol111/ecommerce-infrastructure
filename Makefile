@@ -34,12 +34,13 @@ CHART_PATH ?= $(THIS_DIR)helm/ecommerce-go-service
 COMPOSE_DIR := $(THIS_DIR)docker/compose
 MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
 KAFKA_COMPOSE := $(COMPOSE_DIR)/kafka.yml
+OBSERVABILITY_COMPOSE := $(COMPOSE_DIR)/observability.yml
 DOCKER_NETWORK := shared-network
 
-# Observability services
-GRAFANA_SVC ?= grafana
-GRAFANA_LOCAL_PORT ?= 3000
-GRAFANA_SVC_PORT ?= 80
+# Observability services (docker-compose)
+GRAFANA_URL ?= http://localhost:3000
+PROMETHEUS_URL ?= http://localhost:9090
+TEMPO_URL ?= http://localhost:3200
 
 .DEFAULT_GOAL := help
 
@@ -198,7 +199,7 @@ redeploy: undeploy deploy ## Видалити поточний деплойме�
 # =============================================================================
 
 .PHONY: infra-up
-infra-up: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB на :27017, Kafka на :9092)
+infra-up: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB, Kafka, Observability stack)
 	@printf "\033[36m→ Starting local infrastructure\033[0m\n"
 	@docker network inspect "$(DOCKER_NETWORK)" >/dev/null 2>&1 || \
 		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
@@ -206,10 +207,15 @@ infra-up: tools-check ## Запустити локальну інфрастру�
 	@docker compose -f "$(MONGO_COMPOSE)" up -d
 	@printf "  Starting Kafka...\n"
 	@docker compose -f "$(KAFKA_COMPOSE)" up -d
+	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" up -d
 	@printf "\033[32m✓ Infrastructure started\033[0m\n"
 	@printf "\n\033[36mServices:\033[0m\n"
-	@printf "  MongoDB: mongodb://localhost:27017\n"
-	@printf "  Kafka:   localhost:9092\n"
+	@printf "  MongoDB:    mongodb://localhost:27017\n"
+	@printf "  Kafka:      localhost:9092\n"
+	@printf "  Grafana:    $(GRAFANA_URL) (admin/admin)\n"
+	@printf "  Prometheus: $(PROMETHEUS_URL)\n"
+	@printf "  Tempo:      $(TEMPO_URL)\n"
 	@printf "\n\033[33m⚠  Note: Services may take a few seconds to become ready\033[0m\n"
 
 .PHONY: infra-down
@@ -217,21 +223,23 @@ infra-down: ## Зупинити локальну інфраструктуру (�
 	@printf "\033[33m→ Stopping local infrastructure\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" down
 	@docker compose -f "$(KAFKA_COMPOSE)" down
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down
 	@printf "\033[32m✓ Infrastructure stopped\033[0m\n"
 
 .PHONY: infra-logs
-infra-logs: ## Показати логи MongoDB та Kafka в реальному часі (Ctrl+C для виходу)
+infra-logs: ## Показати логи MongoDB, Kafka та Observability stack в реальному часі (Ctrl+C для виходу)
 	@printf "\033[36m→ Infrastructure logs (Ctrl+C to stop)\033[0m\n"
-	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" logs -f
+	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
 
 .PHONY: infra-restart
 infra-restart: infra-down infra-up ## Перезапустити локальну інфраструктуру (зупинити та знову запустити з збереженням даних)
 
 .PHONY: infra-clean
-infra-clean: infra-down ## Зупинити інфраструктуру та видалити всі Docker volumes (повне очищення баз даних)
+infra-clean: infra-down ## Зупинити інфраструктуру та видалити всі Docker volumes (повне очищення баз даних та логів)
 	@printf "\033[33m→ Cleaning infrastructure volumes\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" down -v
 	@docker compose -f "$(KAFKA_COMPOSE)" down -v
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down -v
 	@printf "\033[32m✓ Volumes removed\033[0m\n"
 
 # =============================================================================
@@ -324,16 +332,48 @@ events: ## Показати останні 20 подій Kubernetes у namespace
 # =============================================================================
 
 .PHONY: grafana
-grafana: ## Відкрити доступ до Grafana через port-forward на http://localhost:3000 (метрики та дашборди)
-	@printf "\033[36m→ Forwarding Grafana: http://localhost:$(GRAFANA_LOCAL_PORT)\033[0m\n"
-	@printf "\033[33m  Press Ctrl+C to stop\033[0m\n"
-	@kubectl -n "$(OBS_NS)" port-forward "svc/$(GRAFANA_SVC)" "$(GRAFANA_LOCAL_PORT):$(GRAFANA_SVC_PORT)"
+grafana: ## Відкрити Grafana в браузері (docker-compose, http://localhost:3000)
+	@printf "\033[36m→ Opening Grafana: $(GRAFANA_URL)\033[0m\n"
+	@printf "\033[33m  Login: admin / admin\033[0m\n"
+	@if command -v xdg-open >/dev/null 2>&1; then \
+		xdg-open "$(GRAFANA_URL)" 2>/dev/null || true; \
+	elif command -v open >/dev/null 2>&1; then \
+		open "$(GRAFANA_URL)" 2>/dev/null || true; \
+	fi
+	@printf "\033[32m  URL: $(GRAFANA_URL)\033[0m\n"
 
 .PHONY: prometheus
-prometheus: ## Відкрити доступ до Prometheus через port-forward на http://localhost:9090 (збір та запити метрик)
-	@printf "\033[36m→ Forwarding Prometheus: http://localhost:9090\033[0m\n"
-	@printf "\033[33m  Press Ctrl+C to stop\033[0m\n"
-	@kubectl -n "$(OBS_NS)" port-forward "svc/prometheus-server" 9090:80
+prometheus: ## Відкрити Prometheus в браузері (docker-compose, http://localhost:9090)
+	@printf "\033[36m→ Opening Prometheus: $(PROMETHEUS_URL)\033[0m\n"
+	@if command -v xdg-open >/dev/null 2>&1; then \
+		xdg-open "$(PROMETHEUS_URL)" 2>/dev/null || true; \
+	elif command -v open >/dev/null 2>&1; then \
+		open "$(PROMETHEUS_URL)" 2>/dev/null || true; \
+	fi
+	@printf "\033[32m  URL: $(PROMETHEUS_URL)\033[0m\n"
+
+.PHONY: loki
+loki: ## Показати інформацію про перегляд логів (використовуйте kubectl logs або stern)
+	@printf "\033[36mДля перегляду логів використовуйте:\033[0m\n"
+	@printf "  \033[32mmake logs SVC=<service-name>\033[0m  - Логи конкретного сервісу\n"
+	@printf "  \033[32mmake logs-all\033[0m                  - Всі логи в namespace dev\n"
+	@printf "  \033[32mkubectl logs <pod-name> -n dev\033[0m - Логи конкретного pod\n"
+	@printf "  \033[32mstern <pattern> -n dev\033[0m         - Логи з фільтром\n"
+	@printf "\n\033[33m💡 Loki не використовується в dev середовищі для простоти\033[0m\n"
+
+.PHONY: tempo
+tempo: ## Показати Tempo endpoints та інформацію про доступ
+	@printf "\033[36mTempo Information:\033[0m\n"
+	@printf "  API URL:  $(TEMPO_URL)\n"
+	@printf "  Health:   $(TEMPO_URL)/ready\n"
+	@printf "  OTLP gRPC: localhost:4317\n"
+	@printf "  OTLP HTTP: localhost:4318\n"
+	@printf "\n\033[33m  Access through Grafana at $(GRAFANA_URL)\033[0m\n"
+
+.PHONY: observability-status
+observability-status: ## Перевірити статус observability стеку (docker-compose)
+	@printf "\033[36m→ Observability stack status:\033[0m\n"
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" ps
 
 .PHONY: minio
 minio: ## Відкрити доступ до MinIO Console через port-forward на http://localhost:9001 (S3 сховище)
@@ -348,14 +388,18 @@ traefik: ## Відкрити доступ до Traefik Dashboard через port
 	@kubectl -n "$(TRAEFIK_NS)" port-forward "svc/traefik" 9000:9000
 
 .PHONY: forward-all
-forward-all: ## Показати список всіх доступних port-forward команд для observability сервісів
-	@printf "\033[36mAvailable port forwards:\033[0m\n"
-	@printf "  \033[32mmake grafana\033[0m     - Grafana at http://localhost:3000\n"
-	@printf "  \033[32mmake prometheus\033[0m  - Prometheus at http://localhost:9090\n"
-	@printf "  \033[32mmake minio\033[0m       - MinIO Console at http://localhost:9001\n"
-	@printf "  \033[32mmake traefik\033[0m     - Traefik Dashboard at http://localhost:9000\n"
+forward-all: ## Показати список всіх доступних observability сервісів та їх URLs
+	@printf "\033[36mObservability Services (docker-compose):\033[0m\n"
+	@printf "  \033[32mmake grafana\033[0m     - Grafana at $(GRAFANA_URL)\n"
+	@printf "  \033[32mmake prometheus\033[0m  - Prometheus at $(PROMETHEUS_URL)\n"
+	@printf "  \033[32mmake tempo\033[0m       - Tempo info (access via Grafana)\n"
 	@printf "\n"
-	@printf "\033[33mRun each in a separate terminal\033[0m\n"
+	@printf "\033[36mOther Services:\033[0m\n"
+	@printf "  \033[32mmake minio\033[0m       - MinIO Console (k8s port-forward)\n"
+	@printf "  \033[32mmake traefik\033[0m     - Traefik Dashboard (k8s port-forward)\n"
+	@printf "\n"
+	@printf "\033[36mLogs:\033[0m\n"
+	@printf "  \033[32mmake logs SVC=<name>\033[0m - View service logs (kubectl/stern)\n"
 
 # =============================================================================
 # Debug Helpers

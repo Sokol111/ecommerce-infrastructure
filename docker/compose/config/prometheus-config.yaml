@@ -1,0 +1,40 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'dev-cluster'
+    environment: 'local'
+
+# Alertmanager конфігурація (опціонально для dev)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# Правила для alerts (можна додати пізніше)
+rule_files:
+  # - "alerts/*.yml"
+
+# Збір метрик
+scrape_configs:
+  # Prometheus самомоніторинг
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Tempo metrics (якщо доступні)
+  - job_name: 'tempo'
+    static_configs:
+      - targets: ['tempo:3200']
+        labels:
+          service: 'tempo'
+
+  # Note: Kubernetes metrics collection requires access to k3d cluster
+  # For local development, metrics are primarily collected via OTel Collector in k8s
+  # which exports to Prometheus via remote_write from Tempo metrics generator
+
+# Remote write can be configured here if needed for long-term storage
+# remote_write:
+#   - url: http://external-prometheus:9090/api/v1/write
