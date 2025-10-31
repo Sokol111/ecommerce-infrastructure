@@ -13,35 +13,35 @@ build:
     - image: sokol111/ecommerce-product-service
       context: /home/ihsokolo/projects/ecommerce
       docker:
-        dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-product-service
           COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-category-service
       context: /home/ihsokolo/projects/ecommerce
       docker:
-        dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-category-service
           COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-product-query-service
       context: /home/ihsokolo/projects/ecommerce
       docker:
-        dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-product-query-service
           COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-category-query-service
       context: /home/ihsokolo/projects/ecommerce
       docker:
-        dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-category-query-service
           COMMONS_DIR: ecommerce-commons
     - image: sokol111/ecommerce-image-service
       context: /home/ihsokolo/projects/ecommerce
       docker:
-        dockerfile: ecommerce-infrastructure/docker/Dockerfile.localdebug
+        dockerfile: ecommerce-infrastructure/docker/Dockerfile.local
         buildArgs:
           SERVICE_DIR: ecommerce-image-service
           COMMONS_DIR: ecommerce-commons
