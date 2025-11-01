@@ -25,8 +25,15 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 
 # 3) Копіюємо код обох репо
 WORKDIR /src
-COPY ${COMMONS_DIR} ./${COMMONS_DIR}
-COPY ${SERVICE_DIR} ./svc
+# Copy commons - only Go source code and module files
+COPY ${COMMONS_DIR}/go.mod ${COMMONS_DIR}/go.sum ./${COMMONS_DIR}/
+COPY ${COMMONS_DIR}/pkg ./${COMMONS_DIR}/pkg
+
+# Copy service - only necessary files
+COPY ${SERVICE_DIR}/cmd ./svc/cmd
+COPY ${SERVICE_DIR}/internal ./svc/internal
+COPY ${SERVICE_DIR}/configs ./svc/configs
+COPY ${SERVICE_DIR}/db ./svc/db
 
 # 4) Встановлення Delve debugger
 RUN --mount=type=cache,target=/go/pkg/mod \

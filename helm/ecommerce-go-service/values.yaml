@@ -92,3 +92,18 @@ ecommerce-image-service:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['app.kubernetes.io/version']
+
+ecommerce-admin-ui:
+  image:
+    repository: sokol111/ecommerce-admin-ui
+    tag: "latest"
+  ingress:
+    enabled: true
+    host: admin.127.0.0.1.nip.io
+  env:
+    - name: CATEGORY_API_URL
+      value: "http://ecommerce-ecommerce-category-service.dev.svc.cluster.local:8080"
+    - name: PRODUCT_API_URL
+      value: "http://ecommerce-ecommerce-product-service.dev.svc.cluster.local:8080"
+    - name: IMAGE_API_URL
+      value: "http://ecommerce-ecommerce-image-service.dev.svc.cluster.local:8080"

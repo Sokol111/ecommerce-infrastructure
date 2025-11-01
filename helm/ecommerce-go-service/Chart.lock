@@ -17,5 +17,8 @@ dependencies:
 - name: ecommerce-image-service
   repository: file://../ecommerce-image-service
   version: 0.0.1
-digest: sha256:8a6e8e6e0863125f7036dce130e287246d35e49c0958bf4256083aaee818d50c
-generated: "2025-10-30T22:50:57.298013319+01:00"
+- name: ecommerce-admin-ui
+  repository: file://../ecommerce-admin-ui
+  version: 0.1.0
+digest: sha256:bc4bd27706f6c7a393c4ce191c1845c043d1bb49947a78fd8dfe336a3ca9ef8b
+generated: "2025-11-01T15:06:16.77523847+01:00"
