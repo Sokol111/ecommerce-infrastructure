@@ -106,26 +106,6 @@ deploy:
         wait: true
         upgradeOnChange: false
 
-      - name: minio
-        remoteChart: minio
-        repo: https://charts.min.io
-        version: "5.4.0"
-        namespace: minio
-        createNamespace: true
-        valuesFiles: [helm/values/storage/minio.yaml]
-        wait: true
-        upgradeOnChange: false
-
-      - name: imgproxy
-        remoteChart: imgproxy
-        repo: https://helm.imgproxy.net
-        version: "1.1.0"
-        namespace: imgproxy
-        createNamespace: true
-        valuesFiles: [helm/values/misc/imgproxy.yaml]
-        wait: true
-        upgradeOnChange: true
-
       - name: ecommerce
         chartPath: helm/ecommerce-go-service
         namespace: dev

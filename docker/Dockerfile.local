@@ -30,7 +30,7 @@ COPY ${SERVICE_DIR} ./svc
 
 # 4) Встановлення Delve debugger
 RUN --mount=type=cache,target=/go/pkg/mod \
-    go install github.com/go-delve/delve/cmd/dlv@latest
+    go install github.com/go-delve/delve/cmd/dlv@v1.24.0
 
 # 5) Збірка бінарника з debug символами
 WORKDIR /src/svc

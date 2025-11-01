@@ -1,0 +1,90 @@
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    ports:
+      - 9000:9000  # API
+      - 9001:9001  # Console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+      MINIO_REGION_NAME: us-east-1
+    volumes:
+      - minio_data:/data
+    networks:
+      - shared-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # MinIO клієнт для автоматичного створення бакета
+  minio-init:
+    image: minio/mc:latest
+    container_name: minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set myminio http://minio:9000 minioadmin minioadmin123;
+      mc mb --ignore-existing myminio/products;
+      mc anonymous set none myminio/products;
+      echo 'MinIO initialized successfully';
+      "
+    networks:
+      - shared-network
+    restart: "no"
+
+  imgproxy:
+    image: darthsim/imgproxy:v3.25
+    container_name: imgproxy
+    ports:
+      - 8081:8080
+    environment:
+      # MinIO configuration
+      IMGPROXY_USE_S3: "true"
+      IMGPROXY_S3_REGION: us-east-1
+      IMGPROXY_S3_ENDPOINT: http://minio:9000
+      IMGPROXY_S3_ENDPOINT_USE_PATH_STYLE: "true"
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin123
+
+      # Security keys
+      IMGPROXY_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+      IMGPROXY_SALT: "1111111111111111111111111111111111111111111111111111111111111111"
+
+      # Features
+      IMGPROXY_ENABLE_WEBP_DETECTION: "true"
+      IMGPROXY_ENFORCE_WEBP: "false"
+      IMGPROXY_ENABLE_AVIF_DETECTION: "true"
+
+      # Performance
+      IMGPROXY_MAX_SRC_RESOLUTION: 50.0  # 50 megapixels
+      IMGPROXY_CONCURRENCY: 100
+      IMGPROXY_MAX_CLIENTS: 500
+
+      # Development
+      IMGPROXY_LOG_LEVEL: info
+      IMGPROXY_DEVELOPMENT_ERRORS_MODE: "true"
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - shared-network
+    healthcheck:
+      test: ["CMD", "imgproxy", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  minio_data:
+
+networks:
+  shared-network:
+    external: true

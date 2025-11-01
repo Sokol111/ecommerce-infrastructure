@@ -35,12 +35,17 @@ COMPOSE_DIR := $(THIS_DIR)docker/compose
 MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
 KAFKA_COMPOSE := $(COMPOSE_DIR)/kafka.yml
 OBSERVABILITY_COMPOSE := $(COMPOSE_DIR)/observability.yml
+STORAGE_COMPOSE := $(COMPOSE_DIR)/storage.yml
 DOCKER_NETWORK := shared-network
 
 # Observability services (docker-compose)
 GRAFANA_URL ?= http://localhost:3000
 PROMETHEUS_URL ?= http://localhost:9090
 TEMPO_URL ?= http://localhost:3200
+
+# Storage services (docker-compose)
+MINIO_CONSOLE_URL ?= http://localhost:9001
+IMGPROXY_URL ?= http://localhost:8081
 
 .DEFAULT_GOAL := help
 
@@ -199,7 +204,7 @@ redeploy: undeploy deploy ## Видалити поточний деплойме�
 # =============================================================================
 
 .PHONY: infra-up
-infra-up: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB, Kafka, Observability stack)
+infra-up: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB, Kafka, Storage, Observability stack)
 	@printf "\033[36m→ Starting local infrastructure\033[0m\n"
 	@docker network inspect "$(DOCKER_NETWORK)" >/dev/null 2>&1 || \
 		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
@@ -207,15 +212,20 @@ infra-up: tools-check ## Запустити локальну інфрастру�
 	@docker compose -f "$(MONGO_COMPOSE)" up -d
 	@printf "  Starting Kafka...\n"
 	@docker compose -f "$(KAFKA_COMPOSE)" up -d
+	@printf "  Starting Storage (MinIO, imgproxy)...\n"
+	@docker compose -f "$(STORAGE_COMPOSE)" up -d
 	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
 	@docker compose -f "$(OBSERVABILITY_COMPOSE)" up -d
 	@printf "\033[32m✓ Infrastructure started\033[0m\n"
 	@printf "\n\033[36mServices:\033[0m\n"
-	@printf "  MongoDB:    mongodb://localhost:27017\n"
-	@printf "  Kafka:      localhost:9092\n"
-	@printf "  Grafana:    $(GRAFANA_URL) (admin/admin)\n"
-	@printf "  Prometheus: $(PROMETHEUS_URL)\n"
-	@printf "  Tempo:      $(TEMPO_URL)\n"
+	@printf "  MongoDB:        mongodb://localhost:27017\n"
+	@printf "  Kafka:          localhost:9092\n"
+	@printf "  MinIO API:      http://localhost:9000\n"
+	@printf "  MinIO Console:  $(MINIO_CONSOLE_URL) (minioadmin/minioadmin123)\n"
+	@printf "  imgproxy:       $(IMGPROXY_URL)\n"
+	@printf "  Grafana:        $(GRAFANA_URL) (admin/admin)\n"
+	@printf "  Prometheus:     $(PROMETHEUS_URL)\n"
+	@printf "  Tempo:          $(TEMPO_URL)\n"
 	@printf "\n\033[33m⚠  Note: Services may take a few seconds to become ready\033[0m\n"
 
 .PHONY: infra-down
@@ -223,13 +233,14 @@ infra-down: ## Зупинити локальну інфраструктуру (�
 	@printf "\033[33m→ Stopping local infrastructure\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" down
 	@docker compose -f "$(KAFKA_COMPOSE)" down
+	@docker compose -f "$(STORAGE_COMPOSE)" down
 	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down
 	@printf "\033[32m✓ Infrastructure stopped\033[0m\n"
 
 .PHONY: infra-logs
-infra-logs: ## Показати логи MongoDB, Kafka та Observability stack в реальному часі (Ctrl+C для виходу)
+infra-logs: ## Показати логи MongoDB, Kafka, Storage та Observability stack в реальному часі (Ctrl+C для виходу)
 	@printf "\033[36m→ Infrastructure logs (Ctrl+C to stop)\033[0m\n"
-	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
+	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
 
 .PHONY: infra-restart
 infra-restart: infra-down infra-up ## Перезапустити локальну інфраструктуру (зупинити та знову запустити з збереженням даних)
@@ -239,6 +250,7 @@ infra-clean: infra-down ## Зупинити інфраструктуру та в
 	@printf "\033[33m→ Cleaning infrastructure volumes\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" down -v
 	@docker compose -f "$(KAFKA_COMPOSE)" down -v
+	@docker compose -f "$(STORAGE_COMPOSE)" down -v
 	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down -v
 	@printf "\033[32m✓ Volumes removed\033[0m\n"
 
@@ -375,11 +387,28 @@ observability-status: ## Перевірити статус observability сте�
 	@printf "\033[36m→ Observability stack status:\033[0m\n"
 	@docker compose -f "$(OBSERVABILITY_COMPOSE)" ps
 
+.PHONY: minio-console
+minio-console: ## Відкрити MinIO Console в браузері (docker-compose, http://localhost:9001)
+	@printf "\033[36m→ Opening MinIO Console: $(MINIO_CONSOLE_URL)\033[0m\n"
+	@printf "\033[33m  Login: minioadmin / minioadmin123\033[0m\n"
+	@if command -v xdg-open >/dev/null 2>&1; then \
+		xdg-open "$(MINIO_CONSOLE_URL)" 2>/dev/null || true; \
+	elif command -v open >/dev/null 2>&1; then \
+		open "$(MINIO_CONSOLE_URL)" 2>/dev/null || true; \
+	fi
+	@printf "\033[32m  URL: $(MINIO_CONSOLE_URL)\033[0m\n"
+
+.PHONY: imgproxy-info
+imgproxy-info: ## Показати інформацію про imgproxy endpoints та приклад використання
+	@printf "\033[36mimgproxy Information:\033[0m\n"
+	@printf "  Base URL:  $(IMGPROXY_URL)\n"
+	@printf "  Health:    $(IMGPROXY_URL)/health\n"
+	@printf "\n\033[33mExample usage:\033[0m\n"
+	@printf "  curl $(IMGPROXY_URL)/health\n"
+	@printf "  $(IMGPROXY_URL)/insecure/rs:fill:300:200/plain/s3://products/image.jpg\n"
+
 .PHONY: minio
-minio: ## Відкрити доступ до MinIO Console через port-forward на http://localhost:9001 (S3 сховище)
-	@printf "\033[36m→ Forwarding MinIO Console: http://localhost:9001\033[0m\n"
-	@printf "\033[33m  Press Ctrl+C to stop\033[0m\n"
-	@kubectl -n "$(MINIO_NS)" port-forward "svc/minio-console" 9001:9001
+minio: minio-console ## Скорочення для команди 'minio-console'
 
 .PHONY: traefik
 traefik: ## Відкрити доступ до Traefik Dashboard через port-forward на http://localhost:9000 (ingress контролер)
@@ -388,14 +417,17 @@ traefik: ## Відкрити доступ до Traefik Dashboard через port
 	@kubectl -n "$(TRAEFIK_NS)" port-forward "svc/traefik" 9000:9000
 
 .PHONY: forward-all
-forward-all: ## Показати список всіх доступних observability сервісів та їх URLs
+forward-all: ## Показати список всіх доступних observability та storage сервісів та їх URLs
 	@printf "\033[36mObservability Services (docker-compose):\033[0m\n"
 	@printf "  \033[32mmake grafana\033[0m     - Grafana at $(GRAFANA_URL)\n"
 	@printf "  \033[32mmake prometheus\033[0m  - Prometheus at $(PROMETHEUS_URL)\n"
 	@printf "  \033[32mmake tempo\033[0m       - Tempo info (access via Grafana)\n"
 	@printf "\n"
+	@printf "\033[36mStorage Services (docker-compose):\033[0m\n"
+	@printf "  \033[32mmake minio\033[0m       - MinIO Console at $(MINIO_CONSOLE_URL)\n"
+	@printf "  \033[32mmake imgproxy-info\033[0m - imgproxy at $(IMGPROXY_URL)\n"
+	@printf "\n"
 	@printf "\033[36mOther Services:\033[0m\n"
-	@printf "  \033[32mmake minio\033[0m       - MinIO Console (k8s port-forward)\n"
 	@printf "  \033[32mmake traefik\033[0m     - Traefik Dashboard (k8s port-forward)\n"
 	@printf "\n"
 	@printf "\033[36mLogs:\033[0m\n"
