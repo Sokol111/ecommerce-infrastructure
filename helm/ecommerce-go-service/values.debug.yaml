@@ -3,6 +3,7 @@
 # Or manually: helm upgrade --install -f values.yaml -f values.debug.yaml ...
 
 ecommerce-product-service:
+  nameOverride: ecommerce-product-service
   debugPort: 2345
   command: ["/dlv"]
   args:
@@ -13,8 +14,21 @@ ecommerce-product-service:
     - "--api-version=2"
     - "--accept-multiclient"
     - "--continue"
+  # Startup probe з великим таймаутом для початкового запуску
+  startupProbe:
+    httpGet:
+      path: /health/live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30  # 30 * 10s = 5 хвилин на старт
+  # Вимикаємо liveness/readiness щоб не вбивало pod під час debug
+  livenessProbe: null
+  readinessProbe: null
 
 ecommerce-category-service:
+  nameOverride: ecommerce-category-service
   debugPort: 2345
   command: ["/dlv"]
   args:
@@ -25,8 +39,19 @@ ecommerce-category-service:
     - "--api-version=2"
     - "--accept-multiclient"
     - "--continue"
+  startupProbe:
+    httpGet:
+      path: /health/live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+  livenessProbe: null
+  readinessProbe: null
 
 ecommerce-product-query-service:
+  nameOverride: ecommerce-product-query-service
   debugPort: 2345
   command: ["/dlv"]
   args:
@@ -37,8 +62,19 @@ ecommerce-product-query-service:
     - "--api-version=2"
     - "--accept-multiclient"
     - "--continue"
+  startupProbe:
+    httpGet:
+      path: /health/live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+  livenessProbe: null
+  readinessProbe: null
 
 ecommerce-category-query-service:
+  nameOverride: ecommerce-category-query-service
   debugPort: 2345
   command: ["/dlv"]
   args:
@@ -49,8 +85,19 @@ ecommerce-category-query-service:
     - "--api-version=2"
     - "--accept-multiclient"
     - "--continue"
+  startupProbe:
+    httpGet:
+      path: /health/live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+  livenessProbe: null
+  readinessProbe: null
 
 ecommerce-image-service:
+  nameOverride: ecommerce-image-service
   debugPort: 2345
   command: ["/dlv"]
   args:
@@ -61,3 +108,13 @@ ecommerce-image-service:
     - "--api-version=2"
     - "--accept-multiclient"
     - "--continue"
+  startupProbe:
+    httpGet:
+      path: /health/live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+  livenessProbe: null
+  readinessProbe: null

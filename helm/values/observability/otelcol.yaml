@@ -49,8 +49,6 @@ config:
             tag_name: service.version
           - key: app.kubernetes.io/environment
             tag_name: deployment.environment
-      filter:
-        node_from_env_var: K8S_NODE_NAME
       passthrough: true  # Не відкидати телеметрію якщо pod не знайдено (для dev)
       pod_association:
         - sources:
@@ -67,18 +65,12 @@ config:
             - from: resource_attribute
               name: k8s.namespace.name
 
-    # Визначення service.name з k8s labels або deployment name
-    transform:
-      error_mode: ignore
-      trace_statements:
-        - context: resource
-          statements:
-            # Якщо service.name не встановлений з k8s labels, використати deployment name
-            - set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil
-      metric_statements:
-        - context: resource
-          statements:
-            - set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil
+    # Копіювання deployment name в service.name якщо не встановлено
+    resource:
+      attributes:
+        - key: service.name
+          from_attribute: k8s.deployment.name
+          action: insert
 
     resource/cleanup:
       attributes:
@@ -130,9 +122,9 @@ config:
     pipelines:
       traces:
         receivers:  [otlp]
-        processors: [k8sattributes, transform, resource/cleanup, batch]
+        processors: [k8sattributes, resource, resource/cleanup, batch]
         exporters:  [otlp/tempo, debug]
       metrics:
         receivers:  [otlp]
-        processors: [k8sattributes, transform, resource/cleanup, batch]
+        processors: [k8sattributes, resource, resource/cleanup, batch]
         exporters:  [otlphttp/metrics]
