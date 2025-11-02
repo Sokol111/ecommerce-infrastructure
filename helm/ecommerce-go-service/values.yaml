@@ -7,7 +7,7 @@ ecommerce-product-service:
     host: ecommerce-product-service.127.0.0.1.nip.io
   env:
     - name: APP_ENV
-      value: "dev"
+      value: "local"
     - name: APP_SERVICE_NAME
       valueFrom:
         fieldRef:
@@ -26,7 +26,7 @@ ecommerce-category-service:
     host: ecommerce-category-service.127.0.0.1.nip.io
   env:
     - name: APP_ENV
-      value: "dev"
+      value: "local"
     - name: APP_SERVICE_NAME
       valueFrom:
         fieldRef:
@@ -45,7 +45,7 @@ ecommerce-product-query-service:
     host: ecommerce-product-query-service.127.0.0.1.nip.io
   env:
     - name: APP_ENV
-      value: "dev"
+      value: "local"
     - name: APP_SERVICE_NAME
       valueFrom:
         fieldRef:
@@ -64,7 +64,7 @@ ecommerce-category-query-service:
     host: ecommerce-category-query-service.127.0.0.1.nip.io
   env:
     - name: APP_ENV
-      value: "dev"
+      value: "local"
     - name: APP_SERVICE_NAME
       valueFrom:
         fieldRef:
@@ -83,7 +83,7 @@ ecommerce-image-service:
     host: ecommerce-image-service.127.0.0.1.nip.io
   env:
     - name: APP_ENV
-      value: "dev"
+      value: "local"
     - name: APP_SERVICE_NAME
       valueFrom:
         fieldRef:
