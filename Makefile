@@ -308,6 +308,73 @@ logs-all: ## Показати логи всіх сервісів у namespace 'd
 logs-select: ## Інтерактивний вибір сервісу для перегляду логів (меню з доступними сервісами)
 	@bash $(THIS_DIR)scripts/monitoring/logs.sh
 
+.PHONY: logs-error
+logs-error: ## Фільтрувати логи за рівнем ERROR для сервісу: make logs-error SVC=<service-name>
+ifndef SVC
+	@printf "\033[31m✗ Usage: make logs-error SVC=<service-name>\033[0m\n"
+	@exit 1
+endif
+	@printf "\033[36m→ Filtering ERROR logs for '$(SVC)' (Ctrl+C to stop)\033[0m\n"
+	@stern "$(SVC)" -n "$(NAMESPACE)" --since 1h | grep -i "error"
+
+.PHONY: logs-warn
+logs-warn: ## Фільтрувати логи за рівнем WARN для сервісу: make logs-warn SVC=<service-name>
+ifndef SVC
+	@printf "\033[31m✗ Usage: make logs-warn SVC=<service-name>\033[0m\n"
+	@exit 1
+endif
+	@printf "\033[36m→ Filtering WARN logs for '$(SVC)' (Ctrl+C to stop)\033[0m\n"
+	@stern "$(SVC)" -n "$(NAMESPACE)" --since 1h | grep -i "warn"
+
+.PHONY: logs-filter
+logs-filter: ## Фільтрувати логи за власним pattern: make logs-filter SVC=<service> PATTERN=<pattern>
+ifndef SVC
+	@printf "\033[31m✗ Usage: make logs-filter SVC=<service-name> PATTERN=<pattern>\033[0m\n"
+	@exit 1
+endif
+ifndef PATTERN
+	@printf "\033[31m✗ Usage: make logs-filter SVC=<service-name> PATTERN=<pattern>\033[0m\n"
+	@exit 1
+endif
+	@printf "\033[36m→ Filtering logs for '$(SVC)' with pattern '$(PATTERN)' (Ctrl+C to stop)\033[0m\n"
+	@stern "$(SVC)" -n "$(NAMESPACE)" --since 1h | grep -i "$(PATTERN)"
+
+.PHONY: logs-exclude
+logs-exclude: ## Виключити рядки з логів за pattern: make logs-exclude SVC=<service> PATTERN=<pattern>
+ifndef SVC
+	@printf "\033[31m✗ Usage: make logs-exclude SVC=<service-name> PATTERN=<pattern>\033[0m\n"
+	@exit 1
+endif
+ifndef PATTERN
+	@printf "\033[31m✗ Usage: make logs-exclude SVC=<service-name> PATTERN=<pattern>\033[0m\n"
+	@exit 1
+endif
+	@printf "\033[36m→ Excluding '$(PATTERN)' from logs for '$(SVC)' (Ctrl+C to stop)\033[0m\n"
+	@stern "$(SVC)" -n "$(NAMESPACE)" --since 1h | grep -v -i "$(PATTERN)"
+
+.PHONY: logs-json
+logs-json: ## Показати логи у JSON форматі з фільтруванням: make logs-json SVC=<service> [FIELD=<field>]
+ifndef SVC
+	@printf "\033[31m✗ Usage: make logs-json SVC=<service-name> [FIELD=<field>]\033[0m\n"
+	@exit 1
+endif
+	@printf "\033[36m→ JSON logs for '$(SVC)' (Ctrl+C to stop)\033[0m\n"
+	@if [ -n "$(FIELD)" ]; then \
+		stern "$(SVC)" -n "$(NAMESPACE)" --since 1h --output json | jq -r '.message | fromjson | .$(FIELD)' 2>/dev/null || stern "$(SVC)" -n "$(NAMESPACE)" --since 1h; \
+	else \
+		stern "$(SVC)" -n "$(NAMESPACE)" --since 1h --output json | jq; \
+	fi
+
+.PHONY: logs-tail
+logs-tail: ## Показати останні N рядків логів: make logs-tail SVC=<service> [LINES=100]
+ifndef SVC
+	@printf "\033[31m✗ Usage: make logs-tail SVC=<service-name> [LINES=100]\033[0m\n"
+	@exit 1
+endif
+	@LINES=$${LINES:-100}; \
+	printf "\033[36m→ Last $$LINES lines for '$(SVC)'\033[0m\n"; \
+	stern "$(SVC)" -n "$(NAMESPACE)" --tail $$LINES --since 1h
+
 .PHONY: exec
 exec: ## Підключитися до shell у поді для інтерактивної роботи: make exec POD=<pod-name>
 ifndef POD
