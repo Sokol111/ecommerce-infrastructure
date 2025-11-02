@@ -10,12 +10,22 @@ service:
 
 image:
   repository: otel/opentelemetry-collector-contrib
-  tag: latest
+  # tag автоматично береться з appVersion Helm chart (0.134.1 для chart 0.133.0)
   pullPolicy: IfNotPresent
 
+# Resource limits для dev середовища
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Вимкнути preset, бо використовуємо власну конфігурацію k8sattributes
 presets:
   kubernetesAttributes:
-    enabled: true
+    enabled: false
 
 config:
   receivers:
@@ -31,6 +41,7 @@ config:
           - k8s.namespace.name
           - k8s.pod.name
           - k8s.deployment.name
+          # k8s.container.name не потрібен - у нас single-container pods
         labels:
           - key: app.kubernetes.io/name
             tag_name: service.name
@@ -40,7 +51,7 @@ config:
             tag_name: deployment.environment
       filter:
         node_from_env_var: K8S_NODE_NAME
-      passthrough: false
+      passthrough: true  # Не відкидати телеметрію якщо pod не знайдено (для dev)
       pod_association:
         - sources:
             - from: resource_attribute
@@ -50,25 +61,28 @@ config:
               name: k8s.pod.uid
         - sources:
             - from: connection
-        - sources:                       # <-- ключ: додаткове правило
+        - sources:
             - from: resource_attribute
               name: k8s.pod.name
             - from: resource_attribute
               name: k8s.namespace.name
 
-    attributes/derive-service:
-      actions:
-        - action: insert
-          key: service.name
-          from_attribute: k8s.deployment.name
-        - action: insert
-          key: service.name
-          from_attribute: k8s.container.name
+    # Визначення service.name з k8s labels або deployment name
+    transform:
+      error_mode: ignore
+      trace_statements:
+        - context: resource
+          statements:
+            # Якщо service.name не встановлений з k8s labels, використати deployment name
+            - set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil
+      metric_statements:
+        - context: resource
+          statements:
+            - set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil
 
     resource/cleanup:
       attributes:
-        - action: delete
-          key: k8s.container.name
+        # Видаляємо тимчасові k8s атрибути, залишаючи тільки service.name та namespace
         - action: delete
           key: k8s.deployment.name
         - action: delete
@@ -78,7 +92,10 @@ config:
         - action: delete
           key: k8s.node.name
 
-    batch: {}
+    batch:
+      send_batch_size: 1024
+      timeout: 10s
+      send_batch_max_size: 2048
 
   exporters:
     # ТРЕЙСИ → Tempo в docker-compose (через shared-network)
@@ -86,20 +103,36 @@ config:
       endpoint: tempo:4317
       tls:
         insecure: true
+      retry_on_failure:
+        enabled: true
+        initial_interval: 1s
+        max_interval: 30s
+        max_elapsed_time: 300s
+    
     # МЕТРИКИ → Prometheus в docker-compose (через remote write receiver)
     otlphttp/metrics:
       endpoint: http://prometheus:9090/api/v1/otlp
       tls:
         insecure: true
-    debug: {}
+      retry_on_failure:
+        enabled: true
+        initial_interval: 1s
+        max_interval: 30s
+        max_elapsed_time: 300s
+    
+    # Debug exporter для troubleshooting (вимкнено в prod)
+    debug:
+      verbosity: detailed
+      sampling_initial: 5
+      sampling_thereafter: 200
 
   service:
     pipelines:
       traces:
         receivers:  [otlp]
-        processors: [batch]
-        exporters:  [otlp/tempo]
+        processors: [k8sattributes, transform, resource/cleanup, batch]
+        exporters:  [otlp/tempo, debug]
       metrics:
         receivers:  [otlp]
-        processors: [batch]
-        exporters:  [otlphttp/metrics, debug]
+        processors: [k8sattributes, transform, resource/cleanup, batch]
+        exporters:  [otlphttp/metrics]
