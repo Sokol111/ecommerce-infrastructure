@@ -8,7 +8,7 @@ build:
   local:
     push: false
     useBuildkit: true
-    concurrency: 4
+    concurrency: 6
   artifacts:
     - image: sokol111/ecommerce-product-service
       context: /home/ihsokolo/projects/ecommerce
