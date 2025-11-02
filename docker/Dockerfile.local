@@ -10,6 +10,11 @@ FROM ${GO_IMAGE} AS builder
 
 WORKDIR /src
 
+# Go proxy settings for corporate environments
+ENV GOSUMDB=off
+ENV GOPROXY=direct
+ENV GIT_SSL_NO_VERIFY=1
+
 # Параметри для різних сервісів
 ARG SERVICE_DIR=service-dir
 ARG COMMONS_DIR=ecommerce-commons
