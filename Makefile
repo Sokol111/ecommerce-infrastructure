@@ -220,6 +220,7 @@ infra-up: tools-check ## Запустити локальну інфрастру�
 	@printf "\n\033[36mServices:\033[0m\n"
 	@printf "  MongoDB:        mongodb://localhost:27017\n"
 	@printf "  Kafka:          localhost:9092\n"
+	@printf "  Kafka UI:       http://localhost:9093\n"
 	@printf "  MinIO API:      http://localhost:9000\n"
 	@printf "  MinIO Console:  $(MINIO_CONSOLE_URL) (minioadmin/minioadmin123)\n"
 	@printf "  imgproxy:       $(IMGPROXY_URL)\n"
