@@ -6,16 +6,14 @@ on:
       version:
         required: true
         type: string
-      # Comma-separated list of artifact names to download
       artifacts:
         required: false
         type: string
-        description: "Comma-separated artifact names (e.g., 'go-api,events-api,js-api')"
-      # Comma-separated list of directories for artifacts
-      artifact_dirs:
+        description: "Comma-separated artifact names"
+      cleanup_dirs:
         required: false
         type: string
-        description: "Comma-separated artifact directories matching artifacts (e.g., 'api,events,js-client')"
+        description: "Comma-separated directories to remove"
 
 permissions:
   contents: write
@@ -32,7 +30,7 @@ jobs:
         run: |
           echo "version: ${{ inputs.version }}"
           echo "artifacts: ${{ inputs.artifacts }}"
-          echo "artifact_dirs: ${{ inputs.artifact_dirs }}"
+          echo "cleanup_dirs: ${{ inputs.cleanup_dirs }}"
 
       - name: Check if tag already exists
         run: |
@@ -47,69 +45,63 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Parse artifacts input
+      - name: Download artifacts
         if: ${{ inputs.artifacts != '' }}
-        id: parse
         run: |
-          # Convert comma-separated strings to arrays
-          echo "artifacts_array=$(echo '${{ inputs.artifacts }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
-          echo "dirs_array=$(echo '${{ inputs.artifact_dirs }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
-
-      - name: Download go-api artifact
-        if: contains(inputs.artifacts, 'go-api')
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: go-api
-          path: api
-
-      - name: Download events-api artifact
-        if: contains(inputs.artifacts, 'events-api')
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: events-api
-          path: events
-
-      - name: Download js-api artifact
-        if: contains(inputs.artifacts, 'js-api')
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: js-api
-          path: js-client
+          IFS=',' read -ra ARTIFACTS <<< "${{ inputs.artifacts }}"
+          
+          for artifact in "${ARTIFACTS[@]}"; do
+            # Trim whitespace
+            artifact=$(echo "$artifact" | xargs)
+            
+            echo "→ Downloading artifact: $artifact"
+            
+            # Download artifact to current directory (it will extract its internal structure)
+            if gh run download ${{ github.run_id }} --name "$artifact" --dir .; then
+              echo "✓ Successfully downloaded $artifact"
+            else
+              echo "❌ Failed to download $artifact"
+              exit 1
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup unnecessary directories
+        if: ${{ inputs.cleanup_dirs != '' }}
         run: |
           echo "🧹 Cleaning up unnecessary directories from release branch..."
           
-          # Remove source files and npm downloads (only keep generated artifacts)
-          rm -rf openapi/ && echo "✓ Removed openapi/" || echo "  openapi/ not found"
-          rm -rf asyncapi/ && echo "✓ Removed asyncapi/" || echo "  asyncapi/ not found"
-          rm -rf avro/ && echo "✓ Removed avro/" || echo "  avro/ not found"
-          rm -rf updated/ && echo "✓ Removed updated/" || echo "  updated/ not found"
-          rm -rf js-client/ && echo "✓ Removed js-client/" || echo "  js-client/ not found"
+          IFS=',' read -ra CLEANUP_DIRS <<< "${{ inputs.cleanup_dirs }}"
           
-          echo "✅ Cleanup complete. Only generated artifacts remain (api/, events/)"
+          for dir in "${CLEANUP_DIRS[@]}"; do
+            # Trim whitespace
+            dir=$(echo "$dir" | xargs)
+            
+            if [ -d "$dir" ]; then
+              rm -rf "$dir" && echo "✓ Removed $dir" || echo "❌ Failed to remove $dir"
+            else
+              echo "  $dir not found (skipping)"
+            fi
+          done
+          
+          echo "✅ Cleanup complete"
 
       - name: Commit artifacts to `release` branch
         if: ${{ inputs.artifacts != '' }}
         run: |
           git checkout -B release
           
-          IFS=',' read -ra ARTIFACT_DIRS <<< "${{ inputs.artifact_dirs }}"
+          # Add all changes (artifacts already extracted to their proper locations)
+          git add -A
           
-          for dir in "${ARTIFACT_DIRS[@]}"; do
-            if [ -d "$dir" ] && [ -n "$(ls -A $dir 2>/dev/null)" ]; then
-              echo "→ Adding $dir to release branch"
-              git add -f "$dir"
-            else
-              echo "⚠️  Directory $dir is empty or doesn't exist"
-            fi
-          done
-          
-          git commit -m "Add API artifacts to release ${{ inputs.version }}" || echo "No changes to commit"
-          git push -u origin release --force
+          if git diff --cached --quiet; then
+            echo "⚠️  No changes to commit"
+          else
+            git commit -m "Add API artifacts to release ${{ inputs.version }}"
+            git push -u origin release --force
+            echo "✓ Pushed artifacts to release branch"
+          fi
 
       - name: Tag release
         run: |
