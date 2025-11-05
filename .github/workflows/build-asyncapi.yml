@@ -235,13 +235,7 @@ jobs:
           		return nil, fmt.Errorf("schema %s not registered", schemaName)
           	}
           	
-          	var buf bytes.Buffer
-          	encoder := avro.NewEncoder(schema, &buf)
-          	if err := encoder.Encode(data); err != nil {
-          		return nil, fmt.Errorf("failed to encode: %w", err)
-          	}
-          	
-          	return buf.Bytes(), nil
+          	return avro.Marshal(schema, data)
           }
 
           // Deserialize decodes Avro data
@@ -251,13 +245,7 @@ jobs:
           		return fmt.Errorf("schema %s not registered", schemaName)
           	}
           	
-          	reader := bytes.NewReader(data)
-          	decoder := avro.NewDecoder(schema, reader)
-          	if err := decoder.Decode(v); err != nil {
-          		return fmt.Errorf("failed to decode: %w", err)
-          	}
-          	
-          	return nil
+          	return avro.Unmarshal(schema, data, v)
           }
           EOF
 
