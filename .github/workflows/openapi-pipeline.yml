@@ -1,0 +1,53 @@
+name: OpenAPI Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      openapi_file:
+        required: false
+        type: string
+        default: openapi/openapi.yml
+      version:
+        required: true
+        type: string
+      npm_repo_name:
+        required: true
+        type: string
+      project_name:
+        required: true
+        type: string
+    outputs:
+      go_artifact:
+        description: "Name of the Go API artifact"
+        value: ${{ jobs.build-go-api.outputs.artifact_name }}
+      js_artifact:
+        description: "Name of the JS API artifact"
+        value: ${{ jobs.build-js-api.outputs.artifact_name }}
+
+permissions:
+  contents: write
+
+jobs:
+  build-go-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-go-api.yml@master
+    with:
+      openapi_file: ${{ inputs.openapi_file }}
+      artifact: go-api
+      artifact_dir: api
+      package: api
+    outputs:
+      artifact_name:
+        value: go-api
+
+  build-js-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-js-api.yml@master
+    with:
+      artifact_dir: js-client
+      artifact: js-api
+      openapi_file: ${{ inputs.openapi_file }}
+      version: ${{ inputs.version }}
+      npm_repo_name: ${{ inputs.npm_repo_name }}
+      project_name: ${{ inputs.project_name }}
+    outputs:
+      artifact_name:
+        value: js-api

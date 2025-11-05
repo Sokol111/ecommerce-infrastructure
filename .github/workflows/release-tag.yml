@@ -6,12 +6,16 @@ on:
       version:
         required: true
         type: string
-      artifact_dir:
+      # Comma-separated list of artifact names to download
+      artifacts:
         required: false
         type: string
-      artifact:
+        description: "Comma-separated artifact names (e.g., 'go-api,events-api,js-api')"
+      # Comma-separated list of directories for artifacts
+      artifact_dirs:
         required: false
         type: string
+        description: "Comma-separated artifact directories matching artifacts (e.g., 'api,events,js-client')"
 
 permissions:
   contents: write
@@ -27,8 +31,8 @@ jobs:
       - name: Debug Inputs
         run: |
           echo "version: ${{ inputs.version }}"
-          echo "artifact_dir: ${{ inputs.artifact_dir }}"
-          echo "artifact: ${{ inputs.artifact }}"
+          echo "artifacts: ${{ inputs.artifacts }}"
+          echo "artifact_dirs: ${{ inputs.artifact_dirs }}"
 
       - name: Check if tag already exists
         run: |
@@ -38,34 +42,73 @@ jobs:
           fi
 
       - name: Configure Git
-        if: ${{ inputs.artifact != '' }}
+        if: ${{ inputs.artifacts != '' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Download artifact
-        if: ${{ inputs.artifact != '' }}
+      - name: Parse artifacts input
+        if: ${{ inputs.artifacts != '' }}
+        id: parse
+        run: |
+          # Convert comma-separated strings to arrays
+          echo "artifacts_array=$(echo '${{ inputs.artifacts }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
+          echo "dirs_array=$(echo '${{ inputs.artifact_dirs }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
+
+      - name: Download go-api artifact
+        if: contains(inputs.artifacts, 'go-api')
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.artifact }}
-          path: ${{ inputs.artifact_dir }}
+          name: go-api
+          path: api
 
-      - name: Download events artifact (if exists)
+      - name: Download events-api artifact
+        if: contains(inputs.artifacts, 'events-api')
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: events-api
           path: events
 
-      - name: Commit artifact to `release` branch
-        if: ${{ inputs.artifact != '' }}
+      - name: Download js-api artifact
+        if: contains(inputs.artifacts, 'js-api')
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: js-api
+          path: js-client
+
+      - name: Cleanup unnecessary directories
+        run: |
+          echo "🧹 Cleaning up unnecessary directories from release branch..."
+          
+          # Remove source files and npm downloads (only keep generated artifacts)
+          rm -rf openapi/ && echo "✓ Removed openapi/" || echo "  openapi/ not found"
+          rm -rf asyncapi/ && echo "✓ Removed asyncapi/" || echo "  asyncapi/ not found"
+          rm -rf avro/ && echo "✓ Removed avro/" || echo "  avro/ not found"
+          rm -rf updated/ && echo "✓ Removed updated/" || echo "  updated/ not found"
+          rm -rf js-client/ && echo "✓ Removed js-client/" || echo "  js-client/ not found"
+          
+          echo "✅ Cleanup complete. Only generated artifacts remain (api/, events/)"
+
+      - name: Commit artifacts to `release` branch
+        if: ${{ inputs.artifacts != '' }}
         run: |
           git checkout -B release
-          git add -f ${{ inputs.artifact_dir }}
-          if [ -d "events" ]; then
-            git add -f events
-          fi
-          git commit -m "Add ${{ inputs.artifact_dir }} folder to release ${{ inputs.version }}" || echo "No changes to commit"
+          
+          IFS=',' read -ra ARTIFACT_DIRS <<< "${{ inputs.artifact_dirs }}"
+          
+          for dir in "${ARTIFACT_DIRS[@]}"; do
+            if [ -d "$dir" ] && [ -n "$(ls -A $dir 2>/dev/null)" ]; then
+              echo "→ Adding $dir to release branch"
+              git add -f "$dir"
+            else
+              echo "⚠️  Directory $dir is empty or doesn't exist"
+            fi
+          done
+          
+          git commit -m "Add API artifacts to release ${{ inputs.version }}" || echo "No changes to commit"
           git push -u origin release --force
 
       - name: Tag release

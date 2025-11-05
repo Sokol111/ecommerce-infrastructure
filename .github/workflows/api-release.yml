@@ -1,0 +1,162 @@
+name: API Release Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      openapi_file:
+        required: false
+        type: string
+      version:
+        required: false
+        type: string
+      npm_repo_name:
+        required: false
+        type: string
+      project_name:
+        required: false
+        type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
+      SCHEMA_REGISTRY_URL:
+        required: false
+        description: URL of the Schema Registry for publishing Avro schemas
+
+permissions:
+  contents: write
+
+jobs:
+  # ============================================
+  # PREPARE: Determine versions and settings
+  # ============================================
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      openapi_file: ${{ steps.openapi.outputs.openapi_file }}
+      version: ${{ steps.ver.outputs.version }}
+      npm_repo_name: ${{ steps.repo.outputs.npm_repo_name }}
+      project_name: ${{ steps.proj.outputs.project_name }}
+      has_asyncapi: ${{ steps.check-asyncapi.outputs.has_asyncapi }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: check-asyncapi
+        run: |
+          if [ -f "asyncapi/asyncapi.yaml" ]; then
+            echo "✓ AsyncAPI file found"
+            echo "has_asyncapi=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  AsyncAPI file not found"
+            echo "has_asyncapi=false" >> $GITHUB_OUTPUT
+          fi
+
+      - id: openapi
+        run: |
+          if [ -z "${{ inputs.openapi_file }}" ]; then
+            echo "openapi_file=openapi/openapi.yml" >> $GITHUB_OUTPUT
+          else
+            echo "openapi_file=${{ inputs.openapi_file }}" >> $GITHUB_OUTPUT
+          fi
+
+      - id: ver
+        env:
+          OPENAPI_FILE: ${{ steps.openapi.outputs.openapi_file }}
+        run: |
+          if [ -z "${{ inputs.version }}" ]; then
+            openapi_version=$(yq e '.info.version' $OPENAPI_FILE)
+            
+            # Check if asyncapi exists and compare versions
+            if [ -f "asyncapi/asyncapi.yaml" ]; then
+              asyncapi_version=$(yq e '.info.version' asyncapi/asyncapi.yaml)
+              if [ "$openapi_version" != "$asyncapi_version" ]; then
+                echo "❌ Version mismatch!"
+                echo "  OpenAPI version:    $openapi_version"
+                echo "  AsyncAPI version:   $asyncapi_version"
+                echo ""
+                echo "Please sync versions in both files:"
+                echo "  - openapi/openapi.yml: info.version"
+                echo "  - asyncapi/asyncapi.yaml: info.version"
+                exit 1
+              fi
+              echo "✓ Versions match: $openapi_version"
+            fi
+            
+            echo "version=v$openapi_version" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - id: repo
+        run: |
+          if [ -z "${{ inputs.npm_repo_name }}" ]; then
+            echo "npm_repo_name=@${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+          else
+            echo "npm_repo_name=${{ inputs.npm_repo_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - id: proj
+        run: |
+          if [ -z "${{ inputs.project_name }}" ]; then
+            echo "project_name=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
+          else
+            echo "project_name=${{ inputs.project_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summary
+        run: |
+          echo "### 📦 Release Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | \`${{ steps.ver.outputs.version }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| OpenAPI | \`${{ steps.openapi.outputs.openapi_file }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| NPM Package | \`${{ steps.repo.outputs.npm_repo_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Project | \`${{ steps.proj.outputs.project_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Has AsyncAPI | ${{ steps.check-asyncapi.outputs.has_asyncapi }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================
+  # OPENAPI PIPELINE: Build Go + JS API
+  # ============================================
+  openapi-pipeline:
+    needs: prepare
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/openapi-pipeline.yml@master
+    with:
+      openapi_file: ${{ needs.prepare.outputs.openapi_file }}
+      version: ${{ needs.prepare.outputs.version }}
+      npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
+      project_name: ${{ needs.prepare.outputs.project_name }}
+
+  # ============================================
+  # ASYNCAPI PIPELINE: Build Events + Publish Schemas
+  # ============================================
+  asyncapi-pipeline:
+    needs: prepare
+    if: needs.prepare.outputs.has_asyncapi == 'true'
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/asyncapi-pipeline.yml@master
+    secrets:
+      SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
+
+  # ============================================
+  # RELEASE: Create Git tag and GitHub Release
+  # ============================================
+  create-release:
+    needs: [prepare, openapi-pipeline, asyncapi-pipeline]
+    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      artifacts: ${{ needs.prepare.outputs.has_asyncapi == 'true' && 'go-api,events-api,js-api' || 'go-api,js-api' }}
+      artifact_dirs: ${{ needs.prepare.outputs.has_asyncapi == 'true' && 'api,events,js-client' || 'api,js-client' }}
+
+  # ============================================
+  # PUBLISH: Publish JS client to NPM
+  # ============================================
+  publish-npm:
+    needs: [prepare, openapi-pipeline, create-release]
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js.yml@master
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    with:
+      artifact_dir: js-client
+      artifact: js-api
