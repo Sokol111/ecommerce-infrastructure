@@ -176,34 +176,21 @@ jobs:
         run: |
           echo "✓ Generating Go types from Avro schemas..."
           
-          # Generate in dependency order: EventMetadata first
-          if [ -f "${{ inputs.avro_dir }}/event_metadata.avsc" ]; then
-            echo "Generating EventMetadata..."
-            $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
-              -o "${{ inputs.artifact_dir }}/event_metadata.gen.go" \
-              -tags json:snake \
-              "${{ inputs.avro_dir }}/event_metadata.avsc"
-          fi
-          
-          # Then generate other schemas
+          # Collect all schemas
+          all_schemas=""
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            basename=$(basename "$schema" .avsc)
-            
-            # Skip already generated EventMetadata
-            if [ "$basename" = "event_metadata" ]; then
-              continue
-            fi
-            
-            echo "Generating $basename..."
-            if ! $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
-              -o "${{ inputs.artifact_dir }}/${basename}.gen.go" \
-              -tags json:snake \
-              "$schema"; then
-              echo "❌ Failed to generate code for $basename"
-              exit 1
-            fi
-            echo "✓ Generated ${basename}.gen.go"
+            all_schemas="$all_schemas $schema"
           done
+          
+          # Generate all schemas together (to resolve cross-references)
+          echo "Generating Go code for all schemas..."
+          if ! $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
+            -o "${{ inputs.artifact_dir }}/generated.gen.go" \
+            -tags json:snake \
+            $all_schemas; then
+            echo "❌ Failed to generate Go code"
+            exit 1
+          fi
           
           echo "✓ All Go code generated successfully"
 
