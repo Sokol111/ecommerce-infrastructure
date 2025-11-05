@@ -20,6 +20,7 @@ on:
         required: true
       SCHEMA_REGISTRY_URL:
         required: false
+        description: URL of the Schema Registry for publishing Avro schemas
 
 permissions:
   contents: write
@@ -139,7 +140,7 @@ jobs:
     needs: prepare
     with:
       avro_dir: ${{ needs.prepare.outputs.avro_dir }}
-      schema_registry_url: ${{ secrets.SCHEMA_REGISTRY_URL || '' }}
+      schema_registry_url: ${{ secrets.SCHEMA_REGISTRY_URL }}
     if: hashFiles('asyncapi/asyncapi.yaml') != '' && secrets.SCHEMA_REGISTRY_URL != ''
 
   build-js-api:
