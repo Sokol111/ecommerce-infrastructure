@@ -97,24 +97,27 @@ jobs:
             exit 1
           fi
           
-          # Validate each schema with official avro-tools
+          # Validate all schemas together (to resolve cross-references)
+          echo "Validating all schemas together..."
+          
+          # Build list of all schemas
+          all_schemas=""
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            schema_name=$(basename "$schema")
-            echo "Validating $schema_name..."
-            
-            # Official Avro validation
-            if ! java -jar /tmp/avro-tools.jar compile schema "$schema" /tmp/avro-validation 2>&1; then
-              echo "❌ Schema validation failed: $schema_name"
-              exit 1
-            fi
-            
-            echo "✓ $schema_name is valid"
+            all_schemas="$all_schemas $schema"
           done
+          
+          # Validate with all schemas in one go (resolves cross-references)
+          if ! java -jar /tmp/avro-tools.jar compile schema $all_schemas /tmp/avro-validation 2>&1; then
+            echo "❌ Schema validation failed"
+            exit 1
+          fi
+          
+          echo "✓ All schemas are valid"
           
           # Clean up validation output
           rm -rf /tmp/avro-validation
           
-          echo "✓ All Avro schemas are valid"
+          echo "✓ Avro schemas validated successfully"
 
       - name: Check schema references
         run: |
