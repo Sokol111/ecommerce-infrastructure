@@ -298,6 +298,9 @@ jobs:
             exit 1
           fi
           
+          # Remove go.mod and go.sum (not needed in artifact)
+          rm -f go.mod go.sum
+          
           echo "✓ Generated Go code is valid and compiles"
 
       - name: Generate README
