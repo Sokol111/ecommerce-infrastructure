@@ -200,7 +200,6 @@ jobs:
           package ${{ inputs.package }}
 
           import (
-          	"bytes"
           	"fmt"
 
           	"github.com/hamba/avro/v2"
