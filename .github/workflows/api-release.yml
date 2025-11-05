@@ -85,7 +85,6 @@ jobs:
     needs: prepare
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/openapi-pipeline.yml@master
     with:
-      openapi_file: openapi/openapi.yml
       version: ${{ needs.prepare.outputs.version }}
       npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
       project_name: ${{ needs.prepare.outputs.project_name }}
@@ -101,25 +100,48 @@ jobs:
       SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
 
   # ============================================
+  # PREPARE RELEASE ARTIFACTS: Build artifact list dynamically
+  # ============================================
+  prepare-release-artifacts:
+    needs: [prepare, openapi-pipeline, asyncapi-pipeline]
+    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      artifacts: ${{ steps.build-list.outputs.artifacts }}
+    steps:
+      - id: build-list
+        run: |
+          artifacts="${{ needs.openapi-pipeline.outputs.go_artifact }}"
+          
+          if [ "${{ needs.asyncapi-pipeline.result }}" == "success" ] && [ -n "${{ needs.asyncapi-pipeline.outputs.events_artifact }}" ]; then
+            artifacts="${artifacts},${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
+            echo "✓ Including AsyncAPI artifact: ${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
+          fi
+          
+          echo "artifacts=${artifacts}" >> $GITHUB_OUTPUT
+          echo "### 📦 Artifacts for Release" >> $GITHUB_STEP_SUMMARY
+          echo "\`${artifacts}\`" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================
   # RELEASE: Create Git tag and GitHub Release
   # ============================================
   create-release:
-    needs: [prepare, openapi-pipeline, asyncapi-pipeline]
+    needs: [prepare, openapi-pipeline, asyncapi-pipeline, prepare-release-artifacts]
     if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
     with:
       version: ${{ needs.prepare.outputs.version }}
-      artifacts: ${{ needs.prepare.outputs.has_asyncapi == 'true' && 'go-api,events-api,js-api' || 'go-api,js-api' }}
-      artifact_dirs: ${{ needs.prepare.outputs.has_asyncapi == 'true' && 'api,events,js-client' || 'api,js-client' }}
+      artifacts: ${{ needs.prepare-release-artifacts.outputs.artifacts }}
+      cleanup_dirs: 'asyncapi,openapi,avro'
 
   # ============================================
   # PUBLISH: Publish JS client to NPM
   # ============================================
   publish-npm:
-    needs: [prepare, openapi-pipeline, create-release]
+    needs: [openapi-pipeline, create-release]
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js.yml@master
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
       artifact_dir: js-client
-      artifact: js-api
+      artifact: ${{ needs.openapi-pipeline.outputs.js_artifact }}
