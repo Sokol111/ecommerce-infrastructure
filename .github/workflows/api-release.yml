@@ -2,19 +2,6 @@ name: API Release Pipeline
 
 on:
   workflow_call:
-    inputs:
-      openapi_file:
-        required: false
-        type: string
-      version:
-        required: false
-        type: string
-      npm_repo_name:
-        required: false
-        type: string
-      project_name:
-        required: false
-        type: string
     secrets:
       NPM_TOKEN:
         required: true
@@ -32,7 +19,6 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      openapi_file: ${{ steps.openapi.outputs.openapi_file }}
       version: ${{ steps.ver.outputs.version }}
       npm_repo_name: ${{ steps.repo.outputs.npm_repo_name }}
       project_name: ${{ steps.proj.outputs.project_name }}
@@ -51,57 +37,35 @@ jobs:
             echo "has_asyncapi=false" >> $GITHUB_OUTPUT
           fi
 
-      - id: openapi
-        run: |
-          if [ -z "${{ inputs.openapi_file }}" ]; then
-            echo "openapi_file=openapi/openapi.yml" >> $GITHUB_OUTPUT
-          else
-            echo "openapi_file=${{ inputs.openapi_file }}" >> $GITHUB_OUTPUT
-          fi
-
       - id: ver
-        env:
-          OPENAPI_FILE: ${{ steps.openapi.outputs.openapi_file }}
         run: |
-          if [ -z "${{ inputs.version }}" ]; then
-            openapi_version=$(yq e '.info.version' $OPENAPI_FILE)
-            
-            # Check if asyncapi exists and compare versions
-            if [ -f "asyncapi/asyncapi.yaml" ]; then
-              asyncapi_version=$(yq e '.info.version' asyncapi/asyncapi.yaml)
-              if [ "$openapi_version" != "$asyncapi_version" ]; then
-                echo "❌ Version mismatch!"
-                echo "  OpenAPI version:    $openapi_version"
-                echo "  AsyncAPI version:   $asyncapi_version"
-                echo ""
-                echo "Please sync versions in both files:"
-                echo "  - openapi/openapi.yml: info.version"
-                echo "  - asyncapi/asyncapi.yaml: info.version"
-                exit 1
-              fi
-              echo "✓ Versions match: $openapi_version"
+          openapi_version=$(yq e '.info.version' openapi/openapi.yml)
+          
+          # Check if asyncapi exists and compare versions
+          if [ -f "asyncapi/asyncapi.yaml" ]; then
+            asyncapi_version=$(yq e '.info.version' asyncapi/asyncapi.yaml)
+            if [ "$openapi_version" != "$asyncapi_version" ]; then
+              echo "❌ Version mismatch!"
+              echo "  OpenAPI version:    $openapi_version"
+              echo "  AsyncAPI version:   $asyncapi_version"
+              echo ""
+              echo "Please sync versions in both files:"
+              echo "  - openapi/openapi.yml: info.version"
+              echo "  - asyncapi/asyncapi.yaml: info.version"
+              exit 1
             fi
-            
-            echo "version=v$openapi_version" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "✓ Versions match: $openapi_version"
           fi
+          
+          echo "version=v$openapi_version" >> $GITHUB_OUTPUT
 
       - id: repo
         run: |
-          if [ -z "${{ inputs.npm_repo_name }}" ]; then
-            echo "npm_repo_name=@${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
-          else
-            echo "npm_repo_name=${{ inputs.npm_repo_name }}" >> $GITHUB_OUTPUT
-          fi
+          echo "npm_repo_name=@${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
 
       - id: proj
         run: |
-          if [ -z "${{ inputs.project_name }}" ]; then
-            echo "project_name=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
-          else
-            echo "project_name=${{ inputs.project_name }}" >> $GITHUB_OUTPUT
-          fi
+          echo "project_name=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
 
       - name: Summary
         run: |
@@ -110,7 +74,6 @@ jobs:
           echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| Version | \`${{ steps.ver.outputs.version }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| OpenAPI | \`${{ steps.openapi.outputs.openapi_file }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| NPM Package | \`${{ steps.repo.outputs.npm_repo_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Project | \`${{ steps.proj.outputs.project_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Has AsyncAPI | ${{ steps.check-asyncapi.outputs.has_asyncapi }} |" >> $GITHUB_STEP_SUMMARY
@@ -122,7 +85,7 @@ jobs:
     needs: prepare
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/openapi-pipeline.yml@master
     with:
-      openapi_file: ${{ needs.prepare.outputs.openapi_file }}
+      openapi_file: openapi/openapi.yml
       version: ${{ needs.prepare.outputs.version }}
       npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
       project_name: ${{ needs.prepare.outputs.project_name }}
