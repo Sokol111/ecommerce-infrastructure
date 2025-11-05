@@ -181,7 +181,7 @@ jobs:
             echo "Generating EventMetadata..."
             $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
               -o "${{ inputs.artifact_dir }}/event_metadata.gen.go" \
-              -tags json \
+              -tags json:snake \
               "${{ inputs.avro_dir }}/event_metadata.avsc"
           fi
           
@@ -197,7 +197,7 @@ jobs:
             echo "Generating $basename..."
             if ! $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
               -o "${{ inputs.artifact_dir }}/${basename}.gen.go" \
-              -tags json \
+              -tags json:snake \
               "$schema"; then
               echo "❌ Failed to generate code for $basename"
               exit 1
