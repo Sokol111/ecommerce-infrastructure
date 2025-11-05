@@ -8,9 +8,9 @@ on:
         type: string
         description: Directory containing Avro schema files
       schema_registry_url:
-        required: true
+        required: false
         type: string
-        description: Schema Registry URL
+        description: Schema Registry URL (optional - will skip if not provided)
 
 permissions:
   contents: read
@@ -21,10 +21,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check if Schema Registry URL is provided
+        id: check-url
+        run: |
+          if [ -z "${{ inputs.schema_registry_url }}" ]; then
+            echo "⚠️  Schema Registry URL not provided"
+            echo "Skipping schema publication"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "✓ Schema Registry URL: ${{ inputs.schema_registry_url }}"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install jq
+        if: steps.check-url.outputs.skip != 'true'
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Validate Avro schemas
+        if: steps.check-url.outputs.skip != 'true'
         run: |
           echo "→ Validating Avro schemas..."
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
@@ -36,6 +50,7 @@ jobs:
           echo "✓ All schemas are valid"
 
       - name: Publish schemas to Schema Registry
+        if: steps.check-url.outputs.skip != 'true'
         run: |
           echo "→ Publishing schemas to Schema Registry at ${{ inputs.schema_registry_url }}"
           
@@ -76,6 +91,7 @@ jobs:
           echo "✓ All schemas published successfully"
 
       - name: List registered schemas
+        if: steps.check-url.outputs.skip != 'true'
         run: |
           echo "→ Registered schemas in Schema Registry:"
           curl -s "${{ inputs.schema_registry_url }}/subjects" | jq -r '.[]' | sort || echo "Failed to list schemas"
