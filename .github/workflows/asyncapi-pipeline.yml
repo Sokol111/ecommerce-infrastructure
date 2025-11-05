@@ -1,0 +1,68 @@
+name: AsyncAPI Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      asyncapi_file:
+        required: false
+        type: string
+        default: asyncapi/asyncapi.yaml
+      avro_dir:
+        required: false
+        type: string
+        default: avro
+    secrets:
+      SCHEMA_REGISTRY_URL:
+        required: false
+        description: URL of the Schema Registry for publishing Avro schemas
+    outputs:
+      events_artifact:
+        description: "Name of the Events API artifact"
+        value: ${{ jobs.build-events-api.outputs.artifact_name }}
+      has_asyncapi:
+        description: "Whether AsyncAPI file exists"
+        value: ${{ jobs.check-asyncapi.outputs.exists }}
+
+permissions:
+  contents: write
+
+jobs:
+  check-asyncapi:
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - id: check
+        run: |
+          if [ -f "${{ inputs.asyncapi_file }}" ]; then
+            echo "✓ AsyncAPI file found at ${{ inputs.asyncapi_file }}"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  AsyncAPI file not found at ${{ inputs.asyncapi_file }}"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  build-events-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-asyncapi.yml@master
+    needs: check-asyncapi
+    if: needs.check-asyncapi.outputs.exists == 'true'
+    with:
+      asyncapi_file: ${{ inputs.asyncapi_file }}
+      avro_dir: ${{ inputs.avro_dir }}
+      artifact: events-api
+      artifact_dir: events
+      package: events
+    outputs:
+      artifact_name:
+        value: events-api
+
+  publish-schemas:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-schemas.yml@master
+    needs: [check-asyncapi, build-events-api]
+    if: needs.check-asyncapi.outputs.exists == 'true'
+    with:
+      avro_dir: ${{ inputs.avro_dir }}
+    secrets:
+      SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
