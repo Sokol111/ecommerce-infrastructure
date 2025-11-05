@@ -38,8 +38,8 @@ jobs:
           # Install AsyncAPI CLI
           npm install -g @asyncapi/cli
           
-          # Install Avro tools (official Apache Avro)
-          wget https://downloads.apache.org/avro/avro-1.11.3/java/avro-tools-1.11.3.jar -O /tmp/avro-tools.jar
+          # Install Avro tools (official Apache Avro) - using latest stable 1.12.0
+          wget https://repo1.maven.org/maven2/org/apache/avro/avro-tools/1.12.0/avro-tools-1.12.0.jar -O /tmp/avro-tools.jar
           
           # Install Go Avro generator
           go install github.com/hamba/avro/v2/cmd/avrogen@latest
