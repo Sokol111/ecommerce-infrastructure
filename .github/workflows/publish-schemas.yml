@@ -1,0 +1,81 @@
+name: Publish Avro Schemas to Schema Registry
+
+on:
+  workflow_call:
+    inputs:
+      avro_dir:
+        required: true
+        type: string
+        description: Directory containing Avro schema files
+      schema_registry_url:
+        required: true
+        type: string
+        description: Schema Registry URL
+
+permissions:
+  contents: read
+
+jobs:
+  publish-schemas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Validate Avro schemas
+        run: |
+          echo "→ Validating Avro schemas..."
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            if [ -f "$schema" ]; then
+              echo "  Validating $schema..."
+              jq empty "$schema" || exit 1
+            fi
+          done
+          echo "✓ All schemas are valid"
+
+      - name: Publish schemas to Schema Registry
+        run: |
+          echo "→ Publishing schemas to Schema Registry at ${{ inputs.schema_registry_url }}"
+          
+          # Check if Schema Registry is accessible
+          if ! curl -f -s "${{ inputs.schema_registry_url }}/subjects" > /dev/null; then
+            echo "⚠ Schema Registry is not accessible at ${{ inputs.schema_registry_url }}"
+            echo "Skipping schema publication"
+            exit 0
+          fi
+          
+          # Publish each schema
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            if [ -f "$schema" ]; then
+              subject=$(basename "$schema" .avsc)
+              echo "  Publishing schema: $subject"
+              
+              schema_json=$(cat "$schema" | jq -c tostring)
+              
+              response=$(curl -s -w "\n%{http_code}" -X POST \
+                -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+                --data "{\"schema\": $schema_json}" \
+                "${{ inputs.schema_registry_url }}/subjects/${subject}-value/versions")
+              
+              http_code=$(echo "$response" | tail -n1)
+              body=$(echo "$response" | head -n-1)
+              
+              if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+                echo "  ✓ Published $subject (HTTP $http_code)"
+                echo "  Response: $body"
+              else
+                echo "  ✗ Failed to publish $subject (HTTP $http_code)"
+                echo "  Response: $body"
+                exit 1
+              fi
+            fi
+          done
+          
+          echo "✓ All schemas published successfully"
+
+      - name: List registered schemas
+        run: |
+          echo "→ Registered schemas in Schema Registry:"
+          curl -s "${{ inputs.schema_registry_url }}/subjects" | jq -r '.[]' | sort || echo "Failed to list schemas"

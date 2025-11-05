@@ -1,0 +1,327 @@
+name: Build AsyncAPI Messaging API
+
+on:
+  workflow_call:
+    inputs:
+      asyncapi_file:
+        required: true
+        type: string
+      avro_dir:
+        required: true
+        type: string
+      artifact:
+        required: true
+        type: string
+      artifact_dir:
+        required: true
+        type: string
+      package:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-messaging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.2
+
+      - name: Install dependencies
+        run: |
+          # Install AsyncAPI CLI
+          npm install -g @asyncapi/cli
+          
+          # Install Avro tools (official Apache Avro)
+          wget https://downloads.apache.org/avro/avro-1.11.3/java/avro-tools-1.11.3.jar -O /tmp/avro-tools.jar
+          
+          # Install Go Avro generator
+          go install github.com/hamba/avro/v2/cmd/avrogen@latest
+
+      - name: Validate AsyncAPI spec
+        run: |
+          echo "✓ Validating AsyncAPI specification..."
+          asyncapi validate ${{ inputs.asyncapi_file }}
+
+      - name: Validate Avro schemas
+        run: |
+          echo "✓ Validating Avro schemas with Apache Avro Tools..."
+          
+          # Count schemas
+          schema_count=$(ls -1 ${{ inputs.avro_dir }}/*.avsc 2>/dev/null | wc -l)
+          echo "Found $schema_count Avro schema(s)"
+          
+          if [ $schema_count -eq 0 ]; then
+            echo "❌ No Avro schemas found in ${{ inputs.avro_dir }}"
+            exit 1
+          fi
+          
+          # Validate each schema with official avro-tools
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            schema_name=$(basename "$schema")
+            echo "Validating $schema_name..."
+            
+            # Official Avro validation
+            if ! java -jar /tmp/avro-tools.jar compile schema "$schema" /tmp/avro-validation 2>&1; then
+              echo "❌ Schema validation failed: $schema_name"
+              exit 1
+            fi
+            
+            echo "✓ $schema_name is valid"
+          done
+          
+          # Clean up validation output
+          rm -rf /tmp/avro-validation
+          
+          echo "✓ All Avro schemas are valid"
+
+      - name: Check schema references
+        run: |
+          echo "✓ Checking schema cross-references..."
+          
+          # Check if EventMetadata is referenced correctly
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            schema_name=$(basename "$schema")
+            
+            # Skip EventMetadata itself
+            if [ "$schema_name" = "event_metadata.avsc" ]; then
+              continue
+            fi
+            
+            # Check if schema references EventMetadata
+            if grep -q "com.ecommerce.events.EventMetadata" "$schema"; then
+              echo "✓ $schema_name correctly references EventMetadata"
+              
+              # Verify EventMetadata exists
+              if [ ! -f "${{ inputs.avro_dir }}/event_metadata.avsc" ]; then
+                echo "❌ $schema_name references EventMetadata but event_metadata.avsc not found"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Verify schema structure (metadata + payload pattern)
+        run: |
+          echo "✓ Verifying event structure follows metadata+payload pattern..."
+          
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            schema_name=$(basename "$schema")
+            
+            # Skip EventMetadata and non-event schemas
+            if [[ "$schema_name" == "event_metadata.avsc" ]]; then
+              continue
+            fi
+            
+            # Check if it's an Event (ends with Event)
+            if [[ "$schema_name" == *"Event"* ]] || [[ "$schema_name" == *"event.avsc" ]]; then
+              # Verify it has metadata and payload fields
+              if ! jq -e '.fields[] | select(.name == "metadata")' "$schema" > /dev/null; then
+                echo "⚠️  $schema_name missing 'metadata' field"
+              fi
+              
+              if ! jq -e '.fields[] | select(.name == "payload")' "$schema" > /dev/null; then
+                echo "⚠️  $schema_name missing 'payload' field"
+              fi
+            fi
+          done
+
+      - name: Create output directory
+        run: mkdir -p ${{ inputs.artifact_dir }}
+
+      - name: Generate Go code from Avro schemas
+        run: |
+          echo "✓ Generating Go types from Avro schemas..."
+          
+          # Generate in dependency order: EventMetadata first
+          if [ -f "${{ inputs.avro_dir }}/event_metadata.avsc" ]; then
+            echo "Generating EventMetadata..."
+            $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
+              -o "${{ inputs.artifact_dir }}/event_metadata.gen.go" \
+              -tags json \
+              "${{ inputs.avro_dir }}/event_metadata.avsc"
+          fi
+          
+          # Then generate other schemas
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            basename=$(basename "$schema" .avsc)
+            
+            # Skip already generated EventMetadata
+            if [ "$basename" = "event_metadata" ]; then
+              continue
+            fi
+            
+            echo "Generating $basename..."
+            if ! $HOME/go/bin/avrogen -pkg ${{ inputs.package }} \
+              -o "${{ inputs.artifact_dir }}/${basename}.gen.go" \
+              -tags json \
+              "$schema"; then
+              echo "❌ Failed to generate code for $basename"
+              exit 1
+            fi
+            echo "✓ Generated ${basename}.gen.go"
+          done
+          
+          echo "✓ All Go code generated successfully"
+
+      - name: Generate serialization helpers
+        run: |
+          cat > ${{ inputs.artifact_dir }}/serializer.gen.go << 'EOF'
+          package ${{ inputs.package }}
+
+          import (
+          	"bytes"
+          	"fmt"
+
+          	"github.com/hamba/avro/v2"
+          )
+
+          // AvroSerializer handles Avro serialization/deserialization
+          type AvroSerializer struct {
+          	schemas map[string]avro.Schema
+          }
+
+          // NewAvroSerializer creates a new Avro serializer
+          func NewAvroSerializer() (*AvroSerializer, error) {
+          	return &AvroSerializer{
+          		schemas: make(map[string]avro.Schema),
+          	}, nil
+          }
+
+          // RegisterSchema registers an Avro schema
+          func (s *AvroSerializer) RegisterSchema(name string, schemaJSON string) error {
+          	schema, err := avro.Parse(schemaJSON)
+          	if err != nil {
+          		return fmt.Errorf("failed to parse schema %s: %w", name, err)
+          	}
+          	s.schemas[name] = schema
+          	return nil
+          }
+
+          // Serialize encodes data using Avro
+          func (s *AvroSerializer) Serialize(schemaName string, data interface{}) ([]byte, error) {
+          	schema, ok := s.schemas[schemaName]
+          	if !ok {
+          		return nil, fmt.Errorf("schema %s not registered", schemaName)
+          	}
+          	
+          	var buf bytes.Buffer
+          	encoder := avro.NewEncoder(schema, &buf)
+          	if err := encoder.Encode(data); err != nil {
+          		return nil, fmt.Errorf("failed to encode: %w", err)
+          	}
+          	
+          	return buf.Bytes(), nil
+          }
+
+          // Deserialize decodes Avro data
+          func (s *AvroSerializer) Deserialize(schemaName string, data []byte, v interface{}) error {
+          	schema, ok := s.schemas[schemaName]
+          	if !ok {
+          		return fmt.Errorf("schema %s not registered", schemaName)
+          	}
+          	
+          	reader := bytes.NewReader(data)
+          	decoder := avro.NewDecoder(schema, reader)
+          	if err := decoder.Decode(v); err != nil {
+          		return fmt.Errorf("failed to decode: %w", err)
+          	}
+          	
+          	return nil
+          }
+          EOF
+
+      - name: Copy AsyncAPI spec
+        run: |
+          echo "Copying AsyncAPI spec..."
+          cp ${{ inputs.asyncapi_file }} ${{ inputs.artifact_dir }}/asyncapi.yaml
+
+      - name: Copy Avro schemas
+        run: |
+          echo "Copying Avro schemas..."
+          mkdir -p ${{ inputs.artifact_dir }}/schemas
+          cp ${{ inputs.avro_dir }}/*.avsc ${{ inputs.artifact_dir }}/schemas/
+
+      - name: Generate schema embeddings
+        run: |
+          cat > ${{ inputs.artifact_dir }}/schemas.gen.go << 'EOF'
+          package ${{ inputs.package }}
+
+          import _ "embed"
+
+          //go:embed asyncapi.yaml
+          var AsyncAPISpec []byte
+
+          EOF
+
+          # Add embedded Avro schemas
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            basename=$(basename "$schema" .avsc)
+            varname=$(echo "$basename" | sed -E 's/(^|_)([a-z])/\U\2/g')
+            echo "//go:embed schemas/${basename}.avsc" >> ${{ inputs.artifact_dir }}/schemas.gen.go
+            echo "var ${varname}Schema []byte" >> ${{ inputs.artifact_dir }}/schemas.gen.go
+            echo "" >> ${{ inputs.artifact_dir }}/schemas.gen.go
+          done
+
+      - name: Validate generated Go code
+        run: |
+          echo "✓ Validating generated Go code..."
+          
+          # Create a temporary go.mod if needed
+          if [ ! -f "${{ inputs.artifact_dir }}/go.mod" ]; then
+            cd ${{ inputs.artifact_dir }}
+            go mod init github.com/${{ github.repository }}/${{ inputs.artifact_dir }}
+            go mod tidy
+            cd -
+          fi
+          
+          # Check if code compiles
+          if ! go build -o /dev/null ${{ inputs.artifact_dir }}/*.go 2>&1; then
+            echo "❌ Generated Go code does not compile"
+            exit 1
+          fi
+          
+          echo "✓ Generated Go code is valid and compiles"
+
+      - name: Generate README
+        run: |
+          cat > ${{ inputs.artifact_dir }}/README.gen.md << 'EOF'
+          # Generated Messaging API
+
+          This package is auto-generated from AsyncAPI and Avro schemas.
+
+          ## Usage
+
+          ```go
+          import "github.com/${{ github.repository }}/${{ inputs.artifact_dir }}"
+
+          // Initialize serializer
+          serializer, err := events.NewAvroSerializer()
+          if err != nil {
+              log.Fatal(err)
+          }
+
+          // Register schemas (schemas are embedded)
+          err = serializer.RegisterSchema("ProductCreatedEvent", string(events.ProductCreatedSchema))
+
+          // Serialize event
+          event := &events.ProductCreatedEvent{...}
+          data, err := serializer.Serialize("ProductCreatedEvent", event)
+          ```
+
+          ## Embedded Resources
+
+          - AsyncAPI specification: `events.AsyncAPISpec`
+          - Avro schemas: `events.*Schema` variables
+          EOF
+
+      - name: Upload built messaging API
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact }}
+          path: ${{ inputs.artifact_dir }}

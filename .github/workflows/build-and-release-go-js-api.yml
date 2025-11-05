@@ -18,6 +18,8 @@ on:
     secrets:
       NPM_TOKEN:
         required: true
+      SCHEMA_REGISTRY_URL:
+        required: false
 
 permissions:
   contents: write
@@ -35,6 +37,11 @@ jobs:
       go_artifact: go-api
       js_gen_dir: js-client
       js_artifact: js-api
+      asyncapi_file: asyncapi/asyncapi.yaml
+      avro_dir: avro
+      events_gen_dir: events
+      events_package: events
+      events_artifact: events-api
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +59,25 @@ jobs:
           OPENAPI_FILE: ${{ steps.openapi.outputs.openapi_file }}
         run: |
           if [ -z "${{ inputs.version }}" ]; then
-            echo "version=v$(yq e '.info.version' $OPENAPI_FILE)" >> $GITHUB_OUTPUT
+            openapi_version=$(yq e '.info.version' $OPENAPI_FILE)
+            
+            # Check if asyncapi exists and compare versions
+            if [ -f "asyncapi/asyncapi.yaml" ]; then
+              asyncapi_version=$(yq e '.info.version' asyncapi/asyncapi.yaml)
+              if [ "$openapi_version" != "$asyncapi_version" ]; then
+                echo "❌ Version mismatch!"
+                echo "  OpenAPI version:    $openapi_version"
+                echo "  AsyncAPI version:   $asyncapi_version"
+                echo ""
+                echo "Please sync versions in both files:"
+                echo "  - openapi/openapi.yml: info.version"
+                echo "  - asyncapi/asyncapi.yaml: info.version"
+                exit 1
+              fi
+              echo "✓ Versions match: $openapi_version"
+            fi
+            
+            echo "version=v$openapi_version" >> $GITHUB_OUTPUT
           else
             echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
           fi
@@ -98,6 +123,25 @@ jobs:
       artifact_dir: ${{ needs.prepare.outputs.go_gen_dir }}
       package: ${{ needs.prepare.outputs.go_package }}
 
+  build-events-api:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-asyncapi.yml@master
+    needs: prepare
+    with:
+      asyncapi_file: ${{ needs.prepare.outputs.asyncapi_file }}
+      avro_dir: ${{ needs.prepare.outputs.avro_dir }}
+      artifact: ${{ needs.prepare.outputs.events_artifact }}
+      artifact_dir: ${{ needs.prepare.outputs.events_gen_dir }}
+      package: ${{ needs.prepare.outputs.events_package }}
+    if: hashFiles('asyncapi/asyncapi.yaml') != ''
+
+  publish-schemas:
+    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-schemas.yml@master
+    needs: prepare
+    with:
+      avro_dir: ${{ needs.prepare.outputs.avro_dir }}
+      schema_registry_url: ${{ secrets.SCHEMA_REGISTRY_URL || '' }}
+    if: hashFiles('asyncapi/asyncapi.yaml') != '' && secrets.SCHEMA_REGISTRY_URL != ''
+
   build-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-js-api.yml@master
     needs: prepare
@@ -111,7 +155,7 @@ jobs:
 
   release-go-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
-    needs: [prepare, build-go-api, build-js-api]
+    needs: [prepare, build-go-api, build-events-api, build-js-api]
     with:
       version: ${{ needs.prepare.outputs.version }}
       artifact_dir: ${{ needs.prepare.outputs.go_gen_dir }}
