@@ -7,9 +7,9 @@ on:
         required: true
         type: string
         description: Directory containing Avro schema files
-      schema_registry_url:
+    secrets:
+      SCHEMA_REGISTRY_URL:
         required: false
-        type: string
         description: Schema Registry URL (optional - will skip if not provided)
 
 permissions:
@@ -24,12 +24,12 @@ jobs:
       - name: Check if Schema Registry URL is provided
         id: check-url
         run: |
-          if [ -z "${{ inputs.schema_registry_url }}" ]; then
+          if [ -z "${{ secrets.SCHEMA_REGISTRY_URL }}" ]; then
             echo "⚠️  Schema Registry URL not provided"
             echo "Skipping schema publication"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
-            echo "✓ Schema Registry URL: ${{ inputs.schema_registry_url }}"
+            echo "✓ Schema Registry URL: ${{ secrets.SCHEMA_REGISTRY_URL }}"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
@@ -52,11 +52,11 @@ jobs:
       - name: Publish schemas to Schema Registry
         if: steps.check-url.outputs.skip != 'true'
         run: |
-          echo "→ Publishing schemas to Schema Registry at ${{ inputs.schema_registry_url }}"
+          echo "→ Publishing schemas to Schema Registry at ${{ secrets.SCHEMA_REGISTRY_URL }}"
           
           # Check if Schema Registry is accessible
-          if ! curl -f -s "${{ inputs.schema_registry_url }}/subjects" > /dev/null; then
-            echo "⚠ Schema Registry is not accessible at ${{ inputs.schema_registry_url }}"
+          if ! curl -f -s "${{ secrets.SCHEMA_REGISTRY_URL }}/subjects" > /dev/null; then
+            echo "⚠ Schema Registry is not accessible at ${{ secrets.SCHEMA_REGISTRY_URL }}"
             echo "Skipping schema publication"
             exit 0
           fi
@@ -72,7 +72,7 @@ jobs:
               response=$(curl -s -w "\n%{http_code}" -X POST \
                 -H "Content-Type: application/vnd.schemaregistry.v1+json" \
                 --data "{\"schema\": $schema_json}" \
-                "${{ inputs.schema_registry_url }}/subjects/${subject}-value/versions")
+                "${{ secrets.SCHEMA_REGISTRY_URL }}/subjects/${subject}-value/versions")
               
               http_code=$(echo "$response" | tail -n1)
               body=$(echo "$response" | head -n-1)
@@ -94,4 +94,4 @@ jobs:
         if: steps.check-url.outputs.skip != 'true'
         run: |
           echo "→ Registered schemas in Schema Registry:"
-          curl -s "${{ inputs.schema_registry_url }}/subjects" | jq -r '.[]' | sort || echo "Failed to list schemas"
+          curl -s "${{ secrets.SCHEMA_REGISTRY_URL }}/subjects" | jq -r '.[]' | sort || echo "Failed to list schemas"

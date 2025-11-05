@@ -149,7 +149,8 @@ jobs:
     needs: prepare
     with:
       avro_dir: ${{ needs.prepare.outputs.avro_dir }}
-      schema_registry_url: ${{ secrets.SCHEMA_REGISTRY_URL }}
+    secrets:
+      SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
     if: hashFiles('asyncapi/asyncapi.yaml') != '' && needs.prepare.outputs.has_schema_registry == 'true'
 
   build-js-api:
