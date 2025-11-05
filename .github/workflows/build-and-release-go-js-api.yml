@@ -44,9 +44,20 @@ jobs:
       events_package: events
       events_artifact: events-api
       has_schema_registry: ${{ steps.check-registry.outputs.has_registry }}
+      has_asyncapi: ${{ steps.check-asyncapi.outputs.has_asyncapi }}
 
     steps:
       - uses: actions/checkout@v4
+
+      - id: check-asyncapi
+        run: |
+          if [ -f "asyncapi/asyncapi.yaml" ]; then
+            echo "✓ AsyncAPI file found"
+            echo "has_asyncapi=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  AsyncAPI file not found"
+            echo "has_asyncapi=false" >> $GITHUB_OUTPUT
+          fi
 
       - id: check-registry
         run: |
@@ -142,7 +153,7 @@ jobs:
       artifact: ${{ needs.prepare.outputs.events_artifact }}
       artifact_dir: ${{ needs.prepare.outputs.events_gen_dir }}
       package: ${{ needs.prepare.outputs.events_package }}
-    if: hashFiles('asyncapi/asyncapi.yaml') != ''
+    if: needs.prepare.outputs.has_asyncapi == 'true'
 
   publish-schemas:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-schemas.yml@master
@@ -151,7 +162,7 @@ jobs:
       avro_dir: ${{ needs.prepare.outputs.avro_dir }}
     secrets:
       SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
-    if: hashFiles('asyncapi/asyncapi.yaml') != '' && needs.prepare.outputs.has_schema_registry == 'true'
+    if: needs.prepare.outputs.has_asyncapi == 'true' && needs.prepare.outputs.has_schema_registry == 'true'
 
   build-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-js-api.yml@master
