@@ -297,16 +297,16 @@ jobs:
         run: |
           echo "✓ Validating generated Go code..."
           
+          cd ${{ inputs.artifact_dir }}
+          
           # Create a temporary go.mod if needed
-          if [ ! -f "${{ inputs.artifact_dir }}/go.mod" ]; then
-            cd ${{ inputs.artifact_dir }}
+          if [ ! -f "go.mod" ]; then
             go mod init github.com/${{ github.repository }}/${{ inputs.artifact_dir }}
             go mod tidy
-            cd -
           fi
           
           # Check if code compiles
-          if ! go build -o /dev/null ${{ inputs.artifact_dir }}/*.go 2>&1; then
+          if ! go build -o /dev/null *.go 2>&1; then
             echo "❌ Generated Go code does not compile"
             exit 1
           fi
