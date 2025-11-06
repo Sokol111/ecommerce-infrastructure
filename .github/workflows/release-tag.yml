@@ -6,14 +6,21 @@ on:
       version:
         required: true
         type: string
+      # Comma-separated list of artifact names to download
       artifacts:
         required: false
         type: string
-        description: "Comma-separated artifact names"
+        description: "Comma-separated artifact names (e.g., 'go-api,events-api,js-api')"
+      # Comma-separated list of directories for artifacts
+      artifact_dirs:
+        required: false
+        type: string
+        description: "Comma-separated target directories matching artifacts (e.g., 'api,events,js-client')"
+      # Comma-separated list of directories to cleanup
       cleanup_dirs:
         required: false
         type: string
-        description: "Comma-separated directories to remove"
+        description: "Comma-separated directories to remove (e.g., 'openapi,asyncapi,avro')"
 
 permissions:
   contents: write
@@ -30,6 +37,7 @@ jobs:
         run: |
           echo "version: ${{ inputs.version }}"
           echo "artifacts: ${{ inputs.artifacts }}"
+          echo "artifact_dirs: ${{ inputs.artifact_dirs }}"
           echo "cleanup_dirs: ${{ inputs.cleanup_dirs }}"
 
       - name: Check if tag already exists
@@ -49,27 +57,23 @@ jobs:
         if: ${{ inputs.artifacts != '' }}
         run: |
           IFS=',' read -ra ARTIFACTS <<< "${{ inputs.artifacts }}"
+          IFS=',' read -ra DIRS <<< "${{ inputs.artifact_dirs }}"
           
-          for artifact in "${ARTIFACTS[@]}"; do
-            # Trim whitespace
-            artifact=$(echo "$artifact" | xargs)
+          for i in "${!ARTIFACTS[@]}"; do
+            artifact=$(echo "${ARTIFACTS[$i]}" | xargs)
+            target_dir=$(echo "${DIRS[$i]}" | xargs)
             
-            echo "→ Downloading artifact: $artifact"
+            echo "→ Downloading artifact: $artifact to $target_dir"
             
             # Download artifact to temp directory
             temp_dir="__temp_${artifact}__"
             if gh run download ${{ github.run_id }} --name "$artifact" --dir "$temp_dir"; then
-              # Move contents from temp_dir/artifact_name/* to current directory
-              if [ -d "$temp_dir/$artifact" ]; then
-                cp -r "$temp_dir/$artifact"/* .
-                rm -rf "$temp_dir"
-                echo "✓ Successfully extracted $artifact"
-              else
-                # If no subdirectory with artifact name, just move everything
-                cp -r "$temp_dir"/* .
-                rm -rf "$temp_dir"
-                echo "✓ Successfully extracted $artifact"
-              fi
+              # gh creates: __temp_go-api__/go-api/{files}
+              # We need to move files to target_dir
+              mkdir -p "$target_dir"
+              cp -r "$temp_dir/$artifact"/* "$target_dir"/
+              rm -rf "$temp_dir"
+              echo "✓ Successfully extracted $artifact to $target_dir"
             else
               echo "❌ Failed to download $artifact"
               exit 1

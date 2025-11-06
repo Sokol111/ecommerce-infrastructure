@@ -20,9 +20,15 @@ on:
       go_artifact:
         description: "Name of the Go API artifact"
         value: ${{ jobs.set-outputs.outputs.go_artifact }}
+      go_artifact_dir:
+        description: "Directory for Go API artifact"
+        value: ${{ jobs.set-outputs.outputs.go_artifact_dir }}
       js_artifact:
         description: "Name of the JS API artifact"
         value: ${{ jobs.set-outputs.outputs.js_artifact }}
+      js_artifact_dir:
+        description: "Directory for JS API artifact"
+        value: ${{ jobs.set-outputs.outputs.js_artifact_dir }}
 
 permissions:
   contents: write
@@ -51,9 +57,13 @@ jobs:
     needs: [build-go-api, build-js-api]
     outputs:
       go_artifact: ${{ steps.set.outputs.go_artifact }}
+      go_artifact_dir: ${{ steps.set.outputs.go_artifact_dir }}
       js_artifact: ${{ steps.set.outputs.js_artifact }}
+      js_artifact_dir: ${{ steps.set.outputs.js_artifact_dir }}
     steps:
       - id: set
         run: |
           echo "go_artifact=go-api" >> $GITHUB_OUTPUT
+          echo "go_artifact_dir=api" >> $GITHUB_OUTPUT
           echo "js_artifact=js-api" >> $GITHUB_OUTPUT
+          echo "js_artifact_dir=js-client" >> $GITHUB_OUTPUT
