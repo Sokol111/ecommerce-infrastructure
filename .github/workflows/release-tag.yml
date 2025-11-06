@@ -113,8 +113,24 @@ jobs:
         run: |
           git checkout -B release
           
-          # Add all changes (artifacts already extracted to their proper locations)
-          git add -A
+          echo "📁 Files before git add:"
+          ls -la
+          
+          # Add only artifact directories
+          IFS=',' read -ra DIRS <<< "${{ inputs.artifact_dirs }}"
+          for dir in "${DIRS[@]}"; do
+            dir=$(echo "$dir" | xargs)
+            if [ -d "$dir" ] && [ -n "$(ls -A $dir 2>/dev/null)" ]; then
+              echo "→ Adding $dir to release branch"
+              git add -f "$dir"
+            else
+              echo "⚠️  Directory $dir is empty or doesn't exist"
+            fi
+          done
+          
+          echo ""
+          echo "📁 Staged files:"
+          git status
           
           if git diff --cached --quiet; then
             echo "⚠️  No changes to commit"
