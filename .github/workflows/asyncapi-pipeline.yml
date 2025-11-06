@@ -19,6 +19,9 @@ on:
       events_artifact:
         description: "Name of the Events API artifact"
         value: ${{ jobs.set-outputs.outputs.events_artifact }}
+      events_artifact_dir:
+        description: "Directory for Events API artifact"
+        value: ${{ jobs.set-outputs.outputs.events_artifact_dir }}
       has_asyncapi:
         description: "Whether AsyncAPI file exists"
         value: ${{ jobs.set-outputs.outputs.has_asyncapi }}
@@ -70,9 +73,11 @@ jobs:
     if: needs.check-asyncapi.outputs.exists == 'true'
     outputs:
       events_artifact: ${{ steps.set.outputs.events_artifact }}
+      events_artifact_dir: ${{ steps.set.outputs.events_artifact_dir }}
       has_asyncapi: ${{ steps.set.outputs.has_asyncapi }}
     steps:
       - id: set
         run: |
           echo "events_artifact=events-api" >> $GITHUB_OUTPUT
+          echo "events_artifact_dir=events" >> $GITHUB_OUTPUT
           echo "has_asyncapi=true" >> $GITHUB_OUTPUT

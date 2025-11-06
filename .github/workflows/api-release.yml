@@ -108,19 +108,24 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       artifacts: ${{ steps.build-list.outputs.artifacts }}
+      artifact_dirs: ${{ steps.build-list.outputs.artifact_dirs }}
     steps:
       - id: build-list
         run: |
           artifacts="${{ needs.openapi-pipeline.outputs.go_artifact }}"
+          artifact_dirs="${{ needs.openapi-pipeline.outputs.go_artifact_dir }}"
           
           if [ "${{ needs.asyncapi-pipeline.result }}" == "success" ] && [ -n "${{ needs.asyncapi-pipeline.outputs.events_artifact }}" ]; then
             artifacts="${artifacts},${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
+            artifact_dirs="${artifact_dirs},${{ needs.asyncapi-pipeline.outputs.events_artifact_dir }}"
             echo "✓ Including AsyncAPI artifact: ${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
           fi
           
           echo "artifacts=${artifacts}" >> $GITHUB_OUTPUT
+          echo "artifact_dirs=${artifact_dirs}" >> $GITHUB_OUTPUT
           echo "### 📦 Artifacts for Release" >> $GITHUB_STEP_SUMMARY
-          echo "\`${artifacts}\`" >> $GITHUB_STEP_SUMMARY
+          echo "Artifacts: \`${artifacts}\`" >> $GITHUB_STEP_SUMMARY
+          echo "Directories: \`${artifact_dirs}\`" >> $GITHUB_STEP_SUMMARY
 
   # ============================================
   # RELEASE: Create Git tag and GitHub Release
@@ -132,6 +137,7 @@ jobs:
     with:
       version: ${{ needs.prepare.outputs.version }}
       artifacts: ${{ needs.prepare-release-artifacts.outputs.artifacts }}
+      artifact_dirs: ${{ needs.prepare-release-artifacts.outputs.artifact_dirs }}
       cleanup_dirs: 'asyncapi,openapi,avro'
 
   # ============================================
@@ -143,5 +149,5 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
-      artifact_dir: js-client
+      artifact_dir: ${{ needs.openapi-pipeline.outputs.js_artifact_dir }}
       artifact: ${{ needs.openapi-pipeline.outputs.js_artifact }}
