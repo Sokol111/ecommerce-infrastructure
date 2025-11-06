@@ -177,6 +177,30 @@ jobs:
           
           echo "✓ All Go code generated successfully"
 
+      - name: Generate event type constants
+        run: |
+          cat > ${{ inputs.artifact_dir }}/event_types.gen.go << 'EOF'
+          package ${{ inputs.package }}
+
+          // Event type constants - single source of truth for event names
+          // These match the schema names and should be used in EventMetadata.EventType
+          const (
+          EOF
+          
+          # Generate constants from schema names
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
+            
+            # Only generate constants for Event schemas
+            if [[ "$schemaName" == *"Event" ]]; then
+              # Convert ProductCreatedEvent to EventTypeProductCreated
+              constName=$(echo "$schemaName" | sed 's/Event$//' | sed 's/^/EventType/')
+              echo "	${constName} = \"${schemaName}\"" >> ${{ inputs.artifact_dir }}/event_types.gen.go
+            fi
+          done
+          
+          echo ")" >> ${{ inputs.artifact_dir }}/event_types.gen.go
+
       - name: Generate serialization helpers
         run: |
           cat > ${{ inputs.artifact_dir }}/serializer.gen.go << 'EOF'
@@ -355,10 +379,11 @@ jobs:
           import "github.com/${{ github.repository }}/${{ inputs.artifact_dir }}"
 
           // Serialize event (no registration needed!)
+          // Use event type constants for type safety
           event := &${{ inputs.package }}.YourEventName{
               Metadata: &${{ inputs.package }}.EventMetadata{
                   EventId:       "unique-id",
-                  EventType:     "YourEventName",
+                  EventType:     ${{ inputs.package }}.EventTypeYourEvent, // ← Type-safe constant
                   Source:        "your-service",
                   Timestamp:     time.Now().UnixMilli(),
                   SchemaVersion: 1,
@@ -402,8 +427,26 @@ jobs:
 
           ✅ **No manual schema registration** - schemas are pre-compiled at package init  
           ✅ **Type-safe helpers** - dedicated functions for each event type  
+          ✅ **Type-safe event constants** - use `EventType*` constants instead of strings  
           ✅ **Zero runtime overhead** - schemas parsed once using sync.Once  
           ✅ **Embedded resources** - all schemas included in the package  
+
+          ## Event Type Constants
+
+          Always use the generated constants for `EventMetadata.EventType` to ensure consistency:
+
+          EOF
+          
+          # List event type constants
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
+            if [[ "$schemaName" == *"Event" ]]; then
+              constName=$(echo "$schemaName" | sed 's/Event$//' | sed 's/^/EventType/')
+              echo "- \`${{ inputs.package }}.${constName}\` = \"${schemaName}\"" >> ${{ inputs.artifact_dir }}/README.gen.md
+            fi
+          done
+          
+          cat >> ${{ inputs.artifact_dir }}/README.gen.md << 'EOF'
 
           ## Embedded Resources
 
