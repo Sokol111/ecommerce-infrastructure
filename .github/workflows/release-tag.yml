@@ -106,15 +106,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug directory structure
-        if: ${{ inputs.artifacts != '' }}
-        run: |
-          echo "📁 Current directory structure:"
-          ls -la
-          echo ""
-          echo "📁 All downloaded artifacts:"
-          find . -type f -name "*.go" -o -name "*.yaml" -o -name "*.yml" | head -20
-
       - name: Commit artifacts to `release` branch
         if: ${{ inputs.artifacts != '' }}
         run: |
@@ -129,8 +120,8 @@ jobs:
             # Create regular branch from current state
             git checkout -B release
           fi
-          
-          echo "📁 Files in working directory:"
+          echo ""
+          echo "📁 Working directory after checkout:"
           ls -la
           
           # Add only artifact directories
@@ -146,8 +137,12 @@ jobs:
           done
           
           echo ""
-          echo "📁 Staged files:"
-          git status
+          echo "📁 Git status (staged changes):"
+          git status --short
+          
+          echo ""
+          echo "📁 Files to be committed:"
+          git diff --cached --name-only
           
           if git diff --cached --quiet; then
             echo "⚠️  No changes to commit"
