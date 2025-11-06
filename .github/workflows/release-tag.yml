@@ -69,6 +69,8 @@ jobs:
             # gh run download extracts artifact contents directly (no subdirectory with artifact name)
             if gh run download ${{ github.run_id }} --name "$artifact" --dir "$target_dir"; then
               echo "✓ Successfully downloaded $artifact to $target_dir"
+              echo "Contents of $target_dir:"
+              ls -la "$target_dir" || echo "Directory is empty or does not exist"
             else
               echo "❌ Failed to download $artifact"
               exit 1
@@ -76,6 +78,15 @@ jobs:
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug directory structure
+        if: ${{ inputs.artifacts != '' }}
+        run: |
+          echo "📁 Current directory structure:"
+          ls -la
+          echo ""
+          echo "📁 All downloaded artifacts:"
+          find . -type f -name "*.go" -o -name "*.yaml" -o -name "*.yml" | head -20
 
       - name: Cleanup unnecessary directories
         if: ${{ inputs.cleanup_dirs != '' }}
