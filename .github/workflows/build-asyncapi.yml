@@ -39,21 +39,8 @@ jobs:
           go-version: '1.24.2'
           cache: true
 
-      - name: Get AsyncAPI CLI version
-        id: asyncapi-version
-        run: |
-          VERSION=$(npm view @asyncapi/cli version)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Latest AsyncAPI CLI version: $VERSION"
-
-      - name: Cache npm global packages
-        id: cache-npm
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            /usr/local/lib/node_modules/@asyncapi
-          key: npm-asyncapi-${{ runner.os }}-${{ steps.asyncapi-version.outputs.version }}
+      - name: Install AsyncAPI CLI
+        run: npm install -g @asyncapi/cli
 
       - name: Cache Avro Tools
         id: cache-avro
@@ -61,12 +48,6 @@ jobs:
         with:
           path: /tmp/avro-tools.jar
           key: avro-tools-1.12.0
-
-      - name: Install AsyncAPI CLI
-        run: npm install -g @asyncapi/cli
-
-      - name: Verify AsyncAPI CLI installation
-        run: asyncapi --version
 
       - name: Download Avro Tools
         if: steps.cache-avro.outputs.cache-hit != 'true'
