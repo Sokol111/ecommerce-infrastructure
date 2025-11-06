@@ -63,12 +63,10 @@ jobs:
           key: avro-tools-1.12.0
 
       - name: Install AsyncAPI CLI
-        if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm install -g @asyncapi/cli
 
-      - name: Verify AsyncAPI CLI cache
-        if: steps.cache-npm.outputs.cache-hit == 'true'
-        run: echo "Using cached AsyncAPI CLI"
+      - name: Verify AsyncAPI CLI installation
+        run: asyncapi --version
 
       - name: Download Avro Tools
         if: steps.cache-avro.outputs.cache-hit != 'true'
