@@ -65,15 +65,10 @@ jobs:
             
             echo "→ Downloading artifact: $artifact to $target_dir"
             
-            # Download artifact to temp directory
-            temp_dir="__temp_${artifact}__"
-            if gh run download ${{ github.run_id }} --name "$artifact" --dir "$temp_dir"; then
-              # gh creates: __temp_go-api__/go-api/{files}
-              # We need to move files to target_dir
-              mkdir -p "$target_dir"
-              cp -r "$temp_dir/$artifact"/* "$target_dir"/
-              rm -rf "$temp_dir"
-              echo "✓ Successfully extracted $artifact to $target_dir"
+            # Download artifact directly to target directory
+            # gh run download extracts artifact contents directly (no subdirectory with artifact name)
+            if gh run download ${{ github.run_id }} --name "$artifact" --dir "$target_dir"; then
+              echo "✓ Successfully downloaded $artifact to $target_dir"
             else
               echo "❌ Failed to download $artifact"
               exit 1
