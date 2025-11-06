@@ -21,6 +21,12 @@ on:
         required: false
         type: string
         description: "Comma-separated directories to remove (e.g., 'openapi,asyncapi,avro')"
+      # Whether to create clean release branch with only artifacts
+      clean_release:
+        required: false
+        type: boolean
+        default: true
+        description: "Create orphan release branch with only artifacts (true) or keep all files (false)"
 
 permissions:
   contents: write
@@ -39,6 +45,7 @@ jobs:
           echo "artifacts: ${{ inputs.artifacts }}"
           echo "artifact_dirs: ${{ inputs.artifact_dirs }}"
           echo "cleanup_dirs: ${{ inputs.cleanup_dirs }}"
+          echo "clean_release: ${{ inputs.clean_release }}"
 
       - name: Check if tag already exists
         run: |
@@ -111,9 +118,19 @@ jobs:
       - name: Commit artifacts to `release` branch
         if: ${{ inputs.artifacts != '' }}
         run: |
-          git checkout -B release
+          if [ "${{ inputs.clean_release }}" = "true" ]; then
+            echo "📦 Creating clean release branch (only artifacts)"
+            # Create orphan release branch (no history, clean slate)
+            git checkout --orphan release
+            # Remove all files from staging
+            git rm -rf --cached . || true
+          else
+            echo "� Creating release branch (keeping all files)"
+            # Create regular branch from current state
+            git checkout -B release
+          fi
           
-          echo "📁 Files before git add:"
+          echo "📁 Files in working directory:"
           ls -la
           
           # Add only artifact directories
