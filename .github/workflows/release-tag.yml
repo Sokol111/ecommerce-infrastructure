@@ -56,9 +56,20 @@ jobs:
             
             echo "→ Downloading artifact: $artifact"
             
-            # Download artifact to current directory (it will extract its internal structure)
-            if gh run download ${{ github.run_id }} --name "$artifact" --dir .; then
-              echo "✓ Successfully downloaded $artifact"
+            # Download artifact to temp directory
+            temp_dir="__temp_${artifact}__"
+            if gh run download ${{ github.run_id }} --name "$artifact" --dir "$temp_dir"; then
+              # Move contents from temp_dir/artifact_name/* to current directory
+              if [ -d "$temp_dir/$artifact" ]; then
+                cp -r "$temp_dir/$artifact"/* .
+                rm -rf "$temp_dir"
+                echo "✓ Successfully extracted $artifact"
+              else
+                # If no subdirectory with artifact name, just move everything
+                cp -r "$temp_dir"/* .
+                rm -rf "$temp_dir"
+                echo "✓ Successfully extracted $artifact"
+              fi
             else
               echo "❌ Failed to download $artifact"
               exit 1
