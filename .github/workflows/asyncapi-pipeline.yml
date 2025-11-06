@@ -18,10 +18,10 @@ on:
     outputs:
       events_artifact:
         description: "Name of the Events API artifact"
-        value: ${{ jobs.build-events-api.outputs.artifact_name }}
+        value: ${{ jobs.set-outputs.outputs.events_artifact }}
       has_asyncapi:
         description: "Whether AsyncAPI file exists"
-        value: ${{ jobs.check-asyncapi.outputs.exists }}
+        value: ${{ jobs.set-outputs.outputs.has_asyncapi }}
 
 permissions:
   contents: write
@@ -54,9 +54,6 @@ jobs:
       artifact: events-api
       artifact_dir: events
       package: events
-    outputs:
-      artifact_name:
-        value: events-api
 
   publish-schemas:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-schemas.yml@master
@@ -66,3 +63,16 @@ jobs:
       avro_dir: ${{ inputs.avro_dir }}
     secrets:
       SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
+
+  set-outputs:
+    runs-on: ubuntu-latest
+    needs: [check-asyncapi, build-events-api]
+    if: needs.check-asyncapi.outputs.exists == 'true'
+    outputs:
+      events_artifact: ${{ steps.set.outputs.events_artifact }}
+      has_asyncapi: ${{ steps.set.outputs.has_asyncapi }}
+    steps:
+      - id: set
+        run: |
+          echo "events_artifact=events-api" >> $GITHUB_OUTPUT
+          echo "has_asyncapi=true" >> $GITHUB_OUTPUT

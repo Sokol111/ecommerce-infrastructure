@@ -19,10 +19,10 @@ on:
     outputs:
       go_artifact:
         description: "Name of the Go API artifact"
-        value: ${{ jobs.build-go-api.outputs.artifact_name }}
+        value: ${{ jobs.set-outputs.outputs.go_artifact }}
       js_artifact:
         description: "Name of the JS API artifact"
-        value: ${{ jobs.build-js-api.outputs.artifact_name }}
+        value: ${{ jobs.set-outputs.outputs.js_artifact }}
 
 permissions:
   contents: write
@@ -35,9 +35,6 @@ jobs:
       artifact: go-api
       artifact_dir: api
       package: api
-    outputs:
-      artifact_name:
-        value: go-api
 
   build-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-js-api.yml@master
@@ -48,6 +45,15 @@ jobs:
       version: ${{ inputs.version }}
       npm_repo_name: ${{ inputs.npm_repo_name }}
       project_name: ${{ inputs.project_name }}
+
+  set-outputs:
+    runs-on: ubuntu-latest
+    needs: [build-go-api, build-js-api]
     outputs:
-      artifact_name:
-        value: js-api
+      go_artifact: ${{ steps.set.outputs.go_artifact }}
+      js_artifact: ${{ steps.set.outputs.js_artifact }}
+    steps:
+      - id: set
+        run: |
+          echo "go_artifact=go-api" >> $GITHUB_OUTPUT
+          echo "js_artifact=js-api" >> $GITHUB_OUTPUT
