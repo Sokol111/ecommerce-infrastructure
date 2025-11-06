@@ -53,6 +53,26 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Cleanup unnecessary directories
+        if: ${{ inputs.cleanup_dirs != '' }}
+        run: |
+          echo "🧹 Cleaning up unnecessary directories before downloading artifacts..."
+          
+          IFS=',' read -ra CLEANUP_DIRS <<< "${{ inputs.cleanup_dirs }}"
+          
+          for dir in "${CLEANUP_DIRS[@]}"; do
+            # Trim whitespace
+            dir=$(echo "$dir" | xargs)
+            
+            if [ -d "$dir" ]; then
+              rm -rf "$dir" && echo "✓ Removed $dir" || echo "❌ Failed to remove $dir"
+            else
+              echo "  $dir not found (skipping)"
+            fi
+          done
+          
+          echo "✅ Cleanup complete"
+
       - name: Download artifacts
         if: ${{ inputs.artifacts != '' }}
         run: |
@@ -87,26 +107,6 @@ jobs:
           echo ""
           echo "📁 All downloaded artifacts:"
           find . -type f -name "*.go" -o -name "*.yaml" -o -name "*.yml" | head -20
-
-      - name: Cleanup unnecessary directories
-        if: ${{ inputs.cleanup_dirs != '' }}
-        run: |
-          echo "🧹 Cleaning up unnecessary directories from release branch..."
-          
-          IFS=',' read -ra CLEANUP_DIRS <<< "${{ inputs.cleanup_dirs }}"
-          
-          for dir in "${CLEANUP_DIRS[@]}"; do
-            # Trim whitespace
-            dir=$(echo "$dir" | xargs)
-            
-            if [ -d "$dir" ]; then
-              rm -rf "$dir" && echo "✓ Removed $dir" || echo "❌ Failed to remove $dir"
-            else
-              echo "  $dir not found (skipping)"
-            fi
-          done
-          
-          echo "✅ Cleanup complete"
 
       - name: Commit artifacts to `release` branch
         if: ${{ inputs.artifacts != '' }}
