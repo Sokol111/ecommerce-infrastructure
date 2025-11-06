@@ -47,14 +47,13 @@ jobs:
           echo "Latest AsyncAPI CLI version: $VERSION"
 
       - name: Cache npm global packages
+        id: cache-npm
         uses: actions/cache@v4
         with:
           path: |
             ~/.npm
             /usr/local/lib/node_modules/@asyncapi
           key: npm-asyncapi-${{ runner.os }}-${{ steps.asyncapi-version.outputs.version }}
-          restore-keys: |
-            npm-asyncapi-${{ runner.os }}-
 
       - name: Cache Avro Tools
         id: cache-avro
@@ -64,7 +63,12 @@ jobs:
           key: avro-tools-1.12.0
 
       - name: Install AsyncAPI CLI
+        if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm install -g @asyncapi/cli
+
+      - name: Verify AsyncAPI CLI cache
+        if: steps.cache-npm.outputs.cache-hit == 'true'
+        run: echo "Using cached AsyncAPI CLI"
 
       - name: Download Avro Tools
         if: steps.cache-avro.outputs.cache-hit != 'true'
