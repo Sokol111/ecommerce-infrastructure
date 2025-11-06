@@ -42,6 +42,11 @@ jobs:
       - name: Install AsyncAPI CLI
         run: npm install -g @asyncapi/cli
 
+      - name: Install yq for YAML parsing
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
       - name: Cache Avro Tools
         id: cache-avro
         uses: actions/cache@v4
@@ -197,6 +202,23 @@ jobs:
               constName=$(echo "$schemaName" | sed 's/Event$//' | sed 's/^/EventType/')
               echo "	${constName} = \"${schemaName}\"" >> ${{ inputs.artifact_dir }}/event_types.gen.go
             fi
+          done
+          
+          echo ")" >> ${{ inputs.artifact_dir }}/event_types.gen.go
+          echo "" >> ${{ inputs.artifact_dir }}/event_types.gen.go
+          
+          # Generate topic constants from AsyncAPI spec
+          echo "// Topic constants - Kafka topics defined in AsyncAPI spec" >> ${{ inputs.artifact_dir }}/event_types.gen.go
+          echo "const (" >> ${{ inputs.artifact_dir }}/event_types.gen.go
+          
+          # Extract channels from AsyncAPI spec
+          topics=$(yq eval '.channels | keys | .[]' ${{ inputs.asyncapi_file }})
+          
+          for topic in $topics; do
+            # Convert topic name to constant name
+            # e.g., catalog.product.events -> TopicCatalogProductEvents
+            constName=$(echo "$topic" | sed 's/\./ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2)); print "Topic"$0}' | tr -d ' ')
+            echo "	${constName} = \"${topic}\"" >> ${{ inputs.artifact_dir }}/event_types.gen.go
           done
           
           echo ")" >> ${{ inputs.artifact_dir }}/event_types.gen.go
