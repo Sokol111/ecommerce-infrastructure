@@ -63,21 +63,21 @@ jobs:
           path: /tmp/avro-tools.jar
           key: avro-tools-1.12.0
 
-      - name: Install dependencies
+      - name: Install AsyncAPI CLI
+        run: npm install -g @asyncapi/cli
+
+      - name: Download Avro Tools
+        if: steps.cache-avro.outputs.cache-hit != 'true'
         run: |
-          # Install AsyncAPI CLI
-          npm install -g @asyncapi/cli
-          
-          # Install Avro tools (official Apache Avro) - using latest stable 1.12.0
-          if [ ! -f /tmp/avro-tools.jar ]; then
-            echo "Downloading Avro Tools..."
-            wget https://repo1.maven.org/maven2/org/apache/avro/avro-tools/1.12.0/avro-tools-1.12.0.jar -O /tmp/avro-tools.jar
-          else
-            echo "Using cached Avro Tools"
-          fi
-          
-          # Install Go Avro generator
-          go install github.com/hamba/avro/v2/cmd/avrogen@latest
+          echo "Downloading Avro Tools..."
+          wget https://repo1.maven.org/maven2/org/apache/avro/avro-tools/1.12.0/avro-tools-1.12.0.jar -O /tmp/avro-tools.jar
+
+      - name: Verify Avro Tools cache
+        if: steps.cache-avro.outputs.cache-hit == 'true'
+        run: echo "Using cached Avro Tools"
+
+      - name: Install Go Avro generator
+        run: go install github.com/hamba/avro/v2/cmd/avrogen@latest
 
       - name: Validate AsyncAPI spec
         run: |
