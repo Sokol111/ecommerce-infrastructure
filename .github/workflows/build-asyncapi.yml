@@ -184,52 +184,106 @@ jobs:
 
           import (
           	"fmt"
+          	"sync"
 
           	"github.com/hamba/avro/v2"
           )
 
-          // AvroSerializer handles Avro serialization/deserialization
-          type AvroSerializer struct {
-          	schemas map[string]avro.Schema
+          var (
+          	// Pre-parsed schemas (initialized once at startup)
+          	compiledSchemas     = make(map[string]avro.Schema)
+          	compiledSchemasOnce sync.Once
+          	schemaInitError     error
+          )
+
+          // initSchemas parses all embedded schemas once
+          func initSchemas() error {
+          	compiledSchemasOnce.Do(func() {
+          		schemas := map[string][]byte{
+          EOF
+          
+          # Add all schemas to the map
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            basename=$(basename "$schema" .avsc)
+            varname=$(echo "$basename" | sed -E 's/(^|_)([a-z])/\U\2/g')
+            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
+            
+            echo "			\"${schemaName}\": ${varname}Schema," >> ${{ inputs.artifact_dir }}/serializer.gen.go
+          done
+          
+          cat >> ${{ inputs.artifact_dir }}/serializer.gen.go << 'EOF'
+          		}
+          
+          		for name, schemaJSON := range schemas {
+          			schema, err := avro.Parse(string(schemaJSON))
+          			if err != nil {
+          				schemaInitError = fmt.Errorf("failed to parse schema %s: %w", name, err)
+          				return
+          			}
+          			compiledSchemas[name] = schema
+          		}
+          	})
+          	return schemaInitError
           }
 
-          // NewAvroSerializer creates a new Avro serializer
-          func NewAvroSerializer() (*AvroSerializer, error) {
-          	return &AvroSerializer{
-          		schemas: make(map[string]avro.Schema),
-          	}, nil
-          }
-
-          // RegisterSchema registers an Avro schema
-          func (s *AvroSerializer) RegisterSchema(name string, schemaJSON string) error {
-          	schema, err := avro.Parse(schemaJSON)
-          	if err != nil {
-          		return fmt.Errorf("failed to parse schema %s: %w", name, err)
-          	}
-          	s.schemas[name] = schema
-          	return nil
-          }
-
-          // Serialize encodes data using Avro
-          func (s *AvroSerializer) Serialize(schemaName string, data interface{}) ([]byte, error) {
-          	schema, ok := s.schemas[schemaName]
-          	if !ok {
-          		return nil, fmt.Errorf("schema %s not registered", schemaName)
+          // Marshal serializes an event using its pre-compiled schema
+          func Marshal(schemaName string, v interface{}) ([]byte, error) {
+          	if err := initSchemas(); err != nil {
+          		return nil, err
           	}
           	
-          	return avro.Marshal(schema, data)
+          	schema, ok := compiledSchemas[schemaName]
+          	if !ok {
+          		return nil, fmt.Errorf("schema %s not found", schemaName)
+          	}
+          	
+          	return avro.Marshal(schema, v)
           }
 
-          // Deserialize decodes Avro data
-          func (s *AvroSerializer) Deserialize(schemaName string, data []byte, v interface{}) error {
-          	schema, ok := s.schemas[schemaName]
+          // Unmarshal deserializes an event using its pre-compiled schema
+          func Unmarshal(schemaName string, data []byte, v interface{}) error {
+          	if err := initSchemas(); err != nil {
+          		return err
+          	}
+          	
+          	schema, ok := compiledSchemas[schemaName]
           	if !ok {
-          		return fmt.Errorf("schema %s not registered", schemaName)
+          		return fmt.Errorf("schema %s not found", schemaName)
           	}
           	
           	return avro.Unmarshal(schema, data, v)
           }
           EOF
+          
+          # Generate typed helpers for each event
+          echo "" >> ${{ inputs.artifact_dir }}/serializer.gen.go
+          echo "// Typed serialization helpers" >> ${{ inputs.artifact_dir }}/serializer.gen.go
+          echo "" >> ${{ inputs.artifact_dir }}/serializer.gen.go
+          
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            basename=$(basename "$schema" .avsc)
+            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
+            
+            # Skip non-event schemas (like EventMetadata)
+            if [[ "$schemaName" == *"Event" ]]; then
+              cat >> ${{ inputs.artifact_dir }}/serializer.gen.go << EOF
+          // Marshal${schemaName} serializes ${schemaName} to Avro bytes
+          func Marshal${schemaName}(event *${schemaName}) ([]byte, error) {
+          	return Marshal("${schemaName}", event)
+          }
+
+          // Unmarshal${schemaName} deserializes ${schemaName} from Avro bytes
+          func Unmarshal${schemaName}(data []byte) (*${schemaName}, error) {
+          	var event ${schemaName}
+          	if err := Unmarshal("${schemaName}", data, &event); err != nil {
+          		return nil, err
+          	}
+          	return &event, nil
+          }
+
+          EOF
+            fi
+          done
 
       - name: Copy AsyncAPI spec
         run: |
@@ -295,63 +349,93 @@ jobs:
 
           ## Usage
 
+          ### Typed API (Recommended)
+
           ```go
           import "github.com/${{ github.repository }}/${{ inputs.artifact_dir }}"
 
-          // Initialize serializer
-          serializer, err := ${{ inputs.package }}.NewAvroSerializer()
-          if err != nil {
-              log.Fatal(err)
-          }
-
-          // Register schemas (schemas are embedded)
-          // Example: Register any event schema
-          err = serializer.RegisterSchema("YourEventName", string(${{ inputs.package }}.YourEventSchema))
-          if err != nil {
-              log.Fatal(err)
-          }
-
-          // Serialize event
+          // Serialize event (no registration needed!)
           event := &${{ inputs.package }}.YourEventName{
-              Metadata: ${{ inputs.package }}.EventMetadata{
-                  EventId:   "unique-id",
-                  EventType: "YourEventName",
-                  // ... other metadata fields
+              Metadata: &${{ inputs.package }}.EventMetadata{
+                  EventId:       "unique-id",
+                  EventType:     "YourEventName",
+                  Source:        "your-service",
+                  Timestamp:     time.Now().UnixMilli(),
+                  SchemaVersion: 1,
               },
-              Payload: ${{ inputs.package }}.YourEventPayload{
+              Payload: &${{ inputs.package }}.YourEventPayload{
                   // ... your payload fields
               },
           }
-          data, err := serializer.Serialize("YourEventName", event)
+
+          // Simply call the typed marshal function
+          data, err := ${{ inputs.package }}.MarshalYourEventName(event)
           if err != nil {
               log.Fatal(err)
           }
 
-          // Deserialize event
-          var receivedEvent ${{ inputs.package }}.YourEventName
-          err = serializer.Deserialize("YourEventName", data, &receivedEvent)
+          // Deserialize with typed function
+          receivedEvent, err := ${{ inputs.package }}.UnmarshalYourEventName(data)
           if err != nil {
               log.Fatal(err)
           }
           ```
+
+          ### Generic API (for dynamic use cases)
+
+          ```go
+          // Marshal any event by schema name
+          data, err := ${{ inputs.package }}.Marshal("YourEventName", event)
+          if err != nil {
+              log.Fatal(err)
+          }
+
+          // Unmarshal any event by schema name
+          var event ${{ inputs.package }}.YourEventName
+          err = ${{ inputs.package }}.Unmarshal("YourEventName", data, &event)
+          if err != nil {
+              log.Fatal(err)
+          }
+          ```
+
+          ## Features
+
+          ✅ **No manual schema registration** - schemas are pre-compiled at package init  
+          ✅ **Type-safe helpers** - dedicated functions for each event type  
+          ✅ **Zero runtime overhead** - schemas parsed once using sync.Once  
+          ✅ **Embedded resources** - all schemas included in the package  
 
           ## Embedded Resources
 
           - AsyncAPI specification: `${{ inputs.package }}.AsyncAPISpec`
           - Avro schemas: `${{ inputs.package }}.*Schema` variables
 
-          ## Available Schemas
+          ## Available Event Types
 
           EOF
           
-          # List all available schemas
-          echo "The following Avro schemas are available:" >> ${{ inputs.artifact_dir }}/README.gen.md
+          # List all available event types with their typed functions
+          echo "The following event types have typed serialization helpers:" >> ${{ inputs.artifact_dir }}/README.gen.md
+          echo "" >> ${{ inputs.artifact_dir }}/README.gen.md
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            basename=$(basename "$schema" .avsc)
+            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
+            
+            if [[ "$schemaName" == *"Event" ]]; then
+              echo "- **${schemaName}**" >> ${{ inputs.artifact_dir }}/README.gen.md
+              echo "  - \`Marshal${schemaName}(event *${schemaName}) ([]byte, error)\`" >> ${{ inputs.artifact_dir }}/README.gen.md
+              echo "  - \`Unmarshal${schemaName}(data []byte) (*${schemaName}, error)\`" >> ${{ inputs.artifact_dir }}/README.gen.md
+              echo "" >> ${{ inputs.artifact_dir }}/README.gen.md
+            fi
+          done
+          
+          echo "## Available Schemas" >> ${{ inputs.artifact_dir }}/README.gen.md
           echo "" >> ${{ inputs.artifact_dir }}/README.gen.md
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
             basename=$(basename "$schema" .avsc)
             varname=$(echo "$basename" | sed -E 's/(^|_)([a-z])/\U\2/g')
             schema_type=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
-            echo "- \`${{ inputs.package }}.${varname}Schema\` - $schema_type" >> ${{ inputs.artifact_dir }}/README.gen.md
+            echo "- \`${{ inputs.package }}.${varname}Schema\` - $schema_type (embedded Avro schema)" >> ${{ inputs.artifact_dir }}/README.gen.md
           done
 
       - name: Upload built messaging API
