@@ -274,114 +274,6 @@ jobs:
           
           echo ")" >> ${{ inputs.artifact_dir }}/constants.gen.go
 
-      - name: Generate serialization helpers
-        run: |
-          cat > ${{ inputs.artifact_dir }}/serializer.gen.go << 'EOF'
-          package ${{ inputs.package }}
-
-          import (
-          	"fmt"
-          	"sync"
-
-          	"github.com/hamba/avro/v2"
-          )
-
-          var (
-          	// Pre-parsed schemas (initialized once at startup)
-          	compiledSchemas     = make(map[string]avro.Schema)
-          	compiledSchemasOnce sync.Once
-          	schemaInitError     error
-          )
-
-          // initSchemas parses all embedded schemas once
-          func initSchemas() error {
-          	compiledSchemasOnce.Do(func() {
-          		schemas := map[string][]byte{
-          EOF
-          
-          # Add all schemas to the map
-          for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            basename=$(basename "$schema" .avsc)
-            varname=$(echo "$basename" | sed -E 's/(^|_)([a-z])/\U\2/g')
-            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
-            
-            echo "			\"${schemaName}\": ${varname}Schema," >> ${{ inputs.artifact_dir }}/serializer.gen.go
-          done
-          
-          cat >> ${{ inputs.artifact_dir }}/serializer.gen.go << 'EOF'
-          		}
-          
-          		for name, schemaJSON := range schemas {
-          			schema, err := avro.Parse(string(schemaJSON))
-          			if err != nil {
-          				schemaInitError = fmt.Errorf("failed to parse schema %s: %w", name, err)
-          				return
-          			}
-          			compiledSchemas[name] = schema
-          		}
-          	})
-          	return schemaInitError
-          }
-
-          // Marshal serializes an event using its pre-compiled schema
-          func Marshal(schemaName string, v interface{}) ([]byte, error) {
-          	if err := initSchemas(); err != nil {
-          		return nil, err
-          	}
-          	
-          	schema, ok := compiledSchemas[schemaName]
-          	if !ok {
-          		return nil, fmt.Errorf("schema %s not found", schemaName)
-          	}
-          	
-          	return avro.Marshal(schema, v)
-          }
-
-          // Unmarshal deserializes an event using its pre-compiled schema
-          func Unmarshal(schemaName string, data []byte, v interface{}) error {
-          	if err := initSchemas(); err != nil {
-          		return err
-          	}
-          	
-          	schema, ok := compiledSchemas[schemaName]
-          	if !ok {
-          		return fmt.Errorf("schema %s not found", schemaName)
-          	}
-          	
-          	return avro.Unmarshal(schema, data, v)
-          }
-          EOF
-          
-          # Generate typed helpers for each event
-          echo "" >> ${{ inputs.artifact_dir }}/serializer.gen.go
-          echo "// Typed serialization helpers" >> ${{ inputs.artifact_dir }}/serializer.gen.go
-          echo "" >> ${{ inputs.artifact_dir }}/serializer.gen.go
-          
-          for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            basename=$(basename "$schema" .avsc)
-            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
-            
-            # Skip non-event schemas (like EventMetadata)
-            if [[ "$schemaName" == *"Event" ]]; then
-              cat >> ${{ inputs.artifact_dir }}/serializer.gen.go << EOF
-          // Marshal${schemaName} serializes ${schemaName} to Avro bytes
-          func Marshal${schemaName}(event *${schemaName}) ([]byte, error) {
-          	return Marshal("${schemaName}", event)
-          }
-
-          // Unmarshal${schemaName} deserializes ${schemaName} from Avro bytes
-          func Unmarshal${schemaName}(data []byte) (*${schemaName}, error) {
-          	var event ${schemaName}
-          	if err := Unmarshal("${schemaName}", data, &event); err != nil {
-          		return nil, err
-          	}
-          	return &event, nil
-          }
-
-          EOF
-            fi
-          done
-
       - name: Copy AsyncAPI spec
         run: |
           echo "Copying AsyncAPI spec..."
@@ -444,69 +336,107 @@ jobs:
 
           This package is auto-generated from AsyncAPI and Avro schemas.
 
-          ## Usage
+          ## 📦 What's Included
 
-          ### Typed API (Recommended)
+          - **Go Types**: Generated from Avro schemas using `avrogen`
+          - **Event Constants**: Type-safe constants for event types and topics
+          - **Schema Embeddings**: Avro schemas embedded as `[]byte` for runtime access
+          - **Sealed Interface**: Exhaustiveness checking for event handlers
+
+          ## 🔧 Usage with Schema Registry
+
+          This package is designed to work with Confluent Schema Registry for production use.
+
+          ### Producer Example
 
           ```go
-          import "github.com/${{ github.repository }}/${{ inputs.artifact_dir }}"
+          import (
+              "${{ inputs.package }}"
+              "github.com/Sokol111/ecommerce-commons/pkg/messaging/kafka/schemaregistry"
+          )
 
-          // Serialize event (no registration needed!)
-          // Use event type constants for type safety
+          // Create Schema Registry serializer
+          serializer, err := schemaregistry.NewSerializer(schemaregistry.Config{
+              URL:                 "http://localhost:8081",
+              AutoRegisterSchemas: true,
+          })
+          if err != nil {
+              log.Fatal(err)
+          }
+          defer serializer.Close()
+
+          // Create event
           event := &${{ inputs.package }}.YourEventName{
-              Metadata: &${{ inputs.package }}.EventMetadata{
-                  EventId:       "unique-id",
-                  EventType:     ${{ inputs.package }}.EventTypeYourEvent, // ← Type-safe constant
+              Metadata: ${{ inputs.package }}.EventMetadata{
+                  EventID:       uuid.New().String(),
+                  EventType:     ${{ inputs.package }}.EventTypeYourEvent, // Use constant!
                   Source:        "your-service",
                   Timestamp:     time.Now().UnixMilli(),
+                  CorrelationID: correlationID,
+                  TraceID:       traceID,
                   SchemaVersion: 1,
               },
-              Payload: &${{ inputs.package }}.YourEventPayload{
+              Payload: ${{ inputs.package }}.YourEventPayload{
                   // ... your payload fields
               },
           }
 
-          // Simply call the typed marshal function
-          data, err := ${{ inputs.package }}.MarshalYourEventName(event)
+          // Serialize with Schema Registry (auto-registers schema)
+          bytes, err := serializer.Serialize("your.topic-value", event)
           if err != nil {
               log.Fatal(err)
           }
 
-          // Deserialize with typed function
-          receivedEvent, err := ${{ inputs.package }}.UnmarshalYourEventName(data)
-          if err != nil {
-              log.Fatal(err)
-          }
+          // Send to Kafka
+          producer.Produce(&kafka.Message{
+              TopicPartition: kafka.TopicPartition{
+                  Topic:     &${{ inputs.package }}.TopicYourTopic,
+                  Partition: kafka.PartitionAny,
+              },
+              Value: bytes, // Contains [0x00][schema_id][avro_data]
+              Key:   []byte(entityID),
+          })
           ```
 
-          ### Generic API (for dynamic use cases)
+          ### Consumer Example
 
           ```go
-          // Marshal any event by schema name
-          data, err := ${{ inputs.package }}.Marshal("YourEventName", event)
+          import (
+              "${{ inputs.package }}"
+              "github.com/Sokol111/ecommerce-commons/pkg/messaging/kafka/schemaregistry"
+          )
+
+          // Create Schema Registry deserializer
+          deserializer, err := schemaregistry.NewDeserializer(schemaregistry.Config{
+              URL: "http://localhost:8081",
+          })
+          if err != nil {
+              log.Fatal(err)
+          }
+          defer deserializer.Close()
+
+          // Receive from Kafka
+          msg := <-consumer.Events()
+
+          // Deserialize (schema fetched from Registry by ID)
+          event, err := deserializer.Deserialize("your.topic-value", msg.Value)
           if err != nil {
               log.Fatal(err)
           }
 
-          // Unmarshal any event by schema name
-          var event ${{ inputs.package }}.YourEventName
-          err = ${{ inputs.package }}.Unmarshal("YourEventName", data, &event)
-          if err != nil {
-              log.Fatal(err)
+          // Type switch with exhaustiveness checking
+          switch e := event.(type) {
+          case *${{ inputs.package }}.YourEventName:
+              handleYourEvent(e)
+          // Add cases for all event types - linter will warn if you miss one
+          default:
+              log.Printf("unhandled event type: %T", event)
           }
           ```
 
-          ## Features
+          ## 🎯 Event Type Constants
 
-          ✅ **No manual schema registration** - schemas are pre-compiled at package init  
-          ✅ **Type-safe helpers** - dedicated functions for each event type  
-          ✅ **Type-safe event constants** - use `EventType*` constants instead of strings  
-          ✅ **Zero runtime overhead** - schemas parsed once using sync.Once  
-          ✅ **Embedded resources** - all schemas included in the package  
-
-          ## Event Type Constants
-
-          Always use the generated constants for `EventMetadata.EventType` to ensure consistency:
+          Always use the generated constants for `EventMetadata.EventType`:
 
           EOF
           
@@ -562,26 +492,7 @@ jobs:
               explicit-exhaustive-switch: true
           ```
 
-          ## Available Event Types
-
-          EOF
-          
-          # List all available event types with their typed functions
-          echo "The following event types have typed serialization helpers:" >> ${{ inputs.artifact_dir }}/README.gen.md
-          echo "" >> ${{ inputs.artifact_dir }}/README.gen.md
-          for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            basename=$(basename "$schema" .avsc)
-            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
-            
-            if [[ "$schemaName" == *"Event" ]]; then
-              echo "- **${schemaName}**" >> ${{ inputs.artifact_dir }}/README.gen.md
-              echo "  - \`Marshal${schemaName}(event *${schemaName}) ([]byte, error)\`" >> ${{ inputs.artifact_dir }}/README.gen.md
-              echo "  - \`Unmarshal${schemaName}(data []byte) (*${schemaName}, error)\`" >> ${{ inputs.artifact_dir }}/README.gen.md
-              echo "" >> ${{ inputs.artifact_dir }}/README.gen.md
-            fi
-          done
-          
-          echo "## Available Schemas" >> ${{ inputs.artifact_dir }}/README.gen.md
+          ## Available Schemas" >> ${{ inputs.artifact_dir }}/README.gen.md
           echo "" >> ${{ inputs.artifact_dir }}/README.gen.md
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
             basename=$(basename "$schema" .avsc)
@@ -589,6 +500,46 @@ jobs:
             schema_type=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
             echo "- \`${{ inputs.package }}.${varname}Schema\` - $schema_type (embedded Avro schema)" >> ${{ inputs.artifact_dir }}/README.gen.md
           done
+          
+          cat >> ${{ inputs.artifact_dir }}/README.gen.md << 'EOF'
+
+          ## 📖 Schema Registry Benefits
+
+          ### Why Schema Registry?
+
+          - ✅ **Centralized schema storage** - Single source of truth
+          - ✅ **Automatic versioning** - Track schema evolution
+          - ✅ **Compatibility checking** - Prevent breaking changes
+          - ✅ **Schema ID in messages** - Efficient wire format
+          - ✅ **No code regeneration** - Schema changes don't require service redeployment
+
+          ### Wire Format
+
+          Messages are serialized as: `[0x00][schema_id (4 bytes)][avro_data]`
+
+          This allows consumers to fetch the exact schema used for serialization from the Registry.
+
+          ### Compatibility Modes
+
+          - **BACKWARD** (recommended): New consumers can read old data
+          - **FORWARD**: Old consumers can read new data
+          - **FULL**: Both BACKWARD and FORWARD
+          - **NONE**: No compatibility checks
+
+          ## 🔧 Configuration
+
+          Add to your service config:
+
+          ```yaml
+          kafka:
+            brokers: "kafka:29092"
+            schema-registry:
+              url: "http://schema-registry:8081"
+              auto-register-schemas: true
+              cache-capacity: 1000
+          ```
+
+          EOF
 
       - name: Upload built messaging API
         uses: actions/upload-artifact@v4
