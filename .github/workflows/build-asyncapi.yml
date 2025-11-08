@@ -88,10 +88,28 @@ jobs:
           # Validate all schemas together (to resolve cross-references)
           echo "Validating all schemas together..."
           
-          # Build list of all schemas
+          # Build list of all schemas with proper ordering
+          # EventMetadata must be first since other schemas reference it
           all_schemas=""
+          
+          # Add EventMetadata first if it exists
+          if [ -f "${{ inputs.avro_dir }}/event_metadata.avsc" ]; then
+            all_schemas="${{ inputs.avro_dir }}/event_metadata.avsc"
+            echo "  - event_metadata.avsc (base schema)"
+          fi
+          
+          # Add all other schemas (excluding event_metadata.avsc)
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            all_schemas="$all_schemas $schema"
+            if [ "$(basename $schema)" != "event_metadata.avsc" ]; then
+              all_schemas="$all_schemas $schema"
+              echo "  - $(basename $schema)"
+            fi
+          done
+          
+          # Print input files
+          echo "Input files to compile:"
+          for schema in $all_schemas; do
+            echo "  $(basename $schema)"
           done
           
           # Validate with all schemas in one go (resolves cross-references)
@@ -164,10 +182,20 @@ jobs:
         run: |
           echo "✓ Generating Go types from Avro schemas..."
           
-          # Collect all schemas
+          # Build list of all schemas with proper ordering
+          # EventMetadata must be first since other schemas reference it
           all_schemas=""
+          
+          # Add EventMetadata first if it exists
+          if [ -f "${{ inputs.avro_dir }}/event_metadata.avsc" ]; then
+            all_schemas="${{ inputs.avro_dir }}/event_metadata.avsc"
+          fi
+          
+          # Add all other schemas (excluding event_metadata.avsc)
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
-            all_schemas="$all_schemas $schema"
+            if [ "$(basename $schema)" != "event_metadata.avsc" ]; then
+              all_schemas="$all_schemas $schema"
+            fi
           done
           
           # Generate all schemas together (to resolve cross-references)
