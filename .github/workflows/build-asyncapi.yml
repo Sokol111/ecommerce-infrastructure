@@ -207,6 +207,29 @@ jobs:
           echo ")" >> ${{ inputs.artifact_dir }}/constants.gen.go
           echo "" >> ${{ inputs.artifact_dir }}/constants.gen.go
           
+          # Generate sealed interface for exhaustiveness checking
+          cat >> ${{ inputs.artifact_dir }}/constants.gen.go << 'EOF'
+          // Event is a sealed interface that all event types must implement.
+          // This enables exhaustiveness checking when using type switches.
+          //
+          // When using exhaustive linter (golangci-lint), it will warn you if you
+          // don't handle all concrete Event types in a type switch.
+          type Event interface {
+          	isEvent() // unexported method seals the interface
+          }
+          EOF
+          
+          # Implement Event interface for each event type
+          for schema in ${{ inputs.avro_dir }}/*.avsc; do
+            schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
+            
+            if [[ "$schemaName" == *"Event" ]]; then
+              echo "" >> ${{ inputs.artifact_dir }}/constants.gen.go
+              echo "// ${schemaName} implements Event interface" >> ${{ inputs.artifact_dir }}/constants.gen.go
+              echo "func (*${schemaName}) isEvent() {}" >> ${{ inputs.artifact_dir }}/constants.gen.go
+            fi
+          done
+          
           # Generate topic constants from AsyncAPI spec
           echo "// Topic constants - Kafka topics defined in AsyncAPI spec" >> ${{ inputs.artifact_dir }}/constants.gen.go
           echo "const (" >> ${{ inputs.artifact_dir }}/constants.gen.go
@@ -474,6 +497,42 @@ jobs:
 
           - AsyncAPI specification: `${{ inputs.package }}.AsyncAPISpec`
           - Avro schemas: `${{ inputs.package }}.*Schema` variables
+
+          ## Exhaustiveness Checking
+
+          All event types implement the sealed `Event` interface:
+
+          ```go
+          type Event interface {
+              isEvent() // unexported method - seals the interface
+          }
+          ```
+
+          This enables exhaustiveness checking in type switches. When using `golangci-lint` with 
+          the `exhaustive` linter, you'll get compile-time warnings if you don't handle all event types:
+
+          ```go
+          func handleEvent(event ${{ inputs.package }}.Event) error {
+              switch e := event.(type) {
+              case *${{ inputs.package }}.ProductCreatedEvent:
+                  // handle created
+              case *${{ inputs.package }}.ProductUpdatedEvent:
+                  // handle updated
+              // exhaustive linter will warn if you forget any Event type!
+              default:
+                  return fmt.Errorf("unhandled event: %T", event)
+              }
+          }
+          ```
+
+          **Configure golangci-lint:**
+
+          ```yaml
+          linters-settings:
+            exhaustive:
+              default-signifies-exhaustive: false
+              explicit-exhaustive-switch: true
+          ```
 
           ## Available Event Types
 
