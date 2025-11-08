@@ -374,7 +374,6 @@ jobs:
                   Timestamp:     time.Now().UnixMilli(),
                   CorrelationID: correlationID,
                   TraceID:       traceID,
-                  SchemaVersion: 1,
               },
               Payload: ${{ inputs.package }}.YourEventPayload{
                   // ... your payload fields
