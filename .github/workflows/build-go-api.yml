@@ -47,7 +47,7 @@ jobs:
       - name: Generate Go server
         run: |
           echo "Generating Go server..."
-          $HOME/go/bin/oapi-codegen -generate gin-server,strict-server -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/server.gen.go ${{ inputs.openapi_file }}
+          $HOME/go/bin/oapi-codegen -generate gin-server,strict-server,spec -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/server.gen.go ${{ inputs.openapi_file }}
 
       - name: Generate Go client
         run: |
