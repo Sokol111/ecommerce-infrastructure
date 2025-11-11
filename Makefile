@@ -45,7 +45,7 @@ TEMPO_URL ?= http://localhost:3200
 
 # Storage services (docker-compose)
 MINIO_CONSOLE_URL ?= http://localhost:9001
-IMGPROXY_URL ?= http://localhost:8081
+IMGPROXY_URL ?= http://localhost:8083
 
 .DEFAULT_GOAL := help
 
@@ -221,7 +221,7 @@ infra-up: tools-check ## Запустити локальну інфрастру�
 	@printf "  MongoDB:          mongodb://localhost:27017\n"
 	@printf "  Kafka:            localhost:9092\n"
 	@printf "  Kafka UI:         http://localhost:9093\n"
-	@printf "  Schema Registry:  http://localhost:8081\n"
+	@printf "  Schema Registry:  http://localhost:8084\n"
 	@printf "  MinIO API:        http://localhost:9000\n"
 	@printf "  MinIO Console:    $(MINIO_CONSOLE_URL) (minioadmin/minioadmin123)\n"
 	@printf "  imgproxy:         $(IMGPROXY_URL)\n"
