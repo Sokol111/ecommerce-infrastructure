@@ -8,7 +8,7 @@ ASYNCAPI_FILE ?= asyncapi/asyncapi.yaml
 AVRO_DIR ?= avro
 GO_GEN_DIR ?= api
 PACKAGE ?= events
-SCHEMA_REGISTRY_URL ?= http://localhost:8081
+SCHEMA_REGISTRY_URL ?= http://localhost:8084
 
 # Tools
 AVROGEN := $(shell go env GOPATH)/bin/avrogen
