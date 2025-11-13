@@ -32,7 +32,23 @@ ingress:
   host: ecommerce-product-query-service.local
   tls: []
 
-resources: {}
+resources:
+  {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+startupProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 12
 
 livenessProbe:
   httpGet:
