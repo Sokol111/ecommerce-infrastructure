@@ -18,7 +18,7 @@ ecommerce-product-service:
   startupProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -27,20 +27,13 @@ ecommerce-product-service:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 30
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 15  # 15 * 60s = 15 хвилин на breakpoint
-  # Залишаємо readiness щоб бачити чи застосунок готовий
-  readinessProbe:
-    httpGet:
-      path: /health/ready
-      port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    timeoutSeconds: 3
-    failureThreshold: 3
+  # Вимикаємо readiness в дебазі - вона заважає при breakpoints
+  readinessProbe: {}
 
 ecommerce-category-service:
   nameOverride: ecommerce-category-service
@@ -57,7 +50,7 @@ ecommerce-category-service:
   startupProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -65,19 +58,12 @@ ecommerce-category-service:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 30
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 15
-  readinessProbe:
-    httpGet:
-      path: /health/ready
-      port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    timeoutSeconds: 3
-    failureThreshold: 3
+  readinessProbe: {}
 
 ecommerce-product-query-service:
   nameOverride: ecommerce-product-query-service
@@ -94,7 +80,7 @@ ecommerce-product-query-service:
   startupProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -102,19 +88,12 @@ ecommerce-product-query-service:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 30
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 15
-  readinessProbe:
-    httpGet:
-      path: /health/ready
-      port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    timeoutSeconds: 3
-    failureThreshold: 3
+  readinessProbe: {}
 
 ecommerce-category-query-service:
   nameOverride: ecommerce-category-query-service
@@ -131,7 +110,7 @@ ecommerce-category-query-service:
   startupProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -139,19 +118,12 @@ ecommerce-category-query-service:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 30
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 15
-  readinessProbe:
-    httpGet:
-      path: /health/ready
-      port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    timeoutSeconds: 3
-    failureThreshold: 3
+  readinessProbe: {}
 
 ecommerce-image-service:
   nameOverride: ecommerce-image-service
@@ -168,7 +140,7 @@ ecommerce-image-service:
   startupProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -176,19 +148,12 @@ ecommerce-image-service:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: 8080
+      port: http
     initialDelaySeconds: 30
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 15
-  readinessProbe:
-    httpGet:
-      path: /health/ready
-      port: 8080
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    timeoutSeconds: 3
-    failureThreshold: 3
+  readinessProbe: {}
 
 ecommerce-admin-ui:
   nameOverride: ecommerce-admin-ui
