@@ -145,6 +145,7 @@ jobs:
   # ============================================
   publish-npm:
     needs: [openapi-pipeline, create-release]
+    if: always() && needs.openapi-pipeline.result == 'success' && needs.create-release.result == 'success'
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js.yml@master
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
