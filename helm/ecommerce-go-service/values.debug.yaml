@@ -17,7 +17,7 @@ ecommerce-product-service:
   # Startup probe з великим таймаутом для початкового запуску
   startupProbe:
     httpGet:
-      path: /health/live
+      path: /health/ready
       port: http
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -49,7 +49,7 @@ ecommerce-category-service:
     - "--continue"
   startupProbe:
     httpGet:
-      path: /health/live
+      path: /health/ready
       port: http
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -79,7 +79,7 @@ ecommerce-product-query-service:
     - "--continue"
   startupProbe:
     httpGet:
-      path: /health/live
+      path: /health/ready
       port: http
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -109,7 +109,7 @@ ecommerce-category-query-service:
     - "--continue"
   startupProbe:
     httpGet:
-      path: /health/live
+      path: /health/ready
       port: http
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -139,7 +139,7 @@ ecommerce-image-service:
     - "--continue"
   startupProbe:
     httpGet:
-      path: /health/live
+      path: /health/ready
       port: http
     initialDelaySeconds: 10
     periodSeconds: 10
