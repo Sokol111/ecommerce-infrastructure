@@ -14,7 +14,7 @@ WORKDIR /src
 ENV GOSUMDB=off
 ENV GOPROXY=direct
 ENV GIT_SSL_NO_VERIFY=1
-ENV GOINSECURE=golang.org,github.com,*.golang.org,*.github.com
+ENV GOINSECURE=golang.org,github.com,*.golang.org,*.github.com,go.mongodb.org,*.go.mongodb.org
 
 # Параметри для різних сервісів
 ARG SERVICE_DIR=service-dir
