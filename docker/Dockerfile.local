@@ -67,8 +67,9 @@ COPY --from=builder /src/svc/configs/ /configs/
 COPY --from=builder /src/svc/db/ /db/
 
 # Копіюємо вихідний код для debugging (щоб Delve міг мапити breakpoints)
-COPY --from=builder /src/svc /app
-COPY --from=builder /src/ecommerce-commons /ecommerce-commons
+# Важливо: шляхи повинні співпадати з тими, що використовувались при компіляції
+COPY --from=builder /src/svc /src/svc
+COPY --from=builder /src/ecommerce-commons /src/ecommerce-commons
 
 # Основний порт сервісу
 EXPOSE 8080
