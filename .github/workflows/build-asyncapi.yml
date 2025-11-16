@@ -215,6 +215,8 @@ jobs:
           cat > ${{ inputs.artifact_dir }}/constants.gen.go << 'EOF'
           package ${{ inputs.package }}
 
+          import "reflect"
+
           // Event type constants - single source of truth for event names
           // These match the schema names and should be used in EventMetadata.EventType
           const (
@@ -259,6 +261,7 @@ jobs:
           done
           
           # Generate topic constants from AsyncAPI spec
+          echo "" >> ${{ inputs.artifact_dir }}/constants.gen.go
           echo "// Topic constants - Kafka topics defined in AsyncAPI spec" >> ${{ inputs.artifact_dir }}/constants.gen.go
           echo "const (" >> ${{ inputs.artifact_dir }}/constants.gen.go
           
@@ -296,8 +299,6 @@ jobs:
           
           # Generate default type mapping
           cat >> ${{ inputs.artifact_dir }}/constants.gen.go << 'EOF'
-          import "reflect"
-          
           // DefaultTypeMapping is a pre-configured mapping of Avro schema full names to Go types.
           // Use this with consumer.RegisterTypeMapping() to deserialize events.
           //
