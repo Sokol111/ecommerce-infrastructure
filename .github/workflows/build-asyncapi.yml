@@ -378,12 +378,15 @@ jobs:
                 
                 # Use jq to inline the EventMetadata type reference
                 # Replace "com.ecommerce.events.EventMetadata" string with the actual schema object
+                # Also remove namespace from nested records to avoid conflicts
                 combined_schema=$(echo "$event_schema" | jq --argjson metadata "$metadata_schema" '
                   # Walk through the schema and replace type references
                   walk(
                     if type == "object" and has("type") then
                       if .type == "com.ecommerce.events.EventMetadata" then
-                        . + {type: $metadata}
+                        # Inline the metadata schema and remove its namespace
+                        # (nested records inherit parent namespace)
+                        . + {type: ($metadata | del(.namespace))}
                       else
                         .
                       end
