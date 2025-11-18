@@ -86,35 +86,6 @@ deploy:
   kubeContext: k3d-dev-cluster
   helm:
     releases:
-      - name: traefik-crds
-        remoteChart: traefik-crds
-        repo: https://traefik.github.io/charts
-        version: "1.11.0"
-        namespace: traefik
-        createNamespace: true
-        wait: true
-        upgradeOnChange: false
-
-      - name: traefik
-        remoteChart: traefik
-        repo: https://traefik.github.io/charts
-        version: "37.1.0"
-        namespace: traefik
-        valuesFiles: [helm/values/infrastructure/traefik.yaml]
-        wait: true
-        upgradeOnChange: false
-        dependsOn: ["traefik-crds"]
-
-      - name: otel-collector
-        remoteChart: opentelemetry-collector
-        repo: https://open-telemetry.github.io/opentelemetry-helm-charts
-        namespace: observability
-        createNamespace: true
-        version: "0.133.0"
-        valuesFiles: [helm/values/observability/otelcol.yaml]
-        wait: true
-        upgradeOnChange: false
-
       - name: ecommerce
         chartPath: helm/ecommerce-go-service
         namespace: dev
