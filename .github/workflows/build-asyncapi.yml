@@ -377,23 +377,20 @@ jobs:
                 event_schema=$(cat "$schema")
                 
                 # Use jq to inline the EventMetadata type reference
-                # Replace "com.ecommerce.events.EventMetadata" reference with the actual schema
+                # Replace "com.ecommerce.events.EventMetadata" string with the actual schema object
                 combined_schema=$(echo "$event_schema" | jq --argjson metadata "$metadata_schema" '
-                  # Recursive function to replace type references
-                  def inline_metadata:
-                    if type == "object" then
+                  # Walk through the schema and replace type references
+                  walk(
+                    if type == "object" and has("type") then
                       if .type == "com.ecommerce.events.EventMetadata" then
-                        $metadata
+                        . + {type: $metadata}
                       else
-                        . | to_entries | map({key: .key, value: (.value | inline_metadata)}) | from_entries
+                        .
                       end
-                    elif type == "array" then
-                      map(inline_metadata)
                     else
                       .
-                    end;
-                  
-                  inline_metadata
+                    end
+                  )
                 ')
                 
                 # Save combined schema
