@@ -353,13 +353,16 @@ jobs:
           done
           
           # Generate combined schemas (EventMetadata + Event) for serialization
-          echo "// Combined schemas with EventMetadata embedded for Avro serialization" >> ${{ inputs.artifact_dir }}/schemas.gen.go
-          echo "// These resolve named type references like \"com.ecommerce.events.EventMetadata\"" >> ${{ inputs.artifact_dir }}/schemas.gen.go
+          echo "// Combined schemas with EventMetadata inlined for Avro serialization" >> ${{ inputs.artifact_dir }}/schemas.gen.go
+          echo "// These schemas have the EventMetadata type definition embedded inline" >> ${{ inputs.artifact_dir }}/schemas.gen.go
           echo "" >> ${{ inputs.artifact_dir }}/schemas.gen.go
           
           # Check if EventMetadata exists
           if [ -f "${{ inputs.avro_dir }}/event_metadata.avsc" ]; then
-            # For each event schema, create a combined version
+            # Read EventMetadata schema once
+            metadata_schema=$(cat "${{ inputs.avro_dir }}/event_metadata.avsc")
+            
+            # For each event schema, create a combined version with inlined EventMetadata
             for schema in ${{ inputs.avro_dir }}/*.avsc; do
               basename=$(basename "$schema" .avsc)
               
@@ -370,17 +373,36 @@ jobs:
               
               # Only process event schemas
               if [[ "$basename" == *"_created" ]] || [[ "$basename" == *"_updated" ]] || [[ "$basename" == *"_event" ]]; then
-                # Create combined schema JSON array: [EventMetadata, EventSchema]
-                echo "[" > "${{ inputs.artifact_dir }}/schemas/${basename}_combined.json"
-                cat "${{ inputs.avro_dir }}/event_metadata.avsc" >> "${{ inputs.artifact_dir }}/schemas/${basename}_combined.json"
-                echo "," >> "${{ inputs.artifact_dir }}/schemas/${basename}_combined.json"
-                cat "$schema" >> "${{ inputs.artifact_dir }}/schemas/${basename}_combined.json"
-                echo "]" >> "${{ inputs.artifact_dir }}/schemas/${basename}_combined.json"
+                # Read the event schema
+                event_schema=$(cat "$schema")
+                
+                # Use jq to inline the EventMetadata type reference
+                # Replace "com.ecommerce.events.EventMetadata" reference with the actual schema
+                combined_schema=$(echo "$event_schema" | jq --argjson metadata "$metadata_schema" '
+                  # Recursive function to replace type references
+                  def inline_metadata:
+                    if type == "object" then
+                      if .type == "com.ecommerce.events.EventMetadata" then
+                        $metadata
+                      else
+                        . | to_entries | map({key: .key, value: (.value | inline_metadata)}) | from_entries
+                      end
+                    elif type == "array" then
+                      map(inline_metadata)
+                    else
+                      .
+                    end;
+                  
+                  inline_metadata
+                ')
+                
+                # Save combined schema
+                echo "$combined_schema" > "${{ inputs.artifact_dir }}/schemas/${basename}_combined.json"
                 
                 # Add to Go file
                 varname=$(echo "${basename}" | sed -E 's/(^|_)([a-z])/\U\2/g')
                 echo "//go:embed schemas/${basename}_combined.json" >> ${{ inputs.artifact_dir }}/schemas.gen.go
-                echo "var ${varname}CombinedSchema []byte // Use this for Serialize() - includes EventMetadata" >> ${{ inputs.artifact_dir }}/schemas.gen.go
+                echo "var ${varname}CombinedSchema []byte // Use this for Serialize() - has EventMetadata inlined" >> ${{ inputs.artifact_dir }}/schemas.gen.go
                 echo "" >> ${{ inputs.artifact_dir }}/schemas.gen.go
               fi
             done
