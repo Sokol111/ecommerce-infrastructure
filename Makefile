@@ -30,6 +30,10 @@ MINIO_NS ?= minio
 # Umbrella chart
 CHART_PATH ?= $(THIS_DIR)helm/ecommerce-go-service
 
+# Infrastructure Helm charts
+TRAEFIK_VALUES ?= $(THIS_DIR)helm/values/infrastructure/traefik.yaml
+OTELCOL_VALUES ?= $(THIS_DIR)helm/values/observability/otelcol.yaml
+
 # Docker compose
 COMPOSE_DIR := $(THIS_DIR)docker/compose
 MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
@@ -136,6 +140,145 @@ cluster-create: tools-check ## Створити k3d кластер на осно
 	fi
 	@kubectl config use-context "$(K3D_CONTEXT)" 2>/dev/null || true
 
+# =============================================================================
+# Infrastructure Components
+# =============================================================================
+
+.PHONY: infra-traefik
+infra-traefik: cluster-create ## Встановити Traefik Ingress Controller (CRDs + Traefik chart)
+	@printf "\033[36m→ Installing Traefik CRDs\033[0m\n"
+	@helm upgrade --install traefik-crds traefik-crds \
+		--repo https://traefik.github.io/charts \
+		--version 1.11.0 \
+		--namespace $(TRAEFIK_NS) \
+		--create-namespace \
+		--wait 2>/dev/null || printf "\033[33m  CRDs already installed\033[0m\n"
+	@printf "\033[36m→ Installing Traefik\033[0m\n"
+	@helm upgrade --install traefik traefik \
+		--repo https://traefik.github.io/charts \
+		--version 37.1.0 \
+		--namespace $(TRAEFIK_NS) \
+		--values $(TRAEFIK_VALUES) \
+		--wait
+	@printf "\033[32m✓ Traefik installed\033[0m\n"
+
+.PHONY: infra-otel
+infra-otel: cluster-create ## Встановити OpenTelemetry Collector для збору метрик та трейсів
+	@printf "\033[36m→ Installing OpenTelemetry Collector\033[0m\n"
+	@helm upgrade --install otel-collector opentelemetry-collector \
+		--repo https://open-telemetry.github.io/opentelemetry-helm-charts \
+		--version 0.133.0 \
+		--namespace $(OBS_NS) \
+		--create-namespace \
+		--values $(OTELCOL_VALUES) \
+		--wait
+	@printf "\033[32m✓ OpenTelemetry Collector installed\033[0m\n"
+
+.PHONY: infra-k8s
+infra-k8s: infra-traefik infra-otel ## Встановити всі Kubernetes infrastructure компоненти (Traefik + OTel Collector)
+	@printf "\033[32m✓ All K8s infrastructure components installed\033[0m\n"
+
+.PHONY: docker-up
+docker-up: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB, Kafka, Storage, Observability stack)
+	@printf "\033[36m→ Starting Docker infrastructure\033[0m\n"
+	@docker network inspect "$(DOCKER_NETWORK)" >/dev/null 2>&1 || \
+		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
+	@printf "  Starting MongoDB...\n"
+	@docker compose -f "$(MONGO_COMPOSE)" up -d
+	@printf "  Starting Kafka...\n"
+	@docker compose -f "$(KAFKA_COMPOSE)" up -d
+	@printf "  Starting Storage (MinIO, imgproxy)...\n"
+	@docker compose -f "$(STORAGE_COMPOSE)" up -d
+	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" up -d
+	@printf "\033[32m✓ Docker infrastructure started\033[0m\n"
+	@printf "\n\033[36mServices:\033[0m\n"
+	@printf "  MongoDB:          mongodb://localhost:27017\n"
+	@printf "  Kafka:            localhost:9092\n"
+	@printf "  Kafka UI:         http://localhost:9093\n"
+	@printf "  Schema Registry:  http://localhost:8084\n"
+	@printf "  MinIO API:        http://localhost:9000\n"
+	@printf "  MinIO Console:    $(MINIO_CONSOLE_URL) (minioadmin/minioadmin123)\n"
+	@printf "  imgproxy:         $(IMGPROXY_URL)\n"
+	@printf "  Grafana:          $(GRAFANA_URL) (admin/admin)\n"
+	@printf "  Prometheus:       $(PROMETHEUS_URL)\n"
+	@printf "  Tempo:            $(TEMPO_URL)\n"
+	@printf "\n\033[33m⚠  Note: Services may take a few seconds to become ready\033[0m\n"
+
+.PHONY: docker-down
+docker-down: ## Зупинити Docker інфраструктуру (контейнери зупиняються, volumes залишаються)
+	@printf "\033[33m→ Stopping Docker infrastructure\033[0m\n"
+	@docker compose -f "$(MONGO_COMPOSE)" down
+	@docker compose -f "$(KAFKA_COMPOSE)" down
+	@docker compose -f "$(STORAGE_COMPOSE)" down
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down
+	@printf "\033[32m✓ Docker infrastructure stopped\033[0m\n"
+
+.PHONY: docker-logs
+docker-logs: ## Показати логи Docker інфраструктури (MongoDB, Kafka, Storage, Observability) в реальному часі (Ctrl+C для виходу)
+	@printf "\033[36m→ Docker infrastructure logs (Ctrl+C to stop)\033[0m\n"
+	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
+
+.PHONY: docker-restart
+docker-restart: docker-down docker-up ## Перезапустити Docker інфраструктуру (зупинити та знову запустити з збереженням даних)
+
+.PHONY: docker-clean
+docker-clean: docker-down ## Зупинити Docker інфраструктуру та видалити всі volumes (повне очищення баз даних та логів)
+	@printf "\033[33m→ Cleaning Docker volumes\033[0m\n"
+	@docker compose -f "$(MONGO_COMPOSE)" down -v
+	@docker compose -f "$(KAFKA_COMPOSE)" down -v
+	@docker compose -f "$(STORAGE_COMPOSE)" down -v
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down -v
+	@printf "\033[32m✓ Docker volumes removed\033[0m\n"
+
+.PHONY: infra-traefik-uninstall
+infra-traefik-uninstall: ## Видалити Traefik Ingress Controller
+	@printf "\033[33m→ Uninstalling Traefik\033[0m\n"
+	@helm uninstall traefik -n $(TRAEFIK_NS) 2>/dev/null || true
+	@helm uninstall traefik-crds -n $(TRAEFIK_NS) 2>/dev/null || true
+	@printf "\033[32m✓ Traefik uninstalled\033[0m\n"
+
+.PHONY: infra-otel-uninstall
+infra-otel-uninstall: ## Видалити OpenTelemetry Collector
+	@printf "\033[33m→ Uninstalling OpenTelemetry Collector\033[0m\n"
+	@helm uninstall otel-collector -n $(OBS_NS) 2>/dev/null || true
+	@printf "\033[32m✓ OpenTelemetry Collector uninstalled\033[0m\n"
+
+.PHONY: infra-k8s-uninstall
+infra-k8s-uninstall: infra-traefik-uninstall infra-otel-uninstall ## Видалити всі Kubernetes infrastructure компоненти
+	@printf "\033[32m✓ All K8s infrastructure components uninstalled\033[0m\n"
+
+.PHONY: init
+init: tools-check cluster-create docker-up infra-k8s ## Повна ініціалізація середовища: створення кластера, запуск інфраструктури та Kubernetes компонентів (без деплою сервісів)
+	@echo ""
+	@printf "\033[32m✓ Development environment ready!\033[0m\n"
+	@echo ""
+	@printf "\033[36mNext steps:\033[0m\n"
+	@printf "  - Run \033[32mmake dev\033[0m to start development mode (debug-enabled)\n"
+	@printf "  - Run \033[32mmake deploy\033[0m to deploy services\n"
+	@printf "  - Run \033[32mmake status\033[0m to check cluster status\n"
+	@printf "  - Run \033[32mmake grafana\033[0m to access observability\n"
+	@printf "  - Run \033[32mmake debug-info\033[0m for debugging instructions\n"
+
+.PHONY: clean
+clean: undeploy infra-k8s-uninstall docker-clean cluster-delete ## Повне очищення: видалення кластера, інфраструктури та всіх volumes з даними
+	@printf "\033[32m✓ Complete cleanup finished\033[0m\n"
+
+.PHONY: reset
+reset: clean init ## Повний reset середовища: очищення та повторна ініціалізація з нуля (clean + init)
+	@printf "\033[32m✓ Environment reset complete\033[0m\n"
+
+.PHONY: up
+up: cluster-start docker-up infra-k8s ## Швидкий старт: запустити кластер, Docker інфраструктуру та Kubernetes компоненти (все окрім деплою сервісів)
+	@echo ""
+	@printf "\033[32m✓ Everything is up and running!\033[0m\n"
+	@echo ""
+	@printf "\033[36mNext step:\033[0m\n"
+	@printf "  - Run \033[32mmake dev\033[0m or \033[32mmake deploy\033[0m to deploy services\n"
+
+.PHONY: down
+down: docker-down cluster-stop ## Швидка зупинка: зупинити Docker інфраструктуру та кластер (дані зберігаються)
+
 .PHONY: cluster-delete
 cluster-delete: ## Повністю видалити k3d кластер разом з контекстом kubectl та всіма даними
 	@printf "\033[33m→ Deleting cluster '$(CLUSTER_NAME)'\033[0m\n"
@@ -175,20 +318,16 @@ dev: cluster-create ## Запустити режим розробки з авт�
 	@printf "\033[33m  Debug ports: 2345-2349 (product, category, product-query, category-query, image)\033[0m\n"
 	@skaffold dev -f "$(SKAFFOLD_CONFIG)" $(if $(SKAFFOLD_PROFILE),-p $(SKAFFOLD_PROFILE),)
 
-
-
 .PHONY: build
 build: cluster-create ## Побудувати Docker образи для всіх сервісів без деплою в кластер
 	@printf "\033[36m→ Building images\033[0m\n"
 	@skaffold build -f "$(SKAFFOLD_CONFIG)"
 
 .PHONY: deploy
-deploy: cluster-create ## Одноразовий деплой всіх сервісів в кластер через Skaffold та Helm (debug-enabled з Delve)
+deploy: cluster-create infra-k8s ## Одноразовий деплой всіх сервісів в кластер через Skaffold та Helm (debug-enabled з Delve)
 	@printf "\033[36m→ Deploying to cluster (debug-enabled)\033[0m\n"
 	@skaffold run -f "$(SKAFFOLD_CONFIG)" --status-check $(if $(SKAFFOLD_PROFILE),-p $(SKAFFOLD_PROFILE),)
 	@printf "\033[32m✓ Deployment complete\033[0m\n"
-
-
 
 .PHONY: undeploy
 undeploy: ## Видалити всі сервіси та Helm релізи, які були задеплоєні через Skaffold
@@ -198,63 +337,6 @@ undeploy: ## Видалити всі сервіси та Helm релізи, як
 
 .PHONY: redeploy
 redeploy: undeploy deploy ## Видалити поточний деплоймент та заново задеплоїти всі сервіси (чистий деплой)
-
-# =============================================================================
-# Local Infrastructure (Docker Compose)
-# =============================================================================
-
-.PHONY: infra-up
-infra-up: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB, Kafka, Storage, Observability stack)
-	@printf "\033[36m→ Starting local infrastructure\033[0m\n"
-	@docker network inspect "$(DOCKER_NETWORK)" >/dev/null 2>&1 || \
-		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
-	@printf "  Starting MongoDB...\n"
-	@docker compose -f "$(MONGO_COMPOSE)" up -d
-	@printf "  Starting Kafka...\n"
-	@docker compose -f "$(KAFKA_COMPOSE)" up -d
-	@printf "  Starting Storage (MinIO, imgproxy)...\n"
-	@docker compose -f "$(STORAGE_COMPOSE)" up -d
-	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
-	@docker compose -f "$(OBSERVABILITY_COMPOSE)" up -d
-	@printf "\033[32m✓ Infrastructure started\033[0m\n"
-	@printf "\n\033[36mServices:\033[0m\n"
-	@printf "  MongoDB:          mongodb://localhost:27017\n"
-	@printf "  Kafka:            localhost:9092\n"
-	@printf "  Kafka UI:         http://localhost:9093\n"
-	@printf "  Schema Registry:  http://localhost:8084\n"
-	@printf "  MinIO API:        http://localhost:9000\n"
-	@printf "  MinIO Console:    $(MINIO_CONSOLE_URL) (minioadmin/minioadmin123)\n"
-	@printf "  imgproxy:         $(IMGPROXY_URL)\n"
-	@printf "  Grafana:          $(GRAFANA_URL) (admin/admin)\n"
-	@printf "  Prometheus:       $(PROMETHEUS_URL)\n"
-	@printf "  Tempo:            $(TEMPO_URL)\n"
-	@printf "\n\033[33m⚠  Note: Services may take a few seconds to become ready\033[0m\n"
-
-.PHONY: infra-down
-infra-down: ## Зупинити локальну інфраструктуру (контейнери зупиняються, volumes залишаються)
-	@printf "\033[33m→ Stopping local infrastructure\033[0m\n"
-	@docker compose -f "$(MONGO_COMPOSE)" down
-	@docker compose -f "$(KAFKA_COMPOSE)" down
-	@docker compose -f "$(STORAGE_COMPOSE)" down
-	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down
-	@printf "\033[32m✓ Infrastructure stopped\033[0m\n"
-
-.PHONY: infra-logs
-infra-logs: ## Показати логи MongoDB, Kafka, Storage та Observability stack в реальному часі (Ctrl+C для виходу)
-	@printf "\033[36m→ Infrastructure logs (Ctrl+C to stop)\033[0m\n"
-	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
-
-.PHONY: infra-restart
-infra-restart: infra-down infra-up ## Перезапустити локальну інфраструктуру (зупинити та знову запустити з збереженням даних)
-
-.PHONY: infra-clean
-infra-clean: infra-down ## Зупинити інфраструктуру та видалити всі Docker volumes (повне очищення баз даних та логів)
-	@printf "\033[33m→ Cleaning infrastructure volumes\033[0m\n"
-	@docker compose -f "$(MONGO_COMPOSE)" down -v
-	@docker compose -f "$(KAFKA_COMPOSE)" down -v
-	@docker compose -f "$(STORAGE_COMPOSE)" down -v
-	@docker compose -f "$(OBSERVABILITY_COMPOSE)" down -v
-	@printf "\033[32m✓ Volumes removed\033[0m\n"
 
 # =============================================================================
 # Kubernetes Helpers
@@ -451,9 +533,16 @@ tempo: ## Показати Tempo endpoints та інформацію про до
 	@printf "  OTLP HTTP: localhost:4318\n"
 	@printf "\n\033[33m  Access through Grafana at $(GRAFANA_URL)\033[0m\n"
 
-.PHONY: observability-status
-observability-status: ## Перевірити статус observability стеку (docker-compose)
-	@printf "\033[36m→ Observability stack status:\033[0m\n"
+.PHONY: docker-status
+docker-status: ## Перевірити статус всіх Docker Compose сервісів (MongoDB, Kafka, Storage, Observability)
+	@printf "\033[36m→ Docker infrastructure status:\033[0m\n"
+	@printf "\n\033[33mMongoDB:\033[0m\n"
+	@docker compose -f "$(MONGO_COMPOSE)" ps
+	@printf "\n\033[33mKafka:\033[0m\n"
+	@docker compose -f "$(KAFKA_COMPOSE)" ps
+	@printf "\n\033[33mStorage:\033[0m\n"
+	@docker compose -f "$(STORAGE_COMPOSE)" ps
+	@printf "\n\033[33mObservability:\033[0m\n"
 	@docker compose -f "$(OBSERVABILITY_COMPOSE)" ps
 
 .PHONY: minio-console
@@ -558,29 +647,6 @@ debug-check: ## Перевірити доступність debug портів 2
 	done
 
 # =============================================================================
-# Development Workflows
-# =============================================================================
-
-.PHONY: init
-init: tools-check cluster-create infra-up deploy ## Повна ініціалізація середовища: створення кластера, запуск інфраструктури та деплой сервісів
-	@echo ""
-	@printf "\033[32m✓ Development environment ready!\033[0m\n"
-	@echo ""
-	@printf "\033[36mNext steps:\033[0m\n"
-	@echo "  - Run \033[32mmake dev\033[0m to start development mode (debug-enabled)"
-	@echo "  - Run \033[32mmake status\033[0m to check cluster status"
-	@echo "  - Run \033[32mmake grafana\033[0m to access observability"
-	@echo "  - Run \033[32mmake debug-info\033[0m for debugging instructions"
-
-.PHONY: clean
-clean: undeploy infra-clean cluster-delete ## Повне очищення: видалення кластера, інфраструктури та всіх volumes з даними
-	@printf "\033[32m✓ Complete cleanup finished\033[0m\n"
-
-.PHONY: reset
-reset: clean init ## Повний reset середовища: очищення та повторна ініціалізація з нуля (clean + init)
-	@printf "\033[32m✓ Environment reset complete\033[0m\n"
-
-# =============================================================================
 # Helm Management
 # =============================================================================
 
@@ -613,12 +679,6 @@ helm-upgrade: ## Вручну оновити Helm chart (upgrade or install як
 # =============================================================================
 # Quick Commands (Aliases)
 # =============================================================================
-
-.PHONY: up
-up: cluster-start infra-up ## Швидкий старт: запустити кластер та локальну інфраструктуру (MongoDB, Kafka)
-
-.PHONY: down
-down: infra-down cluster-stop ## Швидка зупинка: зупинити інфраструктуру та кластер (дані зберігаються)
 
 .PHONY: ps
 ps: pods ## Скорочення для команди 'pods' - список подів у namespace 'dev'
