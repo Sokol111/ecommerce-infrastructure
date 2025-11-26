@@ -297,24 +297,54 @@ jobs:
           echo ")" >> ${{ inputs.artifact_dir }}/constants.gen.go
           echo "" >> ${{ inputs.artifact_dir }}/constants.gen.go
           
-          # Generate default type mapping
+          # Generate type registration entries for TypeMapping
           cat >> ${{ inputs.artifact_dir }}/constants.gen.go << 'EOF'
-          // DefaultTypeMapping is a pre-configured mapping of Avro schema full names to Go types.
-          // Use this with consumer.RegisterTypeMapping() to deserialize events.
+          // TypeRegistrations contains schema registration data for TypeMapping.
+          // Use this to register all schemas in your microservice:
           //
           // Example:
-          //   consumer.RegisterTypeMapping(events.DefaultTypeMapping)
-          var DefaultTypeMapping = map[string]reflect.Type{
+          //   func RegisterSchemas(tm *mapping.TypeMapping) error {
+          //       for _, reg := range events.TypeRegistrations {
+          //           if err := tm.Register(reg.GoType, reg.SchemaJSON, reg.SchemaName, reg.Topic); err != nil {
+          //               return err
+          //           }
+          //       }
+          //       return nil
+          //   }
+          type TypeRegistration struct {
+          	GoType     reflect.Type
+          	SchemaJSON []byte
+          	SchemaName string
+          	Topic      string
+          }
+
+          var TypeRegistrations = []TypeRegistration{
           EOF
+          
+          # Extract default topic from AsyncAPI spec
+          default_topic=$(yq eval '.channels | keys | .[0]' ${{ inputs.asyncapi_file }})
           
           for schema in ${{ inputs.avro_dir }}/*.avsc; do
             schemaName=$(jq -r '.name' "$schema" 2>/dev/null || echo "Unknown")
             namespace=$(jq -r '.namespace' "$schema" 2>/dev/null || echo "")
             
             if [[ "$schemaName" == *"Event" ]] && [[ -n "$namespace" ]]; then
-              # Convert ProductCreatedEvent to SchemaNameProductCreated
-              constName=$(echo "$schemaName" | sed 's/Event$//' | sed 's/^/SchemaName/')
-              echo "	${constName}: reflect.TypeOf(${schemaName}{}),  " >> ${{ inputs.artifact_dir }}/constants.gen.go
+              fullName="${namespace}.${schemaName}"
+              # Convert ProductCreatedEvent to SchemaNameProductCreated for constant
+              schemaConstName=$(echo "$schemaName" | sed 's/Event$//' | sed 's/^/SchemaName/')
+              # Convert to topic constant name
+              topicConstName=$(echo "$default_topic" | sed 's/\./ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2)); print "Topic"$0}' | tr -d ' ')
+              # Convert to schema variable name for embedded schema
+              schemaVarName=$(basename "$schema" .avsc | sed -E 's/(^|_)([a-z])/\U\2/g')
+              
+              cat >> ${{ inputs.artifact_dir }}/constants.gen.go << EOF
+          	{
+          		GoType:     reflect.TypeOf(${schemaName}{}),
+          		SchemaJSON: ${schemaVarName}Schema,
+          		SchemaName: ${schemaConstName},
+          		Topic:      ${topicConstName},
+          	},
+          EOF
             fi
           done
           
