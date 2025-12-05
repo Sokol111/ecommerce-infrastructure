@@ -111,6 +111,10 @@ spec:
               containerPort: {{ .Values.debugPort }}
               protocol: TCP
             {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
