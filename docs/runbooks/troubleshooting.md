@@ -7,9 +7,6 @@
 ### Швидка перевірка системи
 
 ```bash
-# Комплексна перевірка
-make check-env
-
 # Статус кластера
 make status
 
@@ -27,7 +24,7 @@ make resources
 #### Симптоми
 
 ```bash
-$ make cluster-create
+$ make cluster
 Error: Failed to create cluster 'dev-cluster'
 ```
 
@@ -63,7 +60,7 @@ k3d cluster list
 
 # Рішення
 make cluster-delete
-make cluster-create
+make cluster
 ```
 
 ---

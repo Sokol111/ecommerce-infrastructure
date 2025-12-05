@@ -1,0 +1,150 @@
+# -*- mode: Python -*-
+
+# Tiltfile for ecommerce microservices development
+# Usage: cd environments/local && tilt up
+
+# ============================================================================
+# Configuration
+# ============================================================================
+
+# Paths - relative to Tiltfile location
+INFRA_PATH = os.path.dirname(os.path.realpath(config.main_path))
+ROOT_PATH = os.path.dirname(os.path.dirname(INFRA_PATH))
+HELM_PATH = INFRA_PATH + '/../../helm'
+
+# Kubernetes context and namespace
+allow_k8s_contexts('k3d-dev-cluster')
+
+# ============================================================================
+# Go Services Configuration
+# ============================================================================
+
+GO_SERVICES = {
+    'ecommerce-product-service': {'debug_port': 2345, 'http_port': 8081},
+    'ecommerce-category-service': {'debug_port': 2346, 'http_port': 8082},
+    'ecommerce-product-query-service': {'debug_port': 2347, 'http_port': 8083},
+    'ecommerce-category-query-service': {'debug_port': 2348, 'http_port': 8084},
+    'ecommerce-image-service': {'debug_port': 2349, 'http_port': 8085},
+}
+
+# ============================================================================
+# Namespace
+# ============================================================================
+
+k8s_yaml(blob("""
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+"""))
+
+# ============================================================================
+# Go Services
+# ============================================================================
+
+for name, config in GO_SERVICES.items():
+    image = 'sokol111/' + name
+    service_path = ROOT_PATH + '/' + name
+    commons_path = ROOT_PATH + '/ecommerce-commons'
+    
+    # Build Docker image
+    docker_build(
+        image,
+        context=ROOT_PATH,
+        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.local',
+        build_args={
+            'SERVICE_DIR': name,
+            'COMMONS_DIR': 'ecommerce-commons',
+        },
+        only=[
+            name + '/cmd',
+            name + '/internal', 
+            name + '/configs',
+            name + '/db',
+            name + '/go.mod',
+            name + '/go.sum',
+            'ecommerce-commons/pkg',
+            'ecommerce-commons/go.mod',
+            'ecommerce-commons/go.sum',
+        ],
+    )
+    
+    # Deploy with Helm
+    k8s_yaml(helm(
+        HELM_PATH + '/' + name,
+        name=name,
+        namespace='dev',
+        values=[
+            HELM_PATH + '/' + name + '/values.local.yaml',
+            HELM_PATH + '/' + name + '/values.debug.yaml',
+        ],
+    ))
+    
+    # Resource configuration with port forwards
+    k8s_resource(
+        name,
+        port_forwards=[
+            port_forward(config['debug_port'], 2345, name='delve'),
+            port_forward(config['http_port'], 8080, name='http'),
+        ],
+        labels=['go-services'],
+    )
+
+# ============================================================================
+# Admin UI (Next.js)
+# ============================================================================
+
+docker_build(
+    'sokol111/ecommerce-admin-ui',
+    context=ROOT_PATH + '/ecommerce-admin-ui',
+    dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs',
+)
+
+k8s_yaml(helm(
+    HELM_PATH + '/ecommerce-admin-ui',
+    name='ecommerce-admin-ui',
+    namespace='dev',
+    values=[
+        HELM_PATH + '/ecommerce-admin-ui/values.local.yaml',
+    ],
+))
+
+k8s_resource(
+    'ecommerce-admin-ui',
+    port_forwards=[
+        port_forward(3000, 3000, name='http'),
+    ],
+    labels=['frontend'],
+    resource_deps=[
+        'ecommerce-product-service',
+        'ecommerce-category-service', 
+        'ecommerce-image-service',
+    ],
+)
+
+# ============================================================================
+# Settings
+# ============================================================================
+
+update_settings(
+    max_parallel_updates=3,
+    k8s_upsert_timeout_secs=180,
+)
+
+# ============================================================================
+# Useful Links
+# ============================================================================
+
+local_resource(
+    'endpoints',
+    cmd='echo "Services are running"',
+    links=[
+        link('http://ecommerce-product-service.127.0.0.1.nip.io', 'Product Service API'),
+        link('http://ecommerce-category-service.127.0.0.1.nip.io', 'Category Service API'),
+        link('http://ecommerce-product-query-service.127.0.0.1.nip.io', 'Product Query API'),
+        link('http://ecommerce-category-query-service.127.0.0.1.nip.io', 'Category Query API'),
+        link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
+        link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
+    ],
+    labels=['links'],
+)
