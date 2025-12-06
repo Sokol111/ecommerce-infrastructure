@@ -28,11 +28,11 @@ default_registry('localhost:5000')
 # ============================================================================
 
 GO_SERVICES = {
-    'ecommerce-product-service': {'debug_port': 2345, 'http_port': 8081},
-    'ecommerce-category-service': {'debug_port': 2346, 'http_port': 8082},
-    'ecommerce-product-query-service': {'debug_port': 2347, 'http_port': 8083},
-    'ecommerce-category-query-service': {'debug_port': 2348, 'http_port': 8084},
-    'ecommerce-image-service': {'debug_port': 2349, 'http_port': 8085},
+    'ecommerce-product-service': {'debug_port': 2345},
+    'ecommerce-category-service': {'debug_port': 2346},
+    'ecommerce-product-query-service': {'debug_port': 2347},
+    'ecommerce-category-query-service': {'debug_port': 2348},
+    'ecommerce-image-service': {'debug_port': 2349},
 }
 
 # ============================================================================
@@ -102,7 +102,6 @@ for name, config in GO_SERVICES.items():
         name,
         port_forwards=[
             port_forward(config['debug_port'], 2345, name='delve'),
-            port_forward(config['http_port'], 8080, name='http'),
         ],
         labels=['go-services'],
     )
@@ -128,9 +127,6 @@ k8s_yaml(helm_with_deps(
 
 k8s_resource(
     'ecommerce-admin-ui',
-    port_forwards=[
-        port_forward(3000, 3000, name='http'),
-    ],
     labels=['frontend'],
     resource_deps=[
         'ecommerce-product-service',
