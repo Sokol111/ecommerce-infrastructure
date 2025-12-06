@@ -35,6 +35,12 @@ config:
         http: {}
 
   processors:
+    # Захист від OOM - має бути першим у pipeline
+    memory_limiter:
+      check_interval: 1s
+      limit_mib: 200
+      spike_limit_mib: 50
+
     k8sattributes:
       extract:
         metadata:
@@ -122,9 +128,9 @@ config:
     pipelines:
       traces:
         receivers:  [otlp]
-        processors: [k8sattributes, resource, resource/cleanup, batch]
+        processors: [memory_limiter, k8sattributes, resource, resource/cleanup, batch]
         exporters:  [otlp/tempo, debug]
       metrics:
         receivers:  [otlp]
-        processors: [k8sattributes, resource, resource/cleanup, batch]
-        exporters:  [otlphttp/metrics]
+        processors: [memory_limiter, k8sattributes, resource, resource/cleanup, batch]
+        exporters:  [otlphttp/metrics, debug]
