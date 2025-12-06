@@ -10,9 +10,7 @@ init: tools-check cluster docker infra ## Bootstrap full dev environment from sc
 	@printf "\033[36mNext steps:\033[0m\n"
 	@printf "  - Run \033[32mmake dev\033[0m to start Tilt development mode\n"
 	@printf "  - Run \033[32mmake deploy\033[0m to deploy services\n"
-	@printf "  - Run \033[32mmake status\033[0m to check cluster status\n"
-	@printf "  - Run \033[32mmake grafana\033[0m to access observability\n"
-	@printf "  - Run \033[32mmake debug-info\033[0m for debugging instructions\n"
+	@printf "  - Run \033[32mmake urls\033[0m to see all available service URLs\n"
 
 .PHONY: clean
 clean: undeploy infra-uninstall docker-clean cluster-delete ## Destroy everything (cluster, infra, volumes)
