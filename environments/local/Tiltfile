@@ -8,12 +8,20 @@
 # ============================================================================
 
 # Paths - relative to Tiltfile location
-INFRA_PATH = os.path.dirname(os.path.realpath(config.main_path))
-ROOT_PATH = os.path.dirname(os.path.dirname(INFRA_PATH))
-HELM_PATH = INFRA_PATH + '/../../helm'
+# Tiltfile is at: ecommerce-infrastructure/environments/local/Tiltfile
+# INFRA_PATH should be: ecommerce-infrastructure
+# ROOT_PATH should be: ecommerce (parent of all services)
+TILTFILE_DIR = os.path.dirname(os.path.realpath(config.main_path))
+INFRA_PATH = os.path.dirname(os.path.dirname(TILTFILE_DIR))
+ROOT_PATH = os.path.dirname(INFRA_PATH)
+HELM_PATH = INFRA_PATH + '/helm'
 
 # Kubernetes context and namespace
 allow_k8s_contexts('k3d-dev-cluster')
+
+# Use local k3d registry (created automatically with cluster)
+# Images are pushed to localhost:5000 and pulled from k3d-dev-registry:5000 inside cluster
+default_registry('localhost:5000')
 
 # ============================================================================
 # Go Services Configuration
@@ -26,6 +34,15 @@ GO_SERVICES = {
     'ecommerce-category-query-service': {'debug_port': 2348, 'http_port': 8084},
     'ecommerce-image-service': {'debug_port': 2349, 'http_port': 8085},
 }
+
+# ============================================================================
+# Helm Dependencies (auto-build)
+# ============================================================================
+
+def helm_with_deps(chart_path, **kwargs):
+    """Run helm dependency build before templating"""
+    local('helm dependency build ' + chart_path + ' 2>/dev/null || true', quiet=True)
+    return helm(chart_path, **kwargs)
 
 # ============================================================================
 # Namespace
@@ -70,7 +87,7 @@ for name, config in GO_SERVICES.items():
     )
     
     # Deploy with Helm
-    k8s_yaml(helm(
+    k8s_yaml(helm_with_deps(
         HELM_PATH + '/' + name,
         name=name,
         namespace='dev',
@@ -100,7 +117,7 @@ docker_build(
     dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs',
 )
 
-k8s_yaml(helm(
+k8s_yaml(helm_with_deps(
     HELM_PATH + '/ecommerce-admin-ui',
     name='ecommerce-admin-ui',
     namespace='dev',
