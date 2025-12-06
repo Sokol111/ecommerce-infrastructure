@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1.4
 
-ARG GO_IMAGE=golang:1.24.2
+ARG GO_IMAGE=golang:1.25.5
 ARG RUNTIME_IMAGE=ubuntu:24.04
 
 ############################
-# Build stage
+# Base stage - commons (кешується окремо)
 ############################
-FROM ${GO_IMAGE} AS builder
+FROM ${GO_IMAGE} AS base
 
 WORKDIR /src
 
@@ -16,46 +16,56 @@ ENV GOPROXY=direct
 ENV GIT_SSL_NO_VERIFY=1
 ENV GOINSECURE=*
 
-# Параметри для різних сервісів
-ARG SERVICE_DIR=service-dir
 ARG COMMONS_DIR=ecommerce-commons
 
-# 1) Спочатку тільки go.mod/go.sum для кешу модулів
-COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
-COPY ${COMMONS_DIR}/go.mod ./${COMMONS_DIR}/go.mod
+# Commons копіюється один раз і кешується
+COPY ${COMMONS_DIR}/go.mod ${COMMONS_DIR}/go.sum ./${COMMONS_DIR}/
+COPY ${COMMONS_DIR}/pkg ./${COMMONS_DIR}/pkg
 
-# 2) Завантаження залежностей (replace у svc/go.mod на ../commons)
+############################
+# Dependencies stage
+############################
+FROM base AS deps
+
+ARG SERVICE_DIR=service-dir
+
+# Копіюємо go.mod/go.sum для кешу модулів
+COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
+
 WORKDIR /src/svc
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download && go mod verify
 
-# 3) Копіюємо код обох репо
-WORKDIR /src
-# Copy commons - only Go source code and module files
-COPY ${COMMONS_DIR}/go.mod ${COMMONS_DIR}/go.sum ./${COMMONS_DIR}/
-COPY ${COMMONS_DIR}/pkg ./${COMMONS_DIR}/pkg
+############################
+# Build stage
+############################
+FROM deps AS builder
 
-# Copy service - only necessary files
+WORKDIR /src
+
+ARG SERVICE_DIR=service-dir
+
+# Копіюємо код сервісу
 COPY ${SERVICE_DIR}/cmd ./svc/cmd
 COPY ${SERVICE_DIR}/internal ./svc/internal
 COPY ${SERVICE_DIR}/configs ./svc/configs
 COPY ${SERVICE_DIR}/db ./svc/db
 
-# 4) Встановлення Delve debugger
+# Встановлення Delve debugger
 RUN --mount=type=cache,target=/go/pkg/mod \
-    go install github.com/go-delve/delve/cmd/dlv@v1.24.0
+    go install github.com/go-delve/delve/cmd/dlv@v1.25.2
 
-# 5) Збірка бінарника з debug символами
+# Збірка бінарника з debug символами
 WORKDIR /src/svc
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    echo "Building in DEBUG mode with symbols..." && \
     CGO_ENABLED=1 GOOS=linux go build -gcflags="all=-N -l" -v -o /server ./cmd/main.go
 
 ############################
 # Runtime stage
 ############################
 FROM ${RUNTIME_IMAGE} AS release
+
 WORKDIR /
 
 # Копіюємо Delve debugger
