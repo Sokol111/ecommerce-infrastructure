@@ -94,3 +94,35 @@ tools-check: ## Verify required tools are installed
 		exit 1; \
 	fi
 	@printf "\033[32m✓ All required tools are installed\033[0m\n"
+
+.PHONY: urls
+urls: ## Show all service URLs available in browser
+	@printf "\033[1m%s - Service URLs:\033[0m\n\n" "ecommerce-infrastructure"
+	@printf "\033[1;33mApplication Services (via Traefik Ingress):\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Product Service API:" "http://ecommerce-product-service.127.0.0.1.nip.io"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Category Service API:" "http://ecommerce-category-service.127.0.0.1.nip.io"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Product Query API:" "http://ecommerce-product-query-service.127.0.0.1.nip.io"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Category Query API:" "http://ecommerce-category-query-service.127.0.0.1.nip.io"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Image Service API:" "http://ecommerce-image-service.127.0.0.1.nip.io"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Admin UI:" "http://admin.127.0.0.1.nip.io"
+	@printf "\n\033[1;33mDevelopment Tools:\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Tilt Dashboard:" "http://localhost:10350"
+	@printf "\n\033[1;33mKafka & Messaging:\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Kafka UI:" "http://localhost:9093"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Schema Registry:" "http://localhost:8084"
+	@printf "\n\033[1;33mStorage:\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s (minioadmin/minioadmin123)\n" "MinIO Console:" "$(MINIO_CONSOLE_URL)"
+	@printf "  \033[36m%-35s\033[0m %s\n" "imgproxy:" "$(IMGPROXY_URL)"
+	@printf "\n\033[1;33mObservability:\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s (admin/admin)\n" "Grafana:" "$(GRAFANA_URL)"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Prometheus:" "$(PROMETHEUS_URL)"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Tempo:" "$(TEMPO_URL)"
+	@printf "\n\033[1;33mDirect Port Forwards (when Tilt is running):\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Product Service:" "http://localhost:8081"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Category Service:" "http://localhost:8082"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Product Query Service:" "http://localhost:8083"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Category Query Service:" "http://localhost:8084"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Image Service:" "http://localhost:8085"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Admin UI:" "http://localhost:3000"
+	@printf "\n"
+
