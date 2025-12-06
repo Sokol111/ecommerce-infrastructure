@@ -57,7 +57,7 @@ include $(THIS_DIR)makefiles/lifecycle.mk
 # =============================================================================
 
 .PHONY: help
-help: ## Показати довідку з усіма доступними командами та їх описами
+help: ## Show available commands
 	@printf "\033[1m%s - Available targets:\033[0m\n\n" "ecommerce-infrastructure"
 	@awk 'BEGIN {FS = ":.*?## "; category = ""} \
 		/^# =+$$/ {getline; if ($$0 ~ /^# /) {gsub(/^# /, "", $$0); gsub(/ *$$/, "", $$0); category = $$0}} \
@@ -72,7 +72,7 @@ help: ## Показати довідку з усіма доступними ко
 	@echo ""
 
 .PHONY: tools-check
-tools-check: ## Перевірити наявність усіх необхідних інструментів (k3d, kubectl, tilt, helm, stern, docker)
+tools-check: ## Verify required tools are installed
 	@printf "\033[36m→ Checking required tools...\033[0m\n"
 	@missing=0; \
 	for tool in k3d kubectl tilt helm stern docker; do \

@@ -3,7 +3,7 @@
 # =============================================================================
 
 .PHONY: docker
-docker: tools-check ## Запустити локальну інфраструктуру через Docker Compose (MongoDB, Kafka, Storage, Observability stack)
+docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@printf "\033[36m→ Starting Docker infrastructure\033[0m\n"
 	@docker network inspect "$(DOCKER_NETWORK)" >/dev/null 2>&1 || \
 		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
@@ -30,7 +30,7 @@ docker: tools-check ## Запустити локальну інфраструк�
 	@printf "\n\033[33m⚠  Note: Services may take a few seconds to become ready\033[0m\n"
 
 .PHONY: docker-down
-docker-down: ## Зупинити Docker інфраструктуру (контейнери зупиняються, volumes залишаються)
+docker-down: ## Stop Docker infra (keeps volumes)
 	@printf "\033[33m→ Stopping Docker infrastructure\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" down
 	@docker compose -f "$(KAFKA_COMPOSE)" down
@@ -39,15 +39,15 @@ docker-down: ## Зупинити Docker інфраструктуру (конте
 	@printf "\033[32m✓ Docker infrastructure stopped\033[0m\n"
 
 .PHONY: docker-logs
-docker-logs: ## Показати логи Docker інфраструктури (MongoDB, Kafka, Storage, Observability) в реальному часі (Ctrl+C для виходу)
+docker-logs: ## Tail Docker infra logs (Ctrl+C to stop)
 	@printf "\033[36m→ Docker infrastructure logs (Ctrl+C to stop)\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
 
 .PHONY: docker-restart
-docker-restart: docker-down docker ## Перезапустити Docker інфраструктуру (зупинити та знову запустити з збереженням даних)
+docker-restart: docker-down docker ## Restart Docker infra (keeps data)
 
 .PHONY: docker-clean
-docker-clean: docker-down ## Зупинити Docker інфраструктуру та видалити всі volumes (повне очищення баз даних та логів)
+docker-clean: docker-down ## Stop Docker infra and delete volumes
 	@printf "\033[33m→ Cleaning Docker volumes\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" down -v
 	@docker compose -f "$(KAFKA_COMPOSE)" down -v
@@ -56,7 +56,7 @@ docker-clean: docker-down ## Зупинити Docker інфраструктур�
 	@printf "\033[32m✓ Docker volumes removed\033[0m\n"
 
 .PHONY: docker-status
-docker-status: ## Перевірити статус всіх Docker Compose сервісів (MongoDB, Kafka, Storage, Observability)
+docker-status: ## Show Docker services status
 	@printf "\033[36m→ Docker infrastructure status:\033[0m\n"
 	@printf "\n\033[33mMongoDB:\033[0m\n"
 	@docker compose -f "$(MONGO_COMPOSE)" ps
