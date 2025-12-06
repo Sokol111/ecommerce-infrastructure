@@ -75,7 +75,7 @@ help: ## Show available commands
 tools-check: ## Verify required tools are installed
 	@printf "\033[36m→ Checking required tools...\033[0m\n"
 	@missing=0; \
-	for tool in k3d kubectl tilt helm stern docker; do \
+	for tool in k3d kubectl tilt helm docker; do \
 		if ! command -v $$tool >/dev/null 2>&1; then \
 			printf "  \033[31m✗ $$tool\033[0m not found in PATH\n"; \
 			missing=1; \
