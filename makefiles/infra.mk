@@ -3,11 +3,11 @@
 # =============================================================================
 
 .PHONY: infra
-infra: infra-traefik infra-otel ## Встановити всі infrastructure компоненти (Traefik + OTel Collector)
+infra: infra-traefik infra-otel ## Install Traefik + OTel Collector
 	@printf "\033[32m✓ All infrastructure components installed\033[0m\n"
 
 .PHONY: infra-traefik
-infra-traefik: cluster ## Встановити Traefik Ingress Controller (CRDs + Traefik chart)
+infra-traefik: cluster ## Install Traefik Ingress Controller
 	@printf "\033[36m→ Installing Traefik CRDs\033[0m\n"
 	@helm upgrade --install traefik-crds traefik-crds \
 		--repo https://traefik.github.io/charts \
@@ -25,7 +25,7 @@ infra-traefik: cluster ## Встановити Traefik Ingress Controller (CRDs 
 	@printf "\033[32m✓ Traefik installed\033[0m\n"
 
 .PHONY: infra-otel
-infra-otel: cluster ## Встановити OpenTelemetry Collector для збору метрик та трейсів
+infra-otel: cluster ## Install OpenTelemetry Collector
 	@printf "\033[36m→ Installing OpenTelemetry Collector\033[0m\n"
 	@helm upgrade --install otel-collector opentelemetry-collector \
 		--repo https://open-telemetry.github.io/opentelemetry-helm-charts \
@@ -37,18 +37,18 @@ infra-otel: cluster ## Встановити OpenTelemetry Collector для зб�
 	@printf "\033[32m✓ OpenTelemetry Collector installed\033[0m\n"
 
 .PHONY: infra-traefik-uninstall
-infra-traefik-uninstall: ## Видалити Traefik Ingress Controller
+infra-traefik-uninstall: ## Uninstall Traefik
 	@printf "\033[33m→ Uninstalling Traefik\033[0m\n"
 	@helm uninstall traefik -n $(TRAEFIK_NS) 2>/dev/null || true
 	@helm uninstall traefik-crds -n $(TRAEFIK_NS) 2>/dev/null || true
 	@printf "\033[32m✓ Traefik uninstalled\033[0m\n"
 
 .PHONY: infra-otel-uninstall
-infra-otel-uninstall: ## Видалити OpenTelemetry Collector
+infra-otel-uninstall: ## Uninstall OTel Collector
 	@printf "\033[33m→ Uninstalling OpenTelemetry Collector\033[0m\n"
 	@helm uninstall otel-collector -n $(OBS_NS) 2>/dev/null || true
 	@printf "\033[32m✓ OpenTelemetry Collector uninstalled\033[0m\n"
 
 .PHONY: infra-uninstall
-infra-uninstall: infra-traefik-uninstall infra-otel-uninstall ## Видалити всі infrastructure компоненти
+infra-uninstall: infra-traefik-uninstall infra-otel-uninstall ## Uninstall all infra components
 	@printf "\033[32m✓ All infrastructure components uninstalled\033[0m\n"
