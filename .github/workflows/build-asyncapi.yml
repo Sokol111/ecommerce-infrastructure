@@ -334,13 +334,13 @@ jobs:
               schemaConstName=$(echo "$schemaName" | sed 's/Event$//' | sed 's/^/SchemaName/')
               # Convert to topic constant name
               topicConstName=$(echo "$default_topic" | sed 's/\./ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2)); print "Topic"$0}' | tr -d ' ')
-              # Convert to schema variable name for embedded schema
+              # Convert to schema variable name for embedded combined schema
               schemaVarName=$(basename "$schema" .avsc | sed -E 's/(^|_)([a-z])/\U\2/g')
               
               cat >> ${{ inputs.artifact_dir }}/constants.gen.go << EOF
           	{
           		GoType:     reflect.TypeOf(${schemaName}{}),
-          		SchemaJSON: ${schemaVarName}Schema,
+          		SchemaJSON: ${schemaVarName}CombinedSchema,
           		SchemaName: ${schemaConstName},
           		Topic:      ${topicConstName},
           	},
