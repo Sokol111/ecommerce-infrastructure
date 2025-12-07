@@ -37,10 +37,6 @@ COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
 WORKDIR /src
 RUN go work init && go work use ./${COMMONS_DIR} ./svc
 
-# Завантажуємо залежності для кешування
-WORKDIR /src/svc
-RUN --mount=type=cache,target=/go/pkg/mod go mod download
-
 ############################
 # Build stage
 ############################
