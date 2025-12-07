@@ -8,13 +8,13 @@ docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@docker network inspect "$(DOCKER_NETWORK)" >/dev/null 2>&1 || \
 		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
 	@printf "  Starting MongoDB...\n"
-	@docker compose -f "$(MONGO_COMPOSE)" up -d
+	@docker compose -f "$(MONGO_COMPOSE)" up -d --remove-orphans
 	@printf "  Starting Kafka...\n"
-	@docker compose -f "$(KAFKA_COMPOSE)" up -d
+	@docker compose -f "$(KAFKA_COMPOSE)" up -d --remove-orphans
 	@printf "  Starting Storage (MinIO, imgproxy)...\n"
-	@docker compose -f "$(STORAGE_COMPOSE)" up -d
+	@docker compose -f "$(STORAGE_COMPOSE)" up -d --remove-orphans
 	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
-	@docker compose -f "$(OBSERVABILITY_COMPOSE)" up -d
+	@docker compose -f "$(OBSERVABILITY_COMPOSE)" up -d --remove-orphans
 	@printf "\033[32m✓ Docker infrastructure started\033[0m\n"
 	@printf "\n\033[36mServices:\033[0m\n"
 	@printf "  MongoDB:          mongodb://localhost:27017\n"
