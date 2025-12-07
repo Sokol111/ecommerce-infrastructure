@@ -28,13 +28,18 @@ COPY ${COMMONS_DIR}/pkg ./${COMMONS_DIR}/pkg
 FROM base AS deps
 
 ARG SERVICE_DIR=service-dir
+ARG COMMONS_DIR
 
 # Копіюємо go.mod/go.sum для кешу модулів
 COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
 
+# Створюємо go.work для локальної розробки
+WORKDIR /src
+RUN go work init && go work use ./${COMMONS_DIR} ./svc
+
+# Завантажуємо залежності для кешування
 WORKDIR /src/svc
-RUN --mount=type=cache,target=/go/pkg/mod \
-    go mod download && go mod verify
+RUN --mount=type=cache,target=/go/pkg/mod go mod download
 
 ############################
 # Build stage
