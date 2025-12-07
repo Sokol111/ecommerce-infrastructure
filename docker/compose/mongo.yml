@@ -1,3 +1,5 @@
+name: ecommerce
+
 services:
   mongo:
     image: mongo:7.0
