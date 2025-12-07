@@ -2,6 +2,9 @@
 # Docker Compose Infrastructure
 # =============================================================================
 
+# Ignore orphan warnings since we use multiple compose files with same project name
+export COMPOSE_IGNORE_ORPHANS=true
+
 .PHONY: docker
 docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@printf "\033[36m→ Starting Docker infrastructure\033[0m\n"
