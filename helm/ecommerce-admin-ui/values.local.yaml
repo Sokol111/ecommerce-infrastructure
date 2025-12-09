@@ -7,10 +7,26 @@ ingress:
   enabled: true
   host: admin.127.0.0.1.nip.io
 
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 5
+
 env:
   - name: CATEGORY_API_URL
-    value: "http://ecommerce-category-service.dev.svc.cluster.local:8080"
+    value: "http://ecommerce-category-service:8080"
   - name: PRODUCT_API_URL
-    value: "http://ecommerce-product-service.dev.svc.cluster.local:8080"
+    value: "http://ecommerce-product-service:8080"
   - name: IMAGE_API_URL
-    value: "http://ecommerce-image-service.dev.svc.cluster.local:8080"
+    value: "http://ecommerce-image-service:8080"
