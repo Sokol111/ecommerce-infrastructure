@@ -36,6 +36,27 @@ GO_SERVICES = {
 }
 
 # ============================================================================
+# UI Services Configuration (Next.js)
+# ============================================================================
+
+UI_SERVICES = {
+    'ecommerce-admin-ui': {
+        'resource_deps': [
+            'ecommerce-product-service',
+            'ecommerce-category-service',
+            'ecommerce-image-service',
+        ],
+    },
+    'ecommerce-ui': {
+        'resource_deps': [
+            'ecommerce-product-query-service',
+            'ecommerce-category-query-service',
+            'ecommerce-image-service',
+        ],
+    },
+}
+
+# ============================================================================
 # Helm Dependencies (auto-build)
 # ============================================================================
 
@@ -107,33 +128,35 @@ for name, config in GO_SERVICES.items():
     )
 
 # ============================================================================
-# Admin UI (Next.js)
+# UI Services (Next.js)
 # ============================================================================
 
-docker_build(
-    'sokol111/ecommerce-admin-ui',
-    context=ROOT_PATH + '/ecommerce-admin-ui',
-    dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs',
-)
-
-k8s_yaml(helm_with_deps(
-    HELM_PATH + '/ecommerce-admin-ui',
-    name='ecommerce-admin-ui',
-    namespace='dev',
-    values=[
-        HELM_PATH + '/ecommerce-admin-ui/values.local.yaml',
-    ],
-))
-
-k8s_resource(
-    'ecommerce-admin-ui',
-    labels=['frontend'],
-    resource_deps=[
-        'ecommerce-product-service',
-        'ecommerce-category-service', 
-        'ecommerce-image-service',
-    ],
-)
+for name, config in UI_SERVICES.items():
+    image = 'sokol111/' + name
+    
+    # Build Docker image
+    docker_build(
+        image,
+        context=ROOT_PATH + '/' + name,
+        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs',
+    )
+    
+    # Deploy with Helm
+    k8s_yaml(helm_with_deps(
+        HELM_PATH + '/' + name,
+        name=name,
+        namespace='dev',
+        values=[
+            HELM_PATH + '/' + name + '/values.local.yaml',
+        ],
+    ))
+    
+    # Resource configuration
+    k8s_resource(
+        name,
+        labels=['frontend'],
+        resource_deps=config['resource_deps'],
+    )
 
 # ============================================================================
 # Settings
@@ -158,6 +181,7 @@ local_resource(
         link('http://ecommerce-category-query-service.127.0.0.1.nip.io', 'Category Query API'),
         link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
         link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
+        link('http://shop.127.0.0.1.nip.io', 'Shop UI'),
     ],
     labels=['links'],
 )
