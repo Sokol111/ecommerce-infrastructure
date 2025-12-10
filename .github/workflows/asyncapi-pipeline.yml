@@ -55,8 +55,6 @@ jobs:
       asyncapi_file: ${{ inputs.asyncapi_file }}
       avro_dir: ${{ inputs.avro_dir }}
       artifact: events-api
-      artifact_dir: events
-      package: events
 
   publish-schemas:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-schemas.yml@master

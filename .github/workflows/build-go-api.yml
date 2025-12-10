@@ -4,17 +4,20 @@ on:
   workflow_call:
     inputs:
       openapi_file:
-        required: true
+        required: false
         type: string
+        default: 'openapi/openapi.yml'
       artifact:
         required: true
         type: string
       artifact_dir:
-        required: true
+        required: false
         type: string
+        default: 'gen/httpapi'
       package:
-        required: true
+        required: false
         type: string
+        default: 'httpapi'
 
 permissions:
   contents: write
@@ -28,7 +31,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.24.2
+          go-version: 1.25.5
 
       - name: Init Go module
         run: go mod init github.com/${{ github.repository }}
@@ -42,17 +45,17 @@ jobs:
       - name: Generate Go types (models)
         run: |
           echo "Generating Go types (models)..."
-          $HOME/go/bin/oapi-codegen -generate types -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/models.gen.go ${{ inputs.openapi_file }}
+          oapi-codegen -generate types -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/models.gen.go ${{ inputs.openapi_file }}
 
       - name: Generate Go server
         run: |
           echo "Generating Go server..."
-          $HOME/go/bin/oapi-codegen -generate gin-server,strict-server,spec -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/server.gen.go ${{ inputs.openapi_file }}
+          oapi-codegen -generate gin-server,strict-server,spec -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/server.gen.go ${{ inputs.openapi_file }}
 
       - name: Generate Go client
         run: |
           echo "Generating Go client..."
-          $HOME/go/bin/oapi-codegen -generate client -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/client.gen.go ${{ inputs.openapi_file }}
+          oapi-codegen -generate client -package ${{ inputs.package }} -o ${{ inputs.artifact_dir }}/client.gen.go ${{ inputs.openapi_file }}
 
       - name: Embed OpenAPI spec
         run: |
