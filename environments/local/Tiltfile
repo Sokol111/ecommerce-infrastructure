@@ -28,11 +28,26 @@ default_registry('localhost:5000')
 # ============================================================================
 
 GO_SERVICES = {
-    'ecommerce-product-service': {'debug_port': 2345},
-    'ecommerce-category-service': {'debug_port': 2346},
-    'ecommerce-product-query-service': {'debug_port': 2347},
-    'ecommerce-category-query-service': {'debug_port': 2348},
-    'ecommerce-image-service': {'debug_port': 2349},
+    'ecommerce-product-service': {
+        'debug_port': 2345,
+        'api_deps': ['ecommerce-product-service-api'],
+    },
+    'ecommerce-category-service': {
+        'debug_port': 2346,
+        'api_deps': ['ecommerce-category-service-api'],
+    },
+    'ecommerce-product-query-service': {
+        'debug_port': 2347,
+        'api_deps': ['ecommerce-product-query-service-api', 'ecommerce-product-service-api'],
+    },
+    'ecommerce-category-query-service': {
+        'debug_port': 2348,
+        'api_deps': ['ecommerce-category-query-service-api', 'ecommerce-category-service-api'],
+    },
+    'ecommerce-image-service': {
+        'debug_port': 2349,
+        'api_deps': ['ecommerce-image-service-api', 'ecommerce-product-service-api'],
+    },
 }
 
 # ============================================================================
@@ -85,6 +100,23 @@ for name, config in GO_SERVICES.items():
     service_path = ROOT_PATH + '/' + name
     commons_path = ROOT_PATH + '/ecommerce-commons'
     
+    # Build list of paths to watch
+    watch_paths = [
+        name + '/cmd',
+        name + '/internal', 
+        name + '/configs',
+        name + '/db',
+        name + '/go.mod',
+        name + '/go.sum',
+        'ecommerce-commons/pkg',
+        'ecommerce-commons/go.mod',
+        'ecommerce-commons/go.sum',
+    ]
+    
+    # Add API dependencies
+    for api_dep in config.get('api_deps', []):
+        watch_paths.append(api_dep + '/gen')
+    
     # Build Docker image
     docker_build(
         image,
@@ -94,17 +126,7 @@ for name, config in GO_SERVICES.items():
             'SERVICE_DIR': name,
             'COMMONS_DIR': 'ecommerce-commons',
         },
-        only=[
-            name + '/cmd',
-            name + '/internal', 
-            name + '/configs',
-            name + '/db',
-            name + '/go.mod',
-            name + '/go.sum',
-            'ecommerce-commons/pkg',
-            'ecommerce-commons/go.mod',
-            'ecommerce-commons/go.sum',
-        ],
+        only=watch_paths,
     )
     
     # Deploy with Helm
