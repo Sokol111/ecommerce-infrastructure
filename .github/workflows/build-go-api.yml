@@ -33,9 +33,6 @@ jobs:
         with:
           go-version: 1.25.5
 
-      - name: Init Go module
-        run: go mod init github.com/${{ github.repository }}
-
       - name: Install oapi-codegen
         run: go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 
