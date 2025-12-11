@@ -1,25 +1,48 @@
 # Build stage
 FROM node:22-alpine AS builder
 
-WORKDIR /app
+# API_DEPS - space separated list of API dependency directories
+# e.g. "ecommerce-product-service-api ecommerce-category-service-api ecommerce-image-service-api"
+ARG API_DEPS=""
+ARG SERVICE_DIR
 
-# Set npm to use public registry
-RUN npm config set registry https://registry.npmjs.org/
+WORKDIR /app/${SERVICE_DIR}
 
-# Copy package files first for better layer caching
-COPY package*.json ./
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Install dependencies
-RUN npm ci
+# Copy all API dependencies first (for pnpm overrides)
+COPY . /tmp/context/
+RUN set -e && \
+    for api_dep in ${API_DEPS}; do \
+        if [ -d "/tmp/context/${api_dep}/gen/typescript" ]; then \
+            echo "Adding API dependency: ${api_dep}"; \
+            mkdir -p "/app/${api_dep}/gen"; \
+            cp -r "/tmp/context/${api_dep}/gen/typescript" "/app/${api_dep}/gen/typescript"; \
+        else \
+            echo "ERROR: API dependency not found: ${api_dep}/gen/typescript" && \
+            echo "Make sure it's included in 'only' paths in Tiltfile" && \
+            exit 1; \
+        fi; \
+    done
 
-# Copy application code (.dockerignore will exclude node_modules, .next, etc)
-COPY . .
+# Copy package files
+COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ./
+
+# Install dependencies (pnpm.overrides will use /app/../api paths)
+RUN pnpm install --frozen-lockfile
+
+# Copy application code
+COPY ${SERVICE_DIR}/. .
+RUN rm -rf /tmp/context
 
 # Build the application
-RUN npm run build
+RUN pnpm build
 
 # Production stage
 FROM node:22-alpine AS runner
+
+ARG SERVICE_DIR
 
 WORKDIR /app
 
@@ -31,9 +54,9 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy necessary files from builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/${SERVICE_DIR}/public ./public
+COPY --from=builder /app/${SERVICE_DIR}/.next/standalone ./
+COPY --from=builder /app/${SERVICE_DIR}/.next/static ./.next/static
 
 USER nextjs
 
