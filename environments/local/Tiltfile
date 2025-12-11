@@ -175,12 +175,17 @@ for name, config in UI_SERVICES.items():
     watch_paths = [
         name + '/app',
         name + '/components',
+        name + '/hooks',
         name + '/lib',
         name + '/public',
         name + '/package.json',
         name + '/pnpm-lock.yaml',
         name + '/next.config.ts',
         name + '/tsconfig.json',
+        name + '/tailwind.config.ts',
+        name + '/postcss.config.mjs',
+        name + '/components.json',
+        name + '/eslint.config.mjs',
     ]
     
     # Add API dependencies
