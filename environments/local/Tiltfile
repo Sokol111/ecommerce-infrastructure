@@ -99,6 +99,7 @@ for name, config in GO_SERVICES.items():
     image = 'sokol111/' + name
     service_path = ROOT_PATH + '/' + name
     commons_path = ROOT_PATH + '/ecommerce-commons'
+    api_deps = config.get('api_deps', [])
     
     # Build list of paths to watch
     watch_paths = [
@@ -114,8 +115,10 @@ for name, config in GO_SERVICES.items():
     ]
     
     # Add API dependencies
-    for api_dep in config.get('api_deps', []):
+    for api_dep in api_deps:
         watch_paths.append(api_dep + '/gen')
+        watch_paths.append(api_dep + '/go.mod')
+        watch_paths.append(api_dep + '/go.sum')
     
     # Build Docker image
     docker_build(
@@ -125,6 +128,7 @@ for name, config in GO_SERVICES.items():
         build_args={
             'SERVICE_DIR': name,
             'COMMONS_DIR': 'ecommerce-commons',
+            'API_DEPS': ' '.join(api_deps),
         },
         only=watch_paths,
     )
