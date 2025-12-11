@@ -39,11 +39,12 @@ jobs:
     with:
       openapi_file: ${{ inputs.openapi_file }}
       artifact: go-api
+      artifact_dir: gen/httpapi
 
   build-js-api:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/build-js-api.yml@master
     with:
-      artifact_dir: js-client
+      artifact_dir: gen/typescript
       artifact: js-api
       openapi_file: ${{ inputs.openapi_file }}
       version: ${{ inputs.version }}
@@ -62,6 +63,6 @@ jobs:
       - id: set
         run: |
           echo "go_artifact=go-api" >> $GITHUB_OUTPUT
-          echo "go_artifact_dir=api" >> $GITHUB_OUTPUT
+          echo "go_artifact_dir=gen/httpapi" >> $GITHUB_OUTPUT
           echo "js_artifact=js-api" >> $GITHUB_OUTPUT
-          echo "js_artifact_dir=js-client" >> $GITHUB_OUTPUT
+          echo "js_artifact_dir=gen/typescript" >> $GITHUB_OUTPUT

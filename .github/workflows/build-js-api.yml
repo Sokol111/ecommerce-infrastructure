@@ -4,14 +4,16 @@ on:
   workflow_call:
     inputs:
       artifact_dir:
-        required: true
+        required: false
         type: string
+        default: 'gen/typescript'
       artifact:
         required: true
         type: string
       openapi_file:
-        required: true
+        required: false
         type: string
+        default: 'openapi/openapi.yml'
       version:
         required: true
         type: string
@@ -36,96 +38,14 @@ jobs:
         with:
           node-version: 20
 
-      - name: Clean and create generation directory
-        run: |
-          echo "Cleaning JS client files..."
-          rm -rf ${{ inputs.artifact_dir }}
-          echo "Creating generation directory..."
-          mkdir -p ${{ inputs.artifact_dir }}
-
       - name: Generate TypeScript client
         run: |
-          echo "Generating JS client..."
-          npx @openapitools/openapi-generator-cli generate \
-            -i ${{ inputs.openapi_file }} \
-            -g typescript-axios \
-            -o ${{ inputs.artifact_dir }} \
-            --additional-properties=useSingleRequestParameter=true
-
-      - name: Generate package.json
-        run: |
-          # Remove 'v' prefix from version if present
-          VERSION_NO_V="${{ inputs.version }}"
-          VERSION_NO_V="${VERSION_NO_V#v}"
-
-          echo "Generating package.json..."
-          cat > ${{ inputs.artifact_dir }}/package.json <<EOF
-          {
-            "name": "${{ inputs.npm_repo_name }}",
-            "description": "Generated TypeScript Axios client from OpenAPI for ${{ inputs.project_name }}",
-            "version": "$VERSION_NO_V",
-            "main": "dist/index.js",
-            "types": "dist/index.d.ts",
-            "module": "dist/index.js",
-            "scripts": {
-              "build": "tsc",
-              "prepare": "npm run build"
-            },
-            "keywords": ["openapi", "typescript", "axios", "sdk"],
-            "author": "${{ github.repository_owner }}",
-            "license": "MIT",
-            "repository": {
-              "type": "git",
-              "url": "https://github.com/${{ github.repository }}.git"
-            },
-            "dependencies": {
-              "axios": "^1.6.1"
-            },
-            "devDependencies": {
-              "typescript": "^5.4.0"
-            },
-            "publishConfig": {
-              "access": "public"
-            },
-            "files": [
-              "dist"
-            ]
-          }
-          EOF
-
-      - name: Generate tsconfig.json
-        run: |
-          echo "Generating tsconfig.json..."
-          cat > ${{ inputs.artifact_dir }}/tsconfig.json <<EOF
-          {
-            "compilerOptions": {
-              "target": "es6",
-              "module": "ESNext",
-              "moduleResolution": "node",
-              "declaration": true,
-              "outDir": "dist",
-              "strict": true,
-              "esModuleInterop": true
-            },
-            "include": ["**/*.ts"]
-          }
-          EOF
-
-      - name: Build JavaScript package
-        run: |
-          echo "Installing JS dependencies and building JS package..."
-          cd ${{ inputs.artifact_dir }}
-          npm install
-          npm run build
-
-          echo "Cleaning up..."
-          rm -f openapitools.json
-          cd ..
-          rm -f openapitools.json
-
-          echo "JS client is ready"
-          echo "Generated package.json:"
-          cat ${{ inputs.artifact_dir }}/package.json
+          make openapi-ts-generate \
+            OPENAPI_FILE=${{ inputs.openapi_file }} \
+            TS_API_DIR=${{ inputs.artifact_dir }} \
+            TS_PACKAGE_NAME=${{ inputs.npm_repo_name }} \
+            TS_VERSION=${{ inputs.version }} \
+            PROJECT_NAME=${{ inputs.project_name }}
 
       - name: Upload built JS API
         uses: actions/upload-artifact@v4
