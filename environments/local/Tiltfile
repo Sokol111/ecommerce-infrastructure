@@ -61,12 +61,22 @@ UI_SERVICES = {
             'ecommerce-category-service',
             'ecommerce-image-service',
         ],
+        'api_deps': [
+            'ecommerce-product-service-api',
+            'ecommerce-category-service-api',
+            'ecommerce-image-service-api',
+        ],
     },
     'ecommerce-ui': {
         'resource_deps': [
             'ecommerce-product-query-service',
             'ecommerce-category-query-service',
             'ecommerce-image-service',
+        ],
+        'api_deps': [
+            'ecommerce-product-query-service-api',
+            'ecommerce-category-query-service-api',
+            'ecommerce-image-service-api',
         ],
     },
 }
@@ -159,12 +169,34 @@ for name, config in GO_SERVICES.items():
 
 for name, config in UI_SERVICES.items():
     image = 'sokol111/' + name
+    api_deps = config.get('api_deps', [])
+    
+    # Build list of paths to watch
+    watch_paths = [
+        name + '/app',
+        name + '/components',
+        name + '/lib',
+        name + '/public',
+        name + '/package.json',
+        name + '/pnpm-lock.yaml',
+        name + '/next.config.ts',
+        name + '/tsconfig.json',
+    ]
+    
+    # Add API dependencies
+    for api_dep in api_deps:
+        watch_paths.append(api_dep + '/gen/typescript')
     
     # Build Docker image
     docker_build(
         image,
-        context=ROOT_PATH + '/' + name,
+        context=ROOT_PATH,
         dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs',
+        build_args={
+            'SERVICE_DIR': name,
+            'API_DEPS': ' '.join(api_deps),
+        },
+        only=watch_paths,
     )
     
     # Deploy with Helm
