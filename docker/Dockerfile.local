@@ -29,13 +29,32 @@ FROM base AS deps
 
 ARG SERVICE_DIR=service-dir
 ARG COMMONS_DIR
+# API_DEPS - space separated list of API dependency directories (e.g. "ecommerce-product-service-api ecommerce-category-service-api")
+ARG API_DEPS=""
 
 # Копіюємо go.mod/go.sum для кешу модулів
 COPY ${SERVICE_DIR}/go.mod ${SERVICE_DIR}/go.sum ./svc/
 
-# Створюємо go.work для локальної розробки
+# Копіюємо всі API залежності (вони потрібні для go.work)
+# Копіюємо ввесь контекст щоб мати доступ до API модулів
+COPY . /tmp/context/
+
+# Створюємо go.work для локальної розробки з усіма залежностями
 WORKDIR /src
-RUN go work init && go work use ./${COMMONS_DIR} ./svc
+RUN set -e && \
+    go work init && \
+    go work use ./${COMMONS_DIR} ./svc && \
+    for api_dep in ${API_DEPS}; do \
+        if [ -d "/tmp/context/${api_dep}" ]; then \
+            echo "Adding API dependency: ${api_dep}"; \
+            cp -r "/tmp/context/${api_dep}" "/src/${api_dep}"; \
+            go work use "./${api_dep}"; \
+        else \
+            echo "Warning: API dependency not found: ${api_dep}"; \
+        fi; \
+    done && \
+    rm -rf /tmp/context && \
+    echo "Final go.work:" && cat go.work
 
 ############################
 # Build stage
