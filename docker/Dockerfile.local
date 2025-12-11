@@ -42,6 +42,9 @@ COPY . /tmp/context/
 # Створюємо go.work для локальної розробки з усіма залежностями
 WORKDIR /src
 RUN set -e && \
+    echo "=== Docker context contents ===" && \
+    ls -la /tmp/context/ && \
+    echo "===============================" && \
     go work init && \
     go work use ./${COMMONS_DIR} ./svc && \
     for api_dep in ${API_DEPS}; do \
@@ -50,7 +53,9 @@ RUN set -e && \
             cp -r "/tmp/context/${api_dep}" "/src/${api_dep}"; \
             go work use "./${api_dep}"; \
         else \
-            echo "Warning: API dependency not found: ${api_dep}"; \
+            echo "ERROR: API dependency not found: ${api_dep}" && \
+            echo "Make sure it's included in 'only' paths in Tiltfile" && \
+            exit 1; \
         fi; \
     done && \
     rm -rf /tmp/context && \
