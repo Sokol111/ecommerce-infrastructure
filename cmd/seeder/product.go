@@ -15,7 +15,7 @@ import (
 func (s *Seeder) createProducts() error {
 	ctx := context.Background()
 
-	for _, prod := range s.config.Products {
+	for _, prod := range s.data.Products {
 		// Check if product already exists by ID
 		if prod.ID != "" {
 			exists, err := s.productExists(ctx, prod.ID)

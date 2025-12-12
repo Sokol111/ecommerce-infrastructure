@@ -13,6 +13,7 @@ import (
 
 type Seeder struct {
 	config         *Config
+	data           *SeedData
 	httpClient     *http.Client
 	assetsDir      string
 	categoryClient *categoryapi.Client
@@ -20,7 +21,7 @@ type Seeder struct {
 	imageClient    *imageapi.Client
 }
 
-func NewSeeder(config *Config, assetsDir string) (*Seeder, error) {
+func NewSeeder(config *Config, data *SeedData, assetsDir string) (*Seeder, error) {
 	httpClient := &http.Client{
 		Timeout: 30 * time.Second,
 	}
@@ -42,6 +43,7 @@ func NewSeeder(config *Config, assetsDir string) (*Seeder, error) {
 
 	return &Seeder{
 		config:         config,
+		data:           data,
 		httpClient:     httpClient,
 		assetsDir:      assetsDir,
 		categoryClient: categoryClient,

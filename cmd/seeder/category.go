@@ -15,7 +15,7 @@ import (
 func (s *Seeder) createCategories() error {
 	ctx := context.Background()
 
-	for _, cat := range s.config.Categories {
+	for _, cat := range s.data.Categories {
 		// Check if category already exists by ID
 		if cat.ID != "" {
 			exists, err := s.categoryExists(ctx, cat.ID)
