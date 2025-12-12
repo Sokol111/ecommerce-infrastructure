@@ -7,34 +7,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Config represents the seeder configuration
+// Config represents the seeder runtime configuration (endpoints + paths).
 type Config struct {
-	Services   ServicesConfig `yaml:"services"`
-	Categories []Category     `yaml:"categories"`
-	Products   []Product      `yaml:"products"`
+	Services ServicesConfig `yaml:"services"`
+	DataFile string         `yaml:"dataFile"`
 }
 
 type ServicesConfig struct {
 	CategoryService string `yaml:"categoryService"`
 	ProductService  string `yaml:"productService"`
 	ImageService    string `yaml:"imageService"`
-}
-
-type Category struct {
-	ID      string `yaml:"id"`
-	Name    string `yaml:"name"`
-	Enabled bool   `yaml:"enabled"`
-}
-
-type Product struct {
-	ID          string  `yaml:"id"`
-	Name        string  `yaml:"name"`
-	Description string  `yaml:"description"`
-	Price       float32 `yaml:"price"`
-	Quantity    int     `yaml:"quantity"`
-	CategoryID  string  `yaml:"categoryId"` // Direct category UUID
-	ImageFile   string  `yaml:"imageFile"`  // Local file path for image
-	Enabled     bool    `yaml:"enabled"`
 }
 
 func loadConfig(path string) (*Config, error) {
@@ -46,6 +28,10 @@ func loadConfig(path string) (*Config, error) {
 	var config Config
 	if err := yaml.Unmarshal(data, &config); err != nil {
 		return nil, fmt.Errorf("failed to parse config file: %w", err)
+	}
+
+	if config.DataFile == "" {
+		config.DataFile = "seed-data.json"
 	}
 
 	return &config, nil

@@ -16,8 +16,8 @@ This seeder calls actual service endpoints instead of directly inserting into da
 - ✅ Creates products via Product Service API  
 - ✅ Uploads images via Image Service API (presigned URL flow)
 - ✅ Automatic category → product linking
-- ✅ Dry-run mode for testing
-- ✅ Configurable via YAML
+- ✅ Idempotent: skips entities that already exist (GET-by-ID)
+- ✅ Endpoints via YAML + demo data via JSON
 
 ## Prerequisites
 
@@ -40,32 +40,16 @@ go build -o seeder .
 ```bash
 # With default configuration
 ./seeder
-
-# With custom config file
-./seeder -config /path/to/seed-data.yaml
-
-# With custom assets directory (for images)
-./seeder -assets /path/to/images
-
-# Dry run (no actual API calls)
-./seeder -dry-run
-
-# Verbose output
-./seeder -verbose
 ```
 
-### Command Line Options
+## Configuration Files
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `-config` | `seed-data.yaml` | Path to seed data configuration file |
-| `-assets` | `assets` | Path to assets directory containing images |
-| `-dry-run` | `false` | Perform a dry run without making actual API calls |
-| `-verbose` | `false` | Enable verbose output |
+This seeder uses two files:
 
-## Configuration File
+- `config.yaml` for service endpoints and the data file pointer
+- `seed-data.json` for demo content (categories/products)
 
-The seed data is configured in `seed-data.yaml`:
+### config.yaml (endpoints)
 
 ```yaml
 services:
@@ -73,20 +57,29 @@ services:
   productService: http://localhost:8082
   imageService: http://localhost:8084
 
-categories:
-  - name: "Electronics"
-    enabled: true
-  - name: "Smartphones"
-    enabled: true
+dataFile: seed-data.json
+```
 
-products:
-  - name: "iPhone 15 Pro"
-    description: "Apple's flagship smartphone"
-    price: 1199.99
-    quantity: 50
-    categoryRef: "Smartphones"  # References category by name
-    imageFile: "iphone-15.jpg"  # File from assets directory
-    enabled: true
+### seed-data.json (data)
+
+```json
+{
+  "categories": [
+    {"id": "13ef613d-038b-4010-8462-835e57713025", "name": "Electronics", "enabled": true}
+  ],
+  "products": [
+    {
+      "id": "3780f1b5-434f-48c5-813a-abb7b936cb3c",
+      "name": "iPhone 15 Pro Max",
+      "description": "Apple's flagship smartphone",
+      "price": 1199.99,
+      "quantity": 50,
+      "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+      "imageFile": "iphone-15-pro.jpg",
+      "enabled": true
+    }
+  ]
+}
 ```
 
 ## Adding Images
@@ -106,18 +99,17 @@ make dev
 
 # In another terminal, run the seeder
 cd cmd/seeder
-go run . -verbose
+go run .
 ```
 
 ## Adding More Demo Data
 
-Edit `seed-data.yaml` to add:
+Edit `seed-data.json` to add:
 - New categories
 - New products
-- Update service URLs
+- Update service URLs in `config.yaml`
 
 The seeder will:
 1. Create all categories first
-2. Map category names to their generated IDs
-3. Upload images (if specified)
-4. Create products with proper category and image references
+2. Upload images (if specified)
+3. Create products with proper category and image references
