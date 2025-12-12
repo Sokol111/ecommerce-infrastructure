@@ -15,6 +15,13 @@ import (
 func (s *Seeder) createProducts() error {
 	ctx := context.Background()
 
+	categoryNameByID := make(map[string]string, len(s.data.Categories))
+	for _, cat := range s.data.Categories {
+		if cat.ID != "" {
+			categoryNameByID[cat.ID] = cat.Name
+		}
+	}
+
 	for _, prod := range s.data.Products {
 		// Check if product already exists by ID
 		if prod.ID != "" {
@@ -38,19 +45,42 @@ func (s *Seeder) createProducts() error {
 			categoryID = &parsedUUID
 		}
 
-		// Upload image if specified
+		// Upload product image; if missing/fails, try category fallback image file.
 		var imageID *uuid.UUID
+		parseAndSet := func(imgIDStr string) {
+			if imageID != nil || imgIDStr == "" {
+				return
+			}
+			parsedUUID, err := uuid.Parse(imgIDStr)
+			if err != nil {
+				log.Printf("  ⚠ Warning: invalid image UUID %s: %v", imgIDStr, err)
+				return
+			}
+			imageID = &parsedUUID
+		}
+
 		if prod.ImageFile != "" {
 			imgIDStr, err := s.uploadImage(prod.ImageFile, prod.Name)
 			if err != nil {
-				log.Printf("  ⚠ Warning: failed to upload image for %s: %v", prod.Name, err)
-			} else if imgIDStr != "" {
-				parsedUUID, err := uuid.Parse(imgIDStr)
-				if err != nil {
-					log.Printf("  ⚠ Warning: invalid image UUID %s: %v", imgIDStr, err)
-				} else {
-					imageID = &parsedUUID
-				}
+				log.Printf("  ⚠ Warning: failed to upload image for %s (%s): %v", prod.Name, prod.ImageFile, err)
+			} else {
+				parseAndSet(imgIDStr)
+			}
+		}
+
+		if imageID == nil && prod.CategoryID != "" {
+			fallbackFile := fmt.Sprintf("category-%s.png", prod.CategoryID)
+			catName := categoryNameByID[prod.CategoryID]
+			alt := prod.Name
+			if catName != "" {
+				alt = fmt.Sprintf("%s (%s)", prod.Name, catName)
+			}
+
+			imgIDStr, err := s.uploadImage(fallbackFile, alt)
+			if err != nil {
+				log.Printf("  ⚠ Warning: failed to upload category fallback image for %s (%s): %v", prod.Name, fallbackFile, err)
+			} else {
+				parseAndSet(imgIDStr)
 			}
 		}
 

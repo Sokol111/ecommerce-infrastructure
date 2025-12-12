@@ -15,10 +15,8 @@ import (
 )
 
 func (s *Seeder) uploadImage(imageFile, productName string) (string, error) {
-	ctx := context.Background()
 	imagePath := filepath.Join(s.assetsDir, imageFile)
 
-	// Check if file exists
 	fileInfo, err := os.Stat(imagePath)
 	if err != nil {
 		return "", fmt.Errorf("image file not found: %s", imagePath)
@@ -29,6 +27,8 @@ func (s *Seeder) uploadImage(imageFile, productName string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to read image file: %w", err)
 	}
+
+	ctx := context.Background()
 
 	// Determine content type using generated enum
 	contentType := detectContentType(imageFile, fileContent)

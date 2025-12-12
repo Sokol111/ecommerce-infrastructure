@@ -88,6 +88,16 @@ dataFile: seed-data.json
 2. Reference the filename in the product's `imageFile` field
 3. Supported formats: JPEG, PNG, WebP, GIF
 
+### Category fallback images
+
+If a product image is missing (or upload fails), the seeder will try a category fallback image using this convention:
+
+- `assets/category-<categoryId>.png`
+
+Example:
+
+- `assets/category-eff2c798-bfaa-49dc-a6e2-209a30822625.png`
+
 ## Running with Docker Compose
 
 If using the local development environment:
