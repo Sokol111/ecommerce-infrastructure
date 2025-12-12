@@ -126,3 +126,20 @@ urls: ## Show all service URLs available in browser
 	@printf "  \033[36m%-35s\033[0m %s\n" "Admin UI:" "http://localhost:3000"
 	@printf "\n"
 
+# =============================================================================
+# Demo Data Seeder
+# =============================================================================
+
+SEEDER_DIR := $(THIS_DIR)cmd/seeder
+SEEDER_BIN := $(SEEDER_DIR)/seeder
+
+.PHONY: seed-build
+seed-build: ## Build the demo data seeder
+	@printf "\033[36m→ Building seeder...\033[0m\n"
+	cd $(SEEDER_DIR) && go build -o seeder .
+	@printf "\033[32m✓ Seeder built successfully\033[0m\n"
+
+.PHONY: seed
+seed: seed-build ## Seed the database with demo data
+	@printf "\033[36m→ Seeding demo data...\033[0m\n"
+	cd $(SEEDER_DIR) && ./seeder -verbose

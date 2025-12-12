@@ -1,0 +1,408 @@
+# Demo Data Seed Configuration
+# This file contains sample data for populating the ecommerce database
+
+# Service URLs for local development
+# Option 1: Direct port forwards (when using `tilt up`)
+# Option 2: Via Traefik Ingress (when using k3d cluster)
+services:
+  # Using Traefik Ingress URLs (default for k3d environment)
+  categoryService: http://ecommerce-category-service.127.0.0.1.nip.io
+  productService: http://ecommerce-product-service.127.0.0.1.nip.io
+  imageService: http://ecommerce-image-service.127.0.0.1.nip.io
+  
+  # Alternative: Direct port forwards (uncomment if needed)
+  # categoryService: http://localhost:8082
+  # productService: http://localhost:8081
+  # imageService: http://localhost:8085
+
+# Categories to create (with predefined UUIDs for product references)
+categories:
+  - id: "13ef613d-038b-4010-8462-835e57713025"
+    name: "Electronics"
+    enabled: true
+  - id: "eff2c798-bfaa-49dc-a6e2-209a30822625"
+    name: "Smartphones"
+    enabled: true
+  - id: "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c"
+    name: "Laptops"
+    enabled: true
+  - id: "eb7469f7-96d2-4303-a8e3-49a553f5d892"
+    name: "Audio"
+    enabled: true
+  - id: "fe2d0d41-cc99-4379-a8dd-7c3ad089fab2"
+    name: "Clothing"
+    enabled: true
+  - id: "5f22c69e-8abb-4e04-b3b5-2f633bc76ef6"
+    name: "Men's Clothing"
+    enabled: true
+  - id: "0fc1b1e6-13df-46a6-9928-92c174279cd7"
+    name: "Women's Clothing"
+    enabled: true
+  - id: "2b79356f-0e93-4c8a-90c6-cf1e55024313"
+    name: "Shoes"
+    enabled: true
+  - id: "9a78977d-091e-4512-bf89-df82dffeda99"
+    name: "Home & Garden"
+    enabled: true
+  - id: "42dee224-9610-47d7-9c24-98a501fb93f5"
+    name: "Furniture"
+    enabled: true
+  - id: "e36bb363-3746-4d0e-9784-12ef61842bca"
+    name: "Kitchen"
+    enabled: true
+  - id: "0ac81d09-fbb6-4d56-8ca3-9b808f75d581"
+    name: "Sports & Outdoors"
+    enabled: true
+  - id: "f3b16c69-2f55-4ca5-a46a-8a6cee23afa5"
+    name: "Fitness"
+    enabled: true
+  - id: "5a45b1b0-90e0-4fd6-bcb6-76b7eecea549"
+    name: "Camping"
+    enabled: true
+  - id: "f5bd082d-1658-43b9-8524-fb0042c16d71"
+    name: "Books"
+    enabled: true
+  - id: "0f1ef2b8-bae8-416b-8ba6-981e3ed394d2"
+    name: "Fiction"
+    enabled: true
+  - id: "42b6a911-636b-4c69-b3f3-fc3da040dcd5"
+    name: "Non-Fiction"
+    enabled: true
+
+# Products to create
+products:
+  # Electronics - Smartphones
+  - id: "3780f1b5-434f-48c5-813a-abb7b936cb3c"
+    name: "iPhone 15 Pro Max"
+    description: "Apple's flagship smartphone with A17 Pro chip, titanium design, and advanced camera system"
+    price: 1199.99
+    quantity: 50
+    categoryId: "eff2c798-bfaa-49dc-a6e2-209a30822625"
+    imageFile: "iphone-15-pro.jpg"
+    enabled: true
+
+  - id: "8bee99eb-5606-4222-8233-7b0b40f4ae88"
+    name: "Samsung Galaxy S24 Ultra"
+    description: "Samsung's premium smartphone with S Pen, AI features, and 200MP camera"
+    price: 1299.99
+    quantity: 45
+    categoryId: "eff2c798-bfaa-49dc-a6e2-209a30822625"
+    imageFile: "samsung-s24-ultra.jpg"
+    enabled: true
+
+  - id: "f881889a-4c2d-4e85-9e45-107895812e3e"
+    name: "Google Pixel 8 Pro"
+    description: "Google's AI-powered smartphone with Tensor G3 chip and exceptional camera"
+    price: 999.99
+    quantity: 60
+    categoryId: "eff2c798-bfaa-49dc-a6e2-209a30822625"
+    imageFile: "pixel-8-pro.jpg"
+    enabled: true
+
+  # Electronics - Laptops
+  - id: "ae3eb26a-d875-4ee6-ae24-511511f9fc82"
+    name: "MacBook Pro 16-inch M3 Max"
+    description: "Apple's most powerful laptop for professionals with M3 Max chip"
+    price: 3499.99
+    quantity: 25
+    categoryId: "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c"
+    imageFile: "macbook-pro-16.jpg"
+    enabled: true
+
+  - id: "ad93fea0-b46c-4c21-89e5-b6b9fb73ce60"
+    name: "Dell XPS 15"
+    description: "Premium Windows laptop with InfinityEdge display and Intel Core i9"
+    price: 1899.99
+    quantity: 35
+    categoryId: "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c"
+    imageFile: "dell-xps-15.jpg"
+    enabled: true
+
+  - id: "6e0a80b5-c70e-4f64-99f5-9550e8c6afec"
+    name: "Lenovo ThinkPad X1 Carbon"
+    description: "Business ultrabook with legendary durability and enterprise security"
+    price: 1649.99
+    quantity: 40
+    categoryId: "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c"
+    imageFile: "thinkpad-x1.jpg"
+    enabled: true
+
+  # Electronics - Audio
+  - id: "1935be9d-ba9a-4751-b617-94c90f0e307f"
+    name: "Sony WH-1000XM5"
+    description: "Industry-leading noise canceling wireless headphones"
+    price: 399.99
+    quantity: 100
+    categoryId: "eb7469f7-96d2-4303-a8e3-49a553f5d892"
+    imageFile: "sony-xm5.jpg"
+    enabled: true
+
+  - id: "31a28dfa-4d7d-47c4-9767-0d4168f664f5"
+    name: "Apple AirPods Pro 2"
+    description: "Active noise cancellation earbuds with Adaptive Audio"
+    price: 249.99
+    quantity: 150
+    categoryId: "eb7469f7-96d2-4303-a8e3-49a553f5d892"
+    imageFile: "airpods-pro-2.jpg"
+    enabled: true
+
+  - id: "b4f97f1e-19fb-46dc-ad93-31f5270a48b3"
+    name: "Bose QuietComfort Ultra"
+    description: "Premium immersive audio headphones with world-class noise cancellation"
+    price: 429.99
+    quantity: 75
+    categoryId: "eb7469f7-96d2-4303-a8e3-49a553f5d892"
+    imageFile: "bose-qc-ultra.jpg"
+    enabled: true
+
+  # Clothing - Men's
+  - id: "87602ae6-bbe7-4f43-919f-055589017b63"
+    name: "Classic Oxford Shirt - Blue"
+    description: "Timeless button-down oxford shirt in premium cotton"
+    price: 79.99
+    quantity: 200
+    categoryId: "5f22c69e-8abb-4e04-b3b5-2f633bc76ef6"
+    imageFile: "oxford-shirt-blue.jpg"
+    enabled: true
+
+  - id: "cd7411d1-ac6f-4b0e-ad8f-d33b18306b0b"
+    name: "Slim Fit Chinos - Navy"
+    description: "Versatile slim fit chinos perfect for work or casual wear"
+    price: 69.99
+    quantity: 180
+    categoryId: "5f22c69e-8abb-4e04-b3b5-2f633bc76ef6"
+    imageFile: "chinos-navy.jpg"
+    enabled: true
+
+  - id: "da91be73-07c9-43c9-aefc-07df1a951acd"
+    name: "Wool Blend Blazer - Charcoal"
+    description: "Classic blazer crafted from premium wool blend fabric"
+    price: 249.99
+    quantity: 60
+    categoryId: "5f22c69e-8abb-4e04-b3b5-2f633bc76ef6"
+    imageFile: "blazer-charcoal.jpg"
+    enabled: true
+
+  # Clothing - Women's
+  - id: "171397d3-f9ad-4aa8-9de8-cf075e294ce7"
+    name: "Silk Midi Dress - Burgundy"
+    description: "Elegant midi dress in luxurious silk with flattering silhouette"
+    price: 189.99
+    quantity: 80
+    categoryId: "0fc1b1e6-13df-46a6-9928-92c174279cd7"
+    imageFile: "silk-dress-burgundy.jpg"
+    enabled: true
+
+  - id: "a4916130-42e7-4065-9db0-f884ff5a5f99"
+    name: "Cashmere Sweater - Cream"
+    description: "Ultra-soft cashmere sweater for ultimate comfort"
+    price: 199.99
+    quantity: 90
+    categoryId: "0fc1b1e6-13df-46a6-9928-92c174279cd7"
+    imageFile: "cashmere-sweater.jpg"
+    enabled: true
+
+  - id: "73a3e8c8-6592-4f32-ab7b-88c42724cd8e"
+    name: "High-Waist Tailored Pants - Black"
+    description: "Modern tailored pants with comfortable high waist"
+    price: 119.99
+    quantity: 120
+    categoryId: "0fc1b1e6-13df-46a6-9928-92c174279cd7"
+    imageFile: "tailored-pants.jpg"
+    enabled: true
+
+  # Shoes
+  - id: "570e3d00-8e7b-4eb8-b986-1adfdf195f3f"
+    name: "Nike Air Max 90"
+    description: "Iconic sneaker with visible Air cushioning and retro style"
+    price: 129.99
+    quantity: 200
+    categoryId: "2b79356f-0e93-4c8a-90c6-cf1e55024313"
+    imageFile: "nike-air-max-90.jpg"
+    enabled: true
+
+  - id: "35a04e04-1096-48b8-88bb-535a9a1bc74e"
+    name: "Adidas Ultraboost 23"
+    description: "Premium running shoes with Boost midsole technology"
+    price: 189.99
+    quantity: 150
+    categoryId: "2b79356f-0e93-4c8a-90c6-cf1e55024313"
+    imageFile: "adidas-ultraboost.jpg"
+    enabled: true
+
+  - id: "0d476c36-c82c-4469-a1d9-6fe8981362aa"
+    name: "Dr. Martens 1460 Boot"
+    description: "Classic 8-eye boot with signature yellow stitching"
+    price: 179.99
+    quantity: 100
+    categoryId: "2b79356f-0e93-4c8a-90c6-cf1e55024313"
+    imageFile: "dr-martens-1460.jpg"
+    enabled: true
+
+  # Home & Garden - Furniture
+  - id: "e4d2d290-4cec-4860-a8c4-d362c965ce46"
+    name: "Scandinavian Sofa - Grey"
+    description: "Modern 3-seater sofa with clean lines and comfortable cushions"
+    price: 899.99
+    quantity: 20
+    categoryId: "42dee224-9610-47d7-9c24-98a501fb93f5"
+    imageFile: "scandinavian-sofa.jpg"
+    enabled: true
+
+  - id: "4c5b1425-0a4f-4588-a425-a8ccad3477c9"
+    name: "Oak Dining Table"
+    description: "Solid oak dining table seats 6, perfect for family gatherings"
+    price: 699.99
+    quantity: 15
+    categoryId: "42dee224-9610-47d7-9c24-98a501fb93f5"
+    imageFile: "oak-dining-table.jpg"
+    enabled: true
+
+  - id: "ef220a2c-5666-482d-80d1-e13add27ac59"
+    name: "Ergonomic Office Chair"
+    description: "Adjustable office chair with lumbar support and breathable mesh"
+    price: 349.99
+    quantity: 50
+    categoryId: "42dee224-9610-47d7-9c24-98a501fb93f5"
+    imageFile: "office-chair.jpg"
+    enabled: true
+
+  # Home & Garden - Kitchen
+  - id: "0c1c0ead-bd00-4e51-a65e-dbeff0ee0f28"
+    name: "KitchenAid Stand Mixer"
+    description: "Professional 5-quart stand mixer for baking enthusiasts"
+    price: 449.99
+    quantity: 40
+    categoryId: "e36bb363-3746-4d0e-9784-12ef61842bca"
+    imageFile: "kitchenaid-mixer.jpg"
+    enabled: true
+
+  - id: "3ccacff5-9d67-4845-a04d-108ed226b1cf"
+    name: "Nespresso Vertuo Coffee Machine"
+    description: "Premium coffee machine with centrifusion technology"
+    price: 199.99
+    quantity: 75
+    categoryId: "e36bb363-3746-4d0e-9784-12ef61842bca"
+    imageFile: "nespresso-vertuo.jpg"
+    enabled: true
+
+  - id: "0ed8b94b-fb0e-4e68-90fc-920c8c1f7d33"
+    name: "Cast Iron Dutch Oven"
+    description: "Enameled cast iron dutch oven, 6-quart capacity"
+    price: 149.99
+    quantity: 60
+    categoryId: "e36bb363-3746-4d0e-9784-12ef61842bca"
+    imageFile: "dutch-oven.jpg"
+    enabled: true
+
+  # Sports - Fitness
+  - id: "0d72f5db-a00d-4da7-bee4-a654105acec8"
+    name: "Yoga Mat Premium"
+    description: "Extra thick non-slip yoga mat with carrying strap"
+    price: 49.99
+    quantity: 200
+    categoryId: "f3b16c69-2f55-4ca5-a46a-8a6cee23afa5"
+    imageFile: "yoga-mat.jpg"
+    enabled: true
+
+  - id: "b4a78ddc-bbd2-4767-8f92-73066a5dd274"
+    name: "Adjustable Dumbbell Set"
+    description: "Space-saving adjustable dumbbells 5-50 lbs"
+    price: 399.99
+    quantity: 30
+    categoryId: "f3b16c69-2f55-4ca5-a46a-8a6cee23afa5"
+    imageFile: "dumbbell-set.jpg"
+    enabled: true
+
+  - id: "5ea0a429-8ceb-4ee1-a3b9-9e7f072eeb06"
+    name: "Resistance Band Set"
+    description: "Complete set of 5 resistance bands for home workouts"
+    price: 29.99
+    quantity: 300
+    categoryId: "f3b16c69-2f55-4ca5-a46a-8a6cee23afa5"
+    imageFile: "resistance-bands.jpg"
+    enabled: true
+
+  # Sports - Camping
+  - id: "dccfc9b0-251e-40cc-8a1d-8b01976d26a3"
+    name: "4-Person Camping Tent"
+    description: "Waterproof dome tent with easy setup for family camping"
+    price: 199.99
+    quantity: 40
+    categoryId: "5a45b1b0-90e0-4fd6-bcb6-76b7eecea549"
+    imageFile: "camping-tent.jpg"
+    enabled: true
+
+  - id: "c46a2eba-2cb8-45f4-a481-349ab9ffa397"
+    name: "Sleeping Bag -10°C"
+    description: "Mummy sleeping bag rated for cold weather camping"
+    price: 89.99
+    quantity: 80
+    categoryId: "5a45b1b0-90e0-4fd6-bcb6-76b7eecea549"
+    imageFile: "sleeping-bag.jpg"
+    enabled: true
+
+  - id: "dc7ee5b1-441f-4bd8-80d7-0d36ada95d2a"
+    name: "Portable Camping Stove"
+    description: "Compact propane stove with 2 burners for outdoor cooking"
+    price: 79.99
+    quantity: 60
+    categoryId: "5a45b1b0-90e0-4fd6-bcb6-76b7eecea549"
+    imageFile: "camping-stove.jpg"
+    enabled: true
+
+  # Books - Fiction
+  - id: "d237c0f2-2cef-4974-8858-def5925bdebc"
+    name: "The Silent Patient"
+    description: "Psychological thriller by Alex Michaelides"
+    price: 16.99
+    quantity: 150
+    categoryId: "0f1ef2b8-bae8-416b-8ba6-981e3ed394d2"
+    imageFile: "silent-patient.jpg"
+    enabled: true
+
+  - id: "4219c284-f87b-4060-a8f3-5c35d47bc6f8"
+    name: "Project Hail Mary"
+    description: "Sci-fi adventure by Andy Weir, author of The Martian"
+    price: 18.99
+    quantity: 120
+    categoryId: "0f1ef2b8-bae8-416b-8ba6-981e3ed394d2"
+    imageFile: "project-hail-mary.jpg"
+    enabled: true
+
+  - id: "0568e3ab-b58c-44f5-b880-3643757e88a6"
+    name: "The Midnight Library"
+    description: "Thought-provoking novel by Matt Haig about infinite possibilities"
+    price: 15.99
+    quantity: 130
+    categoryId: "0f1ef2b8-bae8-416b-8ba6-981e3ed394d2"
+    imageFile: "midnight-library.jpg"
+    enabled: true
+
+  # Books - Non-Fiction
+  - id: "321b7ff6-733d-471b-b318-33c258b699b8"
+    name: "Atomic Habits"
+    description: "James Clear's guide to building good habits and breaking bad ones"
+    price: 19.99
+    quantity: 200
+    categoryId: "42b6a911-636b-4c69-b3f3-fc3da040dcd5"
+    imageFile: "atomic-habits.jpg"
+    enabled: true
+
+  - id: "fdf66ed4-3d12-4419-82b4-21eba72500ae"
+    name: "Thinking, Fast and Slow"
+    description: "Daniel Kahneman's exploration of the two systems that drive thinking"
+    price: 17.99
+    quantity: 100
+    categoryId: "42b6a911-636b-4c69-b3f3-fc3da040dcd5"
+    imageFile: "thinking-fast-slow.jpg"
+    enabled: true
+
+  - id: "5112dd3d-4251-45f4-8e65-5b9144470c3b"
+    name: "Sapiens: A Brief History"
+    description: "Yuval Noah Harari's sweeping history of humankind"
+    price: 21.99
+    quantity: 110
+    categoryId: "42b6a911-636b-4c69-b3f3-fc3da040dcd5"
+    imageFile: "sapiens.jpg"
+    enabled: true
