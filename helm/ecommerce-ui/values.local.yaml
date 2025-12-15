@@ -28,5 +28,3 @@ env:
     value: "http://ecommerce-category-query-service:8080"
   - name: PRODUCT_QUERY_API_URL
     value: "http://ecommerce-product-query-service:8080"
-  - name: IMAGE_API_URL
-    value: "http://ecommerce-image-service:8080"
