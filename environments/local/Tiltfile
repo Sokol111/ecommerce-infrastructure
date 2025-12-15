@@ -71,12 +71,10 @@ UI_SERVICES = {
         'resource_deps': [
             'ecommerce-product-query-service',
             'ecommerce-category-query-service',
-            'ecommerce-image-service',
         ],
         'api_deps': [
             'ecommerce-product-query-service-api',
             'ecommerce-category-query-service-api',
-            'ecommerce-image-service-api',
         ],
     },
 }
