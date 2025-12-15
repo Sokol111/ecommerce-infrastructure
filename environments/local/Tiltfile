@@ -38,7 +38,7 @@ GO_SERVICES = {
     },
     'ecommerce-product-query-service': {
         'debug_port': 2347,
-        'api_deps': ['ecommerce-product-query-service-api', 'ecommerce-product-service-api'],
+        'api_deps': ['ecommerce-product-query-service-api', 'ecommerce-product-service-api', 'ecommerce-image-service-api'],
     },
     'ecommerce-category-query-service': {
         'debug_port': 2348,
