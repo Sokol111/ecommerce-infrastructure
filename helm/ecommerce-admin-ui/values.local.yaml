@@ -30,3 +30,5 @@ env:
     value: "http://ecommerce-product-service:8080"
   - name: IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
+  - name: ATTRIBUTE_API_URL
+    value: "http://ecommerce-attribute-service:8080"
