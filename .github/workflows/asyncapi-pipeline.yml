@@ -77,5 +77,5 @@ jobs:
       - id: set
         run: |
           echo "events_artifact=events-api" >> $GITHUB_OUTPUT
-          echo "events_artifact_dir=events" >> $GITHUB_OUTPUT
+          echo "events_artifact_dir=gen/events" >> $GITHUB_OUTPUT
           echo "has_asyncapi=true" >> $GITHUB_OUTPUT
