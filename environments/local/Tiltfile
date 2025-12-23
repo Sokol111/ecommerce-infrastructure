@@ -48,6 +48,10 @@ GO_SERVICES = {
         'debug_port': 2349,
         'api_deps': ['ecommerce-image-service-api', 'ecommerce-product-service-api'],
     },
+    'ecommerce-attribute-service': {
+        'debug_port': 2350,
+        'api_deps': ['ecommerce-attribute-service-api'],
+    },
 }
 
 # ============================================================================
@@ -241,6 +245,7 @@ local_resource(
         link('http://ecommerce-product-query-service.127.0.0.1.nip.io', 'Product Query API'),
         link('http://ecommerce-category-query-service.127.0.0.1.nip.io', 'Category Query API'),
         link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
+        link('http://ecommerce-attribute-service.127.0.0.1.nip.io', 'Attribute Service API'),
         link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
         link('http://shop.127.0.0.1.nip.io', 'Shop UI'),
     ],
