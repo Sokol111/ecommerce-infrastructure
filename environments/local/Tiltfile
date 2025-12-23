@@ -64,11 +64,13 @@ UI_SERVICES = {
             'ecommerce-product-service',
             'ecommerce-category-service',
             'ecommerce-image-service',
+            'ecommerce-attribute-service'
         ],
         'api_deps': [
             'ecommerce-product-service-api',
             'ecommerce-category-service-api',
             'ecommerce-image-service-api',
+            'ecommerce-attribute-service-api'
         ],
     },
     'ecommerce-ui': {
