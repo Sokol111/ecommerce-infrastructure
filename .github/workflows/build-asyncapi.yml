@@ -45,26 +45,28 @@ jobs:
       - name: Install AsyncAPI CLI
         run: npm install -g @asyncapi/cli
 
-      - name: Install yq for YAML parsing
+      - name: Install eventgen and avrogen
         run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-
-      - name: Install avrogen
-        run: go install github.com/hamba/avro/v2/cmd/avrogen@latest
+          go install github.com/Sokol111/ecommerce-commons/cmd/eventgen@latest
+          go install github.com/hamba/avro/v2/cmd/avrogen@latest
 
       - name: Validate AsyncAPI spec
         run: |
           echo "✓ Validating AsyncAPI specification..."
           asyncapi validate ${{ inputs.asyncapi_file }}
 
+      - name: Validate Avro schemas
+        run: |
+          echo "✓ Validating Avro schemas..."
+          eventgen validate --payloads ${{ inputs.avro_dir }}
+
       - name: Generate events code
         run: |
-          make events-generate \
-            ASYNCAPI_SPEC=${{ inputs.asyncapi_file }} \
-            AVRO_DIR=${{ inputs.avro_dir }} \
-            EVENTS_DIR=${{ inputs.artifact_dir }} \
-            EVENTS_PACKAGE=${{ inputs.package }}
+          eventgen generate \
+            --payloads ${{ inputs.avro_dir }} \
+            --output ${{ inputs.artifact_dir }} \
+            --package ${{ inputs.package }} \
+            --asyncapi ${{ inputs.asyncapi_file }}
 
       - name: Validate generated Go code
         run: |
