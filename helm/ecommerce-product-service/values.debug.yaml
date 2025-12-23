@@ -17,10 +17,10 @@ startupProbe:
   httpGet:
     path: /health/ready
     port: http
-  initialDelaySeconds: 10
-  periodSeconds: 10
+  initialDelaySeconds: 5
+  periodSeconds: 5
   timeoutSeconds: 5
-  failureThreshold: 30  # 30 * 10s = 5 хвилин на старт
+  failureThreshold: 60  # 60 * 5s = 5 хвилин на старт
 
 # Liveness з великим timeout щоб не вбивало на breakpoint
 livenessProbe:
