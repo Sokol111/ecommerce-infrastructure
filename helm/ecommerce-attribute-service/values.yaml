@@ -1,9 +1,9 @@
-# Default values for ecommerce-image-service
+# Default values for ecommerce-attribute-service
 nameOverride: ""
 fullnameOverride: ""
 
 image:
-  repository: sokol111/ecommerce-image-service
+  repository: sokol111/ecommerce-attribute-service
   tag: "0.0.1"
   pullPolicy: IfNotPresent
   digest: ""
@@ -29,7 +29,7 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
-  host: ecommerce-image-service.local
+  host: ecommerce-attribute-service.local
   tls: []
 
 resources:
