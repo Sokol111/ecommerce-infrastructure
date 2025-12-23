@@ -58,7 +58,8 @@ jobs:
       - name: Validate generated Go code
         run: |
           echo "✓ Validating generated Go code..."
-          go build -mod=readonly -o /dev/null ./${{ inputs.artifact_dir }}/...
+          go mod tidy
+          go build -o /dev/null ./${{ inputs.artifact_dir }}/...
           echo "✓ Generated Go code compiles"
 
       - name: Upload built messaging API
