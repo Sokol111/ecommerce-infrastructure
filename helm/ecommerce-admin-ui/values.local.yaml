@@ -7,21 +7,23 @@ ingress:
   enabled: true
   host: admin.127.0.0.1.nip.io
 
+startupProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 12
+
 livenessProbe:
   httpGet:
     path: /api/health
     port: http
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-
-readinessProbe:
-  httpGet:
-    path: /api/health
-    port: http
   initialDelaySeconds: 10
-  periodSeconds: 5
-  timeoutSeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 2
 
 env:
   - name: CATEGORY_API_URL
