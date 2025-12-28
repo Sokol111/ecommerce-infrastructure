@@ -100,11 +100,56 @@ jobs:
       SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
 
   # ============================================
+  # FINALIZE GO MODULE: Run go mod tidy after all code generation
+  # ============================================
+  finalize-go-module:
+    needs: [prepare, openapi-pipeline, asyncapi-pipeline]
+    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.5'
+
+      - name: Download Go API artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.openapi-pipeline.outputs.go_artifact }}
+          path: ${{ needs.openapi-pipeline.outputs.go_artifact_dir }}
+
+      - name: Download Events artifact
+        if: needs.asyncapi-pipeline.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.asyncapi-pipeline.outputs.events_artifact }}
+          path: ${{ needs.asyncapi-pipeline.outputs.events_artifact_dir }}
+
+      - name: Run go mod tidy
+        run: |
+          echo "📦 Running go mod tidy..."
+          go mod tidy
+          echo "✓ go.mod and go.sum updated"
+          echo ""
+          echo "go.mod contents:"
+          cat go.mod
+
+      - name: Upload go.mod artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-module
+          path: |
+            go.mod
+            go.sum
+
+  # ============================================
   # PREPARE RELEASE ARTIFACTS: Build artifact list dynamically
   # ============================================
   prepare-release-artifacts:
-    needs: [prepare, openapi-pipeline, asyncapi-pipeline]
-    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
+    needs: [prepare, openapi-pipeline, asyncapi-pipeline, finalize-go-module]
+    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success' && needs.finalize-go-module.result == 'success'
     runs-on: ubuntu-latest
     outputs:
       artifacts: ${{ steps.build-list.outputs.artifacts }}
@@ -112,8 +157,9 @@ jobs:
     steps:
       - id: build-list
         run: |
-          artifacts="${{ needs.openapi-pipeline.outputs.go_artifact }}"
-          artifact_dirs="${{ needs.openapi-pipeline.outputs.go_artifact_dir }}"
+          # Start with go-module artifact (go.mod, go.sum go to root)
+          artifacts="go-module,${{ needs.openapi-pipeline.outputs.go_artifact }}"
+          artifact_dirs=".,${{ needs.openapi-pipeline.outputs.go_artifact_dir }}"
           
           if [ "${{ needs.asyncapi-pipeline.result }}" == "success" ] && [ -n "${{ needs.asyncapi-pipeline.outputs.events_artifact }}" ]; then
             artifacts="${artifacts},${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
@@ -131,8 +177,8 @@ jobs:
   # RELEASE: Create Git tag and GitHub Release
   # ============================================
   create-release:
-    needs: [prepare, openapi-pipeline, asyncapi-pipeline, prepare-release-artifacts]
-    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
+    needs: [prepare, openapi-pipeline, asyncapi-pipeline, finalize-go-module, prepare-release-artifacts]
+    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success' && needs.finalize-go-module.result == 'success'
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
     with:
       version: ${{ needs.prepare.outputs.version }}
