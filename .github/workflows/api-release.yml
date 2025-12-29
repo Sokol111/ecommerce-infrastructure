@@ -1,200 +1,121 @@
-name: API Release Pipeline
+name: API Release
 
 on:
   workflow_call:
     secrets:
       NPM_TOKEN:
         required: true
-      SCHEMA_REGISTRY_URL:
-        required: false
-        description: URL of the Schema Registry for publishing Avro schemas
 
 permissions:
   contents: write
 
 jobs:
-  # ============================================
-  # PREPARE: Determine versions and settings
-  # ============================================
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.ver.outputs.version }}
-      npm_repo_name: ${{ steps.repo.outputs.npm_repo_name }}
-      project_name: ${{ steps.proj.outputs.project_name }}
-      has_asyncapi: ${{ steps.check-asyncapi.outputs.has_asyncapi }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - id: check-asyncapi
-        run: |
-          if [ -f "asyncapi/asyncapi.yaml" ]; then
-            echo "✓ AsyncAPI file found"
-            echo "has_asyncapi=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️  AsyncAPI file not found"
-            echo "has_asyncapi=false" >> $GITHUB_OUTPUT
-          fi
-
-      - id: ver
-        run: |
-          openapi_version=$(yq e '.info.version' openapi/openapi.yml)
-          
-          # Check if asyncapi exists and compare versions
-          if [ -f "asyncapi/asyncapi.yaml" ]; then
-            asyncapi_version=$(yq e '.info.version' asyncapi/asyncapi.yaml)
-            if [ "$openapi_version" != "$asyncapi_version" ]; then
-              echo "❌ Version mismatch!"
-              echo "  OpenAPI version:    $openapi_version"
-              echo "  AsyncAPI version:   $asyncapi_version"
-              echo ""
-              echo "Please sync versions in both files:"
-              echo "  - openapi/openapi.yml: info.version"
-              echo "  - asyncapi/asyncapi.yaml: info.version"
-              exit 1
-            fi
-            echo "✓ Versions match: $openapi_version"
-          fi
-          
-          echo "version=v$openapi_version" >> $GITHUB_OUTPUT
-
-      - id: repo
-        run: |
-          echo "npm_repo_name=@${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
-
-      - id: proj
-        run: |
-          echo "project_name=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_OUTPUT
-
-      - name: Summary
-        run: |
-          echo "### 📦 Release Configuration" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Version | \`${{ steps.ver.outputs.version }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| NPM Package | \`${{ steps.repo.outputs.npm_repo_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Project | \`${{ steps.proj.outputs.project_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Has AsyncAPI | ${{ steps.check-asyncapi.outputs.has_asyncapi }} |" >> $GITHUB_STEP_SUMMARY
-
-  # ============================================
-  # OPENAPI PIPELINE: Build Go + JS API
-  # ============================================
-  openapi-pipeline:
-    needs: prepare
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/openapi-pipeline.yml@master
-    with:
-      version: ${{ needs.prepare.outputs.version }}
-      npm_repo_name: ${{ needs.prepare.outputs.npm_repo_name }}
-      project_name: ${{ needs.prepare.outputs.project_name }}
-
-  # ============================================
-  # ASYNCAPI PIPELINE: Build Events + Publish Schemas
-  # ============================================
-  asyncapi-pipeline:
-    needs: prepare
-    if: needs.prepare.outputs.has_asyncapi == 'true'
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/asyncapi-pipeline.yml@master
-    secrets:
-      SCHEMA_REGISTRY_URL: ${{ secrets.SCHEMA_REGISTRY_URL }}
-
-  # ============================================
-  # FINALIZE GO MODULE: Run go mod tidy after all code generation
-  # ============================================
-  finalize-go-module:
-    needs: [prepare, openapi-pipeline, asyncapi-pipeline]
-    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success'
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up Go
+      - name: Setup tools
         uses: actions/setup-go@v5
         with:
           go-version: '1.25.5'
-
-      - name: Download Go API artifact
-        uses: actions/download-artifact@v4
+      
+      - uses: actions/setup-node@v4
         with:
-          name: ${{ needs.openapi-pipeline.outputs.go_artifact }}
-          path: ${{ needs.openapi-pipeline.outputs.go_artifact_dir }}
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
 
-      - name: Download Events artifact
-        if: needs.asyncapi-pipeline.result == 'success'
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.asyncapi-pipeline.outputs.events_artifact }}
-          path: ${{ needs.asyncapi-pipeline.outputs.events_artifact_dir }}
-
-      - name: Run go mod tidy
+      - name: Install generators
         run: |
-          echo "📦 Running go mod tidy..."
-          go mod tidy
-          echo "✓ go.mod and go.sum updated"
-          echo ""
-          echo "go.mod contents:"
-          cat go.mod
+          go install github.com/ogen-go/ogen/cmd/ogen@latest
+          go install github.com/Sokol111/ecommerce-commons/cmd/eventgen@latest
+          go install github.com/hamba/avro/v2/cmd/avrogen@latest
+          npm install -g orval
 
-      - name: Upload go.mod artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: go-module
-          path: |
-            go.mod
-            go.sum
-
-  # ============================================
-  # PREPARE RELEASE ARTIFACTS: Build artifact list dynamically
-  # ============================================
-  prepare-release-artifacts:
-    needs: [prepare, openapi-pipeline, asyncapi-pipeline, finalize-go-module]
-    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success' && needs.finalize-go-module.result == 'success'
-    runs-on: ubuntu-latest
-    outputs:
-      artifacts: ${{ steps.build-list.outputs.artifacts }}
-      artifact_dirs: ${{ steps.build-list.outputs.artifact_dirs }}
-    steps:
-      - id: build-list
+      # ============================================
+      # EXTRACT VERSION & VALIDATE
+      # ============================================
+      - name: Extract version
+        id: version
         run: |
-          # Start with go-module artifact (go.mod, go.sum go to root)
-          artifacts="go-module,${{ needs.openapi-pipeline.outputs.go_artifact }}"
-          artifact_dirs=".,${{ needs.openapi-pipeline.outputs.go_artifact_dir }}"
+          VERSION=$(yq e '.info.version' openapi/openapi.yml)
           
-          if [ "${{ needs.asyncapi-pipeline.result }}" == "success" ] && [ -n "${{ needs.asyncapi-pipeline.outputs.events_artifact }}" ]; then
-            artifacts="${artifacts},${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
-            artifact_dirs="${artifact_dirs},${{ needs.asyncapi-pipeline.outputs.events_artifact_dir }}"
-            echo "✓ Including AsyncAPI artifact: ${{ needs.asyncapi-pipeline.outputs.events_artifact }}"
+          if [ -f "asyncapi/asyncapi.yaml" ]; then
+            ASYNC_VERSION=$(yq e '.info.version' asyncapi/asyncapi.yaml)
+            if [ "$VERSION" != "$ASYNC_VERSION" ]; then
+              echo "❌ Version mismatch: OpenAPI=$VERSION, AsyncAPI=$ASYNC_VERSION"
+              exit 1
+            fi
           fi
           
-          echo "artifacts=${artifacts}" >> $GITHUB_OUTPUT
-          echo "artifact_dirs=${artifact_dirs}" >> $GITHUB_OUTPUT
-          echo "### 📦 Artifacts for Release" >> $GITHUB_STEP_SUMMARY
-          echo "Artifacts: \`${artifacts}\`" >> $GITHUB_STEP_SUMMARY
-          echo "Directories: \`${artifact_dirs}\`" >> $GITHUB_STEP_SUMMARY
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Version: v$VERSION"
 
-  # ============================================
-  # RELEASE: Create Git tag and GitHub Release
-  # ============================================
-  create-release:
-    needs: [prepare, openapi-pipeline, asyncapi-pipeline, finalize-go-module, prepare-release-artifacts]
-    if: always() && needs.prepare.result == 'success' && needs.openapi-pipeline.result == 'success' && needs.finalize-go-module.result == 'success'
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/release-tag.yml@master
-    with:
-      version: ${{ needs.prepare.outputs.version }}
-      artifacts: ${{ needs.prepare-release-artifacts.outputs.artifacts }}
-      artifact_dirs: ${{ needs.prepare-release-artifacts.outputs.artifact_dirs }}
-      cleanup_dirs: 'asyncapi,openapi,avro'
+      - name: Check if tag exists
+        run: |
+          if git rev-parse "refs/tags/${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "❌ Tag ${{ steps.version.outputs.version }} already exists"
+            exit 1
+          fi
 
-  # ============================================
-  # PUBLISH: Publish JS client to NPM
-  # ============================================
-  publish-npm:
-    needs: [openapi-pipeline, create-release]
-    if: always() && needs.openapi-pipeline.result == 'success' && needs.create-release.result == 'success'
-    uses: Sokol111/ecommerce-infrastructure/.github/workflows/publish-js.yml@master
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    with:
-      artifact_dir: ${{ needs.openapi-pipeline.outputs.js_artifact_dir }}
-      artifact: ${{ needs.openapi-pipeline.outputs.js_artifact }}
+      # ============================================
+      # GENERATE ALL CODE
+      # ============================================
+      - name: Generate Go API
+        run: make openapi-generate
+
+      - name: Generate TypeScript client
+        run: |
+          make openapi-ts-generate \
+            TS_VERSION="${{ steps.version.outputs.version }}" \
+            TS_PACKAGE_NAME="@${GITHUB_REPOSITORY,,}"
+
+      - name: Generate Events (AsyncAPI)
+        if: hashFiles('asyncapi/asyncapi.yaml') != ''
+        run: make events-generate
+
+      - name: Finalize Go module
+        run: go mod tidy
+
+      # ============================================
+      # PUBLISH NPM PACKAGE
+      # ============================================
+      - name: Publish to NPM
+        working-directory: gen/typescript
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ============================================
+      # CREATE RELEASE
+      # ============================================
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create release branch and tag
+        run: |
+          # Cleanup source files (keep only generated)
+          rm -rf openapi asyncapi avro
+          
+          # Create orphan release branch
+          git checkout --orphan release
+          git rm -rf --cached .
+          
+          # Add only generated code + go.mod
+          git add -f gen/ go.mod go.sum
+          git commit -m "Release ${{ steps.version.outputs.version }}"
+          
+          # Tag and push
+          git tag "${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.version.outputs.version }}" --force
+          git push origin release --force
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          generate_release_notes: true
