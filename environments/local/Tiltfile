@@ -30,7 +30,7 @@ default_registry('localhost:5000')
 GO_SERVICES = {
     'ecommerce-product-service': {
         'debug_port': 2345,
-        'api_deps': ['ecommerce-product-service-api'],
+        'api_deps': ['ecommerce-product-service-api', 'ecommerce-attribute-service-api'],
     },
     'ecommerce-category-service': {
         'debug_port': 2346,
