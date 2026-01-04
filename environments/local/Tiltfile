@@ -168,7 +168,7 @@ for name, config in GO_SERVICES.items():
     )
 
 # ============================================================================
-# UI Services (Next.js)
+# UI Services (Next.js) - Development Mode
 # ============================================================================
 
 for name, config in UI_SERVICES.items():
@@ -196,16 +196,26 @@ for name, config in UI_SERVICES.items():
     for api_dep in api_deps:
         watch_paths.append(api_dep + '/gen/typescript')
     
-    # Build Docker image
+    # Build Docker image in development mode
     docker_build(
         image,
         context=ROOT_PATH,
-        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs',
+        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nextjs.dev',
         build_args={
             'SERVICE_DIR': name,
             'API_DEPS': ' '.join(api_deps),
         },
         only=watch_paths,
+        live_update=[
+            # Sync source files directly to container for hot reload
+            sync(ROOT_PATH + '/' + name + '/app', '/app/' + name + '/app'),
+            sync(ROOT_PATH + '/' + name + '/components', '/app/' + name + '/components'),
+            sync(ROOT_PATH + '/' + name + '/hooks', '/app/' + name + '/hooks'),
+            sync(ROOT_PATH + '/' + name + '/lib', '/app/' + name + '/lib'),
+            sync(ROOT_PATH + '/' + name + '/public', '/app/' + name + '/public'),
+            # Reinstall deps if package.json changes
+            run('cd /app/' + name + ' && pnpm install', trigger=[name + '/package.json', name + '/pnpm-lock.yaml']),
+        ],
     )
     
     # Deploy with Helm
