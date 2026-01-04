@@ -1,0 +1,48 @@
+# Development Dockerfile for Next.js services
+# Runs in dev mode with hot reload, error overlay, and source maps
+
+FROM node:22-alpine
+
+ARG API_DEPS=""
+ARG SERVICE_DIR
+
+WORKDIR /app/${SERVICE_DIR}
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy all API dependencies first (for pnpm overrides)
+COPY . /tmp/context/
+RUN set -e && \
+    for api_dep in ${API_DEPS}; do \
+        if [ -d "/tmp/context/${api_dep}/gen/typescript" ]; then \
+            echo "Adding API dependency: ${api_dep}"; \
+            mkdir -p "/app/${api_dep}/gen"; \
+            cp -r "/tmp/context/${api_dep}/gen/typescript" "/app/${api_dep}/gen/typescript"; \
+        else \
+            echo "ERROR: API dependency not found: ${api_dep}/gen/typescript" && \
+            echo "Make sure it's included in 'only' paths in Tiltfile" && \
+            exit 1; \
+        fi; \
+    done
+
+# Copy package files
+COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ./
+
+# Install ALL dependencies (including devDependencies)
+RUN pnpm install
+
+# Copy application code
+COPY ${SERVICE_DIR}/. .
+RUN rm -rf /tmp/context
+
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Run in development mode with hot reload
+CMD ["pnpm", "dev"]
