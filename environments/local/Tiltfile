@@ -28,29 +28,21 @@ default_registry('localhost:5000')
 # ============================================================================
 
 GO_SERVICES = {
-    'ecommerce-product-service': {
+    'ecommerce-catalog-service': {
         'debug_port': 2345,
-        'api_deps': ['ecommerce-product-service-api'],
-    },
-    'ecommerce-category-service': {
-        'debug_port': 2346,
-        'api_deps': ['ecommerce-category-service-api'],
+        'api_deps': ['ecommerce-catalog-service-api'],
     },
     'ecommerce-product-query-service': {
         'debug_port': 2347,
-        'api_deps': ['ecommerce-product-query-service-api', 'ecommerce-product-service-api', 'ecommerce-image-service-api', 'ecommerce-attribute-service-api'],
+        'api_deps': ['ecommerce-product-query-service-api', 'ecommerce-catalog-service-api', 'ecommerce-image-service-api'],
     },
     'ecommerce-category-query-service': {
         'debug_port': 2348,
-        'api_deps': ['ecommerce-category-query-service-api', 'ecommerce-category-service-api', 'ecommerce-attribute-service-api'],
+        'api_deps': ['ecommerce-category-query-service-api', 'ecommerce-catalog-service-api'],
     },
     'ecommerce-image-service': {
         'debug_port': 2349,
-        'api_deps': ['ecommerce-image-service-api', 'ecommerce-product-service-api'],
-    },
-    'ecommerce-attribute-service': {
-        'debug_port': 2350,
-        'api_deps': ['ecommerce-attribute-service-api'],
+        'api_deps': ['ecommerce-image-service-api', 'ecommerce-catalog-service-api'],
     },
     'ecommerce-auth-service': {
         'debug_port': 2351,
@@ -65,17 +57,13 @@ GO_SERVICES = {
 UI_SERVICES = {
     'ecommerce-admin-ui': {
         'resource_deps': [
-            'ecommerce-product-service',
-            'ecommerce-category-service',
+            'ecommerce-catalog-service',
             'ecommerce-image-service',
-            'ecommerce-attribute-service',
             'ecommerce-auth-service',
         ],
         'api_deps': [
-            'ecommerce-product-service-api',
-            'ecommerce-category-service-api',
+            'ecommerce-catalog-service-api',
             'ecommerce-image-service-api',
-            'ecommerce-attribute-service-api',
             'ecommerce-auth-service-api',
         ],
     },
@@ -258,12 +246,10 @@ local_resource(
     'endpoints',
     cmd='echo "Services are running"',
     links=[
-        link('http://ecommerce-product-service.127.0.0.1.nip.io', 'Product Service API'),
-        link('http://ecommerce-category-service.127.0.0.1.nip.io', 'Category Service API'),
+        link('http://ecommerce-catalog-service.127.0.0.1.nip.io', 'Catalog Service API'),
         link('http://ecommerce-product-query-service.127.0.0.1.nip.io', 'Product Query API'),
         link('http://ecommerce-category-query-service.127.0.0.1.nip.io', 'Category Query API'),
         link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
-        link('http://ecommerce-attribute-service.127.0.0.1.nip.io', 'Attribute Service API'),
         link('http://ecommerce-auth-service.127.0.0.1.nip.io', 'Auth Service API'),
         link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
         link('http://shop.127.0.0.1.nip.io', 'Shop UI'),
