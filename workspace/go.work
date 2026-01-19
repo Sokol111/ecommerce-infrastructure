@@ -1,0 +1,16 @@
+go 1.25.5
+
+use (
+	./ecommerce-auth-service
+	./ecommerce-auth-service-api
+	./ecommerce-catalog-service
+	./ecommerce-catalog-service-api
+	./ecommerce-category-query-service
+	./ecommerce-category-query-service-api
+	./ecommerce-commons
+	./ecommerce-image-service
+	./ecommerce-image-service-api
+	./ecommerce-infrastructure/cmd/seeder
+	./ecommerce-product-query-service
+	./ecommerce-product-query-service-api
+)
