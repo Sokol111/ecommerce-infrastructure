@@ -26,13 +26,9 @@ livenessProbe:
   failureThreshold: 2
 
 env:
-  - name: CATEGORY_API_URL
-    value: "http://ecommerce-category-service:8080"
-  - name: PRODUCT_API_URL
-    value: "http://ecommerce-product-service:8080"
+  - name: CATALOG_API_URL
+    value: "http://ecommerce-catalog-service:8080"
   - name: IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
-  - name: ATTRIBUTE_API_URL
-    value: "http://ecommerce-attribute-service:8080"
   - name: AUTH_API_URL
     value: "http://ecommerce-auth-service:8080"

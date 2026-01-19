@@ -99,8 +99,7 @@ tools-check: ## Verify required tools are installed
 urls: ## Show all service URLs available in browser
 	@printf "\033[1m%s - Service URLs:\033[0m\n\n" "ecommerce-infrastructure"
 	@printf "\033[1;33mApplication Services (via Traefik Ingress):\033[0m\n"
-	@printf "  \033[36m%-35s\033[0m %s\n" "Product Service API:" "http://ecommerce-product-service.127.0.0.1.nip.io"
-	@printf "  \033[36m%-35s\033[0m %s\n" "Category Service API:" "http://ecommerce-category-service.127.0.0.1.nip.io"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Catalog Service API:" "http://ecommerce-catalog-service.127.0.0.1.nip.io"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Product Query API:" "http://ecommerce-product-query-service.127.0.0.1.nip.io"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Category Query API:" "http://ecommerce-category-query-service.127.0.0.1.nip.io"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Image Service API:" "http://ecommerce-image-service.127.0.0.1.nip.io"
