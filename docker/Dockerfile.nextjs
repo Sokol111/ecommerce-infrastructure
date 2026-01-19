@@ -2,7 +2,7 @@
 FROM node:22-alpine AS builder
 
 # API_DEPS - space separated list of API dependency directories
-# e.g. "ecommerce-product-service-api ecommerce-category-service-api ecommerce-image-service-api"
+# e.g. "ecommerce-catalog-service-api ecommerce-image-service-api"
 ARG API_DEPS=""
 ARG SERVICE_DIR
 

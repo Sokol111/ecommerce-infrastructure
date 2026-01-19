@@ -22,8 +22,7 @@ This seeder calls actual service endpoints instead of directly inserting into da
 ## Prerequisites
 
 All services must be running:
-- `ecommerce-category-service` (default: http://localhost:8081)
-- `ecommerce-product-service` (default: http://localhost:8082)
+- `ecommerce-catalog-service` (default: http://localhost:8081)
 - `ecommerce-image-service` (default: http://localhost:8084)
 
 ## Usage

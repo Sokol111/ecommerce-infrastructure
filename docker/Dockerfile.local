@@ -29,7 +29,7 @@ FROM base AS deps
 
 ARG SERVICE_DIR=service-dir
 ARG COMMONS_DIR
-# API_DEPS - space separated list of API dependency directories (e.g. "ecommerce-product-service-api ecommerce-category-service-api")
+# API_DEPS - space separated list of API dependency directories (e.g. "ecommerce-catalog-service-api")
 ARG API_DEPS=""
 
 # Копіюємо go.mod/go.sum для кешу модулів
