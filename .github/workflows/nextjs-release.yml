@@ -1,4 +1,4 @@
-name: Release GO service
+name: Release Next.js app
 
 on:
   workflow_call:
@@ -26,7 +26,7 @@ jobs:
         run: |
           VERSION_INPUT="${{ inputs.version }}"
           if [ -z "$VERSION_INPUT" ]; then
-            VERSION_INPUT=$(cat VERSION | tr -d '\n' | tr -d '\r')
+            VERSION_INPUT=$(node -p "require('./package.json').version")
             VERSION_INPUT="v$VERSION_INPUT"
           fi
           IMAGE_NAME=sokol111/$(basename ${GITHUB_REPOSITORY})
@@ -58,33 +58,19 @@ jobs:
           username: sokol111
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image (local)
+      - name: Build and push Docker image
         run: |
           IMAGE="${{ steps.meta.outputs.image_name }}"
           TAG="${{ steps.meta.outputs.image_tag }}"
+          SERVICE_DIR=$(basename ${GITHUB_REPOSITORY})
           
           docker buildx build \
-            -f infra/docker/Dockerfile.go \
+            -f infra/docker/Dockerfile.nextjs \
+            --build-arg SERVICE_DIR=${SERVICE_DIR} \
+            --build-arg API_DEPS="" \
             -t "$IMAGE:$TAG" \
             -t "$IMAGE:latest" \
-            --load .
-
-      - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}'
-          format: 'table'
-          exit-code: '1'
-          severity: 'HIGH,CRITICAL'
-          ignore-unfixed: true
-
-      - name: Push Docker image
-        run: |
-          IMAGE="${{ steps.meta.outputs.image_name }}"
-          TAG="${{ steps.meta.outputs.image_tag }}"
-          
-          docker push "$IMAGE:$TAG"
-          docker push "$IMAGE:latest"
+            --push .
 
       - name: Create Git tag
         run: |
