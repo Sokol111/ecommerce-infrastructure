@@ -23,7 +23,7 @@ services:
       retries: 3
     restart: unless-stopped
 
-  # MinIO клієнт для автоматичного створення бакета
+  # MinIO клієнт для створення бакета та lifecycle policy
   minio-init:
     image: minio/mc:latest
     container_name: minio-init
@@ -35,7 +35,8 @@ services:
       mc alias set myminio http://minio:9000 minioadmin minioadmin123;
       mc mb --ignore-existing myminio/products;
       mc anonymous set none myminio/products;
-      echo 'MinIO initialized successfully';
+      mc ilm rule add myminio/products --prefix 'drafts/' --expire-days 1;
+      echo 'MinIO initialized with drafts expiration (1 day)';
       "
     networks:
       - shared-network
