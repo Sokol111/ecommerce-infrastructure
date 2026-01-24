@@ -1,0 +1,85 @@
+name: Go CI
+
+on:
+  workflow_call:
+    inputs:
+      go-version:
+        description: 'Go version to use'
+        required: false
+        type: string
+        default: '1.25.5'
+      coverage-threshold:
+        description: 'Minimum test coverage percentage'
+        required: false
+        type: number
+        default: 60
+      run-security:
+        description: 'Run security checks (govulncheck)'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Run formatting check
+        run: make fmt
+      
+      - name: Check for changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "❌ Code is not formatted. Run 'make fmt' locally."
+            git diff
+            exit 1
+          fi
+
+      - name: Run linter
+        run: make lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Run tests with coverage
+        run: make test
+
+      - name: Check coverage threshold
+        run: make test-coverage-check
+        env:
+          MIN_COVERAGE: ${{ inputs.coverage-threshold }}
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage.out
+          retention-days: 7
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    if: ${{ inputs.run-security }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Run vulnerability check
+        run: make vuln-check
