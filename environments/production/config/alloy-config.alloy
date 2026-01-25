@@ -1,0 +1,122 @@
+// =============================================================================
+// Grafana Alloy Configuration - Docker Log Collection
+// =============================================================================
+// Replaces Promtail for log collection from Docker containers
+
+// -----------------------------------------------------------------------------
+// Logging configuration
+// -----------------------------------------------------------------------------
+logging {
+  level  = "warn"
+  format = "logfmt"
+}
+
+// -----------------------------------------------------------------------------
+// Docker Discovery - Find containers to collect logs from
+// -----------------------------------------------------------------------------
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+  refresh_interval = "5s"
+}
+
+// -----------------------------------------------------------------------------
+// Relabel - Filter and add labels to discovered containers
+// -----------------------------------------------------------------------------
+discovery.relabel "docker_logs" {
+  targets = discovery.docker.containers.targets
+
+  // Only collect logs from containers in ecommerce-prod project
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
+    regex         = "ecommerce-prod"
+    action        = "keep"
+  }
+
+  // Use container name as the primary label
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.+)"
+    target_label  = "container"
+  }
+
+  // Extract service name from compose label
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label  = "service"
+  }
+
+  // Add compose project label
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
+    target_label  = "project"
+  }
+
+  // Add container ID for debugging
+  rule {
+    source_labels = ["__meta_docker_container_id"]
+    target_label  = "container_id"
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Loki Source - Collect logs from Docker containers
+// -----------------------------------------------------------------------------
+loki.source.docker "docker_logs" {
+  host             = "unix:///var/run/docker.sock"
+  targets          = discovery.relabel.docker_logs.output
+  forward_to       = [loki.process.docker_logs.receiver]
+  relabel_rules    = discovery.relabel.docker_logs.rules
+  refresh_interval = "5s"
+}
+
+// -----------------------------------------------------------------------------
+// Process - Parse and transform logs
+// -----------------------------------------------------------------------------
+loki.process "docker_logs" {
+  forward_to = [loki.write.default.receiver]
+
+  // Try to parse JSON logs (Go services output JSON)
+  stage.json {
+    expressions = {
+      level     = "level",
+      msg       = "msg",
+      timestamp = "time",
+      caller    = "caller",
+      trace_id  = "trace_id",
+      span_id   = "span_id",
+      service   = "service",
+    }
+  }
+
+  // Extract labels from parsed JSON
+  stage.labels {
+    values = {
+      level    = "",
+      trace_id = "",
+      span_id  = "",
+    }
+  }
+
+  // Parse timestamp from JSON logs
+  stage.timestamp {
+    source = "timestamp"
+    format = "RFC3339Nano"
+  }
+
+  // Output - use msg field if available
+  stage.output {
+    source = "msg"
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Loki Write - Send logs to Loki
+// -----------------------------------------------------------------------------
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+  external_labels = {
+    cluster = "production",
+  }
+}

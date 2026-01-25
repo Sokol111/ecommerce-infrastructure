@@ -1,7 +1,7 @@
 # =============================================================================
 # Observability Stack
 # =============================================================================
-# OpenTelemetry Collector, Prometheus, Tempo, Loki, Promtail, Grafana
+# OpenTelemetry Collector, Prometheus, Tempo, Loki, Alloy, Grafana
 
 volumes:
   prometheus_data:
@@ -91,15 +91,19 @@ services:
       retries: 5
 
   # ---------------------------------------------------------------------------
-  # Promtail (log collector for Docker containers)
+  # Grafana Alloy (log collector - replaces deprecated Promtail)
   # ---------------------------------------------------------------------------
-  promtail:
-    image: grafana/promtail:3.6.4
-    container_name: promtail
+  alloy:
+    image: grafana/alloy:v1.12.2
+    container_name: alloy
     restart: unless-stopped
-    command: -config.file=/etc/promtail/config.yaml
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
     volumes:
-      - ../config/promtail-config.yaml:/etc/promtail/config.yaml:ro
+      - ../config/alloy-config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
     depends_on:
@@ -107,6 +111,11 @@ services:
         condition: service_healthy
     networks:
       - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:12345/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   # ---------------------------------------------------------------------------
   # Grafana (dashboards & visualization)
