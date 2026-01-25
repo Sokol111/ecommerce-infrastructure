@@ -22,7 +22,7 @@ COMPOSE := docker compose -f $(COMPOSE_FILE)
 
 # Service groups
 INFRA_SERVICES := mongo mongo-init kafka schema-registry minio minio-init imgproxy
-OBSERVABILITY_SERVICES := otel-collector prometheus tempo loki alloy grafana
+OBSERVABILITY_SERVICES := alloy prometheus tempo loki grafana
 APP_SERVICES := auth-service catalog-service image-service product-query-service category-query-service admin-ui ecommerce-ui
 ALL_SERVICES := $(INFRA_SERVICES) $(OBSERVABILITY_SERVICES) $(APP_SERVICES) traefik
 

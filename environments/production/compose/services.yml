@@ -14,7 +14,7 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
-      otel-collector:
+      alloy:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
@@ -30,7 +30,7 @@ services:
       ADMIN_INITIAL_USER_EMAIL: ${ADMIN_EMAIL}
       ADMIN_INITIAL_USER_PASSWORD: ${ADMIN_PASSWORD}
       # Observability
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4317
       OTEL_SERVICE_NAME: auth-service
     networks:
       - ecommerce
@@ -64,7 +64,7 @@ services:
         condition: service_healthy
       auth-service:
         condition: service_healthy
-      otel-collector:
+      alloy:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
@@ -78,7 +78,7 @@ services:
       # Security (security.token.* -> SECURITY_TOKEN_*)
       SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4317
       OTEL_SERVICE_NAME: catalog-service
     networks:
       - ecommerce
@@ -114,7 +114,7 @@ services:
         condition: service_healthy
       auth-service:
         condition: service_healthy
-      otel-collector:
+      alloy:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
@@ -137,7 +137,7 @@ services:
       # Security (security.token.* -> SECURITY_TOKEN_*)
       SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4317
       OTEL_SERVICE_NAME: image-service
     networks:
       - ecommerce
@@ -169,7 +169,7 @@ services:
         condition: service_healthy
       schema-registry:
         condition: service_healthy
-      otel-collector:
+      alloy:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
@@ -183,7 +183,7 @@ services:
       # Security (security.token.* -> SECURITY_TOKEN_*)
       SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4317
       OTEL_SERVICE_NAME: product-query-service
     networks:
       - ecommerce
@@ -215,7 +215,7 @@ services:
         condition: service_healthy
       schema-registry:
         condition: service_healthy
-      otel-collector:
+      alloy:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
@@ -229,7 +229,7 @@ services:
       # Security (security.token.* -> SECURITY_TOKEN_*)
       SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4317
       OTEL_SERVICE_NAME: category-query-service
     networks:
       - ecommerce
