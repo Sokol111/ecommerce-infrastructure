@@ -18,16 +18,17 @@ services:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
-      # MongoDB
+      # MongoDB (mongo.* -> MONGO_*)
       MONGO_HOST: mongo
       MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      # Security
-      AUTH_TOKEN_PRIVATE_KEY: ${AUTH_TOKEN_PRIVATE_KEY}
-      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
-      # Admin user
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      # Security (security.token.* -> SECURITY_TOKEN_*)
+      SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Token (token.* -> TOKEN_*)
+      TOKEN_PRIVATE_KEY: ${AUTH_TOKEN_PRIVATE_KEY}
+      # Admin user (admin.initial-user.* -> ADMIN_INITIAL_USER_*)
+      ADMIN_INITIAL_USER_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_INITIAL_USER_PASSWORD: ${ADMIN_PASSWORD}
       # Observability
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_SERVICE_NAME: auth-service
@@ -67,15 +68,15 @@ services:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
-      # MongoDB
+      # MongoDB (mongo.* -> MONGO_*)
       MONGO_HOST: mongo
       MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      # Kafka
+      # Kafka (kafka.* -> KAFKA_*)
       KAFKA_BROKERS: kafka:29092
-      SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      # Security
-      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Security (security.token.* -> SECURITY_TOKEN_*)
+      SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_SERVICE_NAME: catalog-service
@@ -117,24 +118,24 @@ services:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
-      # MongoDB
+      # MongoDB (mongo.* -> MONGO_*)
       MONGO_HOST: mongo
       MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      # Kafka
+      # Kafka (kafka.* -> KAFKA_*)
       KAFKA_BROKERS: kafka:29092
-      SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      # S3 / MinIO
+      KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # S3 / MinIO (s3.* -> S3_*)
       S3_ENDPOINT: http://minio:9000
       S3_PUBLIC_ENDPOINT: https://${DOMAIN}/storage
       S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
       S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
-      # imgproxy
+      # imgproxy (imgproxy.* -> IMGPROXY_*)
       IMGPROXY_PUBLIC_BASE_URL: https://${DOMAIN}/img
       IMGPROXY_KEY_HEX: ${IMGPROXY_KEY}
       IMGPROXY_SALT_HEX: ${IMGPROXY_SALT}
-      # Security
-      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Security (security.token.* -> SECURITY_TOKEN_*)
+      SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_SERVICE_NAME: image-service
@@ -172,15 +173,15 @@ services:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
-      # MongoDB
+      # MongoDB (mongo.* -> MONGO_*)
       MONGO_HOST: mongo
       MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      # Kafka
+      # Kafka (kafka.* -> KAFKA_*)
       KAFKA_BROKERS: kafka:29092
-      SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      # Security
-      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Security (security.token.* -> SECURITY_TOKEN_*)
+      SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_SERVICE_NAME: product-query-service
@@ -218,15 +219,15 @@ services:
         condition: service_healthy
     environment:
       CONFIG_PATH: /configs/config.pro.yaml
-      # MongoDB
+      # MongoDB (mongo.* -> MONGO_*)
       MONGO_HOST: mongo
       MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      # Kafka
+      # Kafka (kafka.* -> KAFKA_*)
       KAFKA_BROKERS: kafka:29092
-      SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      # Security
-      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Security (security.token.* -> SECURITY_TOKEN_*)
+      SECURITY_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
       # Observability
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_SERVICE_NAME: category-query-service
