@@ -1,122 +1,187 @@
 // =============================================================================
-// Grafana Alloy Configuration - Docker Log Collection
+// Grafana Alloy - All-in-One Configuration
 // =============================================================================
-// Replaces Promtail for log collection from Docker containers
+// Receives: OTLP (metrics + traces) + Docker logs
+// Exports: Prometheus, Tempo, Loki
 
-// -----------------------------------------------------------------------------
-// Logging configuration
-// -----------------------------------------------------------------------------
-logging {
-  level  = "warn"
-  format = "logfmt"
-}
+// =============================================================================
+// OTLP Receiver (metrics + traces from Go services)
+// =============================================================================
 
-// -----------------------------------------------------------------------------
-// Docker Discovery - Find containers to collect logs from
-// -----------------------------------------------------------------------------
-discovery.docker "containers" {
-  host = "unix:///var/run/docker.sock"
-  refresh_interval = "5s"
-}
-
-// -----------------------------------------------------------------------------
-// Relabel - Filter and add labels to discovered containers
-// -----------------------------------------------------------------------------
-discovery.relabel "docker_logs" {
-  targets = discovery.docker.containers.targets
-
-  // Only collect logs from containers in ecommerce-prod project
-  rule {
-    source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
-    regex         = "ecommerce-prod"
-    action        = "keep"
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+  http {
+    endpoint = "0.0.0.0:4318"
   }
 
-  // Use container name as the primary label
+  output {
+    metrics = [otelcol.processor.batch.default.input]
+    traces  = [otelcol.processor.batch.default.input]
+  }
+}
+
+// =============================================================================
+// Batch Processor (improves performance)
+// =============================================================================
+
+otelcol.processor.batch "default" {
+  timeout = "5s"
+  send_batch_size = 1000
+
+  output {
+    metrics = [otelcol.exporter.prometheus.default.input]
+    traces  = [otelcol.exporter.otlp.tempo.input]
+  }
+}
+
+// =============================================================================
+// Prometheus Exporter (metrics)
+// =============================================================================
+
+otelcol.exporter.prometheus "default" {
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://prometheus:9090/api/v1/write"
+  }
+}
+
+// =============================================================================
+// Tempo Exporter (traces)
+// =============================================================================
+
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "tempo:4317"
+    tls {
+      insecure = true
+    }
+  }
+}
+
+// =============================================================================
+// Docker Log Collection
+// =============================================================================
+
+// Discover Docker containers
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+  refresh_interval = "10s"
+}
+
+// Extract labels from Docker containers
+discovery.relabel "docker_labels" {
+  targets = discovery.docker.containers.targets
+
+  // Keep container name as label
   rule {
     source_labels = ["__meta_docker_container_name"]
-    regex         = "/(.+)"
+    regex         = "/(.*)"
     target_label  = "container"
   }
 
-  // Extract service name from compose label
+  // Keep compose service name
   rule {
     source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
     target_label  = "service"
   }
 
-  // Add compose project label
+  // Keep compose project name
   rule {
     source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
     target_label  = "project"
   }
 
-  // Add container ID for debugging
+  // Extract image name
   rule {
-    source_labels = ["__meta_docker_container_id"]
-    target_label  = "container_id"
+    source_labels = ["__meta_docker_container_image"]
+    target_label  = "image"
   }
 }
 
-// -----------------------------------------------------------------------------
-// Loki Source - Collect logs from Docker containers
-// -----------------------------------------------------------------------------
-loki.source.docker "docker_logs" {
-  host             = "unix:///var/run/docker.sock"
-  targets          = discovery.relabel.docker_logs.output
-  forward_to       = [loki.process.docker_logs.receiver]
-  relabel_rules    = discovery.relabel.docker_logs.rules
-  refresh_interval = "5s"
+// Collect logs from Docker containers
+loki.source.docker "containers" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.docker_labels.output
+  labels     = {"job" = "docker"}
+  forward_to = [loki.process.docker_logs.receiver]
 }
 
-// -----------------------------------------------------------------------------
-// Process - Parse and transform logs
-// -----------------------------------------------------------------------------
+// Process and parse logs
 loki.process "docker_logs" {
-  forward_to = [loki.write.default.receiver]
-
   // Try to parse JSON logs (Go services output JSON)
   stage.json {
     expressions = {
-      level     = "level",
-      msg       = "msg",
-      timestamp = "time",
-      caller    = "caller",
-      trace_id  = "trace_id",
-      span_id   = "span_id",
-      service   = "service",
+      level   = "level",
+      msg     = "msg",
+      caller  = "caller",
+      ts      = "ts",
+      trace_id = "trace_id",
+      span_id  = "span_id",
     }
   }
 
-  // Extract labels from parsed JSON
+  // Extract level as label for filtering
   stage.labels {
     values = {
-      level    = "",
-      trace_id = "",
-      span_id  = "",
+      level = "",
     }
   }
 
-  // Parse timestamp from JSON logs
-  stage.timestamp {
-    source = "timestamp"
-    format = "RFC3339Nano"
+  // Normalize log levels
+  stage.label_map {
+    values = {
+      level = {
+        debug = "debug",
+        DEBUG = "debug",
+        info  = "info",
+        INFO  = "info",
+        warn  = "warn",
+        WARN  = "warn",
+        warning = "warn",
+        WARNING = "warn",
+        error = "error",
+        ERROR = "error",
+        fatal = "fatal",
+        FATAL = "fatal",
+      },
+    }
   }
 
-  // Output - use msg field if available
-  stage.output {
-    source = "msg"
+  // Add timestamp from log if available
+  stage.timestamp {
+    source = "ts"
+    format = "Unix"
   }
+
+  forward_to = [loki.write.default.receiver]
 }
 
-// -----------------------------------------------------------------------------
-// Loki Write - Send logs to Loki
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Loki Writer (logs)
+// =============================================================================
+
 loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"
   }
-  external_labels = {
-    cluster = "production",
-  }
+}
+
+// =============================================================================
+// Self-monitoring
+// =============================================================================
+
+// Expose Alloy's own metrics
+prometheus.exporter.self "alloy" {}
+
+prometheus.scrape "alloy_self" {
+  targets    = prometheus.exporter.self.alloy.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+  
+  scrape_interval = "15s"
+  job_name        = "alloy"
 }

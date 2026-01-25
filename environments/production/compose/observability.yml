@@ -1,7 +1,7 @@
 # =============================================================================
 # Observability Stack
 # =============================================================================
-# OpenTelemetry Collector, Prometheus, Tempo, Loki, Alloy, Grafana
+# Grafana Alloy (all-in-one), Prometheus, Tempo, Loki, Grafana
 
 volumes:
   prometheus_data:
@@ -11,22 +11,39 @@ volumes:
 
 services:
   # ---------------------------------------------------------------------------
-  # OpenTelemetry Collector (receives traces & metrics from services)
+  # Grafana Alloy (OTLP receiver + log collector - all-in-one)
   # ---------------------------------------------------------------------------
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.144.0
-    container_name: otel-collector
+  # Replaces: OpenTelemetry Collector + Promtail
+  # Receives: OTLP (metrics + traces) from Go services + Docker logs
+  # Exports: Prometheus (metrics), Tempo (traces), Loki (logs)
+  alloy:
+    image: grafana/alloy:v1.12.2
+    container_name: alloy
     restart: unless-stopped
-    command: ["--config=/etc/otelcol/config.yaml"]
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
     volumes:
-      - ../config/otelcol-config.yaml:/etc/otelcol/config.yaml:ro
+      - ../config/alloy-config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      tempo:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
     networks:
       - ecommerce
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:13133/"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:12345/ready"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 30s
 
   # ---------------------------------------------------------------------------
   # Prometheus (metrics storage)
@@ -89,33 +106,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # ---------------------------------------------------------------------------
-  # Grafana Alloy (log collector)
-  # ---------------------------------------------------------------------------
-  alloy:
-    image: grafana/alloy:v1.12.2
-    container_name: alloy
-    restart: unless-stopped
-    command:
-      - run
-      - --server.http.listen-addr=0.0.0.0:12345
-      - --storage.path=/var/lib/alloy/data
-      - /etc/alloy/config.alloy
-    volumes:
-      - ../config/alloy-config.alloy:/etc/alloy/config.alloy:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-    depends_on:
-      loki:
-        condition: service_healthy
-    networks:
-      - ecommerce
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:12345/ready"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   # ---------------------------------------------------------------------------
   # Grafana (dashboards & visualization)

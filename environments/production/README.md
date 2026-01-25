@@ -40,11 +40,12 @@ Production deployment configuration for the e-commerce platform using Docker Com
 │                                                                            │
 │  ┌────────────────────────────────────────────────────────────────────┐   │
 │  │                     Observability Stack                             │   │
-│  │  OTel Collector → Prometheus (metrics)                             │   │
-│  │                 → Tempo (traces)                                    │   │
-│  │  Alloy ────────→ Loki (logs)                                       │   │
-│  │                              ↓                                      │   │
-│  │                         Grafana                                     │   │
+│  │                                                                     │   │
+│  │  Go services ──OTLP──→ Grafana Alloy ──→ Prometheus (metrics)      │   │
+│  │                           │          ──→ Tempo (traces)             │   │
+│  │  Docker logs ────────────→│          ──→ Loki (logs)                │   │
+│  │                                          ↓                          │   │
+│  │                                      Grafana                        │   │
 │  └────────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -428,15 +429,14 @@ environments/production/
 ├── README.md               # This file
 ├── compose/
 │   ├── infra.yml          # MongoDB, Kafka, MinIO, imgproxy
-│   ├── observability.yml  # OTel, Prometheus, Tempo, Loki, Grafana
+│   ├── observability.yml  # Alloy, Prometheus, Tempo, Loki, Grafana
 │   ├── services.yml       # Go microservices + Next.js UIs
 │   └── traefik.yml        # Reverse proxy + SSL
 └── config/
-    ├── otel-collector-config.yaml
+    ├── alloy-config.alloy       # OTLP receiver + log collector (all-in-one)
     ├── prometheus-config.yaml
     ├── tempo-config.yaml
     ├── loki-config.yaml
-    ├── alloy-config.alloy
     ├── grafana-datasources.yaml
     └── grafana-dashboards.yaml
 ```
