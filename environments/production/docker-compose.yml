@@ -13,10 +13,10 @@
 name: ecommerce-prod
 
 include:
+  - compose/traefik.yml
   - compose/infra.yml
   - compose/observability.yml
   - compose/services.yml
-  # - compose/traefik.yml  # Uncomment after configuring domain & SSL
 
 # =============================================================================
 # Shared Network (used by all compose files)

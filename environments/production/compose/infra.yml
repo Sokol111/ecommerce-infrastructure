@@ -173,6 +173,14 @@ services:
       IMGPROXY_LOG_LEVEL: warn
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.imgproxy.rule=Host(`${DOMAIN}`) && PathPrefix(`/img`)"
+      - "traefik.http.routers.imgproxy.entrypoints=websecure"
+      - "traefik.http.routers.imgproxy.tls.certresolver=letsencrypt"
+      - "traefik.http.middlewares.imgproxy-strip.stripprefix.prefixes=/img"
+      - "traefik.http.routers.imgproxy.middlewares=imgproxy-strip,security-headers@docker"
+      - "traefik.http.services.imgproxy.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "imgproxy", "health"]
       interval: 10s

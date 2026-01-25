@@ -33,6 +33,13 @@ services:
       OTEL_SERVICE_NAME: auth-service
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth-service.rule=Host(`api.${DOMAIN}`) && PathPrefix(`/api/v1/auth`)"
+      - "traefik.http.routers.auth-service.entrypoints=websecure"
+      - "traefik.http.routers.auth-service.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.auth-service.middlewares=security-headers@docker"
+      - "traefik.http.services.auth-service.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
       interval: 10s
@@ -74,6 +81,13 @@ services:
       OTEL_SERVICE_NAME: catalog-service
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.catalog-service.rule=Host(`api.${DOMAIN}`) && PathPrefix(`/api/v1/catalog`)"
+      - "traefik.http.routers.catalog-service.entrypoints=websecure"
+      - "traefik.http.routers.catalog-service.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.catalog-service.middlewares=security-headers@docker"
+      - "traefik.http.services.catalog-service.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
       interval: 10s
@@ -126,6 +140,13 @@ services:
       OTEL_SERVICE_NAME: image-service
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.image-service.rule=Host(`api.${DOMAIN}`) && PathPrefix(`/api/v1/images`)"
+      - "traefik.http.routers.image-service.entrypoints=websecure"
+      - "traefik.http.routers.image-service.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.image-service.middlewares=security-headers@docker"
+      - "traefik.http.services.image-service.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
       interval: 10s
@@ -165,6 +186,13 @@ services:
       OTEL_SERVICE_NAME: product-query-service
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.product-query-service.rule=Host(`api.${DOMAIN}`) && PathPrefix(`/api/v1/products`)"
+      - "traefik.http.routers.product-query-service.entrypoints=websecure"
+      - "traefik.http.routers.product-query-service.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.product-query-service.middlewares=security-headers@docker"
+      - "traefik.http.services.product-query-service.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
       interval: 10s
@@ -204,6 +232,13 @@ services:
       OTEL_SERVICE_NAME: category-query-service
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.category-query-service.rule=Host(`api.${DOMAIN}`) && PathPrefix(`/api/v1/categories`)"
+      - "traefik.http.routers.category-query-service.entrypoints=websecure"
+      - "traefik.http.routers.category-query-service.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.category-query-service.middlewares=security-headers@docker"
+      - "traefik.http.services.category-query-service.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
       interval: 10s
@@ -235,6 +270,13 @@ services:
       NEXT_PUBLIC_IMGPROXY_URL: https://${DOMAIN}/img
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.admin-ui.rule=Host(`admin.${DOMAIN}`)"
+      - "traefik.http.routers.admin-ui.entrypoints=websecure"
+      - "traefik.http.routers.admin-ui.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.admin-ui.middlewares=security-headers@docker"
+      - "traefik.http.services.admin-ui.loadbalancer.server.port=3000"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
       interval: 10s
@@ -263,6 +305,13 @@ services:
       NEXT_PUBLIC_IMGPROXY_URL: https://${DOMAIN}/img
     networks:
       - ecommerce
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ecommerce-ui.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+      - "traefik.http.routers.ecommerce-ui.entrypoints=websecure"
+      - "traefik.http.routers.ecommerce-ui.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.ecommerce-ui.middlewares=security-headers@docker"
+      - "traefik.http.services.ecommerce-ui.loadbalancer.server.port=3000"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
       interval: 10s
