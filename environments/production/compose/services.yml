@@ -1,0 +1,271 @@
+# =============================================================================
+# Application Services
+# =============================================================================
+# Go microservices + Next.js UIs
+
+services:
+  # ---------------------------------------------------------------------------
+  # Auth Service (Go)
+  # ---------------------------------------------------------------------------
+  auth-service:
+    image: sokol111/ecommerce-auth-service:${AUTH_SERVICE_TAG:-latest}
+    container_name: auth-service
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      otel-collector:
+        condition: service_healthy
+    environment:
+      CONFIG_PATH: /configs/config.pro.yaml
+      # MongoDB
+      MONGO_HOST: mongo
+      MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      # Security
+      AUTH_TOKEN_PRIVATE_KEY: ${AUTH_TOKEN_PRIVATE_KEY}
+      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Admin user
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      # Observability
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_SERVICE_NAME: auth-service
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Catalog Service (Go)
+  # ---------------------------------------------------------------------------
+  catalog-service:
+    image: sokol111/ecommerce-catalog-service:${CATALOG_SERVICE_TAG:-latest}
+    container_name: catalog-service
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      otel-collector:
+        condition: service_healthy
+    environment:
+      CONFIG_PATH: /configs/config.pro.yaml
+      # MongoDB
+      MONGO_HOST: mongo
+      MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      # Kafka
+      KAFKA_BROKERS: kafka:29092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Security
+      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Observability
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_SERVICE_NAME: catalog-service
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Image Service (Go)
+  # ---------------------------------------------------------------------------
+  image-service:
+    image: sokol111/ecommerce-image-service:${IMAGE_SERVICE_TAG:-latest}
+    container_name: image-service
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      otel-collector:
+        condition: service_healthy
+    environment:
+      CONFIG_PATH: /configs/config.pro.yaml
+      # MongoDB
+      MONGO_HOST: mongo
+      MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      # Kafka
+      KAFKA_BROKERS: kafka:29092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # S3 / MinIO
+      S3_ENDPOINT: http://minio:9000
+      S3_PUBLIC_ENDPOINT: https://${DOMAIN}/storage
+      S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      # imgproxy
+      IMGPROXY_PUBLIC_BASE_URL: https://${DOMAIN}/img
+      IMGPROXY_KEY_HEX: ${IMGPROXY_KEY}
+      IMGPROXY_SALT_HEX: ${IMGPROXY_SALT}
+      # Security
+      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Observability
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_SERVICE_NAME: image-service
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Product Query Service (Go)
+  # ---------------------------------------------------------------------------
+  product-query-service:
+    image: sokol111/ecommerce-product-query-service:${PRODUCT_QUERY_SERVICE_TAG:-latest}
+    container_name: product-query-service
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      otel-collector:
+        condition: service_healthy
+    environment:
+      CONFIG_PATH: /configs/config.pro.yaml
+      # MongoDB
+      MONGO_HOST: mongo
+      MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      # Kafka
+      KAFKA_BROKERS: kafka:29092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Security
+      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Observability
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_SERVICE_NAME: product-query-service
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Category Query Service (Go)
+  # ---------------------------------------------------------------------------
+  category-query-service:
+    image: sokol111/ecommerce-category-query-service:${CATEGORY_QUERY_SERVICE_TAG:-latest}
+    container_name: category-query-service
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      otel-collector:
+        condition: service_healthy
+    environment:
+      CONFIG_PATH: /configs/config.pro.yaml
+      # MongoDB
+      MONGO_HOST: mongo
+      MONGO_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      # Kafka
+      KAFKA_BROKERS: kafka:29092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Security
+      AUTH_TOKEN_PUBLIC_KEY: ${AUTH_TOKEN_PUBLIC_KEY}
+      # Observability
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_SERVICE_NAME: category-query-service
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Admin UI (Next.js)
+  # ---------------------------------------------------------------------------
+  admin-ui:
+    image: sokol111/ecommerce-admin-ui:${ADMIN_UI_TAG:-latest}
+    container_name: admin-ui
+    restart: unless-stopped
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      catalog-service:
+        condition: service_healthy
+      image-service:
+        condition: service_healthy
+    environment:
+      # API endpoints (internal Docker network)
+      AUTH_SERVICE_URL: http://auth-service:8080
+      CATALOG_SERVICE_URL: http://catalog-service:8080
+      IMAGE_SERVICE_URL: http://image-service:8080
+      # Public URLs for browser
+      NEXT_PUBLIC_API_URL: https://api.${DOMAIN}
+      NEXT_PUBLIC_IMGPROXY_URL: https://${DOMAIN}/img
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # E-commerce UI (Next.js)
+  # ---------------------------------------------------------------------------
+  ecommerce-ui:
+    image: sokol111/ecommerce-ui:${ECOMMERCE_UI_TAG:-latest}
+    container_name: ecommerce-ui
+    restart: unless-stopped
+    depends_on:
+      product-query-service:
+        condition: service_healthy
+      category-query-service:
+        condition: service_healthy
+    environment:
+      # API endpoints (internal Docker network)
+      PRODUCT_QUERY_SERVICE_URL: http://product-query-service:8080
+      CATEGORY_QUERY_SERVICE_URL: http://category-query-service:8080
+      # Public URLs for browser
+      NEXT_PUBLIC_API_URL: https://api.${DOMAIN}
+      NEXT_PUBLIC_IMGPROXY_URL: https://${DOMAIN}/img
+    networks:
+      - ecommerce
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

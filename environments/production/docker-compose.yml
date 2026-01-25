@@ -1,0 +1,26 @@
+# =============================================================================
+# Production Docker Compose - Main Entry Point
+# =============================================================================
+# Usage:
+#   docker compose up -d              # Start all services
+#   docker compose up -d mongo kafka  # Start only specific services
+#   docker compose logs -f            # View logs
+#   docker compose down               # Stop all services
+#
+# To disable a module, comment out the corresponding include line.
+# =============================================================================
+
+name: ecommerce-prod
+
+include:
+  - compose/infra.yml
+  - compose/observability.yml
+  - compose/services.yml
+  # - compose/traefik.yml  # Uncomment after configuring domain & SSL
+
+# =============================================================================
+# Shared Network (used by all compose files)
+# =============================================================================
+networks:
+  ecommerce:
+    driver: bridge
