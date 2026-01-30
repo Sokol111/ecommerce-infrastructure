@@ -30,19 +30,27 @@ jobs:
         with:
           go-version: ${{ inputs.go-version }}
 
+      - name: Install goimports
+        run: go install golang.org/x/tools/cmd/goimports@latest
+
       - name: Run formatting check
-        run: make fmt
+        run: |
+          go fmt ./...
+          goimports -w .
       
       - name: Check for changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "❌ Code is not formatted. Run 'make fmt' locally."
+            echo "❌ Code is not formatted. Run 'go fmt ./... && goimports -w .' locally."
             git diff
             exit 1
           fi
 
       - name: Run linter
-        run: make lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.61.0
+          args: --timeout=5m
 
   test:
     name: Test
@@ -55,12 +63,16 @@ jobs:
           go-version: ${{ inputs.go-version }}
 
       - name: Run tests with coverage
-        run: make test
+        run: go test ./... -v -race -coverprofile=coverage.out
 
       - name: Check coverage threshold
-        run: make test-coverage-check
-        env:
-          MIN_COVERAGE: ${{ inputs.coverage-threshold }}
+        run: |
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print int($3)}')
+          echo "Coverage: ${COVERAGE}% (minimum: ${{ inputs.coverage-threshold }}%)"
+          if [ ${COVERAGE} -lt ${{ inputs.coverage-threshold }} ]; then
+            echo "❌ Coverage is below minimum threshold!"
+            exit 1
+          fi
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
@@ -82,4 +94,7 @@ jobs:
           go-version: ${{ inputs.go-version }}
 
       - name: Run vulnerability check
-        run: make vuln-check
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: ${{ inputs.go-version }}
+          go-package: ./...
