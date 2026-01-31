@@ -67,7 +67,7 @@ jobs:
 
       - name: Check coverage threshold
         run: |
-          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print int($3)}')
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{gsub(/%/,"",$3); print int($3)}')
           echo "Coverage: ${COVERAGE}% (minimum: ${{ inputs.coverage-threshold }}%)"
           if [ ${COVERAGE} -lt ${{ inputs.coverage-threshold }} ]; then
             echo "❌ Coverage is below minimum threshold!"
