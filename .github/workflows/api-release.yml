@@ -27,8 +27,33 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Cache Go tools
+        id: cache-go-tools
+        uses: actions/cache@v4
+        with:
+          path: ~/go/bin
+          key: go-tools-${{ runner.os }}-week-${{ github.run_id }}
+          restore-keys: |
+            go-tools-${{ runner.os }}-week-
+
+      - name: Cache npm global packages
+        id: cache-npm-global
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm-global
+          key: npm-global-${{ runner.os }}-week-${{ github.run_id }}
+          restore-keys: |
+            npm-global-${{ runner.os }}-week-
+
+      - name: Configure npm global directory
+        run: |
+          mkdir -p ~/.npm-global
+          npm config set prefix '~/.npm-global'
+          echo "~/.npm-global/bin" >> $GITHUB_PATH
+
       - name: Install generators
         run: |
+          # Always install latest versions (cache serves as fallback for faster builds)
           go install github.com/ogen-go/ogen/cmd/ogen@latest
           go install github.com/daveshanley/vacuum@latest
           go install github.com/Sokol111/ecommerce-commons/cmd/eventgen@latest
