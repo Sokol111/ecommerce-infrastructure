@@ -59,7 +59,7 @@ jobs:
           # Check TypeScript client
           if [ ! -f "gen/typescript/package.json" ]; then
             echo "❌ gen/typescript/package.json is missing"
-            echo "   Run: make openapi-ts-generate-fast"
+            echo "   Run: make openapi-ts-generate"
             exit 1
           fi
           echo "✓ gen/typescript/ exists"
