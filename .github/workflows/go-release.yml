@@ -70,7 +70,7 @@ jobs:
             --load .
 
       - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}'
           format: 'table'
