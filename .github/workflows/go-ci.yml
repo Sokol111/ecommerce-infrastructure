@@ -67,8 +67,24 @@ jobs:
 
       - name: Check coverage threshold
         run: |
-          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{gsub(/%/,"",$3); print int($3)}')
+          # Filter out files that shouldn't count towards coverage:
+          # - mocks (generated)
+          # - module.go (DI wiring)
+          # - main.go (entrypoint)
+          # - http handlers (covered by e2e tests)
+          # - event factories (simple mappers, covered by e2e)
+          # - infrastructure (covered by integration tests)
+          grep -v -E '(mocks/|/module\.go|main\.go|/http/|/event/|/infrastructure/)' coverage.out > coverage-filtered.out || true
+          
+          if [ -s coverage-filtered.out ]; then
+            COVERAGE=$(go tool cover -func=coverage-filtered.out | grep total | awk '{gsub(/%/,"",$3); print int($3)}')
+          else
+            COVERAGE=0
+          fi
+          
           echo "Coverage: ${COVERAGE}% (minimum: ${{ inputs.coverage-threshold }}%)"
+          echo "Note: mocks, module.go, main.go, http handlers excluded from coverage"
+          
           if [ ${COVERAGE} -lt ${{ inputs.coverage-threshold }} ]; then
             echo "❌ Coverage is below minimum threshold!"
             exit 1
