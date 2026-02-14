@@ -107,7 +107,7 @@ urls: ## Show all service URLs available in browser
 	@printf "\n\033[1;33mDevelopment Tools:\033[0m\n"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Tilt Dashboard:" "http://localhost:10350"
 	@printf "\n\033[1;33mKafka & Messaging:\033[0m\n"
-	@printf "  \033[36m%-35s\033[0m %s\n" "Kafka UI:" "http://localhost:9093"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Redpanda Console:" "http://localhost:9093"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Schema Registry:" "http://localhost:8084"
 	@printf "\n\033[1;33mStorage:\033[0m\n"
 	@printf "  \033[36m%-35s\033[0m %s (minioadmin/minioadmin123)\n" "MinIO Console:" "$(MINIO_CONSOLE_URL)"
