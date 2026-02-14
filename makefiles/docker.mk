@@ -12,7 +12,7 @@ docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 		(printf "  Creating network '$(DOCKER_NETWORK)'\n" && docker network create "$(DOCKER_NETWORK)")
 	@printf "  Starting MongoDB...\n"
 	@docker compose -f "$(MONGO_COMPOSE)" up -d
-	@printf "  Starting Kafka...\n"
+	@printf "  Starting Redpanda...\n"
 	@docker compose -f "$(KAFKA_COMPOSE)" up -d
 	@printf "  Starting Storage (MinIO, imgproxy)...\n"
 	@docker compose -f "$(STORAGE_COMPOSE)" up -d
@@ -21,8 +21,8 @@ docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@printf "\033[32m✓ Docker infrastructure started\033[0m\n"
 	@printf "\n\033[36mServices:\033[0m\n"
 	@printf "  MongoDB:          mongodb://localhost:27017\n"
-	@printf "  Kafka:            localhost:9092\n"
-	@printf "  Kafka UI:         http://localhost:9093\n"
+	@printf "  Redpanda:         localhost:9092\n"
+	@printf "  Redpanda Console: http://localhost:9093\n"
 	@printf "  Schema Registry:  http://localhost:8084\n"
 	@printf "  MinIO API:        http://localhost:9000\n"
 	@printf "  MinIO Console:    $(MINIO_CONSOLE_URL) (minioadmin/minioadmin123)\n"
