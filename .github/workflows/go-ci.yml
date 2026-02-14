@@ -13,6 +13,11 @@ on:
         required: false
         type: number
         default: 60
+      coverage-exclude-pattern:
+        description: 'Regex pattern to exclude from coverage (grep -E format)'
+        required: false
+        type: string
+        default: 'mocks/|/module\.go|main\.go'
       run-security:
         description: 'Run security checks (govulncheck)'
         required: false
@@ -67,14 +72,15 @@ jobs:
 
       - name: Check coverage threshold
         run: |
-          # Filter out files that shouldn't count towards coverage:
-          # - mocks (generated)
-          # - module.go (DI wiring)
-          # - main.go (entrypoint)
-          # - http handlers (covered by e2e tests)
-          # - event factories (simple mappers, covered by e2e)
-          # - infrastructure (covered by integration tests)
-          grep -v -E '(mocks/|/module\.go|main\.go|/http/|/event/|/infrastructure/)' coverage.out > coverage-filtered.out || true
+          # Filter out files based on project-defined pattern
+          EXCLUDE_PATTERN="${{ inputs.coverage-exclude-pattern }}"
+          
+          if [ -n "$EXCLUDE_PATTERN" ]; then
+            grep -v -E "($EXCLUDE_PATTERN)" coverage.out > coverage-filtered.out || true
+            echo "Excluded pattern: $EXCLUDE_PATTERN"
+          else
+            cp coverage.out coverage-filtered.out
+          fi
           
           if [ -s coverage-filtered.out ]; then
             COVERAGE=$(go tool cover -func=coverage-filtered.out | grep total | awk '{gsub(/%/,"",$3); print int($3)}')
@@ -83,7 +89,6 @@ jobs:
           fi
           
           echo "Coverage: ${COVERAGE}% (minimum: ${{ inputs.coverage-threshold }}%)"
-          echo "Note: mocks, module.go, main.go, http handlers excluded from coverage"
           
           if [ ${COVERAGE} -lt ${{ inputs.coverage-threshold }} ]; then
             echo "❌ Coverage is below minimum threshold!"
