@@ -1,0 +1,290 @@
+[
+  {
+    "id": "3780f1b5-434f-48c5-813a-abb7b936cb3c",
+    "name": "NovaTech Stellar X9",
+    "description": "Revolutionary smartphone with HyperCore Z1 processor, quantum glass display, and 500MP holographic camera",
+    "price": 1199.99,
+    "quantity": 50,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "8bee99eb-5606-4222-8233-7b0b40f4ae88",
+    "name": "ZenithPhone Omega Pro",
+    "description": "Premium flagship with neural AI assistant, flexible wraparound screen, and 72-hour battery life",
+    "price": 1299.99,
+    "quantity": 45,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "f881889a-4c2d-4e85-9e45-107895812e3e",
+    "name": "Aether Vision 5G",
+    "description": "Cloud-powered smartphone with Aurora display technology and real-time language translation",
+    "price": 999.99,
+    "quantity": 60,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "Pulse Nova Mini",
+    "description": "Compact powerhouse with BioSense fingerprint scanner and 3D spatial audio system",
+    "price": 699.99,
+    "quantity": 80,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+    "name": "Vortex Phantom X",
+    "description": "Gaming smartphone with liquid cooling system, 240Hz refresh rate, and haptic feedback triggers",
+    "price": 1099.99,
+    "quantity": 35,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+    "name": "Eclipse Noir Edition",
+    "description": "Luxury smartphone with carbon fiber body, sapphire screen, and AI photography suite",
+    "price": 1599.99,
+    "quantity": 20,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+    "name": "Helix Fold Ultra",
+    "description": "Tri-fold smartphone with seamless hinge technology and desktop mode projection",
+    "price": 1899.99,
+    "quantity": 15,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+    "name": "Quantum Spark SE",
+    "description": "Budget-friendly smartphone with all-day battery, NightVision camera, and water resistance",
+    "price": 449.99,
+    "quantity": 120,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
+    "name": "Nebula Ring Phone",
+    "description": "Innovative ring-shaped companion device with holographic display and voice AI",
+    "price": 599.99,
+    "quantity": 40,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d",
+    "name": "Chronos TimeSync",
+    "description": "Smartwatch-phone hybrid with atomic clock sync, health monitoring, and satellite connectivity",
+    "price": 899.99,
+    "quantity": 55,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
+    "name": "Apex Rugged Pro",
+    "description": "Indestructible smartphone with titanium frame, thermal imaging, and 50-day battery standby",
+    "price": 1249.99,
+    "quantity": 30,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
+    "name": "Prism Spectrum Plus",
+    "description": "Color-shifting smartphone with mood-reactive case and customizable LED notifications",
+    "price": 799.99,
+    "quantity": 65,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "d0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a",
+    "name": "Flux Stream Max",
+    "description": "Content creator smartphone with 8K video, directional microphones, and live streaming suite",
+    "price": 1149.99,
+    "quantity": 42,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+    "name": "Solaris Energy Phone",
+    "description": "Solar-powered smartphone with eco-friendly materials and carbon-neutral production",
+    "price": 949.99,
+    "quantity": 38,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "f2a3b4c5-d6e7-4f8a-9b0c-1d2e3f4a5b6c",
+    "name": "Cipher Secure X",
+    "description": "Privacy-focused smartphone with hardware encryption, secure enclave, and anonymous browsing",
+    "price": 1399.99,
+    "quantity": 25,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d",
+    "name": "Metro Slim Basic",
+    "description": "Essential smartphone with clean interface, long battery life, and affordable price",
+    "price": 299.99,
+    "quantity": 150,
+    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "enabled": true
+  },
+  {
+    "id": "ae3eb26a-d875-4ee6-ae24-511511f9fc82",
+    "name": "TitanBook Pro 17 Quantum",
+    "description": "Ultimate creative powerhouse with NeuroChip Q7 processor and holographic projection keyboard",
+    "price": 3499.99,
+    "quantity": 25,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "ad93fea0-b46c-4c21-89e5-b6b9fb73ce60",
+    "name": "Orion UltraSlim Z15",
+    "description": "Featherweight laptop with EdgelessVision display and ambient light charging technology",
+    "price": 1899.99,
+    "quantity": 35,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "6e0a80b5-c70e-4f64-99f5-9550e8c6afec",
+    "name": "Nexus WorkForce Elite",
+    "description": "Enterprise-grade ultrabook with military encryption, self-healing screen, and 30-day standby",
+    "price": 1649.99,
+    "quantity": 40,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "b4c5d6e7-f8a9-4b0c-1d2e-3f4a5b6c7d8e",
+    "name": "Vertex Gaming Beast",
+    "description": "Ultimate gaming laptop with plasma cooling, 360Hz display, and RGB mechanical keyboard",
+    "price": 2799.99,
+    "quantity": 20,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "c5d6e7f8-a9b0-4c1d-2e3f-4a5b6c7d8e9f",
+    "name": "Nova Creator Studio",
+    "description": "Professional workstation with color-accurate 4K OLED display and content creation suite",
+    "price": 2499.99,
+    "quantity": 18,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "d6e7f8a9-b0c1-4d2e-3f4a-5b6c7d8e9f0a",
+    "name": "Phantom Stealth Book",
+    "description": "Ultra-portable laptop with whisper-quiet operation and privacy screen technology",
+    "price": 1449.99,
+    "quantity": 45,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "e7f8a9b0-c1d2-4e3f-4a5b-6c7d8e9f0a1b",
+    "name": "Atlas Expedition 14",
+    "description": "Rugged outdoor laptop with solar charging, dust resistance, and satellite internet",
+    "price": 1999.99,
+    "quantity": 22,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "f8a9b0c1-d2e3-4f4a-5b6c-7d8e9f0a1b2c",
+    "name": "Zenith AcademyBook",
+    "description": "Student-friendly laptop with AI tutoring system, long battery, and affordable price",
+    "price": 599.99,
+    "quantity": 100,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "a9b0c1d2-e3f4-4a5b-6c7d-8e9f0a1b2c3d",
+    "name": "Flux Convertible 360",
+    "description": "Versatile 2-in-1 laptop with 360-degree hinge, stylus support, and tent mode",
+    "price": 1299.99,
+    "quantity": 55,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "b0c1d2e3-f4a5-4b6c-7d8e-9f0a1b2c3d4e",
+    "name": "Quantum Code Developer",
+    "description": "Developer-focused laptop with triple monitor support, 128GB RAM, and container optimization",
+    "price": 2899.99,
+    "quantity": 15,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f",
+    "name": "Helix MiniBook Air",
+    "description": "Ultra-compact 11-inch laptop with fanless design and all-day battery life",
+    "price": 799.99,
+    "quantity": 70,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "d2e3f4a5-b6c7-4d8e-9f0a-1b2c3d4e5f6a",
+    "name": "Prism Media Center",
+    "description": "Entertainment laptop with Dolby Atmos speakers, 17-inch cinematic display, and streaming optimization",
+    "price": 1549.99,
+    "quantity": 32,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "e3f4a5b6-c7d8-4e9f-0a1b-2c3d4e5f6a7b",
+    "name": "Cipher SecureBook Pro",
+    "description": "Government-grade secure laptop with biometric lock, encrypted storage, and tamper detection",
+    "price": 2199.99,
+    "quantity": 12,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "f4a5b6c7-d8e9-4f0a-1b2c-3d4e5f6a7b8c",
+    "name": "Solaris EcoBook",
+    "description": "Sustainable laptop with recycled materials, biodegradable packaging, and carbon offset program",
+    "price": 1199.99,
+    "quantity": 48,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "a5b6c7d8-e9f0-4a1b-2c3d-4e5f6a7b8c9d",
+    "name": "Metro BasicBook 15",
+    "description": "Budget laptop for everyday tasks with reliable performance and essential features",
+    "price": 449.99,
+    "quantity": 130,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  },
+  {
+    "id": "b6c7d8e9-f0a1-4b2c-3d4e-5f6a7b8c9d0e",
+    "name": "Apex DataScience Pro",
+    "description": "AI and machine learning laptop with dual GPU, tensor cores, and Jupyter optimization",
+    "price": 3199.99,
+    "quantity": 10,
+    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "enabled": true
+  }
+]
