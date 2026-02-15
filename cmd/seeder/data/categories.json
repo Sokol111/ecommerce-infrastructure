@@ -1,0 +1,12 @@
+[
+  {
+    "id": "eff2c798-bfaa-49dc-a6e2-209a30822625",
+    "name": "Smartphones",
+    "enabled": true
+  },
+  {
+    "id": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
+    "name": "Laptops",
+    "enabled": true
+  }
+]

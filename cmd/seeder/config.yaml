@@ -1,6 +1,0 @@
-services:
-  categoryService: http://ecommerce-category-service.127.0.0.1.nip.io
-  productService: http://ecommerce-product-service.127.0.0.1.nip.io
-  imageService: http://ecommerce-image-service.127.0.0.1.nip.io
-
-dataFile: seed-data.json
