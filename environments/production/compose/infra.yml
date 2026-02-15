@@ -1,12 +1,12 @@
 # =============================================================================
 # Infrastructure Services
 # =============================================================================
-# MongoDB, Kafka, Schema Registry, MinIO, imgproxy
+# MongoDB, Redpanda (Kafka-compatible), MinIO, imgproxy
 
 volumes:
   mongo_data:
   mongo_config:
-  kafka_data:
+  redpanda_data:
   minio_data:
 
 services:
@@ -41,54 +41,26 @@ services:
       start_period: 30s
 
   # ---------------------------------------------------------------------------
-  # Kafka (KRaft mode - no Zookeeper)
+  # Redpanda (Kafka-compatible streaming + Schema Registry)
   # ---------------------------------------------------------------------------
-  kafka:
-    image: apache/kafka:4.1.1
-    container_name: kafka
+  redpanda:
+    image: redpandadata/redpanda:v24.3.1
+    container_name: redpanda
     restart: unless-stopped
-    environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
-      CLUSTER_ID: ${KAFKA_CLUSTER_ID:-MkU3OEVBNTcwNTJENDM2Qk}
+    command:
+      - redpanda
+      - start
+      - --smp=1
+      - --memory=512M
+      - --reserve-memory=0M
+      - --overprovisioned
+      - --node-id=0
+      - --kafka-addr=PLAINTEXT://0.0.0.0:29092
+      - --advertise-kafka-addr=PLAINTEXT://redpanda:29092
+      - --schema-registry-addr=0.0.0.0:8081
+      - --default-log-level=warn
     volumes:
-      - kafka_data:/tmp/kraft-combined-logs
-    networks:
-      - ecommerce
-    healthcheck:
-      test: ["CMD-SHELL", "kafka-broker-api-versions.sh --bootstrap-server localhost:29092"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-
-  # ---------------------------------------------------------------------------
-  # Schema Registry (Avro schemas for Kafka)
-  # ---------------------------------------------------------------------------
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.8.0
-    container_name: schema-registry
-    restart: unless-stopped
-    depends_on:
-      kafka:
-        condition: service_healthy
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:29092
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
-      SCHEMA_REGISTRY_KAFKASTORE_TOPIC_REPLICATION_FACTOR: 1
+      - redpanda_data:/var/lib/redpanda/data
     networks:
       - ecommerce
     healthcheck:
@@ -96,6 +68,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
   # ---------------------------------------------------------------------------
   # MinIO (S3-compatible storage)
