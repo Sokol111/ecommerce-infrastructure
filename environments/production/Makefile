@@ -22,7 +22,7 @@ COMPOSE := docker compose -f $(COMPOSE_FILE)
 
 # Service groups
 INFRA_SERVICES := mongo mongo-init kafka schema-registry minio minio-init imgproxy
-OBSERVABILITY_SERVICES := alloy prometheus tempo loki grafana
+OBSERVABILITY_SERVICES := alloy
 APP_SERVICES := auth-service catalog-service image-service product-query-service category-query-service admin-ui ecommerce-ui
 ALL_SERVICES := $(INFRA_SERVICES) $(OBSERVABILITY_SERVICES) $(APP_SERVICES) traefik
 
@@ -228,7 +228,7 @@ backup-volumes: ## Backup data volumes to ./backups/
 	@printf "$(COLOR_BLUE)→ Creating backup...$(COLOR_RESET)\n"
 	@mkdir -p backups
 	@timestamp=$$(date +%Y%m%d_%H%M%S)
-	@for vol in mongo_data kafka_data minio_data prometheus_data tempo_data loki_data grafana_data; do \
+	@for vol in mongo_data kafka_data minio_data; do \
 		printf "  Backing up $$vol...\n"; \
 		docker run --rm -v ecommerce_$$vol:/data -v $$(pwd)/backups:/backup alpine \
 			tar czf /backup/$${vol}_$${timestamp}.tar.gz -C /data . 2>/dev/null || true; \
@@ -248,7 +248,7 @@ check-env: ## Verify .env file exists and has required variables
 		exit 1; \
 	fi
 	@missing=""; \
-	for var in DOMAIN MONGO_ROOT_PASSWORD MINIO_ROOT_PASSWORD AUTH_TOKEN_PRIVATE_KEY AUTH_TOKEN_PUBLIC_KEY GRAFANA_ADMIN_PASSWORD IMGPROXY_KEY IMGPROXY_SALT; do \
+	for var in DOMAIN MONGO_ROOT_PASSWORD MINIO_ROOT_PASSWORD AUTH_TOKEN_PRIVATE_KEY AUTH_TOKEN_PUBLIC_KEY IMGPROXY_KEY IMGPROXY_SALT GRAFANA_CLOUD_API_KEY; do \
 		val=$$(grep -E "^$$var=" .env | cut -d'=' -f2-); \
 		if [ -z "$$val" ] || [ "$$val" = "CHANGE_ME_STRONG_PASSWORD" ] || [ "$$val" = "CHANGE_ME_STRONG_PASSWORD_HERE" ]; then \
 			missing="$$missing $$var"; \
@@ -282,8 +282,6 @@ generate-secrets: ## Generate secure random values for secrets
 	@printf "# Auth tokens (use your service's keygen tool for production)\n"
 	@printf "# AUTH_TOKEN_PRIVATE_KEY=<generate with auth-service keygen>\n"
 	@printf "# AUTH_TOKEN_PUBLIC_KEY=<generate with auth-service keygen>\n\n"
-	@printf "# Grafana\n"
-	@printf "GRAFANA_ADMIN_PASSWORD=$$(openssl rand -base64 32 | tr -d '/+=' | head -c 24)\n\n"
 	@printf "# Kafka Cluster ID\n"
 	@printf "KAFKA_CLUSTER_ID=$$(openssl rand -base64 22 | tr -d '/+=' | head -c 22)\n"
 
@@ -306,5 +304,5 @@ urls: ## Show service URLs
 	@printf "  $(COLOR_GREEN)Main UI:$(COLOR_RESET)        https://$$domain\n"
 	@printf "  $(COLOR_GREEN)Admin UI:$(COLOR_RESET)       https://admin.$$domain\n"
 	@printf "  $(COLOR_GREEN)API:$(COLOR_RESET)            https://api.$$domain/api/v1/\n"
-	@printf "  $(COLOR_GREEN)Grafana:$(COLOR_RESET)        https://grafana.$$domain\n"
 	@printf "  $(COLOR_GREEN)Traefik:$(COLOR_RESET)        https://traefik.$$domain\n"
+	@printf "  $(COLOR_GREEN)Grafana:$(COLOR_RESET)        https://grafana.com (Grafana Cloud)\n"
