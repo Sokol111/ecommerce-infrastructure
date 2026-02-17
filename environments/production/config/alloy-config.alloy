@@ -1,8 +1,8 @@
 // =============================================================================
-// Grafana Alloy - All-in-One Configuration
+// Grafana Alloy - Grafana Cloud Configuration
 // =============================================================================
 // Receives: OTLP (metrics + traces) + Docker logs
-// Exports: Prometheus, Tempo, Loki
+// Exports: Grafana Cloud (Prometheus, Tempo, Loki)
 
 // =============================================================================
 // OTLP Receiver (metrics + traces from Go services)
@@ -37,7 +37,7 @@ otelcol.processor.batch "default" {
 }
 
 // =============================================================================
-// Prometheus Exporter (metrics)
+// Prometheus Exporter (metrics → Grafana Cloud)
 // =============================================================================
 
 otelcol.exporter.prometheus "default" {
@@ -46,21 +46,30 @@ otelcol.exporter.prometheus "default" {
 
 prometheus.remote_write "default" {
   endpoint {
-    url = "http://prometheus:9090/api/v1/write"
+    url = env("GRAFANA_CLOUD_PROMETHEUS_URL")
+
+    basic_auth {
+      username = env("GRAFANA_CLOUD_PROMETHEUS_USER")
+      password = env("GRAFANA_CLOUD_API_KEY")
+    }
   }
 }
 
 // =============================================================================
-// Tempo Exporter (traces)
+// Tempo Exporter (traces → Grafana Cloud)
 // =============================================================================
 
 otelcol.exporter.otlp "tempo" {
   client {
-    endpoint = "tempo:4317"
-    tls {
-      insecure = true
-    }
+    endpoint = env("GRAFANA_CLOUD_TEMPO_URL")
+
+    auth = otelcol.auth.basic.tempo_auth.handler
   }
+}
+
+otelcol.auth.basic "tempo_auth" {
+  username = env("GRAFANA_CLOUD_TEMPO_USER")
+  password = env("GRAFANA_CLOUD_API_KEY")
 }
 
 // =============================================================================
@@ -162,12 +171,17 @@ loki.process "docker_logs" {
 }
 
 // =============================================================================
-// Loki Writer (logs)
+// Loki Writer (logs → Grafana Cloud)
 // =============================================================================
 
 loki.write "default" {
   endpoint {
-    url = "http://loki:3100/loki/api/v1/push"
+    url = env("GRAFANA_CLOUD_LOKI_URL")
+
+    basic_auth {
+      username = env("GRAFANA_CLOUD_LOKI_USER")
+      password = env("GRAFANA_CLOUD_API_KEY")
+    }
   }
 }
 
