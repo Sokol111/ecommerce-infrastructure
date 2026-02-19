@@ -26,7 +26,7 @@ livenessProbe:
   failureThreshold: 2
 
 env:
-  - name: CATEGORY_QUERY_API_URL
+  - name: NUXT_CATEGORY_QUERY_API_URL
     value: "http://ecommerce-category-query-service:8080"
-  - name: PRODUCT_QUERY_API_URL
+  - name: NUXT_PRODUCT_QUERY_API_URL
     value: "http://ecommerce-product-query-service:8080"

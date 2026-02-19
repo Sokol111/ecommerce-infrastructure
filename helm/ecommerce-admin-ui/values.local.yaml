@@ -26,9 +26,9 @@ livenessProbe:
   failureThreshold: 2
 
 env:
-  - name: CATALOG_API_URL
+  - name: NUXT_CATALOG_API_URL
     value: "http://ecommerce-catalog-service:8080"
-  - name: IMAGE_API_URL
+  - name: NUXT_IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
-  - name: AUTH_API_URL
+  - name: NUXT_AUTH_API_URL
     value: "http://ecommerce-auth-service:8080"
