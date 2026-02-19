@@ -1,8 +1,8 @@
-# Development Dockerfile for Next.js services
-# Runs in dev mode with hot reload, error overlay, and source maps
+# Build stage
+FROM node:22-alpine AS builder
 
-FROM node:22-alpine
-
+# API_DEPS - space separated list of API dependency directories
+# e.g. "ecommerce-catalog-service-api ecommerce-image-service-api"
 ARG API_DEPS=""
 ARG SERVICE_DIR
 
@@ -29,20 +29,38 @@ RUN set -e && \
 # Copy package files
 COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ./
 
-# Install ALL dependencies (including devDependencies)
-RUN pnpm install
+# Install dependencies (pnpm.overrides will use /app/../api paths)
+RUN pnpm install --frozen-lockfile
 
 # Copy application code
 COPY ${SERVICE_DIR}/. .
 RUN rm -rf /tmp/context
 
-ENV NODE_ENV=development
-ENV NEXT_TELEMETRY_DISABLED=1
+# Build the application
+RUN pnpm build
+
+# Production stage
+FROM node:22-alpine AS runner
+
+ARG SERVICE_DIR
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NUXT_TELEMETRY_DISABLED=1
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nuxtjs
+
+# Copy Nuxt output from builder
+COPY --from=builder --chown=nuxtjs:nodejs /app/${SERVICE_DIR}/.output ./.output
+
+USER nuxtjs
 
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Run in development mode with hot reload
-CMD ["pnpm", "dev"]
+CMD ["node", ".output/server/index.mjs"]
