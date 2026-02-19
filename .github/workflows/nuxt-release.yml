@@ -1,4 +1,4 @@
-name: Release Next.js app
+name: Release Nuxt app
 
 on:
   workflow_call:
@@ -65,7 +65,7 @@ jobs:
           SERVICE_DIR=$(basename ${GITHUB_REPOSITORY})
           
           docker buildx build \
-            -f infra/docker/Dockerfile.nextjs \
+            -f infra/docker/Dockerfile.nuxt \
             --build-arg SERVICE_DIR=${SERVICE_DIR} \
             --build-arg API_DEPS="" \
             -t "$IMAGE:$TAG" \
