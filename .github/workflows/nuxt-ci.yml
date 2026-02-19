@@ -1,4 +1,4 @@
-name: Next.js CI
+name: Nuxt CI
 
 on:
   workflow_call:
@@ -55,7 +55,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run type check
-        run: pnpm exec tsc --noEmit
+        run: pnpm typecheck
 
   build:
     name: Build
