@@ -10,6 +10,8 @@ ingress:
 env:
   - name: APP_ENV
     value: "local"
+  - name: CONFIG_FILE
+    value: "/configs/config.local.yaml"
   - name: APP_SERVICE_NAME
     valueFrom:
       fieldRef:
