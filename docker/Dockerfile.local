@@ -78,7 +78,7 @@ COPY ${SERVICE_DIR}/db ./svc/db
 
 # Встановлення Delve debugger
 RUN --mount=type=cache,target=/go/pkg/mod \
-    go install github.com/go-delve/delve/cmd/dlv@v1.25.2
+    go install github.com/go-delve/delve/cmd/dlv@v1.26.0
 
 # Збірка бінарника з debug символами
 WORKDIR /src/svc
