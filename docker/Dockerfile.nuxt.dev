@@ -38,6 +38,8 @@ RUN rm -rf /tmp/context
 
 ENV NODE_ENV=development
 ENV NUXT_TELEMETRY_DISABLED=1
+# Skip SSL verification in dev to avoid issues with corporate proxies / self-signed certs
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 EXPOSE 3000
 
