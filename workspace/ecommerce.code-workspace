@@ -5,45 +5,59 @@
 			"path": "."
 		},
 		{
+			"name": "ecommerce-commons",
 			"path": "ecommerce-commons"
 		},
 		{
+			"name": "ecommerce-admin-ui",
 			"path": "ecommerce-admin-ui"
 		},
 		{
+			"name": "ecommerce-ui",
 			"path": "ecommerce-ui"
 		},
 		{
+			"name": "ecommerce-infrastructure",
 			"path": "ecommerce-infrastructure"
 		},
 		{
+			"name": "ecommerce-product-query-service-api",
 			"path": "ecommerce-product-query-service-api"
 		},
 		{
+			"name": "ecommerce-product-query-service",
 			"path": "ecommerce-product-query-service"
 		},
 		{
+			"name": "ecommerce-category-query-service-api",
 			"path": "ecommerce-category-query-service-api"
 		},
 		{
+			"name": "ecommerce-category-query-service",
 			"path": "ecommerce-category-query-service"
 		},
 		{
+			"name": "ecommerce-image-service",
 			"path": "ecommerce-image-service"
 		},
 		{
+			"name": "ecommerce-image-service-api",
 			"path": "ecommerce-image-service-api"
 		},
 		{
+			"name": "ecommerce-auth-service-api",
 			"path": "ecommerce-auth-service-api"
 		},
 		{
+			"name": "ecommerce-auth-service",
 			"path": "ecommerce-auth-service"
 		},
 		{
+			"name": "ecommerce-catalog-service-api",
 			"path": "ecommerce-catalog-service-api"
 		},
 		{
+			"name": "ecommerce-catalog-service",
 			"path": "ecommerce-catalog-service"
 		}
 	],
