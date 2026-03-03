@@ -1,6 +1,6 @@
 # Local development values for ecommerce-product-query-service
 image:
-  repository: localhost:5000/ecommerce-product-query-service
+  repository: ecommerce-product-query-service
   tag: "latest"
 
 ingress:

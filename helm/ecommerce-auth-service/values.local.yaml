@@ -1,6 +1,6 @@
 # Local development values for ecommerce-auth-service
 image:
-  repository: localhost:5000/ecommerce-auth-service
+  repository: ecommerce-auth-service
   tag: "latest"
 
 ingress:

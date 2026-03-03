@@ -1,6 +1,6 @@
 # Local development values for ecommerce-image-service
 image:
-  repository: localhost:5000/ecommerce-image-service
+  repository: ecommerce-image-service
   tag: "latest"
 
 ingress:

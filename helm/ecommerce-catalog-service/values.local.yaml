@@ -1,6 +1,6 @@
 # Local development values for ecommerce-catalog-service
 image:
-  repository: localhost:5000/ecommerce-catalog-service
+  repository: ecommerce-catalog-service
   tag: "latest"
 
 ingress:
