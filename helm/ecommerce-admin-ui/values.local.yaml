@@ -1,6 +1,6 @@
 # Local development values for ecommerce-admin-ui
 image:
-  repository: sokol111/ecommerce-admin-ui
+  repository: localhost:5000/ecommerce-admin-ui
   tag: "latest"
 
 ingress:
