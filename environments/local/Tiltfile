@@ -23,6 +23,31 @@ allow_k8s_contexts('k3d-dev-cluster')
 # Images are pushed to localhost:5000 and pulled from k3d-dev-registry:5000 inside cluster
 default_registry('localhost:5000')
 
+COMPOSE_DIR = INFRA_PATH + '/docker/compose'
+
+# ============================================================================
+# Docker Compose Infrastructure
+# ============================================================================
+
+# Ensure shared network exists before starting compose services
+local('docker network inspect shared-network >/dev/null 2>&1 || docker network create shared-network', quiet=True)
+
+docker_compose(COMPOSE_DIR + '/mongo.yml')
+docker_compose(COMPOSE_DIR + '/kafka.yml')
+docker_compose(COMPOSE_DIR + '/storage.yml')
+docker_compose(COMPOSE_DIR + '/observability.yml')
+
+# Organize compose resources in Tilt UI
+dc_resource('mongo', labels=['infrastructure'])
+dc_resource('redpanda', labels=['infrastructure'])
+dc_resource('redpanda-console', labels=['infrastructure'], resource_deps=['redpanda'])
+dc_resource('minio', labels=['infrastructure'])
+dc_resource('minio-init', labels=['infrastructure'], resource_deps=['minio'])
+dc_resource('imgproxy', labels=['infrastructure'], resource_deps=['minio'])
+dc_resource('prometheus', labels=['observability'])
+dc_resource('tempo', labels=['observability'])
+dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 'tempo'])
+
 # ============================================================================
 # Go Services Configuration
 # ============================================================================
@@ -159,6 +184,7 @@ for name, config in GO_SERVICES.items():
             port_forward(config['debug_port'], 2345, name='delve'),
         ],
         labels=['go-services'],
+        resource_deps=['mongo', 'redpanda'],
     )
 
 # ============================================================================
@@ -222,6 +248,7 @@ for name, config in UI_SERVICES.items():
         resource_deps=config['resource_deps'],
     )
 
+
 # ============================================================================
 # Settings
 # ============================================================================
@@ -246,6 +273,10 @@ local_resource(
         link('http://ecommerce-auth-service.127.0.0.1.nip.io', 'Auth Service API'),
         link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
         link('http://shop.127.0.0.1.nip.io', 'Shop UI'),
+        link('http://localhost:9093', 'Redpanda Console'),
+        link('http://localhost:9001', 'MinIO Console'),
+        link('http://localhost:3000', 'Grafana'),
+        link('http://localhost:9090', 'Prometheus'),
     ],
     labels=['links'],
 )
