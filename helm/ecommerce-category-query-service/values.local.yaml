@@ -1,6 +1,6 @@
 # Local development values for ecommerce-category-query-service
 image:
-  repository: sokol111/ecommerce-category-query-service
+  repository: localhost:5000/ecommerce-category-query-service
   tag: "latest"
 
 ingress:

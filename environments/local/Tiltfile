@@ -19,9 +19,9 @@ HELM_PATH = INFRA_PATH + '/helm'
 # Kubernetes context and namespace
 allow_k8s_contexts('k3d-dev-cluster')
 
-# Use local k3d registry (created automatically with cluster)
-# Images are pushed to localhost:5000 and pulled from k3d-dev-registry:5000 inside cluster
-default_registry('localhost:5000')
+# Local k3d registry — images pushed to localhost:5000, pulled from k3d-dev-registry:5000 inside cluster
+# Note: default_registry() is not used because it's incompatible with docker_compose()
+REGISTRY = 'localhost:5000'
 
 COMPOSE_DIR = INFRA_PATH + '/docker/compose'
 
@@ -129,7 +129,7 @@ metadata:
 # ============================================================================
 
 for name, config in GO_SERVICES.items():
-    image = 'sokol111/' + name
+    image = REGISTRY + '/' + name
     service_path = ROOT_PATH + '/' + name
     commons_path = ROOT_PATH + '/ecommerce-commons'
     api_deps = config.get('api_deps', [])
@@ -192,7 +192,7 @@ for name, config in GO_SERVICES.items():
 # ============================================================================
 
 for name, config in UI_SERVICES.items():
-    image = 'sokol111/' + name
+    image = REGISTRY + '/' + name
     api_deps = config.get('api_deps', [])
     
     # Build list of paths to watch (Nuxt structure)
