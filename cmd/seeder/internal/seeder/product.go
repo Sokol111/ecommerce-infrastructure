@@ -45,6 +45,7 @@ func (s *Seeder) createProduct(ctx context.Context, prod data.Product) error {
 		CategoryId: s.parseOptUUID(prod.CategoryID),
 		ImageId:    s.resolveProductImage(ctx, prod),
 		ID:         s.parseOptUUID(prod.ID),
+		Attributes: toAttributeValueInputs(prod.Attributes),
 	}
 	if prod.Description != "" {
 		req.Description = catalogapi.NewOptString(prod.Description)
@@ -76,6 +77,7 @@ func (s *Seeder) updateProduct(ctx context.Context, prod data.Product, version i
 		CategoryId: s.parseOptUUID(prod.CategoryID),
 		ImageId:    s.resolveProductImage(ctx, prod),
 		Version:    version,
+		Attributes: toAttributeValueInputs(prod.Attributes),
 	}
 	if prod.Description != "" {
 		req.Description = catalogapi.NewOptString(prod.Description)
@@ -157,4 +159,34 @@ func (s *Seeder) getProduct(ctx context.Context, id string) (*catalogapi.Product
 	default:
 		return nil, fmt.Errorf("unexpected response type: %T", resp)
 	}
+}
+
+func toAttributeValueInputs(attrs []data.ProductAttribute) []catalogapi.AttributeValueInput {
+	if len(attrs) == 0 {
+		return nil
+	}
+
+	inputs := make([]catalogapi.AttributeValueInput, len(attrs))
+	for i, a := range attrs {
+		attrUUID, _ := uuid.Parse(a.AttributeID)
+		inputs[i] = catalogapi.AttributeValueInput{
+			AttributeId: attrUUID,
+		}
+		if a.OptionSlugValue != "" {
+			inputs[i].OptionSlugValue = catalogapi.NewOptString(a.OptionSlugValue)
+		}
+		if len(a.OptionSlugValues) > 0 {
+			inputs[i].OptionSlugValues = a.OptionSlugValues
+		}
+		if a.NumericValue != nil {
+			inputs[i].NumericValue = catalogapi.NewOptFloat64(*a.NumericValue)
+		}
+		if a.TextValue != "" {
+			inputs[i].TextValue = catalogapi.NewOptString(a.TextValue)
+		}
+		if a.BooleanValue != nil {
+			inputs[i].BooleanValue = catalogapi.NewOptBool(*a.BooleanValue)
+		}
+	}
+	return inputs
 }

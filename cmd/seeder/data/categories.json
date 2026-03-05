@@ -8,5 +8,15 @@
     "id": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "name": "Laptops",
     "enabled": true
+  },
+  {
+    "id": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "name": "Headphones",
+    "enabled": true
+  },
+  {
+    "id": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "name": "Tablets",
+    "enabled": true
   }
 ]

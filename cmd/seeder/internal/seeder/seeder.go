@@ -63,6 +63,11 @@ func (s *Seeder) Run(ctx context.Context) error {
 		return fmt.Errorf("failed to upsert categories: %w", err)
 	}
 
+	log.Println("\n🏷 Upserting attributes...")
+	if err := s.upsertAttributes(ctx); err != nil {
+		return fmt.Errorf("failed to upsert attributes: %w", err)
+	}
+
 	log.Println("\n📦 Upserting products...")
 	if err := s.upsertProducts(ctx); err != nil {
 		return fmt.Errorf("failed to upsert products: %w", err)
