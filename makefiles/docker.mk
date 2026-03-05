@@ -51,7 +51,7 @@ docker-logs: ## Tail Docker infra logs (Ctrl+C to stop)
 docker-restart: docker-down docker ## Restart Docker infra (keeps data)
 
 .PHONY: docker-clean
-docker-clean: docker-down ## Stop Docker infra and delete volumes
+docker-clean: ## Stop Docker infra and delete volumes
 	@printf "\033[33m→ Cleaning Docker volumes\033[0m\n"
 	@$(DC) -f "$(MONGO_COMPOSE)" down -v
 	@$(DC) -f "$(KAFKA_COMPOSE)" down -v

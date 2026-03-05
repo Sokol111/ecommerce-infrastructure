@@ -15,9 +15,18 @@ type SeedData struct {
 }
 
 type Category struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Enabled bool   `json:"enabled"`
+	ID         string              `json:"id"`
+	Name       string              `json:"name"`
+	Enabled    bool                `json:"enabled"`
+	Attributes []CategoryAttribute `json:"attributes,omitempty"`
+}
+
+type CategoryAttribute struct {
+	AttributeID string `json:"attributeId"`
+	Role        string `json:"role"`
+	SortOrder   int    `json:"sortOrder,omitempty"`
+	Filterable  bool   `json:"filterable"`
+	Searchable  bool   `json:"searchable"`
 }
 
 type Product struct {

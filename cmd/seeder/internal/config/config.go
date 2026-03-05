@@ -9,6 +9,7 @@ import (
 type Config struct {
 	CatalogURL string
 	ImageURL   string
+	Token      string
 }
 
 // Args holds all CLI arguments.
@@ -26,6 +27,7 @@ func Parse() *Args {
 
 	flag.StringVar(&args.Config.CatalogURL, "catalog-url", envOr("CATALOG_URL", "http://ecommerce-catalog-service.127.0.0.1.nip.io"), "Catalog service URL")
 	flag.StringVar(&args.Config.ImageURL, "image-url", envOr("IMAGE_URL", "http://ecommerce-image-service.127.0.0.1.nip.io"), "Image service URL")
+	flag.StringVar(&args.Config.Token, "token", envOr("SEEDER_TOKEN", ""), "Bearer token for service authentication")
 	flag.StringVar(&args.DataDir, "data-dir", envOr("DATA_DIR", "data"), "Path to seed data directory")
 	flag.StringVar(&args.AssetsDir, "assets-dir", envOr("ASSETS_DIR", "assets"), "Path to assets directory")
 	flag.Parse()

@@ -14,11 +14,13 @@ import (
 	imageapi "github.com/Sokol111/ecommerce-image-service-api/gen/httpapi"
 )
 
-// noopSecuritySource implements catalogapi.SecuritySource without authentication.
-type noopSecuritySource struct{}
+// tokenSecuritySource implements catalogapi.SecuritySource with a static bearer token.
+type tokenSecuritySource struct {
+	token string
+}
 
-func (noopSecuritySource) BearerAuth(ctx context.Context, operationName catalogapi.OperationName) (catalogapi.BearerAuth, error) {
-	return catalogapi.BearerAuth{Token: ""}, nil
+func (s tokenSecuritySource) BearerAuth(ctx context.Context, operationName catalogapi.OperationName) (catalogapi.BearerAuth, error) {
+	return catalogapi.BearerAuth{Token: s.token}, nil
 }
 
 type Seeder struct {
@@ -35,7 +37,7 @@ func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder
 		Timeout: 30 * time.Second,
 	}
 
-	catalogClient, err := catalogapi.NewClient(cfg.CatalogURL, noopSecuritySource{}, catalogapi.WithClient(httpClient))
+	catalogClient, err := catalogapi.NewClient(cfg.CatalogURL, tokenSecuritySource{token: cfg.Token}, catalogapi.WithClient(httpClient))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create catalog client: %w", err)
 	}
@@ -58,14 +60,14 @@ func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder
 func (s *Seeder) Run(ctx context.Context) error {
 	log.Println("🚀 Starting demo data seeder...")
 
-	log.Println("\n📁 Upserting categories...")
-	if err := s.upsertCategories(ctx); err != nil {
-		return fmt.Errorf("failed to upsert categories: %w", err)
-	}
-
 	log.Println("\n🏷 Upserting attributes...")
 	if err := s.upsertAttributes(ctx); err != nil {
 		return fmt.Errorf("failed to upsert attributes: %w", err)
+	}
+
+	log.Println("\n📁 Upserting categories...")
+	if err := s.upsertCategories(ctx); err != nil {
+		return fmt.Errorf("failed to upsert categories: %w", err)
 	}
 
 	log.Println("\n📦 Upserting products...")

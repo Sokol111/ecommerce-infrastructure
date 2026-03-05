@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/google/uuid"
 
@@ -37,13 +39,20 @@ func (s *Seeder) upsertProduct(ctx context.Context, prod data.Product) error {
 }
 
 func (s *Seeder) createProduct(ctx context.Context, prod data.Product) error {
+	imageID := s.resolveProductImage(ctx, prod)
+	enabled := prod.Enabled
+	if enabled && !imageID.IsSet() {
+		log.Printf("  ⚠ No image found for product %s, creating as disabled", prod.Name)
+		enabled = false
+	}
+
 	req := &catalogapi.CreateProductRequest{
 		Name:       prod.Name,
 		Price:      float64(prod.Price),
 		Quantity:   prod.Quantity,
-		Enabled:    prod.Enabled,
+		Enabled:    enabled,
 		CategoryId: s.parseOptUUID(prod.CategoryID),
-		ImageId:    s.resolveProductImage(ctx, prod),
+		ImageId:    imageID,
 		ID:         s.parseOptUUID(prod.ID),
 		Attributes: toAttributeValueInputs(prod.Attributes),
 	}
@@ -56,26 +65,34 @@ func (s *Seeder) createProduct(ctx context.Context, prod data.Product) error {
 		return fmt.Errorf("failed to create product %s: %w", prod.Name, err)
 	}
 
-	prodResp, ok := resp.(*catalogapi.ProductResponse)
-	if !ok {
+	switch r := resp.(type) {
+	case *catalogapi.ProductResponse:
+		log.Printf("  ✓ Created product: %s (ID: %s)", prod.Name, r.ID)
+		return nil
+	case *catalogapi.CreateProductBadRequest:
+		return fmt.Errorf("failed to create product %s: %s", prod.Name, r.Title)
+	default:
 		return fmt.Errorf("unexpected response type %T for product %s", resp, prod.Name)
 	}
-
-	log.Printf("  ✓ Created product: %s (ID: %s)", prod.Name, prodResp.ID)
-	return nil
 }
 
 func (s *Seeder) updateProduct(ctx context.Context, prod data.Product, version int) error {
 	prodUUID, _ := uuid.Parse(prod.ID)
+	imageID := s.resolveProductImage(ctx, prod)
+	enabled := prod.Enabled
+	if enabled && !imageID.IsSet() {
+		log.Printf("  ⚠ No image found for product %s, updating as disabled", prod.Name)
+		enabled = false
+	}
 
 	req := &catalogapi.UpdateProductRequest{
 		ID:         prodUUID,
 		Name:       prod.Name,
 		Price:      float64(prod.Price),
 		Quantity:   prod.Quantity,
-		Enabled:    prod.Enabled,
+		Enabled:    enabled,
 		CategoryId: s.parseOptUUID(prod.CategoryID),
-		ImageId:    s.resolveProductImage(ctx, prod),
+		ImageId:    imageID,
 		Version:    version,
 		Attributes: toAttributeValueInputs(prod.Attributes),
 	}
@@ -88,43 +105,50 @@ func (s *Seeder) updateProduct(ctx context.Context, prod data.Product, version i
 		return fmt.Errorf("failed to update product %s: %w", prod.Name, err)
 	}
 
-	prodResp, ok := resp.(*catalogapi.ProductResponse)
-	if !ok {
+	switch r := resp.(type) {
+	case *catalogapi.ProductResponse:
+		log.Printf("  ✏ Updated product: %s (ID: %s)", prod.Name, r.ID)
+		return nil
+	case *catalogapi.UpdateProductBadRequest:
+		return fmt.Errorf("failed to update product %s: %s", prod.Name, r.Title)
+	default:
 		return fmt.Errorf("unexpected response type %T for product %s", resp, prod.Name)
 	}
-
-	log.Printf("  ✏ Updated product: %s (ID: %s)", prod.Name, prodResp.ID)
-	return nil
 }
 
 func (s *Seeder) resolveProductImage(ctx context.Context, prod data.Product) catalogapi.OptUUID {
-	imageFile := prod.ID + ".jpg"
-	if imgID := s.tryUploadImage(ctx, imageFile, prod.Name); imgID.IsSet() {
-		return imgID
+	if prod.ID != "" {
+		imageFile := prod.ID + ".jpg"
+		if s.imageFileExists(imageFile) {
+			if imgID := s.tryUploadImage(ctx, imageFile, prod.Name); imgID.IsSet() {
+				return imgID
+			}
+		}
 	}
 
 	if prod.CategoryID != "" {
-		fallbackFile := fmt.Sprintf("category-%s.png", prod.CategoryID)
-		return s.tryUploadImage(ctx, fallbackFile, prod.Name)
+		fallbackFile := fmt.Sprintf("category-%s.jpg", prod.CategoryID)
+		if s.imageFileExists(fallbackFile) {
+			return s.tryUploadImage(ctx, fallbackFile, prod.Name)
+		}
 	}
 
 	return catalogapi.OptUUID{}
 }
 
-func (s *Seeder) tryUploadImage(ctx context.Context, filename, altText string) catalogapi.OptUUID {
-	// Check cache first
-	if cachedID, ok := s.imageCache[filename]; ok {
-		return s.parseOptUUID(cachedID)
-	}
+func (s *Seeder) imageFileExists(filename string) bool {
+	imagePath := filepath.Join(s.assetsDir, filename)
+	_, err := os.Stat(imagePath)
+	return err == nil
+}
 
+func (s *Seeder) tryUploadImage(ctx context.Context, filename, altText string) catalogapi.OptUUID {
 	imgIDStr, err := s.uploadImage(ctx, filename, altText)
 	if err != nil {
 		log.Printf("  ⚠ Warning: failed to upload image %s: %v", filename, err)
 		return catalogapi.OptUUID{}
 	}
 
-	// Cache the result
-	s.imageCache[filename] = imgIDStr
 	return s.parseOptUUID(imgIDStr)
 }
 

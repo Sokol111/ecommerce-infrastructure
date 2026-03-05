@@ -38,9 +38,10 @@ func (s *Seeder) upsertCategory(ctx context.Context, cat data.Category) error {
 
 func (s *Seeder) createCategory(ctx context.Context, cat data.Category) error {
 	req := &catalogapi.CreateCategoryRequest{
-		Name:    cat.Name,
-		Enabled: cat.Enabled,
-		ID:      s.parseOptUUID(cat.ID),
+		Name:       cat.Name,
+		Enabled:    cat.Enabled,
+		ID:         s.parseOptUUID(cat.ID),
+		Attributes: toCategoryAttributeInputs(cat.Attributes),
 	}
 
 	resp, err := s.catalogClient.CreateCategory(ctx, req)
@@ -61,10 +62,11 @@ func (s *Seeder) updateCategory(ctx context.Context, cat data.Category, version 
 	catUUID, _ := uuid.Parse(cat.ID)
 
 	req := &catalogapi.UpdateCategoryRequest{
-		ID:      catUUID,
-		Name:    cat.Name,
-		Enabled: cat.Enabled,
-		Version: version,
+		ID:         catUUID,
+		Name:       cat.Name,
+		Enabled:    cat.Enabled,
+		Version:    version,
+		Attributes: toCategoryAttributeInputs(cat.Attributes),
 	}
 
 	resp, err := s.catalogClient.UpdateCategory(ctx, req)
@@ -79,6 +81,24 @@ func (s *Seeder) updateCategory(ctx context.Context, cat data.Category, version 
 
 	log.Printf("  ✏ Updated category: %s (ID: %s)", cat.Name, catResp.ID)
 	return nil
+}
+
+func toCategoryAttributeInputs(attrs []data.CategoryAttribute) []catalogapi.CategoryAttributeInput {
+	result := make([]catalogapi.CategoryAttributeInput, 0, len(attrs))
+	for _, a := range attrs {
+		attrUUID, _ := uuid.Parse(a.AttributeID)
+		input := catalogapi.CategoryAttributeInput{
+			AttributeId: attrUUID,
+			Role:        catalogapi.CategoryAttributeInputRole(a.Role),
+			Filterable:  a.Filterable,
+			Searchable:  a.Searchable,
+		}
+		if a.SortOrder > 0 {
+			input.SortOrder = catalogapi.NewOptInt(a.SortOrder)
+		}
+		result = append(result, input)
+	}
+	return result
 }
 
 func (s *Seeder) getCategory(ctx context.Context, id string) (*catalogapi.CategoryResponse, error) {
