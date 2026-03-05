@@ -1,0 +1,182 @@
+[
+  {
+    "id": "a1000001-0000-4000-8000-000000000001",
+    "name": "Color",
+    "slug": "color",
+    "type": "single",
+    "enabled": true,
+    "options": [
+      { "name": "Black", "slug": "black", "colorCode": "#000000", "sortOrder": 1 },
+      { "name": "White", "slug": "white", "colorCode": "#FFFFFF", "sortOrder": 2 },
+      { "name": "Silver", "slug": "silver", "colorCode": "#C0C0C0", "sortOrder": 3 },
+      { "name": "Gold", "slug": "gold", "colorCode": "#FFD700", "sortOrder": 4 },
+      { "name": "Blue", "slug": "blue", "colorCode": "#0000FF", "sortOrder": 5 },
+      { "name": "Red", "slug": "red", "colorCode": "#FF0000", "sortOrder": 6 },
+      { "name": "Green", "slug": "green", "colorCode": "#008000", "sortOrder": 7 }
+    ]
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000002",
+    "name": "RAM",
+    "slug": "ram",
+    "type": "range",
+    "unit": "GB",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000003",
+    "name": "Storage",
+    "slug": "storage",
+    "type": "range",
+    "unit": "GB",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000004",
+    "name": "Screen Size",
+    "slug": "screen-size",
+    "type": "range",
+    "unit": "inch",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000005",
+    "name": "Battery Capacity",
+    "slug": "battery-capacity",
+    "type": "range",
+    "unit": "mAh",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000006",
+    "name": "Operating System",
+    "slug": "operating-system",
+    "type": "single",
+    "enabled": true,
+    "options": [
+      { "name": "Android", "slug": "android", "sortOrder": 1 },
+      { "name": "iOS", "slug": "ios", "sortOrder": 2 },
+      { "name": "Windows", "slug": "windows", "sortOrder": 3 },
+      { "name": "macOS", "slug": "macos", "sortOrder": 4 },
+      { "name": "Linux", "slug": "linux", "sortOrder": 5 },
+      { "name": "ChromeOS", "slug": "chromeos", "sortOrder": 6 }
+    ]
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000007",
+    "name": "Connectivity",
+    "slug": "connectivity",
+    "type": "multiple",
+    "enabled": true,
+    "options": [
+      { "name": "WiFi 6E", "slug": "wifi-6e", "sortOrder": 1 },
+      { "name": "Bluetooth 5.3", "slug": "bluetooth-5-3", "sortOrder": 2 },
+      { "name": "5G", "slug": "5g", "sortOrder": 3 },
+      { "name": "NFC", "slug": "nfc", "sortOrder": 4 },
+      { "name": "USB-C", "slug": "usb-c", "sortOrder": 5 },
+      { "name": "Thunderbolt 4", "slug": "thunderbolt-4", "sortOrder": 6 }
+    ]
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000008",
+    "name": "Water Resistant",
+    "slug": "water-resistant",
+    "type": "boolean",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000009",
+    "name": "Processor",
+    "slug": "processor",
+    "type": "text",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000010",
+    "name": "Weight",
+    "slug": "weight",
+    "type": "range",
+    "unit": "g",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000011",
+    "name": "Headphone Type",
+    "slug": "headphone-type",
+    "type": "single",
+    "enabled": true,
+    "options": [
+      { "name": "Over-Ear", "slug": "over-ear", "sortOrder": 1 },
+      { "name": "On-Ear", "slug": "on-ear", "sortOrder": 2 },
+      { "name": "In-Ear", "slug": "in-ear", "sortOrder": 3 },
+      { "name": "Earbuds", "slug": "earbuds", "sortOrder": 4 }
+    ]
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000012",
+    "name": "Noise Cancellation",
+    "slug": "noise-cancellation",
+    "type": "boolean",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000013",
+    "name": "Wireless",
+    "slug": "wireless",
+    "type": "boolean",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000014",
+    "name": "Driver Size",
+    "slug": "driver-size",
+    "type": "range",
+    "unit": "mm",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000015",
+    "name": "Impedance",
+    "slug": "impedance",
+    "type": "range",
+    "unit": "Ω",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000016",
+    "name": "Microphone",
+    "slug": "microphone",
+    "type": "boolean",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000017",
+    "name": "Frequency Response",
+    "slug": "frequency-response",
+    "type": "text",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000018",
+    "name": "Stylus Support",
+    "slug": "stylus-support",
+    "type": "boolean",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000019",
+    "name": "Refresh Rate",
+    "slug": "refresh-rate",
+    "type": "range",
+    "unit": "Hz",
+    "enabled": true
+  },
+  {
+    "id": "a1000001-0000-4000-8000-000000000020",
+    "name": "Camera Resolution",
+    "slug": "camera-resolution",
+    "type": "range",
+    "unit": "MP",
+    "enabled": true
+  }
+]

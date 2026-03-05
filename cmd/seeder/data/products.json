@@ -6,7 +6,23 @@
     "price": 1199.99,
     "quantity": 50,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.7 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "HyperCore Z1" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 195 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 500 }
+    ]
   },
   {
     "id": "8bee99eb-5606-4222-8233-7b0b40f4ae88",
@@ -15,7 +31,23 @@
     "price": 1299.99,
     "quantity": 45,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "ZenithCore A1 Neural" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 210 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 144 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 200 }
+    ]
   },
   {
     "id": "f881889a-4c2d-4e85-9e45-107895812e3e",
@@ -24,7 +56,23 @@
     "price": 999.99,
     "quantity": 60,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.5 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Aether Cloud X5" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 178 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+    ]
   },
   {
     "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
@@ -33,7 +81,23 @@
     "price": 699.99,
     "quantity": 80,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 5.8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "PulseCore M3" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 152 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+    ]
   },
   {
     "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
@@ -42,7 +106,23 @@
     "price": 1099.99,
     "quantity": 35,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "VortexCore G9 Gaming" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 228 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 240 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+    ]
   },
   {
     "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
@@ -51,7 +131,23 @@
     "price": 1599.99,
     "quantity": 20,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.7 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "EclipseCore L1 Pro" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 205 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 200 }
+    ]
   },
   {
     "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
@@ -60,7 +156,23 @@
     "price": 1899.99,
     "quantity": 15,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 7.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "HelixCore F5" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 263 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+    ]
   },
   {
     "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
@@ -69,7 +181,23 @@
     "price": 449.99,
     "quantity": 120,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "QuantumCore S3" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 185 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 48 }
+    ]
   },
   {
     "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
@@ -78,7 +206,23 @@
     "price": 599.99,
     "quantity": 40,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 2.1 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 1200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "NebulaMicro R1" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 48 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+    ]
   },
   {
     "id": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d",
@@ -87,7 +231,23 @@
     "price": 899.99,
     "quantity": 55,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 2.5 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 1500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "ChronosCore T2" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 85 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 16 }
+    ]
   },
   {
     "id": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
@@ -96,7 +256,23 @@
     "price": 1249.99,
     "quantity": 30,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 10000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "ApexCore R7 Titanium" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 320 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 48 }
+    ]
   },
   {
     "id": "c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
@@ -105,7 +281,23 @@
     "price": 799.99,
     "quantity": 65,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.5 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "PrismCore P5" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 182 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+    ]
   },
   {
     "id": "d0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a",
@@ -114,7 +306,23 @@
     "price": 1149.99,
     "quantity": 42,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.7 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "FluxCore S8 Media" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 198 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+    ]
   },
   {
     "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
@@ -123,7 +331,23 @@
     "price": 949.99,
     "quantity": 38,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "SolarisCore E4 Eco" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 192 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+    ]
   },
   {
     "id": "f2a3b4c5-d6e7-4f8a-9b0c-1d2e3f4a5b6c",
@@ -132,16 +356,23 @@
     "price": 1399.99,
     "quantity": 25,
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
-  },
-  {
-    "id": "a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d",
-    "name": "Metro Slim Basic",
-    "description": "Essential smartphone with clean interface, long battery life, and affordable price",
-    "price": 299.99,
-    "quantity": 150,
-    "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.5 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "CipherCore X9 Secure" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 202 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+    ]
   },
   {
     "id": "ae3eb26a-d875-4ee6-ae24-511511f9fc82",
@@ -150,7 +381,23 @@
     "price": 3499.99,
     "quantity": 25,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 2048 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "NeuroChip Q7" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2800 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 165 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   },
   {
     "id": "ad93fea0-b46c-4c21-89e5-b6b9fb73ce60",
@@ -159,7 +406,23 @@
     "price": 1899.99,
     "quantity": 35,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 15.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 265H" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1250 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+    ]
   },
   {
     "id": "6e0a80b5-c70e-4f64-99f5-9550e8c6afec",
@@ -168,7 +431,23 @@
     "price": 1649.99,
     "quantity": 40,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 9 285HX" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1580 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   },
   {
     "id": "b4c5d6e7-f8a9-4b0c-1d2e-3f4a5b6c7d8e",
@@ -177,7 +456,23 @@
     "price": 2799.99,
     "quantity": 20,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 2048 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 9 9950X3D" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 3200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 360 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+    ]
   },
   {
     "id": "c5d6e7f8-a9b0-4c1d-2e3f-4a5b6c7d8e9f",
@@ -186,7 +481,23 @@
     "price": 2499.99,
     "quantity": 18,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 2048 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 16.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "macos" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M4 Max" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2140 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+    ]
   },
   {
     "id": "d6e7f8a9-b0c1-4d2e-3f4a-5b6c7d8e9f0a",
@@ -195,7 +506,23 @@
     "price": 1449.99,
     "quantity": 45,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 255H" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1350 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+    ]
   },
   {
     "id": "e7f8a9b0-c1d2-4e3f-4a5b-6c7d8e9f0a1b",
@@ -204,7 +531,23 @@
     "price": 1999.99,
     "quantity": 22,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 7 9800X" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2450 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   },
   {
     "id": "f8a9b0c1-d2e3-4f4a-5b6c-7d8e9f0a1b2c",
@@ -213,7 +556,23 @@
     "price": 599.99,
     "quantity": 100,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "chromeos" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core i5-1340P" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1450 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 1 }
+    ]
   },
   {
     "id": "a9b0c1d2-e3f4-4a5b-6c7d-8e9f0a1b2c3d",
@@ -222,7 +581,23 @@
     "price": 1299.99,
     "quantity": 55,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6800 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 258V" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1600 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   },
   {
     "id": "b0c1d2e3-f4a5-4b6c-7d8e-9f0a1b2c3d4e",
@@ -231,7 +606,23 @@
     "price": 2899.99,
     "quantity": 15,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 4096 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 16.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 9 9950X" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2350 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 165 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   },
   {
     "id": "c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f",
@@ -240,7 +631,23 @@
     "price": 799.99,
     "quantity": 70,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "macos" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M4" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 980 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 1 }
+    ]
   },
   {
     "id": "d2e3f4a5-b6c7-4d8e-9f0a-1b2c3d4e5f6a",
@@ -249,7 +656,23 @@
     "price": 1549.99,
     "quantity": 32,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 5 245H" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2650 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+    ]
   },
   {
     "id": "e3f4a5b6-c7d8-4e9f-0a1b-2c3d4e5f6a7b",
@@ -258,7 +681,23 @@
     "price": 2199.99,
     "quantity": 12,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 9 285HX" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1900 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   },
   {
     "id": "f4a5b6c7-d8e9-4f0a-1b2c-3d4e5f6a7b8c",
@@ -267,16 +706,23 @@
     "price": 1199.99,
     "quantity": 48,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
-  },
-  {
-    "id": "a5b6c7d8-e9f0-4a1b-2c3d-4e5f6a7b8c9d",
-    "name": "Metro BasicBook 15",
-    "description": "Budget laptop for everyday tasks with reliable performance and essential features",
-    "price": 449.99,
-    "quantity": 130,
-    "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 15.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 7 8845HS" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1680 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+    ]
   },
   {
     "id": "b6c7d8e9-f0a1-4b2c-3d4e-5f6a7b8c9d0e",
@@ -285,6 +731,712 @@
     "price": 3199.99,
     "quantity": 10,
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 4096 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen Threadripper 7980X" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 3500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 165 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3001",
+    "name": "AuraSound Eclipse Pro",
+    "description": "Premium over-ear headphones with adaptive noise cancellation and 60-hour battery life",
+    "price": 449.99,
+    "quantity": 40,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 340 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 50 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "4Hz - 40kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3002",
+    "name": "ZenithBuds Ultra X",
+    "description": "Flagship true wireless earbuds with spatial audio and intelligent conversation mode",
+    "price": 349.99,
+    "quantity": 60,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 11 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "6Hz - 24kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3003",
+    "name": "Vortex BassDrive 7",
+    "description": "Bass-heavy over-ear headphones with custom EQ engine and rumble feedback technology",
+    "price": 299.99,
+    "quantity": 55,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 310 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 53 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 38 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "2Hz - 30kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3004",
+    "name": "Nebula SoundStage Open",
+    "description": "Audiophile open-back headphones with planar magnetic drivers and premium leather pads",
+    "price": 699.99,
+    "quantity": 20,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 420 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 70 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 300 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "5Hz - 50kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3005",
+    "name": "Pulse FitBuds Sport",
+    "description": "Sweat-proof in-ear sports headphones with secure wing tips and heart rate monitor",
+    "price": 179.99,
+    "quantity": 90,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "in-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 10 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3006",
+    "name": "Chronos Studio Monitor V3",
+    "description": "Professional studio reference headphones with flat frequency response and detachable cable",
+    "price": 549.99,
+    "quantity": 25,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 380 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 45 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 250 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "5Hz - 35kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3007",
+    "name": "Helix NoiseShield Max",
+    "description": "Travel-optimized on-ear headphones with industry-leading ANC and foldable design",
+    "price": 399.99,
+    "quantity": 35,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 250 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "on-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 40 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "4Hz - 40kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3008",
+    "name": "Apex GamerPods Tactical",
+    "description": "Low-latency gaming earbuds with surround sound emulation and detachable boom mic",
+    "price": 199.99,
+    "quantity": 70,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 7 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "10Hz - 22kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3009",
+    "name": "Prism HiFi Luxe",
+    "description": "Luxury wireless headphones with titanium drivers, alcantara headband, and LDAC codec",
+    "price": 899.99,
+    "quantity": 15,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 360 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 50 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 47 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "3Hz - 42kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3010",
+    "name": "Flux EcoBuds Zero",
+    "description": "Sustainable earbuds with recycled ocean plastic shell and solar charging case",
+    "price": 129.99,
+    "quantity": 100,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 5 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 10 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3011",
+    "name": "Cipher SecureAudio Pro",
+    "description": "Privacy-first headphones with encrypted Bluetooth, voice anonymizer, and anti-surveillance mode",
+    "price": 499.99,
+    "quantity": 18,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 290 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 40 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "8Hz - 28kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3012",
+    "name": "Solaris DayWear Neckband",
+    "description": "Lightweight neckband in-ear headphones with 24-hour playback and magnetic earbuds",
+    "price": 89.99,
+    "quantity": 120,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 35 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "in-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 9 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3013",
+    "name": "NovaTech DJ Master X",
+    "description": "Professional DJ headphones with swiveling ear cups, coiled cable, and punchy bass",
+    "price": 329.99,
+    "quantity": 30,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 295 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "on-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 50 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "5Hz - 30kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3014",
+    "name": "Quantum SleepBuds Zen",
+    "description": "Ultra-small sleep earbuds with soothing soundscapes and alarm-only pass-through",
+    "price": 249.99,
+    "quantity": 45,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+    ]
+  },
+  {
+    "id": "10a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3015",
+    "name": "Eclipse KidsGuard Safe",
+    "description": "Volume-limited on-ear headphones for children with durable build and fun color options",
+    "price": 59.99,
+    "quantity": 150,
+    "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 150 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "on-ear" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 30 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4001",
+    "name": "TitanTab Pro 13 Ultra",
+    "description": "Professional-grade tablet with 13-inch mini-LED display and desktop-class performance",
+    "price": 1499.99,
+    "quantity": 25,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 13.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 10300 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "ios" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M4 Pro" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 680 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4002",
+    "name": "Orion Canvas 12 Art",
+    "description": "Artist-focused tablet with pressure-sensitive display and pro illustration suite",
+    "price": 1199.99,
+    "quantity": 30,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 12.4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9800 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 8 Gen 4" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 590 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4003",
+    "name": "Nexus EduTab 10",
+    "description": "Affordable education tablet with kid-safe mode, rugged case, and learning apps bundle",
+    "price": 299.99,
+    "quantity": 120,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.1 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "MediaTek Dimensity 7300" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 460 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4004",
+    "name": "Vertex GamePad Z11",
+    "description": "Gaming tablet with 144Hz display, shoulder triggers, and active cooling fan",
+    "price": 899.99,
+    "quantity": 35,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8600 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 8 Elite" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 530 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 144 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4005",
+    "name": "Nova SlimTab Air 11",
+    "description": "Ultra-thin tablet with all-day battery, sleek aluminum body, and floating keyboard",
+    "price": 799.99,
+    "quantity": 50,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "ios" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M3" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 460 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4006",
+    "name": "Phantom NoteTab 12 Pro",
+    "description": "Productivity tablet with detachable keyboard, desktop mode, and dual-screen mirroring",
+    "price": 1099.99,
+    "quantity": 28,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 12.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 10000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 5 236V" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 800 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4007",
+    "name": "Atlas Rugged Field 10",
+    "description": "Military-grade rugged tablet with sunlight-readable display and glove-compatible touchscreen",
+    "price": 1299.99,
+    "quantity": 15,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.1 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 7s Gen 3" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 850 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4008",
+    "name": "Zenith ReadPad E-Ink",
+    "description": "E-ink tablet with paper-like display for reading and note-taking with zero eye strain",
+    "price": 449.99,
+    "quantity": 55,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Qualcomm Snapdragon 680" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 390 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4009",
+    "name": "Flux MediaTab 11 Cinema",
+    "description": "Entertainment tablet with quad speakers, Dolby Vision HDR, and 11-inch AMOLED display",
+    "price": 649.99,
+    "quantity": 45,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.0 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8400 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "MediaTek Dimensity 9300" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4010",
+    "name": "Aether CloudTab Mini 8",
+    "description": "Compact 8-inch tablet perfect for one-handed use, reading, and on-the-go productivity",
+    "price": 399.99,
+    "quantity": 70,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 8.3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5100 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "ios" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple A17 Pro" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 300 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4011",
+    "name": "Prism SketchPad 14 Studio",
+    "description": "Large-format digital canvas with tilt-sensitive stylus and professional color accuracy",
+    "price": 1799.99,
+    "quantity": 12,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 11200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 8 Gen 4" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 720 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4012",
+    "name": "Solaris SunTab Eco",
+    "description": "Solar-assisted charging tablet with eco-friendly construction and nature-proof design",
+    "price": 549.99,
+    "quantity": 40,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 6 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.5 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Samsung Exynos 1480" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 480 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4013",
+    "name": "Cipher SecureSlate 12",
+    "description": "Enterprise security tablet with hardware encryption, secure boot, and remote wipe capability",
+    "price": 1399.99,
+    "quantity": 10,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 12.4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9200 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Qualcomm QCS8550" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 650 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4014",
+    "name": "Helix FoldTab Duo",
+    "description": "Dual-screen foldable tablet with seamless hinge and multi-app split view",
+    "price": 1699.99,
+    "quantity": 18,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 13.3 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9500 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c", "thunderbolt-4"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 258V" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 590 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
+  },
+  {
+    "id": "20a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a4015",
+    "name": "Quantum BudgetPad 10 Lite",
+    "description": "Value tablet for everyday browsing, video calls, and casual gaming with long battery",
+    "price": 199.99,
+    "quantity": 150,
+    "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.4 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Unisoc Tiger T616" },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 470 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+    ]
   }
 ]
