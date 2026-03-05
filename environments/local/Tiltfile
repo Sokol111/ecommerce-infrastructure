@@ -31,10 +31,10 @@ COMPOSE_DIR = INFRA_PATH + '/docker/compose'
 # Ensure shared network exists before starting compose services
 local('docker network inspect shared-network >/dev/null 2>&1 || docker network create shared-network', quiet=True)
 
-docker_compose(COMPOSE_DIR + '/mongo.yml')
-docker_compose(COMPOSE_DIR + '/kafka.yml')
-docker_compose(COMPOSE_DIR + '/storage.yml')
-docker_compose(COMPOSE_DIR + '/observability.yml')
+docker_compose(COMPOSE_DIR + '/mongo.yml', project_name='ecommerce')
+docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
+docker_compose(COMPOSE_DIR + '/storage.yml', project_name='ecommerce')
+docker_compose(COMPOSE_DIR + '/observability.yml', project_name='ecommerce')
 
 # Organize compose resources in Tilt UI
 dc_resource('mongo', labels=['infrastructure'])

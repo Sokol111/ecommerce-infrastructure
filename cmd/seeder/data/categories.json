@@ -2,21 +2,81 @@
   {
     "id": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "name": "Smartphones",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "role": "variant", "sortOrder": 1, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "role": "variant", "sortOrder": 2, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "role": "specification", "sortOrder": 3, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "role": "specification", "sortOrder": 4, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "role": "specification", "sortOrder": 5, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "role": "specification", "sortOrder": 6, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "role": "specification", "sortOrder": 7, "filterable": false, "searchable": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "role": "specification", "sortOrder": 8, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "role": "specification", "sortOrder": 9, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "role": "specification", "sortOrder": 10, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "role": "specification", "sortOrder": 11, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "role": "specification", "sortOrder": 12, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "role": "specification", "sortOrder": 13, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "role": "specification", "sortOrder": 14, "filterable": true, "searchable": false }
+    ]
   },
   {
     "id": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "name": "Laptops",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "role": "variant", "sortOrder": 1, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "role": "specification", "sortOrder": 2, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "role": "specification", "sortOrder": 3, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "role": "specification", "sortOrder": 4, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "role": "specification", "sortOrder": 5, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "role": "specification", "sortOrder": 6, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "role": "specification", "sortOrder": 7, "filterable": false, "searchable": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "role": "specification", "sortOrder": 8, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "role": "specification", "sortOrder": 9, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "role": "specification", "sortOrder": 10, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "role": "specification", "sortOrder": 11, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "role": "specification", "sortOrder": 12, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "role": "specification", "sortOrder": 13, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "role": "specification", "sortOrder": 14, "filterable": true, "searchable": false }
+    ]
   },
   {
     "id": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "name": "Headphones",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "role": "variant", "sortOrder": 1, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000011", "role": "specification", "sortOrder": 2, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000013", "role": "specification", "sortOrder": 3, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000012", "role": "specification", "sortOrder": 4, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000014", "role": "specification", "sortOrder": 5, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000015", "role": "specification", "sortOrder": 6, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000017", "role": "specification", "sortOrder": 7, "filterable": false, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "role": "specification", "sortOrder": 8, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "role": "specification", "sortOrder": 9, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "role": "specification", "sortOrder": 10, "filterable": true, "searchable": false }
+    ]
   },
   {
     "id": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "name": "Tablets",
-    "enabled": true
+    "enabled": true,
+    "attributes": [
+      { "attributeId": "a1000001-0000-4000-8000-000000000001", "role": "variant", "sortOrder": 1, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000003", "role": "variant", "sortOrder": 2, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000002", "role": "specification", "sortOrder": 3, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000004", "role": "specification", "sortOrder": 4, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000005", "role": "specification", "sortOrder": 5, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000006", "role": "specification", "sortOrder": 6, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000009", "role": "specification", "sortOrder": 7, "filterable": false, "searchable": true },
+      { "attributeId": "a1000001-0000-4000-8000-000000000020", "role": "specification", "sortOrder": 8, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000019", "role": "specification", "sortOrder": 9, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000018", "role": "specification", "sortOrder": 10, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000007", "role": "specification", "sortOrder": 11, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000008", "role": "specification", "sortOrder": 12, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000010", "role": "specification", "sortOrder": 13, "filterable": true, "searchable": false },
+      { "attributeId": "a1000001-0000-4000-8000-000000000016", "role": "specification", "sortOrder": 14, "filterable": true, "searchable": false }
+    ]
   }
 ]

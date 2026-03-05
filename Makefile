@@ -131,6 +131,8 @@ urls: ## Show all service URLs available in browser
 
 SEEDER_DIR := $(THIS_DIR)cmd/seeder
 SEEDER_BIN := $(SEEDER_DIR)/seeder
+AUTH_SERVICE_DIR := $(THIS_DIR)../ecommerce-auth-service
+SEEDER_PRIVATE_KEY := e9bc26b8119fa3ccd616e3bd05603507fd308cb30a0a99c4b858c621dd147f1beb6ebefd6a2b0a304d43c2ccca329aef0a1439d429dbe8ca9b6190622ce38341
 
 .PHONY: seed-build
 seed-build: ## Build the demo data seeder
@@ -140,5 +142,12 @@ seed-build: ## Build the demo data seeder
 
 .PHONY: seed
 seed: seed-build ## Seed the database with demo data
+	@printf "\033[36m→ Generating service token...\033[0m\n"
+	$(eval SEEDER_TOKEN := $(shell cd $(AUTH_SERVICE_DIR) && go run ./cmd/servicetoken \
+		-private-key="$(SEEDER_PRIVATE_KEY)" \
+		-name=seeder \
+		-role=super_admin \
+		-permissions="products:read,products:write,products:delete,categories:read,categories:write,categories:delete,attributes:read,attributes:write,attributes:delete" \
+		-duration=87600h 2>/dev/null | tail -1))
 	@printf "\033[36m→ Seeding demo data...\033[0m\n"
-	cd $(SEEDER_DIR) && ./seeder -verbose
+	cd $(SEEDER_DIR) && SEEDER_TOKEN="$(SEEDER_TOKEN)" ./seeder
