@@ -34,8 +34,8 @@ services:
       - 9093:8080
     environment:
       KAFKA_BROKERS: redpanda:29092
-      SCHEMA_REGISTRY_ENABLED: "true"
-      SCHEMA_REGISTRY_URLS: http://redpanda:8081
+      KAFKA_SCHEMAREGISTRY_ENABLED: "true"
+      KAFKA_SCHEMAREGISTRY_URLS: http://redpanda:8081
     depends_on:
       - redpanda
     networks:
