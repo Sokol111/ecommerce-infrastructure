@@ -201,6 +201,7 @@ for name, config in UI_SERVICES.items():
         name + '/public',
         name + '/package.json',
         name + '/pnpm-lock.yaml',
+        name + '/pnpm-workspace.yaml',
         name + '/nuxt.config.ts',
         name + '/tsconfig.json',
         name + '/eslint.config.mjs',
