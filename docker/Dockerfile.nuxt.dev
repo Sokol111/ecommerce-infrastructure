@@ -26,8 +26,9 @@ RUN set -e && \
         fi; \
     done
 
-# Copy package files
-COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ./
+# Copy package and config files needed before install
+COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ./
+COPY ${SERVICE_DIR}/nuxt.config.ts ./
 
 # Install ALL dependencies (including devDependencies)
 RUN pnpm install
