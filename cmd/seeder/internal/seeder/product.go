@@ -48,7 +48,7 @@ func (s *Seeder) createProduct(ctx context.Context, prod data.Product) error {
 
 	req := &catalogapi.CreateProductRequest{
 		Name:       prod.Name,
-		Price:      float64(prod.Price),
+		Price:      prod.Price,
 		Quantity:   prod.Quantity,
 		Enabled:    enabled,
 		CategoryId: s.parseOptUUID(prod.CategoryID),
@@ -88,7 +88,7 @@ func (s *Seeder) updateProduct(ctx context.Context, prod data.Product, version i
 	req := &catalogapi.UpdateProductRequest{
 		ID:         prodUUID,
 		Name:       prod.Name,
-		Price:      float64(prod.Price),
+		Price:      prod.Price,
 		Quantity:   prod.Quantity,
 		Enabled:    enabled,
 		CategoryId: s.parseOptUUID(prod.CategoryID),
