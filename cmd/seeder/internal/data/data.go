@@ -33,7 +33,7 @@ type Product struct {
 	ID          string             `json:"id"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
-	Price       float32            `json:"price"`
+	Price       float64            `json:"price"`
 	Quantity    int                `json:"quantity"`
 	CategoryID  string             `json:"categoryId"`
 	Enabled     bool               `json:"enabled"`
