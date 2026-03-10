@@ -14,11 +14,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -41,10 +41,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -83,11 +79,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -110,10 +106,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -152,11 +144,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -179,10 +171,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -221,11 +209,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -248,10 +236,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -290,11 +274,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -316,10 +300,6 @@
           "5g",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -358,11 +338,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -385,10 +365,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -427,11 +403,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -454,10 +430,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -496,11 +468,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 6
+        "optionSlugValue": "6"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -522,10 +494,6 @@
           "5g",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -564,11 +532,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 4
+        "optionSlugValue": "4"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -590,10 +558,6 @@
           "5g",
           "nfc"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -632,11 +596,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 4
+        "optionSlugValue": "4"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -658,10 +622,6 @@
           "5g",
           "nfc"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -700,11 +660,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -727,10 +687,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -769,11 +725,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -796,10 +752,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -838,11 +790,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -865,10 +817,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -907,11 +855,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -934,10 +882,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -976,11 +920,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1003,10 +947,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -1045,11 +985,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 2048
+        "optionSlugValue": "2048"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1073,10 +1013,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "NeuroChip Q7"
       },
@@ -1085,16 +1021,8 @@
         "numericValue": 2800
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 165
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -1113,11 +1041,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1141,10 +1069,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core Ultra 7 265H"
       },
@@ -1153,16 +1077,8 @@
         "numericValue": 1250
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 120
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 2
       }
     ]
   },
@@ -1181,11 +1097,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 32
+        "optionSlugValue": "32"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1209,10 +1125,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core Ultra 9 285HX"
       },
@@ -1221,16 +1133,8 @@
         "numericValue": 1580
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -1249,11 +1153,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 2048
+        "optionSlugValue": "2048"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1277,10 +1181,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "AMD Ryzen 9 9950X3D"
       },
@@ -1289,16 +1189,8 @@
         "numericValue": 3200
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 360
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 2
       }
     ]
   },
@@ -1317,11 +1209,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 2048
+        "optionSlugValue": "2048"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1345,10 +1237,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Apple M4 Max"
       },
@@ -1357,16 +1245,8 @@
         "numericValue": 2140
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 120
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 2
       }
     ]
   },
@@ -1385,11 +1265,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1413,10 +1293,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core Ultra 7 255H"
       },
@@ -1425,16 +1301,8 @@
         "numericValue": 1350
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 2
       }
     ]
   },
@@ -1453,11 +1321,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 32
+        "optionSlugValue": "32"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1480,10 +1348,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "AMD Ryzen 7 9800X"
       },
@@ -1492,16 +1356,8 @@
         "numericValue": 2450
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -1520,11 +1376,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1547,10 +1403,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core i5-1340P"
       },
@@ -1559,16 +1411,8 @@
         "numericValue": 1450
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 1
       }
     ]
   },
@@ -1587,11 +1431,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1615,10 +1459,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core Ultra 7 258V"
       },
@@ -1627,16 +1467,8 @@
         "numericValue": 1600
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -1655,11 +1487,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 4096
+        "optionSlugValue": "4096"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1683,10 +1515,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "AMD Ryzen 9 9950X"
       },
@@ -1695,16 +1523,8 @@
         "numericValue": 2350
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 165
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -1723,11 +1543,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1751,10 +1571,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Apple M4"
       },
@@ -1763,16 +1579,8 @@
         "numericValue": 980
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 1
       }
     ]
   },
@@ -1791,11 +1599,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1819,10 +1627,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core Ultra 5 245H"
       },
@@ -1831,16 +1635,8 @@
         "numericValue": 2650
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 120
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 2
       }
     ]
   },
@@ -1859,11 +1655,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 32
+        "optionSlugValue": "32"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1887,10 +1683,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "Intel Core Ultra 9 285HX"
       },
@@ -1899,16 +1691,8 @@
         "numericValue": 1900
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -1927,11 +1711,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -1954,10 +1738,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "AMD Ryzen 7 8845HS"
       },
@@ -1966,16 +1746,8 @@
         "numericValue": 1680
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 60
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 2
       }
     ]
   },
@@ -1994,11 +1766,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 4096
+        "optionSlugValue": "4096"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -2022,10 +1794,6 @@
         ]
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
         "textValue": "AMD Ryzen Threadripper 7980X"
       },
@@ -2034,16 +1802,8 @@
         "numericValue": 3500
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000019",
         "numericValue": 165
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "numericValue": 5
       }
     ]
   },
@@ -2080,10 +1840,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 50
       },
@@ -2098,6 +1854,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "4Hz - 40kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2133,10 +1893,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 11
       },
@@ -2151,6 +1907,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "6Hz - 24kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
       }
     ]
   },
@@ -2187,10 +1947,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 53
       },
@@ -2205,6 +1961,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "2Hz - 30kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2240,10 +2000,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 70
       },
@@ -2258,6 +2014,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "5Hz - 50kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2293,10 +2053,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 10
       },
@@ -2311,6 +2067,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "20Hz - 20kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
       }
     ]
   },
@@ -2346,10 +2106,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 45
       },
@@ -2364,6 +2120,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "5Hz - 35kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2400,10 +2160,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 40
       },
@@ -2418,6 +2174,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "4Hz - 40kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2454,10 +2214,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 12
       },
@@ -2472,6 +2228,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "10Hz - 22kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
       }
     ]
   },
@@ -2508,10 +2268,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 50
       },
@@ -2526,6 +2282,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "3Hz - 42kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2561,10 +2321,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 10
       },
@@ -2579,6 +2335,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "20Hz - 20kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
       }
     ]
   },
@@ -2615,10 +2375,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 40
       },
@@ -2633,6 +2389,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "8Hz - 28kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2668,10 +2428,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 9
       },
@@ -2686,6 +2442,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "20Hz - 20kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
       }
     ]
   },
@@ -2721,10 +2481,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 50
       },
@@ -2739,6 +2495,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "5Hz - 30kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2774,10 +2534,6 @@
         "booleanValue": true
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 6
       },
@@ -2792,6 +2548,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "20Hz - 20kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2827,10 +2587,6 @@
         "booleanValue": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "booleanValue": true
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000014",
         "numericValue": 30
       },
@@ -2845,6 +2601,10 @@
       {
         "attributeId": "a1000001-0000-4000-8000-000000000017",
         "textValue": "20Hz - 20kHz"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
       }
     ]
   },
@@ -2863,11 +2623,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -2890,10 +2650,6 @@
           "usb-c",
           "thunderbolt-4"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -2932,11 +2688,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -2958,10 +2714,6 @@
           "5g",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3000,11 +2752,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 4
+        "optionSlugValue": "4"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3025,10 +2777,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3067,11 +2815,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3092,10 +2840,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3134,11 +2878,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3159,10 +2903,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3201,11 +2941,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3228,10 +2968,6 @@
           "usb-c",
           "thunderbolt-4"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3270,11 +3006,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3297,10 +3033,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3339,11 +3071,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 4
+        "optionSlugValue": "4"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3364,10 +3096,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3406,11 +3134,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 8
+        "optionSlugValue": "8"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 256
+        "optionSlugValue": "256"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3431,10 +3159,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3473,11 +3197,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 6
+        "optionSlugValue": "6"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3499,10 +3223,6 @@
           "5g",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3541,11 +3261,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 1024
+        "optionSlugValue": "1024"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3567,10 +3287,6 @@
           "5g",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3609,11 +3325,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 6
+        "optionSlugValue": "6"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 128
+        "optionSlugValue": "128"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3634,10 +3350,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3676,11 +3388,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 12
+        "optionSlugValue": "12"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3703,10 +3415,6 @@
           "nfc",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": true
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3745,11 +3453,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 16
+        "optionSlugValue": "16"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 512
+        "optionSlugValue": "512"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3772,10 +3480,6 @@
           "usb-c",
           "thunderbolt-4"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",
@@ -3814,11 +3518,11 @@
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
-        "numericValue": 4
+        "optionSlugValue": "4"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000003",
-        "numericValue": 64
+        "optionSlugValue": "64"
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000004",
@@ -3839,10 +3543,6 @@
           "bluetooth-5-3",
           "usb-c"
         ]
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "booleanValue": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000009",

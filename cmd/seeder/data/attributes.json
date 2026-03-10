@@ -6,30 +6,144 @@
     "type": "single",
     "enabled": true,
     "options": [
-      { "name": "Black", "slug": "black", "colorCode": "#000000", "sortOrder": 1 },
-      { "name": "White", "slug": "white", "colorCode": "#FFFFFF", "sortOrder": 2 },
-      { "name": "Silver", "slug": "silver", "colorCode": "#C0C0C0", "sortOrder": 3 },
-      { "name": "Gold", "slug": "gold", "colorCode": "#FFD700", "sortOrder": 4 },
-      { "name": "Blue", "slug": "blue", "colorCode": "#0000FF", "sortOrder": 5 },
-      { "name": "Red", "slug": "red", "colorCode": "#FF0000", "sortOrder": 6 },
-      { "name": "Green", "slug": "green", "colorCode": "#008000", "sortOrder": 7 }
+      {
+        "name": "Black",
+        "slug": "black",
+        "colorCode": "#000000",
+        "sortOrder": 1
+      },
+      {
+        "name": "White",
+        "slug": "white",
+        "colorCode": "#FFFFFF",
+        "sortOrder": 2
+      },
+      {
+        "name": "Silver",
+        "slug": "silver",
+        "colorCode": "#C0C0C0",
+        "sortOrder": 3
+      },
+      {
+        "name": "Gold",
+        "slug": "gold",
+        "colorCode": "#FFD700",
+        "sortOrder": 4
+      },
+      {
+        "name": "Blue",
+        "slug": "blue",
+        "colorCode": "#0000FF",
+        "sortOrder": 5
+      },
+      {
+        "name": "Red",
+        "slug": "red",
+        "colorCode": "#FF0000",
+        "sortOrder": 6
+      },
+      {
+        "name": "Green",
+        "slug": "green",
+        "colorCode": "#008000",
+        "sortOrder": 7
+      }
     ]
   },
   {
     "id": "a1000001-0000-4000-8000-000000000002",
     "name": "RAM",
     "slug": "ram",
-    "type": "range",
-    "unit": "GB",
-    "enabled": true
+    "type": "single",
+    "enabled": true,
+    "options": [
+      {
+        "name": "4",
+        "slug": "4",
+        "sortOrder": 1
+      },
+      {
+        "name": "6",
+        "slug": "6",
+        "sortOrder": 2
+      },
+      {
+        "name": "8",
+        "slug": "8",
+        "sortOrder": 3
+      },
+      {
+        "name": "12",
+        "slug": "12",
+        "sortOrder": 4
+      },
+      {
+        "name": "16",
+        "slug": "16",
+        "sortOrder": 5
+      },
+      {
+        "name": "32",
+        "slug": "32",
+        "sortOrder": 6
+      },
+      {
+        "name": "64",
+        "slug": "64",
+        "sortOrder": 7
+      },
+      {
+        "name": "128",
+        "slug": "128",
+        "sortOrder": 8
+      }
+    ],
+    "unit": "GB"
   },
   {
     "id": "a1000001-0000-4000-8000-000000000003",
     "name": "Storage",
     "slug": "storage",
-    "type": "range",
-    "unit": "GB",
-    "enabled": true
+    "type": "single",
+    "enabled": true,
+    "options": [
+      {
+        "name": "64",
+        "slug": "64",
+        "sortOrder": 1
+      },
+      {
+        "name": "128",
+        "slug": "128",
+        "sortOrder": 2
+      },
+      {
+        "name": "256",
+        "slug": "256",
+        "sortOrder": 3
+      },
+      {
+        "name": "512",
+        "slug": "512",
+        "sortOrder": 4
+      },
+      {
+        "name": "1024",
+        "slug": "1024",
+        "sortOrder": 5
+      },
+      {
+        "name": "2048",
+        "slug": "2048",
+        "sortOrder": 6
+      },
+      {
+        "name": "4096",
+        "slug": "4096",
+        "sortOrder": 7
+      }
+    ],
+    "unit": "GB"
   },
   {
     "id": "a1000001-0000-4000-8000-000000000004",
@@ -54,12 +168,36 @@
     "type": "single",
     "enabled": true,
     "options": [
-      { "name": "Android", "slug": "android", "sortOrder": 1 },
-      { "name": "iOS", "slug": "ios", "sortOrder": 2 },
-      { "name": "Windows", "slug": "windows", "sortOrder": 3 },
-      { "name": "macOS", "slug": "macos", "sortOrder": 4 },
-      { "name": "Linux", "slug": "linux", "sortOrder": 5 },
-      { "name": "ChromeOS", "slug": "chromeos", "sortOrder": 6 }
+      {
+        "name": "Android",
+        "slug": "android",
+        "sortOrder": 1
+      },
+      {
+        "name": "iOS",
+        "slug": "ios",
+        "sortOrder": 2
+      },
+      {
+        "name": "Windows",
+        "slug": "windows",
+        "sortOrder": 3
+      },
+      {
+        "name": "macOS",
+        "slug": "macos",
+        "sortOrder": 4
+      },
+      {
+        "name": "Linux",
+        "slug": "linux",
+        "sortOrder": 5
+      },
+      {
+        "name": "ChromeOS",
+        "slug": "chromeos",
+        "sortOrder": 6
+      }
     ]
   },
   {
@@ -69,12 +207,36 @@
     "type": "multiple",
     "enabled": true,
     "options": [
-      { "name": "WiFi 6E", "slug": "wifi-6e", "sortOrder": 1 },
-      { "name": "Bluetooth 5.3", "slug": "bluetooth-5-3", "sortOrder": 2 },
-      { "name": "5G", "slug": "5g", "sortOrder": 3 },
-      { "name": "NFC", "slug": "nfc", "sortOrder": 4 },
-      { "name": "USB-C", "slug": "usb-c", "sortOrder": 5 },
-      { "name": "Thunderbolt 4", "slug": "thunderbolt-4", "sortOrder": 6 }
+      {
+        "name": "WiFi 6E",
+        "slug": "wifi-6e",
+        "sortOrder": 1
+      },
+      {
+        "name": "Bluetooth 5.3",
+        "slug": "bluetooth-5-3",
+        "sortOrder": 2
+      },
+      {
+        "name": "5G",
+        "slug": "5g",
+        "sortOrder": 3
+      },
+      {
+        "name": "NFC",
+        "slug": "nfc",
+        "sortOrder": 4
+      },
+      {
+        "name": "USB-C",
+        "slug": "usb-c",
+        "sortOrder": 5
+      },
+      {
+        "name": "Thunderbolt 4",
+        "slug": "thunderbolt-4",
+        "sortOrder": 6
+      }
     ]
   },
   {
@@ -106,10 +268,26 @@
     "type": "single",
     "enabled": true,
     "options": [
-      { "name": "Over-Ear", "slug": "over-ear", "sortOrder": 1 },
-      { "name": "On-Ear", "slug": "on-ear", "sortOrder": 2 },
-      { "name": "In-Ear", "slug": "in-ear", "sortOrder": 3 },
-      { "name": "Earbuds", "slug": "earbuds", "sortOrder": 4 }
+      {
+        "name": "Over-Ear",
+        "slug": "over-ear",
+        "sortOrder": 1
+      },
+      {
+        "name": "On-Ear",
+        "slug": "on-ear",
+        "sortOrder": 2
+      },
+      {
+        "name": "In-Ear",
+        "slug": "in-ear",
+        "sortOrder": 3
+      },
+      {
+        "name": "Earbuds",
+        "slug": "earbuds",
+        "sortOrder": 4
+      }
     ]
   },
   {

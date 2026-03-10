@@ -8,7 +8,7 @@
         "attributeId": "a1000001-0000-4000-8000-000000000001",
         "role": "variant",
         "sortOrder": 1,
-        "filterable": true,
+        "filterable": false,
         "searchable": false
       },
       {
@@ -71,13 +71,6 @@
         "attributeId": "a1000001-0000-4000-8000-000000000007",
         "role": "specification",
         "sortOrder": 10,
-        "filterable": true,
-        "searchable": false
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "role": "specification",
-        "sortOrder": 11,
         "filterable": true,
         "searchable": false
       },
@@ -106,7 +99,7 @@
         "attributeId": "a1000001-0000-4000-8000-000000000001",
         "role": "variant",
         "sortOrder": 1,
-        "filterable": true,
+        "filterable": false,
         "searchable": false
       },
       {
@@ -166,30 +159,9 @@
         "searchable": false
       },
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "role": "specification",
-        "sortOrder": 10,
-        "filterable": true,
-        "searchable": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000010",
         "role": "specification",
         "sortOrder": 11,
-        "filterable": true,
-        "searchable": false
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000018",
-        "role": "specification",
-        "sortOrder": 13,
-        "filterable": true,
-        "searchable": false
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000020",
-        "role": "specification",
-        "sortOrder": 14,
         "filterable": true,
         "searchable": false
       }
@@ -204,20 +176,13 @@
         "attributeId": "a1000001-0000-4000-8000-000000000001",
         "role": "variant",
         "sortOrder": 1,
-        "filterable": true,
+        "filterable": false,
         "searchable": false
       },
       {
         "attributeId": "a1000001-0000-4000-8000-000000000011",
         "role": "specification",
         "sortOrder": 2,
-        "filterable": true,
-        "searchable": false
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000013",
-        "role": "specification",
-        "sortOrder": 3,
         "filterable": true,
         "searchable": false
       },
@@ -269,6 +234,13 @@
         "sortOrder": 10,
         "filterable": true,
         "searchable": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "role": "specification",
+        "sortOrder": 3,
+        "filterable": true,
+        "searchable": false
       }
     ]
   },
@@ -281,7 +253,7 @@
         "attributeId": "a1000001-0000-4000-8000-000000000001",
         "role": "variant",
         "sortOrder": 1,
-        "filterable": true,
+        "filterable": false,
         "searchable": false
       },
       {
@@ -351,13 +323,6 @@
         "attributeId": "a1000001-0000-4000-8000-000000000007",
         "role": "specification",
         "sortOrder": 11,
-        "filterable": true,
-        "searchable": false
-      },
-      {
-        "attributeId": "a1000001-0000-4000-8000-000000000008",
-        "role": "specification",
-        "sortOrder": 12,
         "filterable": true,
         "searchable": false
       },
