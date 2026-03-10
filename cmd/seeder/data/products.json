@@ -8,20 +8,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.7 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "HyperCore Z1" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 195 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 500 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.7
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "HyperCore Z1"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 195
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 500
+      }
     ]
   },
   {
@@ -33,20 +77,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "ZenithCore A1 Neural" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 210 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 144 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 200 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "ZenithCore A1 Neural"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 210
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 144
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 200
+      }
     ]
   },
   {
@@ -58,20 +146,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.5 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Aether Cloud X5" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 178 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.5
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 4500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Aether Cloud X5"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 178
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 90
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 108
+      }
     ]
   },
   {
@@ -83,20 +215,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 5.8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "PulseCore M3" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 152 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 5.8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 4000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "PulseCore M3"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 152
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 90
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 64
+      }
     ]
   },
   {
@@ -108,20 +284,63 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "VortexCore G9 Gaming" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 228 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 240 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "red"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "VortexCore G9 Gaming"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 228
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 240
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 64
+      }
     ]
   },
   {
@@ -133,20 +352,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.7 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "EclipseCore L1 Pro" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 205 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 200 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.7
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "EclipseCore L1 Pro"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 205
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 200
+      }
     ]
   },
   {
@@ -158,20 +421,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 7.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "HelixCore F5" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 263 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 7.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "HelixCore F5"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 263
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 108
+      }
     ]
   },
   {
@@ -183,20 +490,63 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "QuantumCore S3" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 185 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 48 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "QuantumCore S3"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 185
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 48
+      }
     ]
   },
   {
@@ -208,20 +558,63 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 2.1 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 1200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "NebulaMicro R1" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 48 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "gold"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 2.1
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 1200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "NebulaMicro R1"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 48
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 12
+      }
     ]
   },
   {
@@ -233,20 +626,63 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 2.5 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 1500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "ChronosCore T2" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 85 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 16 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 2.5
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 1500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "ChronosCore T2"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 85
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 16
+      }
     ]
   },
   {
@@ -258,20 +694,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 10000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "ApexCore R7 Titanium" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 320 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 48 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 10000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "ApexCore R7 Titanium"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 320
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 90
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 48
+      }
     ]
   },
   {
@@ -283,20 +763,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.5 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "PrismCore P5" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 182 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.5
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 4500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "PrismCore P5"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 182
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 108
+      }
     ]
   },
   {
@@ -308,20 +832,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.7 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "FluxCore S8 Media" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 198 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 108 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.7
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "FluxCore S8 Media"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 198
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 108
+      }
     ]
   },
   {
@@ -333,20 +901,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "SolarisCore E4 Eco" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 192 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "SolarisCore E4 Eco"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 192
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 90
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 64
+      }
     ]
   },
   {
@@ -358,20 +970,64 @@
     "categoryId": "eff2c798-bfaa-49dc-a6e2-209a30822625",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 6.5 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "CipherCore X9 Secure" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 202 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 64 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 6.5
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "CipherCore X9 Secure"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 202
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 90
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 64
+      }
     ]
   },
   {
@@ -383,20 +1039,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 2048 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "NeuroChip Q7" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2800 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 165 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 2048
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 17.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "NeuroChip Q7"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 2800
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 165
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -408,20 +1107,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 15.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 265H" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1250 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "gold"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 15.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 7200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 7 265H"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1250
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 2
+      }
     ]
   },
   {
@@ -433,20 +1175,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 9 285HX" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1580 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 8000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 9 285HX"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1580
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -458,20 +1243,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 2048 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 9 9950X3D" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 3200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 360 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "red"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 2048
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 17.3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "AMD Ryzen 9 9950X3D"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 3200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 360
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 2
+      }
     ]
   },
   {
@@ -483,20 +1311,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 2048 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 16.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "macos" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M4 Max" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2140 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 2048
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 16.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 8500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "macos"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Apple M4 Max"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 2140
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 2
+      }
     ]
   },
   {
@@ -508,20 +1379,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 255H" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1350 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 7 255H"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1350
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 2
+      }
     ]
   },
   {
@@ -533,20 +1447,62 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 7 9800X" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2450 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 8500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "linux"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "AMD Ryzen 7 9800X"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 2450
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -558,20 +1514,62 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "chromeos" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core i5-1340P" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1450 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 1 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "chromeos"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core i5-1340P"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1450
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 1
+      }
     ]
   },
   {
@@ -583,20 +1581,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6800 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 258V" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1600 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6800
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 7 258V"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1600
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -608,20 +1649,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 4096 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 16.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 9 9950X" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2350 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 165 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 4096
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 16.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 7500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "linux"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "AMD Ryzen 9 9950X"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 2350
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 165
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -633,20 +1717,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "macos" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M4" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 980 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 1 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "gold"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 11.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "macos"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Apple M4"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 980
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 1
+      }
     ]
   },
   {
@@ -658,20 +1785,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 5 245H" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 2650 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 17.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 7000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 5 245H"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 2650
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 2
+      }
     ]
   },
   {
@@ -683,20 +1853,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 9 285HX" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1900 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 7000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "linux"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 9 285HX"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1900
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -708,20 +1921,62 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 15.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen 7 8845HS" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 1680 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 2 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 15.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 7200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "linux"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "AMD Ryzen 7 8845HS"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 1680
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 2
+      }
     ]
   },
   {
@@ -733,20 +1988,63 @@
     "categoryId": "e2dbb782-7cbf-4b21-94c5-aa21d2cfe29c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 4096 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 17.3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "linux" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "AMD Ryzen Threadripper 7980X" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 3500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 165 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 4096
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 17.3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "linux"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "AMD Ryzen Threadripper 7980X"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 3500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 165
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -758,16 +2056,49 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 340 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 50 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "4Hz - 40kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 340
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "over-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 50
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "4Hz - 40kHz"
+      }
     ]
   },
   {
@@ -779,16 +2110,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 11 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "6Hz - 24kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "earbuds"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 11
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "6Hz - 24kHz"
+      }
     ]
   },
   {
@@ -800,16 +2163,49 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 310 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 53 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 38 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "2Hz - 30kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "red"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 310
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "over-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 53
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 38
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "2Hz - 30kHz"
+      }
     ]
   },
   {
@@ -821,16 +2217,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 420 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 70 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 300 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "5Hz - 50kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 420
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "over-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 70
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 300
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "5Hz - 50kHz"
+      }
     ]
   },
   {
@@ -842,16 +2270,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "in-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 10 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "in-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 10
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "20Hz - 20kHz"
+      }
     ]
   },
   {
@@ -863,16 +2323,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 380 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 45 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 250 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "5Hz - 35kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 380
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "over-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 45
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 250
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "5Hz - 35kHz"
+      }
     ]
   },
   {
@@ -884,16 +2376,49 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 250 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "on-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 40 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "4Hz - 40kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 250
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "on-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 40
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "4Hz - 40kHz"
+      }
     ]
   },
   {
@@ -905,16 +2430,49 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 7 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "10Hz - 22kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "red"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 7
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "earbuds"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "10Hz - 22kHz"
+      }
     ]
   },
   {
@@ -926,16 +2484,49 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 360 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 50 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 47 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "3Hz - 42kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "gold"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 360
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "over-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 50
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 47
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "3Hz - 42kHz"
+      }
     ]
   },
   {
@@ -947,16 +2538,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 5 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 10 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 5
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "earbuds"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 10
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "20Hz - 20kHz"
+      }
     ]
   },
   {
@@ -968,16 +2591,49 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 290 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "over-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 40 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "8Hz - 28kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 290
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "over-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 40
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "8Hz - 28kHz"
+      }
     ]
   },
   {
@@ -989,16 +2645,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 35 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "in-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 9 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 35
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "in-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 9
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "20Hz - 20kHz"
+      }
     ]
   },
   {
@@ -1010,16 +2698,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 295 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "on-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 50 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "5Hz - 30kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 295
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "on-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 50
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "5Hz - 30kHz"
+      }
     ]
   },
   {
@@ -1031,16 +2751,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "earbuds" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "earbuds"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "20Hz - 20kHz"
+      }
     ]
   },
   {
@@ -1052,16 +2804,48 @@
     "categoryId": "f3a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["bluetooth-5-3"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 150 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000011", "optionSlugValue": "on-ear" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000012", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000013", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000014", "numericValue": 30 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000015", "numericValue": 32 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000017", "textValue": "20Hz - 20kHz" }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "bluetooth-5-3"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 150
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000011",
+        "optionSlugValue": "on-ear"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000012",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000013",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000014",
+        "numericValue": 30
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000015",
+        "numericValue": 32
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000016",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000017",
+        "textValue": "20Hz - 20kHz"
+      }
     ]
   },
   {
@@ -1073,20 +2857,64 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 13.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 10300 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "ios" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M4 Pro" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 680 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 13.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 10300
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "ios"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Apple M4 Pro"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 680
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 12
+      }
     ]
   },
   {
@@ -1098,20 +2926,63 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 12.4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9800 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 8 Gen 4" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 590 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 12.4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9800
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Snapdragon 8 Gen 4"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 590
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 13
+      }
     ]
   },
   {
@@ -1123,20 +2994,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.1 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "MediaTek Dimensity 7300" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 460 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 10.1
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "MediaTek Dimensity 7300"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 460
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 8
+      }
     ]
   },
   {
@@ -1148,20 +3061,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "red" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8600 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 8 Elite" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 530 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 144 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "red"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 11.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 8600
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Snapdragon 8 Elite"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 530
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 144
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 13
+      }
     ]
   },
   {
@@ -1173,20 +3128,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "gold" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "ios" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple M3" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 460 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "gold"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 11.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 8200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "ios"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Apple M3"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 460
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 12
+      }
     ]
   },
   {
@@ -1198,20 +3195,64 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 12.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 10000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 5 236V" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 800 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 12.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 10000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 5 236V"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 800
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 8
+      }
     ]
   },
   {
@@ -1223,20 +3264,64 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.1 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 7s Gen 3" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 850 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 10.1
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Snapdragon 7s Gen 3"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 850
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 8
+      }
     ]
   },
   {
@@ -1248,20 +3333,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 4000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Qualcomm Snapdragon 680" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 390 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 10.3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 4000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Qualcomm Snapdragon 680"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 390
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -1273,20 +3400,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 8 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 256 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 11.0 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 8400 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "MediaTek Dimensity 9300" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 8
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 256
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 11.0
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 8400
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "MediaTek Dimensity 9300"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 13
+      }
     ]
   },
   {
@@ -1298,20 +3467,63 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "white" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 8.3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 5100 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "ios" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Apple A17 Pro" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 300 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 12 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "white"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 8.3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 5100
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "ios"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Apple A17 Pro"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 300
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 12
+      }
     ]
   },
   {
@@ -1323,20 +3535,63 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 1024 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 14.6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 11200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Snapdragon 8 Gen 4" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 720 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 13 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 1024
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 14.6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 11200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Snapdragon 8 Gen 4"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 720
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 13
+      }
     ]
   },
   {
@@ -1348,20 +3603,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "green" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 6 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 128 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.5 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 7500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Samsung Exynos 1480" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 480 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 90 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "green"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 6
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 128
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 10.5
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 7500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Samsung Exynos 1480"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 480
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 90
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 8
+      }
     ]
   },
   {
@@ -1373,20 +3670,64 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "black" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 12 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 12.4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9200 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "nfc", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Qualcomm QCS8550" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 650 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 8 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "black"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 12
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 12.4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9200
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "nfc",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Qualcomm QCS8550"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 650
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 8
+      }
     ]
   },
   {
@@ -1398,20 +3739,64 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "silver" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 16 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 512 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 13.3 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 9500 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "windows" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "5g", "usb-c", "thunderbolt-4"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Intel Core Ultra 7 258V" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 590 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 120 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "silver"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 16
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 512
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 13.3
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 9500
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "windows"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "5g",
+          "usb-c",
+          "thunderbolt-4"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Intel Core Ultra 7 258V"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 590
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": true
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 120
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   },
   {
@@ -1423,20 +3808,62 @@
     "categoryId": "a4b5c6d7-e8f9-4a0b-1c2d-3e4f5a6b7c8d",
     "enabled": true,
     "attributes": [
-      { "attributeId": "a1000001-0000-4000-8000-000000000001", "optionSlugValue": "blue" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000002", "numericValue": 4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000003", "numericValue": 64 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000004", "numericValue": 10.4 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000005", "numericValue": 6000 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000006", "optionSlugValue": "android" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000007", "optionSlugValues": ["wifi-6e", "bluetooth-5-3", "usb-c"] },
-      { "attributeId": "a1000001-0000-4000-8000-000000000008", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000009", "textValue": "Unisoc Tiger T616" },
-      { "attributeId": "a1000001-0000-4000-8000-000000000010", "numericValue": 470 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000016", "booleanValue": true },
-      { "attributeId": "a1000001-0000-4000-8000-000000000018", "booleanValue": false },
-      { "attributeId": "a1000001-0000-4000-8000-000000000019", "numericValue": 60 },
-      { "attributeId": "a1000001-0000-4000-8000-000000000020", "numericValue": 5 }
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000001",
+        "optionSlugValue": "blue"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000002",
+        "numericValue": 4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000003",
+        "numericValue": 64
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000004",
+        "numericValue": 10.4
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000005",
+        "numericValue": 6000
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000006",
+        "optionSlugValue": "android"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000007",
+        "optionSlugValues": [
+          "wifi-6e",
+          "bluetooth-5-3",
+          "usb-c"
+        ]
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000008",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000009",
+        "textValue": "Unisoc Tiger T616"
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000010",
+        "numericValue": 470
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000018",
+        "booleanValue": false
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000019",
+        "numericValue": 60
+      },
+      {
+        "attributeId": "a1000001-0000-4000-8000-000000000020",
+        "numericValue": 5
+      }
     ]
   }
 ]
