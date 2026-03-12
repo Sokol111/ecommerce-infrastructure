@@ -10,7 +10,7 @@ RUN go mod download && go mod verify && go mod tidy
 
 COPY . .
 
-RUN CGO_ENABLED=1 GOOS=linux go build -v -o /server cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o /server cmd/main.go
 
 # Release Stage
 FROM ubuntu:24.04 AS base-release
