@@ -3,7 +3,7 @@
 ## Architecture
 
 ```
-VPS (Hetzner CX22, 2 GB or CPX21, 4 GB)
+VPS (Hetzner CX33, 8 GB)
 └── k3s
     ├── namespace: prod
     │   ├── 5 Go services        (Helm charts)
