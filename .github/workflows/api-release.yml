@@ -2,12 +2,10 @@ name: API Release
 
 on:
   workflow_call:
-    secrets:
-      NPM_TOKEN:
-        required: true
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   release:
@@ -25,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npm.pkg.github.com'
 
       # ============================================
       # EXTRACT VERSION & VALIDATE
@@ -85,11 +83,11 @@ jobs:
           npm install
           npm run build
 
-      - name: Publish to NPM
+      - name: Publish to GitHub Packages
         working-directory: gen/typescript
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ============================================
       # CREATE RELEASE

@@ -67,7 +67,6 @@ jobs:
           docker buildx build \
             -f infra/docker/Dockerfile.nuxt \
             --build-arg SERVICE_DIR=${SERVICE_DIR} \
-            --build-arg API_DEPS="" \
             -t "$IMAGE:$TAG" \
             -t "$IMAGE:latest" \
             --push .
