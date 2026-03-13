@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 
-ARG GO_IMAGE=golang:1.26.0
+ARG GO_IMAGE=golang:1.26.1
 ARG RUNTIME_IMAGE=ubuntu:24.04
 
 ############################
@@ -78,7 +78,7 @@ COPY ${SERVICE_DIR}/db ./svc/db
 
 # Встановлення Delve debugger
 RUN --mount=type=cache,target=/go/pkg/mod \
-    go install github.com/go-delve/delve/cmd/dlv@v1.26.0
+    go install github.com/go-delve/delve/cmd/dlv@v1.26.1
 
 # Збірка бінарника з debug символами
 WORKDIR /src/svc
