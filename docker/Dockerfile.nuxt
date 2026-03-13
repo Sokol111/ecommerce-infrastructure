@@ -9,12 +9,10 @@ RUN corepack enable
 # Copy package files for dependency caching
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
-# Install dependencies (mount NODE_AUTH_TOKEN for private GitHub Packages)
+# Install dependencies (NODE_AUTH_TOKEN is interpolated from .npmrc)
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN 2>/dev/null) && \
-    echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc && \
-    pnpm install --frozen-lockfile && \
-    sed -i '/\/_authToken/d' .npmrc
+    export NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN 2>/dev/null) && \
+    pnpm install --frozen-lockfile
 
 # Copy application code
 COPY . .
