@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: Sokol111/ecommerce-infrastructure
-          path: ${{ runner.temp }}/infra
+          path: infra
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -68,7 +68,7 @@ jobs:
           TAG="${{ steps.meta.outputs.image_tag }}"
           
           docker buildx build \
-            -f ${{ runner.temp }}/infra/docker/Dockerfile.go \
+            -f infra/docker/Dockerfile.go \
             --target ${{ inputs.docker_target }} \
             -t "$IMAGE:$TAG" \
             -t "$IMAGE:latest" \
