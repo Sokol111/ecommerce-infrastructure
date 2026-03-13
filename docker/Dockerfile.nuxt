@@ -11,8 +11,10 @@ RUN corepack enable
 # Copy package files for dependency caching
 COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ${SERVICE_DIR}/.npmrc ./
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Install dependencies (mount NODE_AUTH_TOKEN for private GitHub Packages)
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    export NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN 2>/dev/null) && \
+    pnpm install --frozen-lockfile
 
 # Copy application code
 COPY ${SERVICE_DIR}/. .
