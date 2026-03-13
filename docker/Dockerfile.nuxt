@@ -11,8 +11,10 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # Install dependencies (mount NODE_AUTH_TOKEN for private GitHub Packages)
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    export NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN 2>/dev/null) && \
-    pnpm install --frozen-lockfile
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN 2>/dev/null) && \
+    echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc && \
+    pnpm install --frozen-lockfile && \
+    sed -i '/\/_authToken/d' .npmrc
 
 # Copy application code
 COPY . .
