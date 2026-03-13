@@ -9,6 +9,8 @@ on:
     secrets:
       DOCKER_PASSWORD:
         required: true
+      NPM_AUTH_TOKEN:
+        required: true
 
 permissions:
   contents: write
@@ -70,7 +72,7 @@ jobs:
             -t "$IMAGE:latest" \
             --load .
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Scan image for vulnerabilities
         uses: aquasecurity/trivy-action@0.35.0
