@@ -1,15 +1,13 @@
 # Build stage
 FROM node:22-alpine AS builder
 
-ARG SERVICE_DIR
-
 WORKDIR /app
 
 # Enable corepack (pnpm version is read from package.json "packageManager" field)
 RUN corepack enable
 
 # Copy package files for dependency caching
-COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ${SERVICE_DIR}/.npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # Install dependencies (mount NODE_AUTH_TOKEN for private GitHub Packages)
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
@@ -17,7 +15,7 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     pnpm install --frozen-lockfile
 
 # Copy application code
-COPY ${SERVICE_DIR}/. .
+COPY . .
 
 # Build the application
 RUN pnpm build
