@@ -3,39 +3,41 @@
 
 FROM node:22-alpine
 
+# API_DEPS - space separated list of API dependency directories (for local development)
+# e.g. "ecommerce-catalog-service-api ecommerce-image-service-api"
 ARG API_DEPS=""
 ARG SERVICE_DIR
 
-WORKDIR /app/${SERVICE_DIR}
+WORKDIR /app
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy all API dependencies first (for pnpm overrides)
+# Copy package and config files needed before install
+COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ${SERVICE_DIR}/.npmrc ./
+COPY ${SERVICE_DIR}/nuxt.config.ts ./
+
+# Install ALL dependencies (including devDependencies) from registry
+RUN pnpm install
+
+# Copy local API dependencies and link them (overrides registry versions)
 COPY . /tmp/context/
 RUN set -e && \
     for api_dep in ${API_DEPS}; do \
         if [ -d "/tmp/context/${api_dep}/gen/typescript" ]; then \
-            echo "Adding API dependency: ${api_dep}"; \
-            mkdir -p "/app/${api_dep}/gen"; \
-            cp -r "/tmp/context/${api_dep}/gen/typescript" "/app/${api_dep}/gen/typescript"; \
+            echo "Linking local API dependency: ${api_dep}"; \
+            mkdir -p "/app/${api_dep}/gen/typescript"; \
+            cp -r "/tmp/context/${api_dep}/gen/typescript/." "/app/${api_dep}/gen/typescript/"; \
+            cd "/app/${api_dep}/gen/typescript" && npm install && npm run build && cd /app; \
+            pnpm link "/app/${api_dep}/gen/typescript"; \
         else \
-            echo "ERROR: API dependency not found: ${api_dep}/gen/typescript" && \
-            echo "Make sure it's included in 'only' paths in Tiltfile" && \
-            exit 1; \
+            echo "WARNING: API dependency not found: ${api_dep}/gen/typescript (skipping)"; \
         fi; \
-    done
-
-# Copy package and config files needed before install
-COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ./
-COPY ${SERVICE_DIR}/nuxt.config.ts ./
-
-# Install ALL dependencies (including devDependencies)
-RUN pnpm install
+    done && \
+    rm -rf /tmp/context
 
 # Copy application code
 COPY ${SERVICE_DIR}/. .
-RUN rm -rf /tmp/context
 
 ENV NODE_ENV=development
 ENV NUXT_TELEMETRY_DISABLED=1
