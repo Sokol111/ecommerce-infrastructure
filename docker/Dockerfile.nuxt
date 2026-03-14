@@ -24,7 +24,10 @@ RUN pnpm build
 FROM node:22-alpine AS runner
 
 # Update system packages to fix known vulnerabilities
-RUN apk update && apk upgrade --no-cache
+# Remove npm/corepack (not needed at runtime, eliminates bundled glob/tar/minimatch CVEs)
+RUN apk update && apk upgrade --no-cache && \
+    npm uninstall -g npm corepack && \
+    rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
 
 WORKDIR /app
 
