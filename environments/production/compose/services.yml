@@ -8,7 +8,7 @@ services:
   # Auth Service (Go)
   # ---------------------------------------------------------------------------
   auth-service:
-    image: sokol111/ecommerce-auth-service:${AUTH_SERVICE_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-auth-service:${AUTH_SERVICE_TAG:-latest}
     container_name: auth-service
     restart: unless-stopped
     depends_on:
@@ -52,7 +52,7 @@ services:
   # Catalog Service (Go)
   # ---------------------------------------------------------------------------
   catalog-service:
-    image: sokol111/ecommerce-catalog-service:${CATALOG_SERVICE_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-catalog-service:${CATALOG_SERVICE_TAG:-latest}
     container_name: catalog-service
     restart: unless-stopped
     depends_on:
@@ -100,7 +100,7 @@ services:
   # Image Service (Go)
   # ---------------------------------------------------------------------------
   image-service:
-    image: sokol111/ecommerce-image-service:${IMAGE_SERVICE_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-image-service:${IMAGE_SERVICE_TAG:-latest}
     container_name: image-service
     restart: unless-stopped
     depends_on:
@@ -159,7 +159,7 @@ services:
   # Product Query Service (Go)
   # ---------------------------------------------------------------------------
   product-query-service:
-    image: sokol111/ecommerce-product-query-service:${PRODUCT_QUERY_SERVICE_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-product-query-service:${PRODUCT_QUERY_SERVICE_TAG:-latest}
     container_name: product-query-service
     restart: unless-stopped
     depends_on:
@@ -205,7 +205,7 @@ services:
   # Category Query Service (Go)
   # ---------------------------------------------------------------------------
   category-query-service:
-    image: sokol111/ecommerce-category-query-service:${CATEGORY_QUERY_SERVICE_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-category-query-service:${CATEGORY_QUERY_SERVICE_TAG:-latest}
     container_name: category-query-service
     restart: unless-stopped
     depends_on:
@@ -251,7 +251,7 @@ services:
   # Admin UI (Next.js)
   # ---------------------------------------------------------------------------
   admin-ui:
-    image: sokol111/ecommerce-admin-ui:${ADMIN_UI_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-admin-ui:${ADMIN_UI_TAG:-latest}
     container_name: admin-ui
     restart: unless-stopped
     depends_on:
@@ -289,7 +289,7 @@ services:
   # E-commerce UI (Next.js)
   # ---------------------------------------------------------------------------
   ecommerce-ui:
-    image: sokol111/ecommerce-ui:${ECOMMERCE_UI_TAG:-latest}
+    image: ghcr.io/sokol111/ecommerce-ui:${ECOMMERCE_UI_TAG:-latest}
     container_name: ecommerce-ui
     restart: unless-stopped
     depends_on:
