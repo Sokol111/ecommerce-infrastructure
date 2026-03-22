@@ -1,5 +1,5 @@
 # =============================================================================
-# E-Commerce Production Deployment Makefile
+# E-Commerce Production Deployment (k3s)
 # =============================================================================
 # Usage: make [target]
 # Run `make help` to see all available targets
@@ -8,23 +8,26 @@ SHELL := /bin/bash
 .ONESHELL:
 .SHELLFLAGS := -eu -o pipefail -c
 
-# Colors for output
-COLOR_RESET := \033[0m
-COLOR_BOLD := \033[1m
-COLOR_GREEN := \033[32m
+# Colors
+COLOR_RESET  := \033[0m
+COLOR_BOLD   := \033[1m
+COLOR_GREEN  := \033[32m
 COLOR_YELLOW := \033[33m
-COLOR_BLUE := \033[36m
-COLOR_RED := \033[31m
+COLOR_BLUE   := \033[36m
+COLOR_RED    := \033[31m
 
-# Docker Compose configuration
-COMPOSE_FILE := docker-compose.yml
-COMPOSE := docker compose -f $(COMPOSE_FILE)
+# Paths
+HELM_DIR     := ../../helm
+INFRA_VALUES := $(HELM_DIR)/values/infrastructure
+K8S_DIR      := k8s
 
-# Service groups
-INFRA_SERVICES := mongo mongo-init kafka schema-registry minio minio-init imgproxy
-OBSERVABILITY_SERVICES := alloy
-APP_SERVICES := auth-service catalog-service image-service product-query-service category-query-service admin-ui ecommerce-ui
-ALL_SERVICES := $(INFRA_SERVICES) $(OBSERVABILITY_SERVICES) $(APP_SERVICES) traefik
+# Namespaces
+NS_PROD := prod
+NS_OBS  := observability
+
+# Helm repos
+REDPANDA_REPO := https://charts.redpanda.com
+GRAFANA_REPO  := https://grafana.github.io/helm-charts
 
 .DEFAULT_GOAL := help
 
@@ -34,275 +37,258 @@ ALL_SERVICES := $(INFRA_SERVICES) $(OBSERVABILITY_SERVICES) $(APP_SERVICES) trae
 
 .PHONY: help
 help: ## Show this help message
-	@printf "$(COLOR_BOLD)E-Commerce Production Deployment$(COLOR_RESET)\n\n"
+	@printf "$(COLOR_BOLD)E-Commerce Production Deployment (k3s)$(COLOR_RESET)\n\n"
 	@printf "$(COLOR_YELLOW)Usage:$(COLOR_RESET) make [target]\n\n"
 	@printf "$(COLOR_YELLOW)Targets:$(COLOR_RESET)\n"
 	@awk 'BEGIN {FS = ":.*##"; } \
-		/^[a-zA-Z_-]+:.*?##/ { printf "  $(COLOR_GREEN)%-20s$(COLOR_RESET) %s\n", $$1, $$2 } \
+		/^[a-zA-Z_-]+:.*?##/ { printf "  $(COLOR_GREEN)%-25s$(COLOR_RESET) %s\n", $$1, $$2 } \
 		/^##@/ { printf "\n$(COLOR_BOLD)%s$(COLOR_RESET)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 # =============================================================================
-##@ Deployment
+##@ Initial Setup
+# =============================================================================
+
+.PHONY: setup
+setup: setup-namespaces setup-repos setup-traefik ## Full initial setup (namespaces, repos, traefik)
+
+.PHONY: setup-namespaces
+setup-namespaces: ## Create Kubernetes namespaces
+	@printf "$(COLOR_BLUE)→ Creating namespaces...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/namespaces.yaml
+	@printf "$(COLOR_GREEN)✓ Namespaces created$(COLOR_RESET)\n"
+
+.PHONY: setup-repos
+setup-repos: ## Add Helm repositories
+	@printf "$(COLOR_BLUE)→ Adding Helm repositories...$(COLOR_RESET)\n"
+	helm repo add redpanda $(REDPANDA_REPO) 2>/dev/null || true
+	helm repo add grafana $(GRAFANA_REPO) 2>/dev/null || true
+	helm repo update
+	@printf "$(COLOR_GREEN)✓ Helm repositories configured$(COLOR_RESET)\n"
+
+.PHONY: setup-traefik
+setup-traefik: ## Configure Traefik (k3s built-in) with ACME/Let's Encrypt
+	@printf "$(COLOR_BLUE)→ Configuring Traefik...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/traefik-config.yaml
+	@printf "$(COLOR_GREEN)✓ Traefik configured (restart may take a moment)$(COLOR_RESET)\n"
+
+.PHONY: setup-secrets
+setup-secrets: ## Apply Kubernetes secrets (must create secrets.yaml first!)
+	@if [ ! -f $(K8S_DIR)/secrets.yaml ]; then \
+		printf "$(COLOR_RED)Error: $(K8S_DIR)/secrets.yaml not found$(COLOR_RESET)\n"; \
+		printf "Copy secrets.yaml.example to secrets.yaml and fill in values:\n"; \
+		printf "  cp $(K8S_DIR)/secrets.yaml.example $(K8S_DIR)/secrets.yaml\n"; \
+		exit 1; \
+	fi
+	@printf "$(COLOR_BLUE)→ Applying secrets...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/secrets.yaml
+	@printf "$(COLOR_GREEN)✓ Secrets applied$(COLOR_RESET)\n"
+
+# =============================================================================
+##@ Deploy Infrastructure
+# =============================================================================
+
+.PHONY: deploy-redpanda
+deploy-redpanda: ## Deploy Redpanda (Kafka-compatible broker)
+	@printf "$(COLOR_BLUE)→ Deploying Redpanda...$(COLOR_RESET)\n"
+	helm upgrade --install redpanda redpanda/redpanda \
+		-n $(NS_PROD) \
+		-f $(INFRA_VALUES)/redpanda-prod.yaml \
+		--wait --timeout 5m
+	@printf "$(COLOR_GREEN)✓ Redpanda deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-imgproxy
+deploy-imgproxy: ## Deploy imgproxy (image processing)
+	@printf "$(COLOR_BLUE)→ Deploying imgproxy...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/imgproxy.yaml
+	@printf "$(COLOR_GREEN)✓ imgproxy deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-infra
+deploy-infra: deploy-redpanda deploy-imgproxy ## Deploy all infrastructure (Redpanda + imgproxy)
+
+# =============================================================================
+##@ Deploy Observability
+# =============================================================================
+
+.PHONY: deploy-alloy
+deploy-alloy: ## Deploy Grafana Alloy (→ Grafana Cloud)
+	@printf "$(COLOR_BLUE)→ Deploying Grafana Alloy...$(COLOR_RESET)\n"
+	helm upgrade --install alloy grafana/alloy \
+		-n $(NS_OBS) \
+		-f $(INFRA_VALUES)/alloy-prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ Grafana Alloy deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-observability
+deploy-observability: deploy-alloy ## Deploy observability stack
+
+# =============================================================================
+##@ Deploy Application Services
+# =============================================================================
+
+.PHONY: deploy-auth
+deploy-auth: ## Deploy auth-service
+	@printf "$(COLOR_BLUE)→ Deploying auth-service...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-auth-service && helm dependency update
+	helm upgrade --install auth-service $(HELM_DIR)/ecommerce-auth-service \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-auth-service/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ auth-service deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-catalog
+deploy-catalog: ## Deploy catalog-service
+	@printf "$(COLOR_BLUE)→ Deploying catalog-service...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-catalog-service && helm dependency update
+	helm upgrade --install catalog-service $(HELM_DIR)/ecommerce-catalog-service \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-catalog-service/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ catalog-service deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-category-query
+deploy-category-query: ## Deploy category-query-service
+	@printf "$(COLOR_BLUE)→ Deploying category-query-service...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-category-query-service && helm dependency update
+	helm upgrade --install category-query-service $(HELM_DIR)/ecommerce-category-query-service \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-category-query-service/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ category-query-service deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-product-query
+deploy-product-query: ## Deploy product-query-service
+	@printf "$(COLOR_BLUE)→ Deploying product-query-service...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-product-query-service && helm dependency update
+	helm upgrade --install product-query-service $(HELM_DIR)/ecommerce-product-query-service \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-product-query-service/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ product-query-service deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-image-service
+deploy-image-service: ## Deploy image-service
+	@printf "$(COLOR_BLUE)→ Deploying image-service...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-image-service && helm dependency update
+	helm upgrade --install image-service $(HELM_DIR)/ecommerce-image-service \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-image-service/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ image-service deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-admin-ui
+deploy-admin-ui: ## Deploy admin-ui
+	@printf "$(COLOR_BLUE)→ Deploying admin-ui...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-admin-ui && helm dependency update
+	helm upgrade --install admin-ui $(HELM_DIR)/ecommerce-admin-ui \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-admin-ui/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ admin-ui deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-ecommerce-ui
+deploy-ecommerce-ui: ## Deploy ecommerce-ui
+	@printf "$(COLOR_BLUE)→ Deploying ecommerce-ui...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-ui && helm dependency update
+	helm upgrade --install ecommerce-ui $(HELM_DIR)/ecommerce-ui \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-ui/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ ecommerce-ui deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-backend
+deploy-backend: deploy-auth deploy-catalog deploy-image-service deploy-product-query deploy-category-query ## Deploy all backend services
+
+.PHONY: deploy-frontend
+deploy-frontend: deploy-admin-ui deploy-ecommerce-ui ## Deploy all frontend UIs
+
+.PHONY: deploy-services
+deploy-services: deploy-backend deploy-frontend ## Deploy all application services
+
+# =============================================================================
+##@ Full Deployment
 # =============================================================================
 
 .PHONY: deploy
-deploy: check-env ## Deploy the entire stack
-	@printf "$(COLOR_BLUE)→ Deploying entire stack...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d
-	@printf "$(COLOR_GREEN)✓ Stack deployed successfully$(COLOR_RESET)\n"
-	@$(MAKE) --no-print-directory status
+deploy: deploy-infra deploy-observability deploy-services ## Deploy everything
 
-.PHONY: deploy-fresh
-deploy-fresh: check-env ## Force recreate all containers (use after config changes)
-	@printf "$(COLOR_BLUE)→ Recreating all containers...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d --force-recreate
-	@printf "$(COLOR_GREEN)✓ All containers recreated$(COLOR_RESET)\n"
-	@$(MAKE) --no-print-directory status
-
-.PHONY: deploy-infra
-deploy-infra: check-env ## Deploy infrastructure services (MongoDB, Kafka, MinIO, imgproxy)
-	@printf "$(COLOR_BLUE)→ Deploying infrastructure services...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d $(INFRA_SERVICES)
-	@printf "$(COLOR_GREEN)✓ Infrastructure deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-observability
-deploy-observability: check-env ## Deploy observability stack (OTel, Prometheus, Grafana, etc.)
-	@printf "$(COLOR_BLUE)→ Deploying observability services...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d $(OBSERVABILITY_SERVICES)
-	@printf "$(COLOR_GREEN)✓ Observability stack deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-services
-deploy-services: check-env ## Deploy application services (Go microservices + UIs)
-	@printf "$(COLOR_BLUE)→ Deploying application services...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d $(APP_SERVICES)
-	@printf "$(COLOR_GREEN)✓ Application services deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-traefik
-deploy-traefik: check-env ## Deploy Traefik reverse proxy
-	@printf "$(COLOR_BLUE)→ Deploying Traefik...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d traefik
-	@printf "$(COLOR_GREEN)✓ Traefik deployed$(COLOR_RESET)\n"
+.PHONY: deploy-all
+deploy-all: setup setup-secrets deploy ## Full setup + deploy (first time only)
 
 # =============================================================================
-##@ Lifecycle Management
-# =============================================================================
-
-.PHONY: down
-down: ## Stop and remove all containers
-	@printf "$(COLOR_YELLOW)→ Stopping all services...$(COLOR_RESET)\n"
-	$(COMPOSE) down
-	@printf "$(COLOR_GREEN)✓ All services stopped$(COLOR_RESET)\n"
-
-.PHONY: down-volumes
-down-volumes: ## Stop all containers and remove volumes (⚠️ DATA LOSS)
-	@printf "$(COLOR_RED)⚠️  WARNING: This will delete all data!$(COLOR_RESET)\n"
-	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	$(COMPOSE) down -v
-	@printf "$(COLOR_GREEN)✓ All services and volumes removed$(COLOR_RESET)\n"
-
-.PHONY: restart
-restart: ## Restart all services
-	@printf "$(COLOR_BLUE)→ Restarting all services...$(COLOR_RESET)\n"
-	$(COMPOSE) restart
-	@printf "$(COLOR_GREEN)✓ All services restarted$(COLOR_RESET)\n"
-
-.PHONY: restart-services
-restart-services: ## Restart only application services
-	@printf "$(COLOR_BLUE)→ Restarting application services...$(COLOR_RESET)\n"
-	$(COMPOSE) restart $(APP_SERVICES)
-	@printf "$(COLOR_GREEN)✓ Application services restarted$(COLOR_RESET)\n"
-
-.PHONY: stop
-stop: ## Stop all services (without removing)
-	@printf "$(COLOR_YELLOW)→ Stopping all services...$(COLOR_RESET)\n"
-	$(COMPOSE) stop
-	@printf "$(COLOR_GREEN)✓ All services stopped$(COLOR_RESET)\n"
-
-.PHONY: start
-start: ## Start stopped services
-	@printf "$(COLOR_BLUE)→ Starting services...$(COLOR_RESET)\n"
-	$(COMPOSE) start
-	@printf "$(COLOR_GREEN)✓ Services started$(COLOR_RESET)\n"
-
-# =============================================================================
-##@ Updates & Images
-# =============================================================================
-
-.PHONY: pull
-pull: ## Pull latest images for all services
-	@printf "$(COLOR_BLUE)→ Pulling latest images...$(COLOR_RESET)\n"
-	$(COMPOSE) pull
-	@printf "$(COLOR_GREEN)✓ Images updated$(COLOR_RESET)\n"
-
-.PHONY: pull-services
-pull-services: ## Pull latest images for application services only
-	@printf "$(COLOR_BLUE)→ Pulling latest application images...$(COLOR_RESET)\n"
-	$(COMPOSE) pull $(APP_SERVICES)
-	@printf "$(COLOR_GREEN)✓ Application images updated$(COLOR_RESET)\n"
-
-.PHONY: upgrade
-upgrade: pull ## Pull latest images and redeploy
-	@printf "$(COLOR_BLUE)→ Upgrading stack...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d
-	@printf "$(COLOR_GREEN)✓ Stack upgraded$(COLOR_RESET)\n"
-
-.PHONY: upgrade-services
-upgrade-services: pull-services ## Pull and redeploy application services
-	@printf "$(COLOR_BLUE)→ Upgrading application services...$(COLOR_RESET)\n"
-	$(COMPOSE) up -d $(APP_SERVICES)
-	@printf "$(COLOR_GREEN)✓ Application services upgraded$(COLOR_RESET)\n"
-
-# =============================================================================
-##@ Monitoring & Logs
+##@ Monitoring & Status
 # =============================================================================
 
 .PHONY: status
-status: ## Show status of all services
-	@printf "$(COLOR_BOLD)Service Status:$(COLOR_RESET)\n"
-	@$(COMPOSE) ps -a
-
-.PHONY: ps
-ps: status ## Alias for status
+status: ## Show status of all pods
+	@printf "$(COLOR_BOLD)Namespace: $(NS_PROD)$(COLOR_RESET)\n"
+	@kubectl get pods -n $(NS_PROD) -o wide
+	@printf "\n$(COLOR_BOLD)Namespace: $(NS_OBS)$(COLOR_RESET)\n"
+	@kubectl get pods -n $(NS_OBS) -o wide
 
 .PHONY: health
 health: ## Check health of all services
-	@printf "$(COLOR_BOLD)Health Check:$(COLOR_RESET)\n"
-	@for svc in $(ALL_SERVICES); do \
-		status=$$($(COMPOSE) ps -q $$svc 2>/dev/null | xargs -r docker inspect --format='{{.State.Health.Status}}' 2>/dev/null || echo "no-healthcheck"); \
-		if [ "$$status" = "healthy" ]; then \
-			printf "$(COLOR_GREEN)✓ %-30s healthy$(COLOR_RESET)\n" "$$svc"; \
-		elif [ "$$status" = "unhealthy" ]; then \
-			printf "$(COLOR_RED)✗ %-30s unhealthy$(COLOR_RESET)\n" "$$svc"; \
-		elif [ "$$status" = "starting" ]; then \
-			printf "$(COLOR_YELLOW)◐ %-30s starting$(COLOR_RESET)\n" "$$svc"; \
-		else \
-			printf "$(COLOR_BLUE)○ %-30s $$status$(COLOR_RESET)\n" "$$svc"; \
-		fi \
-	done
+	@printf "$(COLOR_BOLD)Pod Health:$(COLOR_RESET)\n"
+	@kubectl get pods -n $(NS_PROD) -o custom-columns=\
+	"NAME:.metadata.name,STATUS:.status.phase,READY:.status.conditions[?(@.type=='Ready')].status,RESTARTS:.status.containerStatuses[0].restartCount"
+	@printf "\n"
+	@kubectl get pods -n $(NS_OBS) -o custom-columns=\
+	"NAME:.metadata.name,STATUS:.status.phase,READY:.status.conditions[?(@.type=='Ready')].status,RESTARTS:.status.containerStatuses[0].restartCount"
 
 .PHONY: logs
-logs: ## Follow logs for all services
-	$(COMPOSE) logs -f
-
-.PHONY: logs-infra
-logs-infra: ## Follow logs for infrastructure services
-	$(COMPOSE) logs -f $(INFRA_SERVICES)
-
-.PHONY: logs-observability
-logs-observability: ## Follow logs for observability services
-	$(COMPOSE) logs -f $(OBSERVABILITY_SERVICES)
-
-.PHONY: logs-services
-logs-services: ## Follow logs for application services
-	$(COMPOSE) logs -f $(APP_SERVICES)
-
-.PHONY: logs-service
-logs-service: ## Follow logs for a specific service (usage: make logs-service SVC=auth-service)
+logs: ## Follow logs for a service (usage: make logs SVC=auth-service)
 ifndef SVC
 	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
-	@printf "Usage: make logs-service SVC=<service-name>\n"
-	@printf "Available services: $(ALL_SERVICES)\n"
+	@printf "Usage: make logs SVC=<service-name>\n"
 	@exit 1
 endif
-	$(COMPOSE) logs -f $(SVC)
+	kubectl logs -f -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC)
+
+.PHONY: ingresses
+ingresses: ## Show all ingress routes
+	@printf "$(COLOR_BOLD)Ingress Routes:$(COLOR_RESET)\n"
+	@kubectl get ingress -n $(NS_PROD)
 
 # =============================================================================
-##@ Maintenance
+##@ Upgrades
 # =============================================================================
 
-.PHONY: clean
-clean: ## Remove stopped containers and unused images
-	@printf "$(COLOR_BLUE)→ Cleaning up...$(COLOR_RESET)\n"
-	docker system prune -f
-	@printf "$(COLOR_GREEN)✓ Cleanup complete$(COLOR_RESET)\n"
+.PHONY: upgrade-service
+upgrade-service: ## Upgrade a single service (usage: make upgrade-service SVC=auth-service)
+ifndef SVC
+	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
+	@printf "Usage: make upgrade-service SVC=<chart-name>\n"
+	@exit 1
+endif
+	@printf "$(COLOR_BLUE)→ Upgrading $(SVC)...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update
+	helm upgrade $(SVC) $(HELM_DIR)/ecommerce-$(SVC) \
+		-n $(NS_PROD) \
+		-f $(HELM_DIR)/ecommerce-$(SVC)/values.prod.yaml \
+		--wait --timeout 3m
+	@printf "$(COLOR_GREEN)✓ $(SVC) upgraded$(COLOR_RESET)\n"
 
-.PHONY: clean-all
-clean-all: ## Remove all unused Docker resources (⚠️ affects other projects)
-	@printf "$(COLOR_RED)⚠️  WARNING: This affects ALL Docker resources!$(COLOR_RESET)\n"
+# =============================================================================
+##@ Cleanup
+# =============================================================================
+
+.PHONY: delete-services
+delete-services: ## Delete all application services (keeps infra)
+	@printf "$(COLOR_YELLOW)→ Deleting application services...$(COLOR_RESET)\n"
+	-helm uninstall auth-service -n $(NS_PROD)
+	-helm uninstall catalog-service -n $(NS_PROD)
+	-helm uninstall image-service -n $(NS_PROD)
+	-helm uninstall product-query-service -n $(NS_PROD)
+	-helm uninstall category-query-service -n $(NS_PROD)
+	-helm uninstall admin-ui -n $(NS_PROD)
+	-helm uninstall ecommerce-ui -n $(NS_PROD)
+	@printf "$(COLOR_GREEN)✓ Application services deleted$(COLOR_RESET)\n"
+
+.PHONY: delete-all
+delete-all: ## Delete everything (⚠️ destructive!)
+	@printf "$(COLOR_RED)⚠️  WARNING: This will delete all deployments!$(COLOR_RESET)\n"
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	docker system prune -a -f --volumes
-	@printf "$(COLOR_GREEN)✓ Full cleanup complete$(COLOR_RESET)\n"
-
-.PHONY: backup-volumes
-backup-volumes: ## Backup data volumes to ./backups/
-	@printf "$(COLOR_BLUE)→ Creating backup...$(COLOR_RESET)\n"
-	@mkdir -p backups
-	@timestamp=$$(date +%Y%m%d_%H%M%S)
-	@for vol in mongo_data kafka_data minio_data; do \
-		printf "  Backing up $$vol...\n"; \
-		docker run --rm -v ecommerce_$$vol:/data -v $$(pwd)/backups:/backup alpine \
-			tar czf /backup/$${vol}_$${timestamp}.tar.gz -C /data . 2>/dev/null || true; \
-	done
-	@printf "$(COLOR_GREEN)✓ Backup complete: ./backups/$(COLOR_RESET)\n"
-
-# =============================================================================
-##@ Configuration
-# =============================================================================
-
-.PHONY: check-env
-check-env: ## Verify .env file exists and has required variables
-	@if [ ! -f .env ]; then \
-		printf "$(COLOR_RED)Error: .env file not found$(COLOR_RESET)\n"; \
-		printf "Copy .env.example to .env and fill in the values:\n"; \
-		printf "  cp .env.example .env\n"; \
-		exit 1; \
-	fi
-	@missing=""; \
-	for var in DOMAIN MONGO_ROOT_PASSWORD MINIO_ROOT_PASSWORD AUTH_TOKEN_PRIVATE_KEY AUTH_TOKEN_PUBLIC_KEY IMGPROXY_KEY IMGPROXY_SALT GRAFANA_CLOUD_API_KEY; do \
-		val=$$(grep -E "^$$var=" .env | cut -d'=' -f2-); \
-		if [ -z "$$val" ] || [ "$$val" = "CHANGE_ME_STRONG_PASSWORD" ] || [ "$$val" = "CHANGE_ME_STRONG_PASSWORD_HERE" ]; then \
-			missing="$$missing $$var"; \
-		fi; \
-	done; \
-	if [ -n "$$missing" ]; then \
-		printf "$(COLOR_RED)Error: Missing or default values for:$$missing$(COLOR_RESET)\n"; \
-		exit 1; \
-	fi
-	@printf "$(COLOR_GREEN)✓ Environment configuration valid$(COLOR_RESET)\n"
-
-.PHONY: show-config
-show-config: ## Show current configuration (without secrets)
-	@printf "$(COLOR_BOLD)Current Configuration:$(COLOR_RESET)\n"
-	@printf "  Domain: $$(grep -E '^DOMAIN=' .env | cut -d'=' -f2)\n"
-	@printf "  ACME Email: $$(grep -E '^ACME_EMAIL=' .env | cut -d'=' -f2)\n"
-	@printf "  Admin Email: $$(grep -E '^ADMIN_EMAIL=' .env | cut -d'=' -f2)\n"
-	@printf "\n$(COLOR_BOLD)Image Tags:$(COLOR_RESET)\n"
-	@grep -E '_TAG=' .env | while read line; do printf "  $$line\n"; done
-
-.PHONY: generate-secrets
-generate-secrets: ## Generate secure random values for secrets
-	@printf "$(COLOR_BOLD)Generated Secrets (copy to .env):$(COLOR_RESET)\n\n"
-	@printf "# MongoDB\n"
-	@printf "MONGO_ROOT_PASSWORD=$$(openssl rand -base64 32 | tr -d '/+=' | head -c 32)\n\n"
-	@printf "# MinIO\n"
-	@printf "MINIO_ROOT_PASSWORD=$$(openssl rand -base64 32 | tr -d '/+=' | head -c 32)\n\n"
-	@printf "# imgproxy\n"
-	@printf "IMGPROXY_KEY=$$(openssl rand -hex 32)\n"
-	@printf "IMGPROXY_SALT=$$(openssl rand -hex 32)\n\n"
-	@printf "# Auth tokens (use your service's keygen tool for production)\n"
-	@printf "# AUTH_TOKEN_PRIVATE_KEY=<generate with auth-service keygen>\n"
-	@printf "# AUTH_TOKEN_PUBLIC_KEY=<generate with auth-service keygen>\n\n"
-	@printf "# Kafka Cluster ID\n"
-	@printf "KAFKA_CLUSTER_ID=$$(openssl rand -base64 22 | tr -d '/+=' | head -c 22)\n"
-
-# =============================================================================
-##@ Quick Access
-# =============================================================================
-
-.PHONY: shell-mongo
-shell-mongo: ## Open MongoDB shell
-	@$(COMPOSE) exec mongo mongosh -u $$(grep MONGO_ROOT_USERNAME .env | cut -d'=' -f2) -p $$(grep MONGO_ROOT_PASSWORD .env | cut -d'=' -f2)
-
-.PHONY: shell-kafka
-shell-kafka: ## Open Kafka container shell
-	@$(COMPOSE) exec kafka /bin/bash
-
-.PHONY: urls
-urls: ## Show service URLs
-	@domain=$$(grep -E '^DOMAIN=' .env | cut -d'=' -f2)
-	@printf "$(COLOR_BOLD)Service URLs:$(COLOR_RESET)\n"
-	@printf "  $(COLOR_GREEN)Main UI:$(COLOR_RESET)        https://$$domain\n"
-	@printf "  $(COLOR_GREEN)Admin UI:$(COLOR_RESET)       https://admin.$$domain\n"
-	@printf "  $(COLOR_GREEN)API:$(COLOR_RESET)            https://api.$$domain/api/v1/\n"
-	@printf "  $(COLOR_GREEN)Traefik:$(COLOR_RESET)        https://traefik.$$domain\n"
-	@printf "  $(COLOR_GREEN)Grafana:$(COLOR_RESET)        https://grafana.com (Grafana Cloud)\n"
+	-helm uninstall auth-service catalog-service image-service product-query-service category-query-service admin-ui ecommerce-ui -n $(NS_PROD)
+	-helm uninstall redpanda -n $(NS_PROD)
+	-helm uninstall alloy -n $(NS_OBS)
+	-kubectl delete -f $(K8S_DIR)/imgproxy.yaml
+	@printf "$(COLOR_GREEN)✓ Everything deleted$(COLOR_RESET)\n"

@@ -1,0 +1,63 @@
+# Production values for ecommerce-product-query-service
+image:
+  repository: ghcr.io/sokol111/ecommerce-product-query-service
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  host: api.example.com # CHANGE_ME
+  path: /api/v1/products
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+env:
+  - name: CONFIG_FILE
+    value: "/configs/config.pro.yaml"
+  # MongoDB Atlas
+  - name: MONGO_HOST
+    value: "cluster0.xxxxx.mongodb.net" # CHANGE_ME
+  - name: MONGO_REPLICA_SET
+    value: "rs0" # CHANGE_ME
+  - name: MONGO_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: mongodb-credentials
+        key: username
+  - name: MONGO_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mongodb-credentials
+        key: password
+  # Auth
+  - name: SECURITY_TOKEN_PUBLIC_KEY
+    valueFrom:
+      secretKeyRef:
+        name: auth-keys
+        key: public-key
+  # Kafka (Redpanda)
+  - name: KAFKA_BROKERS
+    value: "redpanda.prod.svc.cluster.local:9093"
+  - name: KAFKA_SCHEMA_REGISTRY_URL
+    value: "http://redpanda.prod.svc.cluster.local:8081"
+  # Observability
+  - name: OBSERVABILITY_OTEL_COLLECTOR_ENDPOINT
+    value: "http://alloy.observability.svc.cluster.local:4317"
+  - name: APP_SERVICE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['app.kubernetes.io/name']
+  - name: APP_SERVICE_VERSION
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['app.kubernetes.io/version']

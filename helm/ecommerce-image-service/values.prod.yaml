@@ -1,0 +1,101 @@
+# Production values for ecommerce-image-service
+image:
+  repository: ghcr.io/sokol111/ecommerce-image-service
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  host: api.example.com # CHANGE_ME
+  path: /api/v1/images
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+env:
+  - name: CONFIG_FILE
+    value: "/configs/config.pro.yaml"
+  # MongoDB Atlas
+  - name: MONGO_HOST
+    value: "cluster0.xxxxx.mongodb.net" # CHANGE_ME
+  - name: MONGO_REPLICA_SET
+    value: "rs0" # CHANGE_ME
+  - name: MONGO_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: mongodb-credentials
+        key: username
+  - name: MONGO_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mongodb-credentials
+        key: password
+  # Auth
+  - name: SECURITY_TOKEN_PUBLIC_KEY
+    valueFrom:
+      secretKeyRef:
+        name: auth-keys
+        key: public-key
+  # Application
+  - name: APPLICATION_JWT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: image-service-secrets
+        key: jwt-secret
+  # Kafka (Redpanda)
+  - name: KAFKA_BROKERS
+    value: "redpanda.prod.svc.cluster.local:9093"
+  - name: KAFKA_SCHEMA_REGISTRY_URL
+    value: "http://redpanda.prod.svc.cluster.local:8081"
+  # S3 (Cloudflare R2)
+  - name: S3_ENDPOINT
+    value: "https://ACCOUNT_ID.r2.cloudflarestorage.com" # CHANGE_ME
+  - name: S3_PUBLIC_ENDPOINT
+    value: "https://example.com/img" # CHANGE_ME
+  - name: S3_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: r2-credentials
+        key: access-key-id
+  - name: S3_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: r2-credentials
+        key: secret-key
+  - name: S3_BUCKET
+    value: "ecommerce-images"
+  - name: S3_REGION
+    value: "auto"
+  # imgproxy
+  - name: IMGPROXY_PUBLIC_BASE_URL
+    value: "https://example.com/img" # CHANGE_ME
+  - name: IMGPROXY_KEY_HEX
+    valueFrom:
+      secretKeyRef:
+        name: imgproxy-keys
+        key: key
+  - name: IMGPROXY_SALT_HEX
+    valueFrom:
+      secretKeyRef:
+        name: imgproxy-keys
+        key: salt
+  # Observability
+  - name: OBSERVABILITY_OTEL_COLLECTOR_ENDPOINT
+    value: "http://alloy.observability.svc.cluster.local:4317"
+  - name: APP_SERVICE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['app.kubernetes.io/name']
+  - name: APP_SERVICE_VERSION
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['app.kubernetes.io/version']
