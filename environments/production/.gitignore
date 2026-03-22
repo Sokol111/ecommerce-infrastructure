@@ -1,5 +1,2 @@
-# Environment secrets
-.env
-
-# Ignore local data volumes (if mounted locally for testing)
-data/
+# Kubernetes secrets (real values, not the .example template)
+k8s/secrets.yaml

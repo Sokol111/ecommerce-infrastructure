@@ -1,0 +1,189 @@
+# Grafana Alloy - Production values for k3s
+# Chart: grafana/alloy from https://grafana.github.io/helm-charts
+
+alloy:
+  configMap:
+    content: |
+      // =========================================================================
+      // Grafana Alloy - Kubernetes Configuration for Grafana Cloud
+      // =========================================================================
+
+      // OTLP Receiver (metrics + traces from Go services)
+      otelcol.receiver.otlp "default" {
+        grpc {
+          endpoint = "0.0.0.0:4317"
+        }
+        http {
+          endpoint = "0.0.0.0:4318"
+        }
+        output {
+          metrics = [otelcol.processor.batch.default.input]
+          traces  = [otelcol.processor.batch.default.input]
+        }
+      }
+
+      // Batch Processor
+      otelcol.processor.batch "default" {
+        timeout = "5s"
+        send_batch_size = 1000
+        output {
+          metrics = [otelcol.exporter.prometheus.default.input]
+          traces  = [otelcol.exporter.otlp.tempo.input]
+        }
+      }
+
+      // Prometheus Remote Write (metrics → Grafana Cloud)
+      otelcol.exporter.prometheus "default" {
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+
+      prometheus.remote_write "default" {
+        endpoint {
+          url = env("GRAFANA_CLOUD_PROMETHEUS_URL")
+          basic_auth {
+            username = env("GRAFANA_CLOUD_PROMETHEUS_USER")
+            password = env("GRAFANA_CLOUD_API_KEY")
+          }
+        }
+      }
+
+      // Tempo Exporter (traces → Grafana Cloud)
+      otelcol.exporter.otlp "tempo" {
+        client {
+          endpoint = env("GRAFANA_CLOUD_TEMPO_URL")
+          auth     = otelcol.auth.basic.tempo_auth.handler
+        }
+      }
+
+      otelcol.auth.basic "tempo_auth" {
+        username = env("GRAFANA_CLOUD_TEMPO_USER")
+        password = env("GRAFANA_CLOUD_API_KEY")
+      }
+
+      // Kubernetes Pod Log Collection
+      discovery.kubernetes "pods" {
+        role = "pod"
+        namespaces {
+          names = ["prod"]
+        }
+      }
+
+      discovery.relabel "pod_logs" {
+        targets = discovery.kubernetes.pods.targets
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          target_label  = "pod"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          target_label  = "namespace"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          target_label  = "container"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          target_label  = "service"
+        }
+      }
+
+      loki.source.kubernetes "pod_logs" {
+        targets    = discovery.relabel.pod_logs.output
+        forward_to = [loki.process.pod_logs.receiver]
+      }
+
+      loki.process "pod_logs" {
+        stage.json {
+          expressions = {
+            level    = "level",
+            msg      = "msg",
+            caller   = "caller",
+            ts       = "ts",
+            trace_id = "trace_id",
+            span_id  = "span_id",
+          }
+        }
+        stage.labels {
+          values = {
+            level = "",
+          }
+        }
+        stage.timestamp {
+          source = "ts"
+          format = "Unix"
+        }
+        forward_to = [loki.write.default.receiver]
+      }
+
+      // Loki Writer (logs → Grafana Cloud)
+      loki.write "default" {
+        endpoint {
+          url = env("GRAFANA_CLOUD_LOKI_URL")
+          basic_auth {
+            username = env("GRAFANA_CLOUD_LOKI_USER")
+            password = env("GRAFANA_CLOUD_API_KEY")
+          }
+        }
+      }
+
+      // Self-monitoring
+      prometheus.exporter.self "alloy" {}
+      prometheus.scrape "alloy_self" {
+        targets        = prometheus.exporter.self.alloy.targets
+        forward_to     = [prometheus.remote_write.default.receiver]
+        scrape_interval = "15s"
+        job_name        = "alloy"
+      }
+
+  extraEnv:
+    - name: GRAFANA_CLOUD_PROMETHEUS_URL
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: prometheus-url
+    - name: GRAFANA_CLOUD_PROMETHEUS_USER
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: prometheus-user
+    - name: GRAFANA_CLOUD_LOKI_URL
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: loki-url
+    - name: GRAFANA_CLOUD_LOKI_USER
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: loki-user
+    - name: GRAFANA_CLOUD_TEMPO_URL
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: tempo-url
+    - name: GRAFANA_CLOUD_TEMPO_USER
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: tempo-user
+    - name: GRAFANA_CLOUD_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: api-key
+
+controller:
+  type: daemonset
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+serviceMonitor:
+  enabled: false
