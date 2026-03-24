@@ -18,12 +18,20 @@ COLOR_RED    := \033[31m
 
 # Paths
 HELM_DIR     := ../../helm
-INFRA_VALUES := $(HELM_DIR)/values/infrastructure
+VALUES_DIR   := values
 K8S_DIR      := k8s
 
 # Namespaces
 NS_PROD := prod
 NS_OBS  := observability
+
+# SSH tunnel
+SSH_HOST := hetzner
+K8S_PORT := 6443
+
+# Kubeconfig (uses SSH tunnel to reach k3s API)
+KUBECONFIG_FILE := $(HOME)/.kube/config-hetzner
+export KUBECONFIG := $(KUBECONFIG_FILE)
 
 # Helm repos
 REDPANDA_REPO := https://charts.redpanda.com
@@ -47,6 +55,38 @@ help: ## Show this help message
 # =============================================================================
 ##@ Initial Setup
 # =============================================================================
+
+.PHONY: tunnel
+tunnel: ## Open SSH tunnel for kubectl access
+	@if ss -tln | grep -q ':$(K8S_PORT)\b'; then \
+		printf "$(COLOR_YELLOW)⚡ Tunnel already active on port $(K8S_PORT)$(COLOR_RESET)\n"; \
+	else \
+		printf "$(COLOR_BLUE)→ Opening SSH tunnel to $(SSH_HOST):$(K8S_PORT)...$(COLOR_RESET)\n"; \
+		ssh -L $(K8S_PORT):127.0.0.1:$(K8S_PORT) $(SSH_HOST) -N -f; \
+		printf "$(COLOR_GREEN)✓ Tunnel established$(COLOR_RESET)\n"; \
+	fi
+
+.PHONY: kubeconfig
+kubeconfig: ## Fetch kubeconfig from VPS (creates ~/.kube/config-hetzner)
+	@if [ -f $(KUBECONFIG_FILE) ]; then \
+		printf "$(COLOR_YELLOW)⚡ $(KUBECONFIG_FILE) already exists$(COLOR_RESET)\n"; \
+	else \
+		printf "$(COLOR_BLUE)→ Fetching kubeconfig from $(SSH_HOST)...$(COLOR_RESET)\n"; \
+		mkdir -p $(HOME)/.kube; \
+		ssh $(SSH_HOST) "cat /etc/rancher/k3s/k3s.yaml" > $(KUBECONFIG_FILE); \
+		printf "$(COLOR_GREEN)✓ Kubeconfig saved to $(KUBECONFIG_FILE)$(COLOR_RESET)\n"; \
+	fi
+
+.PHONY: tunnel-stop
+tunnel-stop: ## Close SSH tunnel
+	@printf "$(COLOR_BLUE)→ Closing SSH tunnel...$(COLOR_RESET)\n"
+	@pkill -f "ssh -L $(K8S_PORT)" 2>/dev/null && \
+		printf "$(COLOR_GREEN)✓ Tunnel closed$(COLOR_RESET)\n" || \
+		printf "$(COLOR_YELLOW)⚡ No active tunnel found$(COLOR_RESET)\n"
+
+.PHONY: ssh
+ssh: ## SSH into the VPS
+	ssh $(SSH_HOST)
 
 .PHONY: setup
 setup: setup-namespaces setup-repos setup-traefik ## Full initial setup (namespaces, repos, traefik)
@@ -92,7 +132,7 @@ deploy-redpanda: ## Deploy Redpanda (Kafka-compatible broker)
 	@printf "$(COLOR_BLUE)→ Deploying Redpanda...$(COLOR_RESET)\n"
 	helm upgrade --install redpanda redpanda/redpanda \
 		-n $(NS_PROD) \
-		-f $(INFRA_VALUES)/redpanda-prod.yaml \
+		-f $(VALUES_DIR)/redpanda-prod.yaml \
 		--wait --timeout 5m
 	@printf "$(COLOR_GREEN)✓ Redpanda deployed$(COLOR_RESET)\n"
 
@@ -114,7 +154,7 @@ deploy-alloy: ## Deploy Grafana Alloy (→ Grafana Cloud)
 	@printf "$(COLOR_BLUE)→ Deploying Grafana Alloy...$(COLOR_RESET)\n"
 	helm upgrade --install alloy grafana/alloy \
 		-n $(NS_OBS) \
-		-f $(INFRA_VALUES)/alloy-prod.yaml \
+		-f $(VALUES_DIR)/alloy-prod.yaml \
 		--wait --timeout 3m
 	@printf "$(COLOR_GREEN)✓ Grafana Alloy deployed$(COLOR_RESET)\n"
 

@@ -1,5 +1,5 @@
 # k3s Traefik customization via HelmChartConfig
-# This configures the built-in Traefik in k3s
+# SSL handled by Cloudflare (Proxy ON + Origin Certificate)
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
@@ -8,9 +8,6 @@ metadata:
 spec:
   valuesContent: |-
     additionalArguments:
-      - "--certificatesresolvers.letsencrypt.acme.email=admin@example.com"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     ports:
@@ -20,13 +17,13 @@ spec:
       websecure:
         tls:
           enabled: true
+    tlsStore:
+      default:
+        defaultCertificate:
+          secretName: cloudflare-origin-tls
     ingressClass:
       enabled: true
       isDefaultClass: true
-    persistence:
-      enabled: true
-      size: 128Mi
-      path: /data
     resources:
       requests:
         cpu: 100m

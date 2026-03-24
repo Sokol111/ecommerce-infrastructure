@@ -6,11 +6,10 @@ image:
 
 ingress:
   enabled: true
-  host: example.com # CHANGE_ME
+  host: sokolshop.com
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 
 resources:
   requests:
@@ -43,7 +42,6 @@ env:
     value: "http://ecommerce-category-query-service:8080"
   - name: NUXT_PRODUCT_QUERY_API_URL
     value: "http://ecommerce-product-query-service:8080"
-  - name: NUXT_PUBLIC_API_URL
-    value: "https://api.example.com" # CHANGE_ME
+  # API calls go through Nuxt SSR to internal k8s services
   - name: NUXT_PUBLIC_IMGPROXY_URL
-    value: "https://example.com/img" # CHANGE_ME
+    value: "https://sokolshop.com/img"

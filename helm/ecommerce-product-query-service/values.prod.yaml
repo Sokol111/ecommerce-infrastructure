@@ -5,13 +5,7 @@ image:
   pullPolicy: IfNotPresent
 
 ingress:
-  enabled: true
-  host: api.example.com # CHANGE_ME
-  path: /api/v1/products
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+  enabled: false
 
 resources:
   requests:
