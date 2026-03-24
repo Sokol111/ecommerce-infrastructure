@@ -289,25 +289,6 @@ ingresses: ## Show all ingress routes
 	@kubectl get ingress -n $(NS_PROD)
 
 # =============================================================================
-##@ Upgrades
-# =============================================================================
-
-.PHONY: upgrade-service
-upgrade-service: ## Upgrade a single service (usage: make upgrade-service SVC=auth-service)
-ifndef SVC
-	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
-	@printf "Usage: make upgrade-service SVC=<chart-name>\n"
-	@exit 1
-endif
-	@printf "$(COLOR_BLUE)→ Upgrading $(SVC)...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update
-	helm upgrade $(SVC) $(HELM_DIR)/ecommerce-$(SVC) \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-$(SVC)/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ $(SVC) upgraded$(COLOR_RESET)\n"
-
-# =============================================================================
 ##@ Cleanup
 # =============================================================================
 
