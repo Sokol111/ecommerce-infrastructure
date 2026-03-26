@@ -1,7 +1,7 @@
 # Production values for ecommerce-admin-ui
 image:
   repository: ghcr.io/sokol111/ecommerce-admin-ui
-  tag: "latest"
+  tag: "0.1.0"
   pullPolicy: IfNotPresent
 
 ingress:

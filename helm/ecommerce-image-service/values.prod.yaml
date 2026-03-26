@@ -1,7 +1,7 @@
 # Production values for ecommerce-image-service
 image:
   repository: ghcr.io/sokol111/ecommerce-image-service
-  tag: "latest"
+  tag: "0.1.0"
   pullPolicy: IfNotPresent
 
 ingress:
@@ -52,7 +52,7 @@ env:
     value: "http://redpanda.prod.svc.cluster.local:8081"
   # S3 (Cloudflare R2)
   - name: S3_ENDPOINT
-    value: "https://ACCOUNT_ID.r2.cloudflarestorage.com" # CHANGE_ME
+    value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
   - name: S3_PUBLIC_ENDPOINT
     value: "https://sokolshop.com/img"
   - name: S3_ACCESS_KEY_ID
@@ -66,7 +66,7 @@ env:
         name: r2-credentials
         key: secret-key
   - name: S3_BUCKET
-    value: "ecommerce-images"
+    value: "products"
   - name: S3_REGION
     value: "auto"
   # imgproxy

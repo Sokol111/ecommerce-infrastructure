@@ -1,7 +1,7 @@
 # Production values for ecommerce-catalog-service
 image:
   repository: ghcr.io/sokol111/ecommerce-catalog-service
-  tag: "latest"
+  tag: "0.1.0"
   pullPolicy: IfNotPresent
 
 ingress:

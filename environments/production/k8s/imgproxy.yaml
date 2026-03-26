@@ -31,7 +31,7 @@ spec:
             - name: IMGPROXY_S3_REGION
               value: "auto"
             - name: IMGPROXY_S3_ENDPOINT
-              value: "https://ACCOUNT_ID.r2.cloudflarestorage.com" # CHANGE_ME
+              value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
