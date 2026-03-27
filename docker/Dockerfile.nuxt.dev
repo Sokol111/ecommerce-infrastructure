@@ -19,25 +19,26 @@ COPY ${SERVICE_DIR}/nuxt.config.ts ./
 # Install pnpm (version from package.json packageManager field, cached with package.json layer)
 RUN corepack install
 
-# Install ALL dependencies (including devDependencies) from registry
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) pnpm install
-
-# Copy local API dependencies and link them (overrides registry versions)
+# Build local API dependencies and rewrite package.json to use link: protocol BEFORE pnpm install.
+# This avoids fetching @sokol111/* packages from GitHub registry (dev always uses local sources).
 COPY . /tmp/context/
 RUN set -e && \
     for api_dep in ${API_DEPS}; do \
         if [ -d "/tmp/context/${api_dep}/gen/typescript" ]; then \
-            echo "Linking local API dependency: ${api_dep}"; \
+            echo "Building local API dependency: ${api_dep}"; \
             mkdir -p "/app/${api_dep}/gen/typescript"; \
             cp -r "/tmp/context/${api_dep}/gen/typescript/." "/app/${api_dep}/gen/typescript/"; \
             cd "/app/${api_dep}/gen/typescript" && npm install && npm run build && cd /app; \
-            pnpm link "/app/${api_dep}/gen/typescript"; \
+            pkg_name=$(node -e "console.log(require('/app/${api_dep}/gen/typescript/package.json').name)"); \
+            sed -i "s|\"${pkg_name}\": \"[^\"]*\"|\"${pkg_name}\": \"link:/app/${api_dep}/gen/typescript\"|" /app/package.json; \
         else \
             echo "WARNING: API dependency not found: ${api_dep}/gen/typescript (skipping)"; \
         fi; \
     done && \
     rm -rf /tmp/context
+
+# Install dependencies — @sokol111/* packages resolved locally via link: protocol
+RUN pnpm install --no-frozen-lockfile
 
 # Copy application code
 COPY ${SERVICE_DIR}/. .

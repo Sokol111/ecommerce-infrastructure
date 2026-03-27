@@ -221,7 +221,6 @@ for name, config in UI_SERVICES.items():
             'SERVICE_DIR': name,
             'API_DEPS': ' '.join(api_deps),
         },
-        secret=['id=NODE_AUTH_TOKEN,env=NODE_AUTH_TOKEN'],
         only=watch_paths,
         live_update=[
             # Sync source files directly to container for hot reload (Nuxt structure)
