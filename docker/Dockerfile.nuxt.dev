@@ -18,7 +18,8 @@ COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pn
 COPY ${SERVICE_DIR}/nuxt.config.ts ./
 
 # Install ALL dependencies (including devDependencies) from registry
-RUN pnpm install
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) pnpm install
 
 # Copy local API dependencies and link them (overrides registry versions)
 COPY . /tmp/context/

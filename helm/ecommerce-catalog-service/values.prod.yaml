@@ -15,24 +15,28 @@ resources:
     cpu: 200m
     memory: 128Mi
 
+config: |
+  mongo:
+    database: catalog
+    max-pool-size: 20
+  kafka:
+    schema-registry:
+      auto-register-schemas: true
+  observability:
+    tracing:
+      enabled: true
+    metrics:
+      enabled: true
+
 env:
   - name: CONFIG_FILE
-    value: "/configs/config.pro.yaml"
-  # MongoDB Atlas
-  - name: MONGO_HOST
-    value: "cluster0.xxxxx.mongodb.net" # CHANGE_ME
-  - name: MONGO_REPLICA_SET
-    value: "rs0" # CHANGE_ME
-  - name: MONGO_USERNAME
+    value: "/configs/config.yaml"
+  # MongoDB Atlas (SRV connection string: mongodb+srv://user:pass@cluster0.ewnbawt.mongodb.net/catalog?appName=Cluster0)
+  - name: MONGO_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: mongodb-credentials
-        key: username
-  - name: MONGO_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: mongodb-credentials
-        key: password
+        key: connection-string
   # Auth
   - name: SECURITY_TOKEN_PUBLIC_KEY
     valueFrom:

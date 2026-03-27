@@ -202,6 +202,7 @@ for name, config in UI_SERVICES.items():
         name + '/package.json',
         name + '/pnpm-lock.yaml',
         name + '/pnpm-workspace.yaml',
+        name + '/.npmrc',
         name + '/nuxt.config.ts',
         name + '/tsconfig.json',
         name + '/eslint.config.mjs',
@@ -220,6 +221,7 @@ for name, config in UI_SERVICES.items():
             'SERVICE_DIR': name,
             'API_DEPS': ' '.join(api_deps),
         },
+        secret=['id=NODE_AUTH_TOKEN,env=NODE_AUTH_TOKEN'],
         only=watch_paths,
         live_update=[
             # Sync source files directly to container for hot reload (Nuxt structure)

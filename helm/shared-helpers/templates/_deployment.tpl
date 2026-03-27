@@ -127,13 +127,28 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
+          {{- if or .Values.volumeMounts .Values.config }}
           volumeMounts:
+            {{- if .Values.config }}
+            - name: config
+              mountPath: /configs/config.yaml
+              subPath: config.yaml
+              readOnly: true
+            {{- end }}
+            {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- end }}
-      {{- with .Values.volumes }}
+      {{- if or .Values.volumes .Values.config }}
       volumes:
+        {{- if .Values.config }}
+        - name: config
+          configMap:
+            name: {{ .name }}-config
+        {{- end }}
+        {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

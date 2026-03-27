@@ -21,7 +21,6 @@ FROM gcr.io/distroless/static-debian12 AS base-release
 WORKDIR /
 
 COPY --from=base-build /server /server
-COPY --from=base-build /app/configs/ /configs/
 COPY --from=base-build /app/db/ /db/
 
 EXPOSE 8080

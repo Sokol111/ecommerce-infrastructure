@@ -15,24 +15,72 @@ resources:
     cpu: 200m
     memory: 128Mi
 
+config: |
+  mongo:
+    database: auth
+    max-pool-size: 20
+  observability:
+    tracing:
+      enabled: true
+    metrics:
+      enabled: true
+  token:
+    access-token-duration: 15m
+    refresh-token-duration: 168h
+  rate-limit:
+    login-tokens: 5
+    login-interval: 1m
+  admin:
+    initial-user:
+      enabled: true
+      first-name: Super
+      last-name: Admin
+  permissions:
+    roles:
+      - name: super_admin
+        description: Full access to all resources
+        permissions:
+          - "users:read"
+          - "users:write"
+          - "users:delete"
+          - "products:read"
+          - "products:write"
+          - "products:delete"
+          - "categories:read"
+          - "categories:write"
+          - "categories:delete"
+          - "attributes:read"
+          - "attributes:write"
+          - "attributes:delete"
+      - name: catalog_manager
+        description: Can manage products, categories and attributes
+        permissions:
+          - "products:read"
+          - "products:write"
+          - "products:delete"
+          - "categories:read"
+          - "categories:write"
+          - "categories:delete"
+          - "attributes:read"
+          - "attributes:write"
+          - "attributes:delete"
+      - name: viewer
+        description: Read-only access
+        permissions:
+          - "users:read"
+          - "products:read"
+          - "categories:read"
+          - "attributes:read"
+
 env:
   - name: CONFIG_FILE
-    value: "/configs/config.pro.yaml"
-  # MongoDB Atlas
-  - name: MONGO_HOST
-    value: "cluster0.xxxxx.mongodb.net" # CHANGE_ME
-  - name: MONGO_PORT
-    value: "27017"
-  - name: MONGO_USERNAME
+    value: "/configs/config.yaml"
+  # MongoDB Atlas (SRV connection string: mongodb+srv://user:pass@cluster0.ewnbawt.mongodb.net/auth?appName=Cluster0)
+  - name: MONGO_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: mongodb-credentials
-        key: username
-  - name: MONGO_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: mongodb-credentials
-        key: password
+        key: connection-string
   # Auth keys
   - name: SECURITY_TOKEN_PUBLIC_KEY
     valueFrom:
