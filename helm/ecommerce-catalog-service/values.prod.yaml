@@ -31,7 +31,6 @@ config: |
 env:
   - name: CONFIG_FILE
     value: "/configs/config.yaml"
-  # MongoDB Atlas (SRV connection string: mongodb+srv://user:pass@cluster0.ewnbawt.mongodb.net/catalog?appName=Cluster0)
   - name: MONGO_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
