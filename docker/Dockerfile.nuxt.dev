@@ -10,12 +10,14 @@ ARG SERVICE_DIR
 
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable
 
 # Copy package and config files needed before install
 COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ${SERVICE_DIR}/.npmrc ./
 COPY ${SERVICE_DIR}/nuxt.config.ts ./
+
+# Install pnpm (version from package.json packageManager field, cached with package.json layer)
+RUN corepack install
 
 # Install ALL dependencies (including devDependencies) from registry
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
