@@ -275,6 +275,19 @@ health: ## Check health of all services
 	@kubectl get pods -n $(NS_OBS) -o custom-columns=\
 	"NAME:.metadata.name,STATUS:.status.phase,READY:.status.conditions[?(@.type=='Ready')].status,RESTARTS:.status.containerStatuses[0].restartCount"
 
+.PHONY: console
+console: ## Run Redpanda Console locally (port-forward + Docker)
+	@printf "$(COLOR_BLUE)→ Port-forwarding Redpanda...$(COLOR_RESET)\n"
+	@kubectl port-forward -n $(NS_PROD) svc/redpanda 19093:9093 18081:8081 &
+	@sleep 2
+	@printf "$(COLOR_BLUE)→ Starting Redpanda Console on http://localhost:8080 ...$(COLOR_RESET)\n"
+	@docker run --rm --network host \
+		-e KAFKA_BROKERS=localhost:19093 \
+		-e KAFKA_SCHEMAREGISTRY_ENABLED=true \
+		-e KAFKA_SCHEMAREGISTRY_URLS=http://localhost:18081 \
+		docker.redpanda.com/redpandadata/console:latest; \
+	kill %1 2>/dev/null || true
+
 .PHONY: logs
 logs: ## Follow logs for a service (usage: make logs SVC=auth-service)
 ifndef SVC

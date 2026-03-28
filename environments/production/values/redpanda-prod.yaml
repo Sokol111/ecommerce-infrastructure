@@ -8,10 +8,10 @@ resources:
     cores: 1
   memory:
     container:
-      max: 1Gi
+      max: 2Gi
     redpanda:
-      memory: 512Mi
-      reserveMemory: 128Mi
+      memory: 1536Mi
+      reserveMemory: 256Mi
 
 storage:
   persistentVolume:
