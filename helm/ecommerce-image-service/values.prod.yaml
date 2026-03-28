@@ -1,7 +1,7 @@
 # Production values for ecommerce-image-service
 image:
   repository: ghcr.io/sokol111/ecommerce-image-service
-  tag: "0.1.1"
+  tag: "0.1.2"
   pullPolicy: IfNotPresent
 
 ingress:
