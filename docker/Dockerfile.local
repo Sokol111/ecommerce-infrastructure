@@ -112,4 +112,7 @@ EXPOSE 8080
 # Debug порт для Delve
 EXPOSE 2345
 
+# Pprof порт (enabled via config)
+EXPOSE 6060
+
 ENTRYPOINT ["/server"]
