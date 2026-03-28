@@ -73,6 +73,8 @@ config: |
           - "attributes:read"
 
 env:
+  - name: APP_ENV
+    value: "production"
   - name: CONFIG_FILE
     value: "/configs/config.yaml"
   - name: MONGO_CONNECTION_STRING

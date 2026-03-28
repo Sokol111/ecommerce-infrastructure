@@ -297,6 +297,28 @@ ifndef SVC
 endif
 	kubectl logs -f -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC)
 
+.PHONY: logs-prev
+logs-prev: ## Show logs from crashed container (usage: make logs-prev SVC=auth-service)
+ifndef SVC
+	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
+	@printf "Usage: make logs-prev SVC=<service-name>\n"
+	@exit 1
+endif
+	kubectl logs -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC) -p --tail=50
+
+.PHONY: describe
+describe: ## Describe pod for a service (usage: make describe SVC=auth-service)
+ifndef SVC
+	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
+	@printf "Usage: make describe SVC=<service-name>\n"
+	@exit 1
+endif
+	kubectl describe pod -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC)
+
+.PHONY: events
+events: ## Show recent events in prod namespace
+	kubectl get events -n $(NS_PROD) --sort-by='.lastTimestamp' | tail -30
+
 .PHONY: ingresses
 ingresses: ## Show all ingress routes
 	@printf "$(COLOR_BOLD)Ingress Routes:$(COLOR_RESET)\n"
