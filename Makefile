@@ -126,6 +126,42 @@ urls: ## Show all service URLs available in browser
 	@printf "\n"
 
 # =============================================================================
+# Profiling (pprof)
+# =============================================================================
+
+PPROF_UI_PORT ?= 8081
+
+# Pprof ports per service (must match Tiltfile pprof_port)
+PPROF_PORT_catalog   := 6060
+PPROF_PORT_product   := 6061
+PPROF_PORT_category  := 6062
+PPROF_PORT_image     := 6063
+PPROF_PORT_auth      := 6064
+
+.PHONY: pprof-heap pprof-cpu pprof-goroutine pprof-allocs pprof
+
+pprof: ## Show available pprof commands
+	@printf "\033[1mPprof profiling targets:\033[0m\n\n"
+	@printf "  \033[36mmake pprof-heap SVC=catalog\033[0m      — memory profile\n"
+	@printf "  \033[36mmake pprof-cpu SVC=catalog\033[0m       — CPU profile (30s)\n"
+	@printf "  \033[36mmake pprof-allocs SVC=catalog\033[0m    — allocations profile\n"
+	@printf "  \033[36mmake pprof-goroutine SVC=catalog\033[0m — goroutine profile\n"
+	@printf "\n  Available SVC values: catalog, product, category, image, auth\n"
+	@printf "  UI opens on: http://localhost:$(PPROF_UI_PORT)\n\n"
+
+pprof-heap: ## Open heap (memory) profile in browser (SVC=catalog|product|category|image|auth)
+	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/heap
+
+pprof-cpu: ## Open CPU profile in browser - records for 30s (SVC=catalog|product|category|image|auth)
+	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/profile?seconds=30
+
+pprof-allocs: ## Open allocations profile in browser (SVC=catalog|product|category|image|auth)
+	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/allocs
+
+pprof-goroutine: ## Open goroutine profile in browser (SVC=catalog|product|category|image|auth)
+	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/goroutine
+
+# =============================================================================
 # Demo Data Seeder
 # =============================================================================
 

@@ -54,22 +54,27 @@ dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 't
 GO_SERVICES = {
     'ecommerce-catalog-service': {
         'debug_port': 2345,
+        'pprof_port': 6060,
         'api_deps': ['ecommerce-catalog-service-api'],
     },
     'ecommerce-product-query-service': {
         'debug_port': 2347,
+        'pprof_port': 6061,
         'api_deps': ['ecommerce-product-query-service-api', 'ecommerce-catalog-service-api', 'ecommerce-image-service-api'],
     },
     'ecommerce-category-query-service': {
         'debug_port': 2348,
+        'pprof_port': 6062,
         'api_deps': ['ecommerce-category-query-service-api', 'ecommerce-catalog-service-api'],
     },
     'ecommerce-image-service': {
         'debug_port': 2349,
+        'pprof_port': 6063,
         'api_deps': ['ecommerce-image-service-api', 'ecommerce-catalog-service-api'],
     },
     'ecommerce-auth-service': {
         'debug_port': 2351,
+        'pprof_port': 6064,
         'api_deps': ['ecommerce-auth-service-api'],
     },
 }
@@ -181,6 +186,7 @@ for name, config in GO_SERVICES.items():
         name,
         port_forwards=[
             port_forward(config['debug_port'], 2345, name='delve'),
+            port_forward(config['pprof_port'], 6060, name='pprof'),
         ],
         labels=['go-services'],
         resource_deps=['mongo', 'redpanda'],
