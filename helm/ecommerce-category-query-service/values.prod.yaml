@@ -1,7 +1,7 @@
 # Production values for ecommerce-category-query-service
 image:
   repository: ghcr.io/sokol111/ecommerce-category-query-service
-  tag: "0.1.2"
+  tag: "0.1.3"
   pullPolicy: IfNotPresent
 
 ingress:
