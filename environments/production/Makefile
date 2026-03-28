@@ -20,6 +20,7 @@ COLOR_RED    := \033[31m
 HELM_DIR     := ../../helm
 VALUES_DIR   := values
 K8S_DIR      := k8s
+SEEDER_DIR   := ../../cmd/seeder
 
 # Namespaces
 NS_PROD := prod
@@ -287,6 +288,38 @@ endif
 ingresses: ## Show all ingress routes
 	@printf "$(COLOR_BOLD)Ingress Routes:$(COLOR_RESET)\n"
 	@kubectl get ingress -n $(NS_PROD)
+
+# =============================================================================
+##@ Seeder
+# =============================================================================
+
+SEED_CATALOG_PORT := 9081
+SEED_IMAGE_PORT   := 9084
+
+.PHONY: seed
+seed: ## Run seeder against production (requires tunnel + SEEDER_TOKEN)
+ifndef SEEDER_TOKEN
+	@printf "$(COLOR_RED)Error: SEEDER_TOKEN is not set$(COLOR_RESET)\n"
+	@printf "Usage: make seed SEEDER_TOKEN=<token>\n"
+	@exit 1
+endif
+	@printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"
+	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 &
+	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 &
+	@sleep 2
+	@printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"
+	cd $(SEEDER_DIR) && go run . \
+		-catalog-url http://localhost:$(SEED_CATALOG_PORT) \
+		-image-url http://localhost:$(SEED_IMAGE_PORT) \
+		-token "$(SEEDER_TOKEN)"; \
+	EXIT_CODE=$$?; \
+	kill %1 %2 2>/dev/null || true; \
+	if [ $$EXIT_CODE -eq 0 ]; then \
+		printf "$(COLOR_GREEN)✓ Seeding completed$(COLOR_RESET)\n"; \
+	else \
+		printf "$(COLOR_RED)✗ Seeding failed$(COLOR_RESET)\n"; \
+		exit $$EXIT_CODE; \
+	fi
 
 # =============================================================================
 ##@ Cleanup
