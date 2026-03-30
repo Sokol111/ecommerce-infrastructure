@@ -34,6 +34,7 @@ alloy:
 
       // Prometheus Remote Write (metrics → Grafana Cloud)
       otelcol.exporter.prometheus "default" {
+        resource_to_telemetry_conversion = true
         forward_to = [prometheus.remote_write.default.receiver]
       }
 
@@ -173,6 +174,16 @@ alloy:
         secretKeyRef:
           name: grafana-cloud
           key: api-key
+
+  extraPorts:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+      protocol: TCP
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+      protocol: TCP
 
 controller:
   type: daemonset

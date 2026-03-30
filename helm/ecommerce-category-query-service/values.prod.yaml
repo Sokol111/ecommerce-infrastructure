@@ -67,7 +67,7 @@ env:
     value: "http://redpanda.prod.svc.cluster.local:8081"
   # Observability
   - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
-    value: "http://alloy.observability.svc.cluster.local:4317"
+    value: "alloy.observability.svc.cluster.local:4317"
   - name: APP_SERVICE_NAME
     valueFrom:
       fieldRef:

@@ -324,6 +324,18 @@ ingresses: ## Show all ingress routes
 	@printf "$(COLOR_BOLD)Ingress Routes:$(COLOR_RESET)\n"
 	@kubectl get ingress -n $(NS_PROD)
 
+.PHONY: restart
+restart: ## Restart a service (usage: make restart SVC=auth-service)
+ifndef SVC
+	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
+	@printf "Usage: make restart SVC=<service-name>\n"
+	@exit 1
+endif
+	@printf "$(COLOR_BLUE)→ Restarting $(SVC)...$(COLOR_RESET)\n"
+	kubectl rollout restart deployment -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC)
+	kubectl rollout status deployment -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC) --timeout=90s
+	@printf "$(COLOR_GREEN)✓ $(SVC) restarted$(COLOR_RESET)\n"
+
 # =============================================================================
 ##@ Seeder
 # =============================================================================
