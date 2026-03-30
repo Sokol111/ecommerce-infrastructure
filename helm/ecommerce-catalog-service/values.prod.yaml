@@ -1,7 +1,7 @@
 # Production values for ecommerce-catalog-service
 image:
   repository: ghcr.io/sokol111/ecommerce-catalog-service
-  tag: "0.1.4"
+  tag: "0.1.5"
   pullPolicy: IfNotPresent
 
 ingress:
@@ -33,24 +33,24 @@ env:
     value: "production"
   - name: CONFIG_FILE
     value: "/configs/config.yaml"
-  - name: MONGO_CONNECTION_STRING
+  - name: MONGO__CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: mongodb-credentials
         key: connection-string
   # Auth
-  - name: SECURITY_TOKEN_PUBLIC_KEY
+  - name: SECURITY__TOKEN__PUBLIC_KEY
     valueFrom:
       secretKeyRef:
         name: auth-keys
         key: public-key
   # Kafka (Redpanda)
-  - name: KAFKA_BROKERS
+  - name: KAFKA__BROKERS
     value: "redpanda.prod.svc.cluster.local:9093"
-  - name: KAFKA_SCHEMA_REGISTRY_URL
+  - name: KAFKA__SCHEMA_REGISTRY_URL
     value: "http://redpanda.prod.svc.cluster.local:8081"
   # Observability
-  - name: OBSERVABILITY_OTEL_COLLECTOR_ENDPOINT
+  - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
     value: "http://alloy.observability.svc.cluster.local:4317"
   - name: APP_SERVICE_NAME
     valueFrom:

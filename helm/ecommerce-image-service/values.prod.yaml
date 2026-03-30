@@ -1,7 +1,7 @@
 # Production values for ecommerce-image-service
 image:
   repository: ghcr.io/sokol111/ecommerce-image-service
-  tag: "0.1.3"
+  tag: "0.1.4"
   pullPolicy: IfNotPresent
 
 ingress:
@@ -48,62 +48,62 @@ env:
     value: "production"
   - name: CONFIG_FILE
     value: "/configs/config.yaml"
-  - name: MONGO_CONNECTION_STRING
+  - name: MONGO__CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: mongodb-credentials
         key: connection-string
   # Auth
-  - name: SECURITY_TOKEN_PUBLIC_KEY
+  - name: SECURITY__TOKEN__PUBLIC_KEY
     valueFrom:
       secretKeyRef:
         name: auth-keys
         key: public-key
   # Application
-  - name: APPLICATION_JWT_SECRET
+  - name: APPLICATION__JWT_SECRET
     valueFrom:
       secretKeyRef:
         name: image-service-secrets
         key: jwt-secret
   # Kafka (Redpanda)
-  - name: KAFKA_BROKERS
+  - name: KAFKA__BROKERS
     value: "redpanda.prod.svc.cluster.local:9093"
-  - name: KAFKA_SCHEMA_REGISTRY_URL
+  - name: KAFKA__SCHEMA_REGISTRY_URL
     value: "http://redpanda.prod.svc.cluster.local:8081"
   # S3 (Cloudflare R2)
-  - name: S3_ENDPOINT
+  - name: S3__ENDPOINT
     value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
-  - name: S3_PUBLIC_ENDPOINT
+  - name: S3__PUBLIC_ENDPOINT
     value: "https://sokolshop.com/img"
-  - name: S3_ACCESS_KEY_ID
+  - name: S3__ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
         name: r2-credentials
         key: access-key-id
-  - name: S3_SECRET_KEY
+  - name: S3__SECRET_KEY
     valueFrom:
       secretKeyRef:
         name: r2-credentials
         key: secret-key
-  - name: S3_BUCKET
+  - name: S3__BUCKET
     value: "products"
-  - name: S3_REGION
+  - name: S3__REGION
     value: "auto"
   # imgproxy
-  - name: IMGPROXY_PUBLIC_BASE_URL
+  - name: IMGPROXY__PUBLIC_BASE_URL
     value: "https://sokolshop.com/img"
-  - name: IMGPROXY_KEY_HEX
+  - name: IMGPROXY__KEY_HEX
     valueFrom:
       secretKeyRef:
         name: imgproxy-keys
         key: key
-  - name: IMGPROXY_SALT_HEX
+  - name: IMGPROXY__SALT_HEX
     valueFrom:
       secretKeyRef:
         name: imgproxy-keys
         key: salt
   # Observability
-  - name: OBSERVABILITY_OTEL_COLLECTOR_ENDPOINT
+  - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
     value: "http://alloy.observability.svc.cluster.local:4317"
   - name: APP_SERVICE_NAME
     valueFrom:
