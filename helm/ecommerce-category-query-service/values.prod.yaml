@@ -63,7 +63,7 @@ env:
   # Kafka (Redpanda)
   - name: KAFKA__BROKERS
     value: "redpanda.prod.svc.cluster.local:9093"
-  - name: KAFKA__SCHEMA_REGISTRY_URL
+  - name: KAFKA__SCHEMA_REGISTRY__URL
     value: "http://redpanda.prod.svc.cluster.local:8081"
   # Observability
   - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
