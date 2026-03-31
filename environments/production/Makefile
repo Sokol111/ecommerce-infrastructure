@@ -364,22 +364,24 @@ export
 .PHONY: seed
 seed: ## Run seeder against production (requires tunnel + SEEDER_TOKEN)
 ifndef SEEDER_TOKEN
-	@printf "$(COLOR_RED)Error: SEEDER_TOKEN is not set$(COLOR_RESET)\n"
-	@printf "Usage: make seed SEEDER_TOKEN=<token>\n"
-	@printf "Or create .env file with SEEDER_TOKEN=<token>\n"
-	@exit 1
+	@printf "$(COLOR_RED)Error: SEEDER_TOKEN is not set$(COLOR_RESET)\n"; \
+	printf "Usage: make seed SEEDER_TOKEN=<token>\n"; \
+	printf "Or create .env file with SEEDER_TOKEN=<token>\n"; \
+	exit 1
 endif
-	@printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"
-	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 &
-	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 &
-	@sleep 2
-	@printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"
+	@trap 'kill $$PF1 $$PF2 2>/dev/null || true' EXIT; \
+	printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"; \
+	kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 & PF1=$$!; \
+	kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 & PF2=$$!; \
+	sleep 2; \
+	printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"; \
+	set +e; \
 	cd $(SEEDER_DIR) && go run . \
 		-catalog-url http://localhost:$(SEED_CATALOG_PORT) \
 		-image-url http://localhost:$(SEED_IMAGE_PORT) \
 		-token "$(SEEDER_TOKEN)"; \
 	EXIT_CODE=$$?; \
-	kill %1 %2 2>/dev/null || true; \
+	set -e; \
 	if [ $$EXIT_CODE -eq 0 ]; then \
 		printf "$(COLOR_GREEN)✓ Seeding completed$(COLOR_RESET)\n"; \
 	else \

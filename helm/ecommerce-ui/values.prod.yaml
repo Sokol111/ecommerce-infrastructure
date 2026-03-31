@@ -19,7 +19,7 @@ resources:
     memory: 128Mi
   limits:
     cpu: 200m
-    memory: 256Mi
+    memory: 384Mi
 
 startupProbe:
   httpGet:
@@ -36,8 +36,17 @@ livenessProbe:
     port: http
   initialDelaySeconds: 10
   periodSeconds: 10
-  timeoutSeconds: 2
-  failureThreshold: 2
+  timeoutSeconds: 5
+  failureThreshold: 4
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
 
 env:
   - name: NUXT_CATEGORY_QUERY_API_URL
