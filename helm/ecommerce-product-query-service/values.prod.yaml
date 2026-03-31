@@ -3,7 +3,7 @@ fullnameOverride: ecommerce-product-query-service
 
 image:
   repository: ghcr.io/sokol111/ecommerce-product-query-service
-  tag: "0.1.7"
+  tag: "0.1.8"
   pullPolicy: IfNotPresent
 
 ingress:
