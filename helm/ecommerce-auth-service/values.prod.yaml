@@ -3,7 +3,7 @@ fullnameOverride: ecommerce-auth-service
 
 image:
   repository: ghcr.io/sokol111/ecommerce-auth-service
-  tag: "0.1.6"
+  tag: "0.1.7"
   pullPolicy: IfNotPresent
 
 ingress:
