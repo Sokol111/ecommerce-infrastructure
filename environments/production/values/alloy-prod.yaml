@@ -33,8 +33,11 @@ alloy:
       }
 
       // Prometheus Remote Write (metrics → Grafana Cloud)
+      // service.name → "job" label automatically by OTel-to-Prometheus convention
       otelcol.exporter.prometheus "default" {
-        resource_to_telemetry_conversion = true
+        include_target_info  = false
+        include_scope_info   = false
+        include_scope_labels = false
         forward_to = [prometheus.remote_write.default.receiver]
       }
 
