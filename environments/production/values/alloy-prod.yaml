@@ -99,25 +99,54 @@ alloy:
       }
 
       loki.process "pod_logs" {
-        stage.json {
-          expressions = {
-            level    = "level",
-            msg      = "msg",
-            caller   = "caller",
-            ts       = "ts",
-            trace_id = "trace_id",
-            span_id  = "span_id",
+        // Go services: structured JSON logs (slog format)
+        stage.match {
+          selector = "{service!~\"ecommerce-ui|ecommerce-admin-ui\"}"
+
+          stage.json {
+            expressions = {
+              level    = "level",
+              msg      = "msg",
+              caller   = "caller",
+              ts       = "ts",
+              trace_id = "trace_id",
+              span_id  = "span_id",
+            }
+          }
+          stage.labels {
+            values = {
+              level = "",
+            }
+          }
+          stage.timestamp {
+            source = "ts"
+            format = "Unix"
           }
         }
-        stage.labels {
-          values = {
-            level = "",
+
+        // Nuxt UI services: consola JSON logs
+        stage.match {
+          selector = "{service=~\"ecommerce-ui|ecommerce-admin-ui\"}"
+
+          stage.json {
+            expressions = {
+              level = "level",
+              msg   = "msg",
+              ts    = "date",
+              tag   = "tag",
+            }
+          }
+          stage.labels {
+            values = {
+              level = "",
+            }
+          }
+          stage.timestamp {
+            source = "ts"
+            format = "RFC3339"
           }
         }
-        stage.timestamp {
-          source = "ts"
-          format = "Unix"
-        }
+
         forward_to = [loki.write.default.receiver]
       }
 
