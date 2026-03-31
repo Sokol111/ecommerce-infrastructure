@@ -279,13 +279,13 @@ health: ## Check health of all services
 console: ## Run Redpanda Console locally (port-forward + Docker)
 	@trap 'kill $$PF 2>/dev/null || true' EXIT; \
 	printf "$(COLOR_BLUE)→ Port-forwarding Redpanda...$(COLOR_RESET)\n"; \
-	kubectl port-forward -n $(NS_PROD) svc/redpanda 19093:9093 18081:8081 & PF=$$!; \
+	kubectl port-forward -n $(NS_PROD) svc/redpanda 9093:9093 18081:8081 & PF=$$!; \
 	sleep 2; \
 	printf "$(COLOR_BLUE)→ Starting Redpanda Console on http://localhost:8080 ...$(COLOR_RESET)\n"; \
 	docker run --rm --network host \
-		-e KAFKA_BROKERS=localhost:19093 \
-		-e KAFKA_SCHEMAREGISTRY_ENABLED=true \
-		-e KAFKA_SCHEMAREGISTRY_URLS=http://localhost:18081 \
+		--add-host=redpanda-0.redpanda.prod.svc.cluster.local:127.0.0.1 \
+		-v $(CURDIR)/console-config.yaml:/etc/redpanda/redpanda-console-config.yaml:ro \
+		-e CONFIG_FILEPATH=/etc/redpanda/redpanda-console-config.yaml \
 		docker.redpanda.com/redpandadata/console:latest
 
 .PHONY: logs

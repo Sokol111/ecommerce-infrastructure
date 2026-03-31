@@ -1,0 +1,8 @@
+kafka:
+  brokers:
+    - localhost:9093
+
+schemaRegistry:
+  enabled: true
+  urls:
+    - http://localhost:18081
