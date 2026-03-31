@@ -1,7 +1,7 @@
 # Production values for ecommerce-auth-service
 image:
   repository: ghcr.io/sokol111/ecommerce-auth-service
-  tag: "0.1.4"
+  tag: "0.1.5"
   pullPolicy: IfNotPresent
 
 ingress:
