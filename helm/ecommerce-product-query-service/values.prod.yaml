@@ -18,6 +18,8 @@ resources:
     memory: 256Mi
 
 config: |
+  logger:
+    level: "debug"
   mongo:
     database: product-query
     max-pool-size: 20

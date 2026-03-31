@@ -18,6 +18,8 @@ resources:
     memory: 256Mi
 
 config: |
+  logger:
+    level: "debug"
   mongo:
     database: images
     max-pool-size: 20

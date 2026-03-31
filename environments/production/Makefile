@@ -324,6 +324,20 @@ ingresses: ## Show all ingress routes
 	@printf "$(COLOR_BOLD)Ingress Routes:$(COLOR_RESET)\n"
 	@kubectl get ingress -n $(NS_PROD)
 
+.PHONY: restart-alloy
+restart-alloy: ## Restart Grafana Alloy
+	@printf "$(COLOR_BLUE)→ Restarting Alloy...$(COLOR_RESET)\n"
+	kubectl rollout restart daemonset/alloy -n $(NS_OBS)
+	kubectl rollout status daemonset/alloy -n $(NS_OBS) --timeout=90s
+	@printf "$(COLOR_GREEN)✓ Alloy restarted$(COLOR_RESET)\n"
+
+.PHONY: restart-redpanda
+restart-redpanda: ## Restart Redpanda
+	@printf "$(COLOR_BLUE)→ Restarting Redpanda...$(COLOR_RESET)\n"
+	kubectl rollout restart statefulset/redpanda -n $(NS_PROD)
+	kubectl rollout status statefulset/redpanda -n $(NS_PROD) --timeout=5m
+	@printf "$(COLOR_GREEN)✓ Redpanda restarted$(COLOR_RESET)\n"
+
 .PHONY: restart
 restart: ## Restart a service (usage: make restart SVC=auth-service)
 ifndef SVC

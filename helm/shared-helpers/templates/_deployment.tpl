@@ -53,10 +53,13 @@ spec:
       {{- toYaml .SelectorLabels | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        {{- if .Values.config }}
+        checksum/config: {{ .Values.config | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- toYaml .Labels | nindent 8 }}
         {{- with .Values.podLabels }}
