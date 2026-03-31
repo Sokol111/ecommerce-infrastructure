@@ -1,4 +1,6 @@
 # Production values for ecommerce-catalog-service
+fullnameOverride: ecommerce-catalog-service
+
 image:
   repository: ghcr.io/sokol111/ecommerce-catalog-service
   tag: "0.1.6"

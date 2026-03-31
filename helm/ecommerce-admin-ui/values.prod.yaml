@@ -1,7 +1,9 @@
 # Production values for ecommerce-admin-ui
+fullnameOverride: ecommerce-admin-ui
+
 image:
   repository: ghcr.io/sokol111/ecommerce-admin-ui
-  tag: "0.1.2"
+  tag: "0.1.3"
   pullPolicy: IfNotPresent
 
 ingress:

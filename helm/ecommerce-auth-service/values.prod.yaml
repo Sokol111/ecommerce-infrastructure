@@ -1,4 +1,6 @@
 # Production values for ecommerce-auth-service
+fullnameOverride: ecommerce-auth-service
+
 image:
   repository: ghcr.io/sokol111/ecommerce-auth-service
   tag: "0.1.5"

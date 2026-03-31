@@ -356,8 +356,8 @@ ifndef SEEDER_TOKEN
 	@exit 1
 endif
 	@printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"
-	@kubectl port-forward -n $(NS_PROD) svc/catalog-service-ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 &
-	@kubectl port-forward -n $(NS_PROD) svc/image-service-ecommerce-image-service $(SEED_IMAGE_PORT):8080 &
+	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 &
+	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 &
 	@sleep 2
 	@printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"
 	cd $(SEEDER_DIR) && go run . \

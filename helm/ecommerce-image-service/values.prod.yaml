@@ -1,4 +1,6 @@
 # Production values for ecommerce-image-service
+fullnameOverride: ecommerce-image-service
+
 image:
   repository: ghcr.io/sokol111/ecommerce-image-service
   tag: "0.1.5"
