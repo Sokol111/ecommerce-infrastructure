@@ -1,5 +1,11 @@
 # Redpanda (Kafka-compatible) - Production values for single-node k3s
 # Chart: redpanda/redpanda from https://charts.redpanda.com
+config:
+  cluster:
+    auto_create_topics_enabled: true
+    default_topic_replications: 1
+    default_topic_partitions: 3
+
 statefulset:
   replicas: 1
 

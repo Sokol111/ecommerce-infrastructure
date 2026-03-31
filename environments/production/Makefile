@@ -343,16 +343,21 @@ endif
 SEED_CATALOG_PORT := 9081
 SEED_IMAGE_PORT   := 9084
 
+# Load .env if it exists (provides SEEDER_TOKEN etc.)
+-include .env
+export
+
 .PHONY: seed
 seed: ## Run seeder against production (requires tunnel + SEEDER_TOKEN)
 ifndef SEEDER_TOKEN
 	@printf "$(COLOR_RED)Error: SEEDER_TOKEN is not set$(COLOR_RESET)\n"
 	@printf "Usage: make seed SEEDER_TOKEN=<token>\n"
+	@printf "Or create .env file with SEEDER_TOKEN=<token>\n"
 	@exit 1
 endif
 	@printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"
-	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 &
-	@kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 &
+	@kubectl port-forward -n $(NS_PROD) svc/catalog-service-ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 &
+	@kubectl port-forward -n $(NS_PROD) svc/image-service-ecommerce-image-service $(SEED_IMAGE_PORT):8080 &
 	@sleep 2
 	@printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"
 	cd $(SEEDER_DIR) && go run . \

@@ -169,8 +169,8 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(db_client_operation_duration_seconds_count{job=~\"$job\"}[$__rate_interval])) by (db_operation_name)",
-          "legendFormat": "{{ db_operation_name }}"
+          "expr": "sum(rate(db_client_operation_duration_seconds_count{job=~\"$job\"}[$__rate_interval])) by (db_operation_name, instance)",
+          "legendFormat": "{{ db_operation_name }} — {{ instance }}"
         }
       ]
     },
@@ -225,7 +225,7 @@
       "targets": [
         {
           "expr": "go_goroutine_count{job=~\"$job\"}",
-          "legendFormat": "{{ job }}"
+          "legendFormat": "{{ job }} — {{ instance }}"
         }
       ]
     },
@@ -245,7 +245,7 @@
       "targets": [
         {
           "expr": "go_memory_used_bytes{job=~\"$job\"}",
-          "legendFormat": "{{ go_memory_type }}"
+          "legendFormat": "{{ instance }} — {{ go_memory_type }}"
         }
       ]
     },
@@ -265,7 +265,7 @@
       "targets": [
         {
           "expr": "rate(go_memory_allocated_bytes_total{job=~\"$job\"}[$__rate_interval])",
-          "legendFormat": "{{ job }}"
+          "legendFormat": "{{ job }} — {{ instance }}"
         }
       ]
     },
@@ -285,11 +285,11 @@
       "targets": [
         {
           "expr": "go_memory_gc_goal_bytes{job=~\"$job\"}",
-          "legendFormat": "GC goal"
+          "legendFormat": "GC goal — {{ instance }}"
         },
         {
-          "expr": "sum(go_memory_used_bytes{job=~\"$job\"}) by (job)",
-          "legendFormat": "Used"
+          "expr": "sum(go_memory_used_bytes{job=~\"$job\"}) by (instance)",
+          "legendFormat": "Used — {{ instance }}"
         }
       ]
     },
@@ -309,7 +309,7 @@
       "targets": [
         {
           "expr": "rate(go_gc_collections_total{job=~\"$job\"}[$__rate_interval])",
-          "legendFormat": "GC / sec"
+          "legendFormat": "{{ job }} — {{ instance }}"
         }
       ]
     },
