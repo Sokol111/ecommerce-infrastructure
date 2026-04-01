@@ -3,7 +3,7 @@ fullnameOverride: ecommerce-image-service
 
 image:
   repository: ghcr.io/sokol111/ecommerce-image-service
-  tag: "0.1.7"
+  tag: "0.1.8"
   pullPolicy: IfNotPresent
 
 ingress:
@@ -90,7 +90,7 @@ env:
         name: r2-credentials
         key: secret-key
   - name: S3__BUCKET
-    value: "products"
+    value: "images"
   - name: S3__REGION
     value: "auto"
   # imgproxy
