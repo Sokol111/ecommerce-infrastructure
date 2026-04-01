@@ -373,7 +373,7 @@ endif
 	printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"; \
 	kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 & PF1=$$!; \
 	kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 & PF2=$$!; \
-	sleep 2; \
+	sleep 5; \
 	printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"; \
 	set +e; \
 	cd $(SEEDER_DIR) && go run . \
