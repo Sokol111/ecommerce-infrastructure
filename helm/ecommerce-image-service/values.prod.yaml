@@ -3,7 +3,7 @@ fullnameOverride: ecommerce-image-service
 
 image:
   repository: ghcr.io/sokol111/ecommerce-image-service
-  tag: "0.1.9"
+  tag: "0.2.1"
   pullPolicy: IfNotPresent
 
 ingress:

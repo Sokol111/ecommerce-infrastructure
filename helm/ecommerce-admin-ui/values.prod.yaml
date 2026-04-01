@@ -3,7 +3,7 @@ fullnameOverride: ecommerce-admin-ui
 
 image:
   repository: ghcr.io/sokol111/ecommerce-admin-ui
-  tag: "0.1.4"
+  tag: "0.1.5"
   pullPolicy: IfNotPresent
 
 ingress:
