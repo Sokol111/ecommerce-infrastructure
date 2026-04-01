@@ -96,13 +96,6 @@
     "enabled": true,
     "attributes": [
       {
-        "attributeId": "a1000001-0000-4000-8000-000000000001",
-        "role": "variant",
-        "sortOrder": 1,
-        "filterable": false,
-        "searchable": false
-      },
-      {
         "attributeId": "a1000001-0000-4000-8000-000000000002",
         "role": "specification",
         "sortOrder": 2,
