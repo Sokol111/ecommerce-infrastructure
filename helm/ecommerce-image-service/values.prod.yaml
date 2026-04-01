@@ -78,7 +78,7 @@ env:
   - name: S3__ENDPOINT
     value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
   - name: S3__PUBLIC_ENDPOINT
-    value: "https://sokolshop.com/img"
+    value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
   - name: S3__ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
