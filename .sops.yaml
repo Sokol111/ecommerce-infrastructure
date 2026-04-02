@@ -2,3 +2,5 @@ creation_rules:
   - path_regex: environments/.*secrets(\.enc)?\.yaml$
     age: age1whvzy4ly4uxcu340ffyszvtj9wxlnvs269fr6zctz0u79xgl7ehqc274a9
     encrypted_regex: "^data$"
+  - path_regex: environments/.*\.env(\.enc)?$
+    age: age1whvzy4ly4uxcu340ffyszvtj9wxlnvs269fr6zctz0u79xgl7ehqc274a9

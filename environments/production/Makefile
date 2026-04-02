@@ -139,6 +139,10 @@ secrets-encrypt: ## Encrypt secrets.yaml → secrets.enc.yaml
 	sops encrypt $(K8S_DIR)/secrets.yaml > $(K8S_DIR)/secrets.enc.yaml
 	@printf "$(COLOR_GREEN)✓ Secrets encrypted to $(K8S_DIR)/secrets.enc.yaml$(COLOR_RESET)\n"
 
+.PHONY: env-edit
+env-edit: ## Edit encrypted .env (opens in VS Code)
+	EDITOR="code --wait" sops --input-type dotenv --output-type dotenv .env.enc
+
 # =============================================================================
 ##@ Deploy Infrastructure
 # =============================================================================
@@ -372,18 +376,17 @@ endif
 SEED_CATALOG_PORT := 9081
 SEED_IMAGE_PORT   := 9084
 
-# Load .env if it exists (provides SEEDER_TOKEN etc.)
--include .env
-export
-
 .PHONY: seed
-seed: ## Run seeder against production (requires tunnel + SEEDER_TOKEN)
-ifndef SEEDER_TOKEN
-	@printf "$(COLOR_RED)Error: SEEDER_TOKEN is not set$(COLOR_RESET)\n"; \
-	printf "Usage: make seed SEEDER_TOKEN=<token>\n"; \
-	printf "Or create .env file with SEEDER_TOKEN=<token>\n"; \
-	exit 1
-endif
+seed: ## Run seeder against production (requires tunnel + .env.enc)
+	@if [ ! -f .env.enc ]; then \
+		printf "$(COLOR_RED)Error: .env.enc not found. Encrypt your .env first: make secrets-encrypt-env$(COLOR_RESET)\n"; \
+		exit 1; \
+	fi
+	$(eval SEEDER_TOKEN := $(shell sops decrypt --input-type dotenv --output-type dotenv .env.enc 2>/dev/null | grep '^SEEDER_TOKEN=' | cut -d= -f2-))
+	@if [ -z "$(SEEDER_TOKEN)" ]; then \
+		printf "$(COLOR_RED)Error: Failed to decrypt SEEDER_TOKEN from .env.enc$(COLOR_RESET)\n"; \
+		exit 1; \
+	fi
 	@trap 'kill $$PF1 $$PF2 2>/dev/null || true' EXIT; \
 	printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"; \
 	kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 & PF1=$$!; \

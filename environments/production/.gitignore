@@ -1,2 +1,5 @@
 # Kubernetes secrets (real values, not the .example template)
 k8s/secrets.yaml
+
+# Unencrypted env (use .env.enc instead)
+.env
