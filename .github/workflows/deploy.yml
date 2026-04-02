@@ -4,8 +4,8 @@ on:
   workflow_call:
     inputs:
       image_tag:
-        description: "Image tag to deploy"
-        required: true
+        description: "Image tag to deploy (empty = latest release)"
+        required: false
         type: string
     secrets:
       KUBE_CONFIG:
@@ -36,9 +36,17 @@ jobs:
           chmod 600 ~/.kube/config
 
       - name: Deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           SERVICE=$(basename ${{ github.repository }})
           CHART_DIR="helm/${SERVICE}"
+
+          IMAGE_TAG="${{ inputs.image_tag }}"
+          if [ -z "$IMAGE_TAG" ]; then
+            IMAGE_TAG=$(gh release view --repo ${{ github.repository }} --json tagName -q .tagName | sed 's/^v//')
+            echo "→ Using latest release: ${IMAGE_TAG}"
+          fi
 
           echo "→ Deploying ${SERVICE}..."
           cd "$CHART_DIR" && helm dependency update && cd "$GITHUB_WORKSPACE"
@@ -46,7 +54,7 @@ jobs:
           helm upgrade --install "${SERVICE}" "$CHART_DIR" \
             -n prod \
             -f "$CHART_DIR/values.prod.yaml" \
-            --set image.tag=${{ inputs.image_tag }} \
+            --set image.tag=${IMAGE_TAG} \
             --wait --timeout 3m
 
           echo "✓ ${SERVICE} deployed"
