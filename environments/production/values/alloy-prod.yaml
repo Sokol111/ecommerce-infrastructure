@@ -26,6 +26,7 @@ alloy:
       otelcol.processor.batch "default" {
         timeout = "5s"
         send_batch_size = 1000
+        send_batch_max_size = 2000
         output {
           metrics = [otelcol.exporter.prometheus.default.input]
           traces  = [otelcol.exporter.otlp.tempo.input]
@@ -47,6 +48,11 @@ alloy:
           basic_auth {
             username = env("GRAFANA_CLOUD_PROMETHEUS_USER")
             password = env("GRAFANA_CLOUD_API_KEY")
+          }
+          queue_config {
+            capacity = 5000
+            max_shards = 3
+            max_samples_per_send = 1000
           }
         }
       }
@@ -226,7 +232,7 @@ controller:
       memory: 128Mi
     limits:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
 
 serviceMonitor:
   enabled: false
