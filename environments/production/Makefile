@@ -113,16 +113,31 @@ setup-traefik: ## Configure Traefik (k3s built-in) with ACME/Let's Encrypt
 	@printf "$(COLOR_GREEN)✓ Traefik configured (restart may take a moment)$(COLOR_RESET)\n"
 
 .PHONY: setup-secrets
-setup-secrets: ## Apply Kubernetes secrets (must create secrets.yaml first!)
-	@if [ ! -f $(K8S_DIR)/secrets.yaml ]; then \
-		printf "$(COLOR_RED)Error: $(K8S_DIR)/secrets.yaml not found$(COLOR_RESET)\n"; \
-		printf "Copy secrets.yaml.example to secrets.yaml and fill in values:\n"; \
-		printf "  cp $(K8S_DIR)/secrets.yaml.example $(K8S_DIR)/secrets.yaml\n"; \
+setup-secrets: ## Decrypt and apply Kubernetes secrets via SOPS
+	@if [ ! -f $(K8S_DIR)/secrets.enc.yaml ]; then \
+		printf "$(COLOR_RED)Error: $(K8S_DIR)/secrets.enc.yaml not found$(COLOR_RESET)\n"; \
 		exit 1; \
 	fi
-	@printf "$(COLOR_BLUE)→ Applying secrets...$(COLOR_RESET)\n"
-	kubectl apply -f $(K8S_DIR)/secrets.yaml
+	@printf "$(COLOR_BLUE)→ Decrypting and applying secrets...$(COLOR_RESET)\n"
+	sops decrypt $(K8S_DIR)/secrets.enc.yaml | kubectl apply -f -
 	@printf "$(COLOR_GREEN)✓ Secrets applied$(COLOR_RESET)\n"
+
+.PHONY: secrets-edit
+secrets-edit: ## Edit encrypted secrets (opens in $$EDITOR)
+	sops $(K8S_DIR)/secrets.enc.yaml
+
+.PHONY: secrets-view
+secrets-view: ## View decrypted secrets (stdout only, not saved)
+	sops decrypt $(K8S_DIR)/secrets.enc.yaml
+
+.PHONY: secrets-encrypt
+secrets-encrypt: ## Encrypt secrets.yaml → secrets.enc.yaml
+	@if [ ! -f $(K8S_DIR)/secrets.yaml ]; then \
+		printf "$(COLOR_RED)Error: $(K8S_DIR)/secrets.yaml not found$(COLOR_RESET)\n"; \
+		exit 1; \
+	fi
+	sops encrypt $(K8S_DIR)/secrets.yaml > $(K8S_DIR)/secrets.enc.yaml
+	@printf "$(COLOR_GREEN)✓ Secrets encrypted to $(K8S_DIR)/secrets.enc.yaml$(COLOR_RESET)\n"
 
 # =============================================================================
 ##@ Deploy Infrastructure
