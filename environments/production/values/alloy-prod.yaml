@@ -99,10 +99,9 @@ alloy:
           source_labels = ["__meta_kubernetes_pod_container_name"]
           target_label  = "container"
         }
-        // Drop high-cardinality / useless labels
         rule {
-          action = "labeldrop"
-          regex  = "instance|job"
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          target_label  = "service_name"
         }
       }
 
@@ -158,6 +157,11 @@ alloy:
             source = "ts"
             format = "RFC3339"
           }
+        }
+
+        // Drop useless labels added by loki.source.kubernetes
+        stage.label_drop {
+          values = ["instance", "job"]
         }
 
         forward_to = [loki.write.default.receiver]
