@@ -170,7 +170,7 @@ deploy-observability: deploy-alloy ## Deploy observability stack
 deploy-auth: ## Deploy auth-service
 	@printf "$(COLOR_BLUE)→ Deploying auth-service...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-auth-service && helm dependency update
-	helm upgrade --install auth-service $(HELM_DIR)/ecommerce-auth-service \
+	helm upgrade --install ecommerce-auth-service $(HELM_DIR)/ecommerce-auth-service \
 		-n $(NS_PROD) \
 		-f $(HELM_DIR)/ecommerce-auth-service/values.prod.yaml \
 		--wait --timeout 3m
@@ -180,7 +180,7 @@ deploy-auth: ## Deploy auth-service
 deploy-catalog: ## Deploy catalog-service
 	@printf "$(COLOR_BLUE)→ Deploying catalog-service...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-catalog-service && helm dependency update
-	helm upgrade --install catalog-service $(HELM_DIR)/ecommerce-catalog-service \
+	helm upgrade --install ecommerce-catalog-service $(HELM_DIR)/ecommerce-catalog-service \
 		-n $(NS_PROD) \
 		-f $(HELM_DIR)/ecommerce-catalog-service/values.prod.yaml \
 		--wait --timeout 3m
@@ -190,7 +190,7 @@ deploy-catalog: ## Deploy catalog-service
 deploy-category-query: ## Deploy category-query-service
 	@printf "$(COLOR_BLUE)→ Deploying category-query-service...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-category-query-service && helm dependency update
-	helm upgrade --install category-query-service $(HELM_DIR)/ecommerce-category-query-service \
+	helm upgrade --install ecommerce-category-query-service $(HELM_DIR)/ecommerce-category-query-service \
 		-n $(NS_PROD) \
 		-f $(HELM_DIR)/ecommerce-category-query-service/values.prod.yaml \
 		--wait --timeout 3m
@@ -200,7 +200,7 @@ deploy-category-query: ## Deploy category-query-service
 deploy-product-query: ## Deploy product-query-service
 	@printf "$(COLOR_BLUE)→ Deploying product-query-service...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-product-query-service && helm dependency update
-	helm upgrade --install product-query-service $(HELM_DIR)/ecommerce-product-query-service \
+	helm upgrade --install ecommerce-product-query-service $(HELM_DIR)/ecommerce-product-query-service \
 		-n $(NS_PROD) \
 		-f $(HELM_DIR)/ecommerce-product-query-service/values.prod.yaml \
 		--wait --timeout 3m
@@ -210,7 +210,7 @@ deploy-product-query: ## Deploy product-query-service
 deploy-image-service: ## Deploy image-service
 	@printf "$(COLOR_BLUE)→ Deploying image-service...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-image-service && helm dependency update
-	helm upgrade --install image-service $(HELM_DIR)/ecommerce-image-service \
+	helm upgrade --install ecommerce-image-service $(HELM_DIR)/ecommerce-image-service \
 		-n $(NS_PROD) \
 		-f $(HELM_DIR)/ecommerce-image-service/values.prod.yaml \
 		--wait --timeout 3m
@@ -220,7 +220,7 @@ deploy-image-service: ## Deploy image-service
 deploy-admin-ui: ## Deploy admin-ui
 	@printf "$(COLOR_BLUE)→ Deploying admin-ui...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-admin-ui && helm dependency update
-	helm upgrade --install admin-ui $(HELM_DIR)/ecommerce-admin-ui \
+	helm upgrade --install ecommerce-admin-ui $(HELM_DIR)/ecommerce-admin-ui \
 		-n $(NS_PROD) \
 		-f $(HELM_DIR)/ecommerce-admin-ui/values.prod.yaml \
 		--wait --timeout 3m
@@ -396,12 +396,12 @@ endif
 .PHONY: delete-services
 delete-services: ## Delete all application services (keeps infra)
 	@printf "$(COLOR_YELLOW)→ Deleting application services...$(COLOR_RESET)\n"
-	-helm uninstall auth-service -n $(NS_PROD)
-	-helm uninstall catalog-service -n $(NS_PROD)
-	-helm uninstall image-service -n $(NS_PROD)
-	-helm uninstall product-query-service -n $(NS_PROD)
-	-helm uninstall category-query-service -n $(NS_PROD)
-	-helm uninstall admin-ui -n $(NS_PROD)
+	-helm uninstall ecommerce-auth-service -n $(NS_PROD)
+	-helm uninstall ecommerce-catalog-service -n $(NS_PROD)
+	-helm uninstall ecommerce-image-service -n $(NS_PROD)
+	-helm uninstall ecommerce-product-query-service -n $(NS_PROD)
+	-helm uninstall ecommerce-category-query-service -n $(NS_PROD)
+	-helm uninstall ecommerce-admin-ui -n $(NS_PROD)
 	-helm uninstall ecommerce-ui -n $(NS_PROD)
 	@printf "$(COLOR_GREEN)✓ Application services deleted$(COLOR_RESET)\n"
 
@@ -409,7 +409,7 @@ delete-services: ## Delete all application services (keeps infra)
 delete-all: ## Delete everything (⚠️ destructive!)
 	@printf "$(COLOR_RED)⚠️  WARNING: This will delete all deployments!$(COLOR_RESET)\n"
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	-helm uninstall auth-service catalog-service image-service product-query-service category-query-service admin-ui ecommerce-ui -n $(NS_PROD)
+	-helm uninstall ecommerce-auth-service ecommerce-catalog-service ecommerce-image-service ecommerce-product-query-service ecommerce-category-query-service ecommerce-admin-ui ecommerce-ui -n $(NS_PROD)
 	-helm uninstall redpanda -n $(NS_PROD)
 	-helm uninstall alloy -n $(NS_OBS)
 	-kubectl delete -f $(K8S_DIR)/imgproxy.yaml

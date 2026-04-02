@@ -1,0 +1,56 @@
+name: Deploy to Production
+
+on:
+  workflow_call:
+    inputs:
+      image_tag:
+        description: "Image tag to deploy"
+        required: true
+        type: string
+    secrets:
+      KUBE_CONFIG:
+        required: true
+
+concurrency:
+  group: deploy-${{ github.repository }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Sokol111/ecommerce-infrastructure
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy
+        run: |
+          SERVICE=$(basename ${{ github.repository }})
+          CHART_DIR="helm/${SERVICE}"
+
+          echo "→ Deploying ${SERVICE}..."
+          cd "$CHART_DIR" && helm dependency update && cd "$GITHUB_WORKSPACE"
+
+          helm upgrade --install "${SERVICE}" "$CHART_DIR" \
+            -n prod \
+            -f "$CHART_DIR/values.prod.yaml" \
+            --set image.tag=${{ inputs.image_tag }} \
+            --wait --timeout 3m
+
+          echo "✓ ${SERVICE} deployed"
+
+      - name: Deployment status
+        if: always()
+        run: kubectl get pods -n prod -o wide
