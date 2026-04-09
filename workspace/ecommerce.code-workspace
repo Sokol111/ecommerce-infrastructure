@@ -9,6 +9,10 @@
 			"path": "ecommerce-commons"
 		},
 		{
+			"name": "ecommerce-platform-ui",
+			"path": "ecommerce-platform-ui"
+		},
+		{
 			"name": "ecommerce-admin-ui",
 			"path": "ecommerce-admin-ui"
 		},
@@ -37,12 +41,12 @@
 			"path": "ecommerce-category-query-service"
 		},
 		{
-			"name": "ecommerce-image-service",
-			"path": "ecommerce-image-service"
-		},
-		{
 			"name": "ecommerce-image-service-api",
 			"path": "ecommerce-image-service-api"
+		},
+		{
+			"name": "ecommerce-image-service",
+			"path": "ecommerce-image-service"
 		},
 		{
 			"name": "ecommerce-auth-service-api",
@@ -59,6 +63,14 @@
 		{
 			"name": "ecommerce-catalog-service",
 			"path": "ecommerce-catalog-service"
+		},
+		{
+			"name": "ecommerce-tenant-service-api",
+			"path": "ecommerce-tenant-service-api"
+		},
+		{
+			"name": "ecommerce-tenant-service",
+			"path": "ecommerce-tenant-service"
 		}
 	],
 	"settings": {
