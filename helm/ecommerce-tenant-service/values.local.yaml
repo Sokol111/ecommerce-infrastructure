@@ -1,0 +1,22 @@
+# Local development values for ecommerce-tenant-service
+image:
+  repository: ecommerce-tenant-service
+  tag: "latest"
+
+ingress:
+  enabled: true
+  host: ecommerce-tenant-service.127.0.0.1.nip.io
+
+env:
+  - name: APP_ENV
+    value: "local"
+  - name: CONFIG_FILE
+    value: "/configs/config.local.yaml"
+  - name: APP_SERVICE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['app.kubernetes.io/name']
+  - name: APP_SERVICE_VERSION
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['app.kubernetes.io/version']

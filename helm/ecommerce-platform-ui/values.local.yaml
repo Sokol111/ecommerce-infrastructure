@@ -1,0 +1,34 @@
+# Local development values for ecommerce-platform-ui
+image:
+  repository: ecommerce-platform-ui
+  tag: "latest"
+
+ingress:
+  enabled: true
+  host: platform.127.0.0.1.nip.io
+
+startupProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 12
+
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 2
+
+env:
+  - name: NUXT_TENANT_API_URL
+    value: "http://ecommerce-tenant-service:8080"
+  - name: NUXT_AUTH_API_URL
+    value: "http://ecommerce-auth-service:8080"
+  - name: NUXT_COOKIE_SECURE
+    value: "false"

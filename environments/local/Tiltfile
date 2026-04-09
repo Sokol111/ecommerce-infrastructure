@@ -77,6 +77,11 @@ GO_SERVICES = {
         'pprof_port': 6064,
         'api_deps': ['ecommerce-auth-service-api'],
     },
+    'ecommerce-tenant-service': {
+        'debug_port': 2352,
+        'pprof_port': 6065,
+        'api_deps': ['ecommerce-tenant-service-api'],
+    },
 }
 
 # ============================================================================
@@ -104,6 +109,16 @@ UI_SERVICES = {
         'api_deps': [
             'ecommerce-product-query-service-api',
             'ecommerce-category-query-service-api',
+        ],
+    },
+    'ecommerce-platform-ui': {
+        'resource_deps': [
+            'ecommerce-tenant-service',
+            'ecommerce-auth-service',
+        ],
+        'api_deps': [
+            'ecommerce-tenant-service-api',
+            'ecommerce-auth-service-api',
         ],
     },
 }
@@ -278,8 +293,10 @@ local_resource(
         link('http://ecommerce-category-query-service.127.0.0.1.nip.io', 'Category Query API'),
         link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
         link('http://ecommerce-auth-service.127.0.0.1.nip.io', 'Auth Service API'),
+        link('http://ecommerce-tenant-service.127.0.0.1.nip.io', 'Tenant Service API'),
         link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
         link('http://shop.127.0.0.1.nip.io', 'Shop UI'),
+        link('http://platform.127.0.0.1.nip.io', 'Platform UI'),
         link('http://localhost:9093', 'Redpanda Console'),
         link('http://localhost:9001', 'MinIO Console'),
         link('http://localhost:3000', 'Grafana'),

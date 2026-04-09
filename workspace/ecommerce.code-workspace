@@ -89,6 +89,10 @@
 			"PATH": "/usr/local/go/bin:/home/ihsokolo/go/bin:/usr/bin:/bin",
 			"GOROOT": "/usr/local/go"
 		},
+		"terminal.integrated.env.linux": {
+			"PATH": "/usr/local/go/bin:/home/ihsokolo/go/bin:/usr/bin:/bin",
+			"GOROOT": "/usr/local/go"
+		},
 		"go.delveConfig": {
 			"dlvToolPath": "/home/ihsokolo/go/bin/dlv"
 		},

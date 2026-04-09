@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # Dependencies Stage
-FROM golang:1.26.1 AS base-deps
+FROM golang:1.26.2 AS base-deps
 
 WORKDIR /app
 
@@ -32,7 +32,7 @@ ENTRYPOINT ["/server"]
 FROM base-deps AS debug-build
 
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -gcflags="all=-N -l" -v -o /server cmd/main.go
-RUN go install github.com/go-delve/delve/cmd/dlv@v1.26.1
+RUN go install github.com/go-delve/delve/cmd/dlv@v1.26.2
 
 # Debug Release Stage
 FROM gcr.io/distroless/base-debian12 AS debug-release
