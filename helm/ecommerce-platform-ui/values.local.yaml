@@ -30,5 +30,7 @@ env:
     value: "http://ecommerce-tenant-service:8080"
   - name: NUXT_AUTH_API_URL
     value: "http://ecommerce-auth-service:8080"
+  - name: NUXT_PLATFORM_SERVICE_TOKEN
+    value: "v4.public.eyJleHAiOiIyMDM2LTA0LTA3VDIzOjQ2OjI4KzAyOjAwIiwiaWF0IjoiMjAyNi0wNC0xMFQyMzo0NjoyOCswMjowMCIsIm5iZiI6IjIwMjYtMDQtMTBUMjM6NDY6MjgrMDI6MDAiLCJwZXJtaXNzaW9ucyI6WyJ0ZW5hbnRzOnJlYWQiLCJ0ZW5hbnRzOndyaXRlIiwidXNlcnM6d3JpdGUiXSwicm9sZSI6InNlcnZpY2VfYWNjb3VudCIsInNlcnZpY2VfbmFtZSI6InBsYXRmb3JtLXVpIiwic3ViIjoic2VydmljZTpwbGF0Zm9ybS11aSIsInR5cGUiOiJhY2Nlc3MifUqVxHTqHbN8K2L-9ItMr_cSdAG5qTKSI2IfGCdxd6SGYQ2aO3YNpP39-y5P8EIR5daxO7YpHj2fSf8WOsavig8"
   - name: NUXT_COOKIE_SECURE
     value: "false"
