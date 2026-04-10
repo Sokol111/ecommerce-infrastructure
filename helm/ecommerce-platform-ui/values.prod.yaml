@@ -1,0 +1,62 @@
+# Production values for ecommerce-platform-ui
+fullnameOverride: ecommerce-platform-ui
+
+image:
+  repository: ghcr.io/sokol111/ecommerce-platform-ui
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  host: platform.sokolshop.com
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 384Mi
+
+startupProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 12
+
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 4
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+env:
+  - name: NUXT_TENANT_API_URL
+    value: "http://ecommerce-tenant-service:8080"
+  - name: NUXT_AUTH_API_URL
+    value: "http://ecommerce-auth-service:8080"
+  - name: NUXT_PLATFORM_SERVICE_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: platform-ui-token
+        key: service-token
+  - name: NUXT_COOKIE_SECURE
+    value: "true"

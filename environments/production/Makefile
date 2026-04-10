@@ -122,9 +122,12 @@ setup-secrets: ## Decrypt and apply Kubernetes secrets via SOPS
 	sops decrypt $(K8S_DIR)/secrets.enc.yaml | kubectl apply -f -
 	@printf "$(COLOR_GREEN)✓ Secrets applied$(COLOR_RESET)\n"
 
+VSCODE_CODE := $(or $(shell which code 2>/dev/null),$(wildcard $(HOME)/.vscode-server/bin/*/bin/remote-cli/code))
+
 .PHONY: secrets-edit
 secrets-edit: ## Edit encrypted secrets (opens in VS Code)
-	EDITOR="code --wait" sops $(K8S_DIR)/secrets.enc.yaml
+	@if [ -z "$(VSCODE_CODE)" ]; then printf "$(COLOR_RED)Error: 'code' command not found$(COLOR_RESET)\n"; exit 1; fi
+	EDITOR="$(VSCODE_CODE) --wait" sops $(K8S_DIR)/secrets.enc.yaml
 
 .PHONY: secrets-view
 secrets-view: ## View decrypted secrets (stdout only, not saved)

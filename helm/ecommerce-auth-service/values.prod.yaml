@@ -97,6 +97,11 @@ env:
       secretKeyRef:
         name: auth-keys
         key: private-key
+  - name: SECURITY__TOKEN__SERVICE_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: auth-service-token
+        key: service-token
   # Admin bootstrap
   - name: ADMIN__INITIAL_USER__EMAIL
     valueFrom:

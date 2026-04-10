@@ -63,6 +63,11 @@ env:
       secretKeyRef:
         name: auth-keys
         key: public-key
+  - name: SECURITY__TOKEN__SERVICE_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: image-service-token
+        key: service-token
   # Application
   - name: APPLICATION__JWT_SECRET
     valueFrom:

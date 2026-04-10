@@ -64,6 +64,11 @@ env:
       secretKeyRef:
         name: auth-keys
         key: public-key
+  - name: SECURITY__TOKEN__SERVICE_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: product-query-service-token
+        key: service-token
   # Kafka (Redpanda)
   - name: KAFKA__BROKERS
     value: "redpanda.prod.svc.cluster.local:9093"
