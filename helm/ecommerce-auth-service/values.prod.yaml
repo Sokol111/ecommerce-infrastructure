@@ -34,11 +34,6 @@ config: |
   rate-limit:
     login-tokens: 5
     login-interval: 1m
-  admin:
-    initial-user:
-      enabled: true
-      first-name: Super
-      last-name: Admin
   permissions:
     roles:
       - name: super_admin
@@ -102,17 +97,6 @@ env:
       secretKeyRef:
         name: auth-service-token
         key: service-token
-  # Admin bootstrap
-  - name: ADMIN__INITIAL_USER__EMAIL
-    valueFrom:
-      secretKeyRef:
-        name: admin-credentials
-        key: email
-  - name: ADMIN__INITIAL_USER__PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: admin-credentials
-        key: password
   # Observability
   - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
     value: "alloy.observability.svc.cluster.local:4317"

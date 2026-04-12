@@ -91,6 +91,7 @@ GO_SERVICES = {
 UI_SERVICES = {
     'ecommerce-admin-ui': {
         'resource_deps': [
+            'ecommerce-tenant-service',
             'ecommerce-catalog-service',
             'ecommerce-image-service',
             'ecommerce-auth-service',
@@ -103,6 +104,7 @@ UI_SERVICES = {
     },
     'ecommerce-ui': {
         'resource_deps': [
+            'ecommerce-tenant-service',
             'ecommerce-product-query-service',
             'ecommerce-category-query-service',
         ],
@@ -197,6 +199,11 @@ for name, config in GO_SERVICES.items():
     ))
     
     # Resource configuration with port forwards
+    # All services depend on tenant (except tenant itself)
+    svc_resource_deps = ['mongo', 'redpanda']
+    if name != 'ecommerce-tenant-service':
+        svc_resource_deps.append('ecommerce-tenant-service')
+
     k8s_resource(
         name,
         port_forwards=[
@@ -204,7 +211,7 @@ for name, config in GO_SERVICES.items():
             port_forward(config['pprof_port'], 6060, name='pprof'),
         ],
         labels=['go-services'],
-        resource_deps=['mongo', 'redpanda'],
+        resource_deps=svc_resource_deps,
     )
 
 # ============================================================================
