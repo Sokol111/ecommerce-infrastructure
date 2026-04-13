@@ -5,7 +5,7 @@ image:
 
 ingress:
   enabled: true
-  host: shop.127.0.0.1.nip.io
+  host: "*.shop.127.0.0.1.nip.io"
 
 startupProbe:
   httpGet:

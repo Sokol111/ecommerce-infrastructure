@@ -62,7 +62,7 @@ metadata:
     {{- end }}
 spec:
   rules:
-    - host: {{ $host }}
+    - host: "{{ $host }}"
       http:
         paths:
           - path: {{ $path }}

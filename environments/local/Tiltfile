@@ -185,6 +185,7 @@ for name, config in GO_SERVICES.items():
             'API_DEPS': ' '.join(api_deps),
         },
         only=watch_paths,
+        ignore=['**/__debug_bin*', '**/__debug_bin'],
     )
     
     # Deploy with Helm
@@ -301,8 +302,8 @@ local_resource(
         link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
         link('http://ecommerce-auth-service.127.0.0.1.nip.io', 'Auth Service API'),
         link('http://ecommerce-tenant-service.127.0.0.1.nip.io', 'Tenant Service API'),
-        link('http://admin.127.0.0.1.nip.io', 'Admin UI'),
-        link('http://shop.127.0.0.1.nip.io', 'Shop UI'),
+        link('http://demo.admin.127.0.0.1.nip.io', 'Admin UI (demo tenant)'),
+        link('http://demo.shop.127.0.0.1.nip.io', 'Shop UI (demo tenant)'),
         link('http://platform.127.0.0.1.nip.io', 'Platform UI'),
         link('http://localhost:9093', 'Redpanda Console'),
         link('http://localhost:9001', 'MinIO Console'),

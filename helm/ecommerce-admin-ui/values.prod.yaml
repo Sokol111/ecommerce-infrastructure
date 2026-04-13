@@ -8,7 +8,7 @@ image:
 
 ingress:
   enabled: true
-  host: admin.sokolshop.com
+  host: "*.admin.sokolshop.com"
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
