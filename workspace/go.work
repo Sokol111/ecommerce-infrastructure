@@ -1,8 +1,6 @@
 go 1.26.2
 
 use (
-	./ecommerce-auth-service
-	./ecommerce-auth-service-api
 	./ecommerce-catalog-service
 	./ecommerce-catalog-service-api
 	./ecommerce-category-query-service
@@ -10,7 +8,9 @@ use (
 	./ecommerce-commons
 	./ecommerce-image-service
 	./ecommerce-image-service-api
+	./ecommerce-infrastructure/cmd/actions-webhook
 	./ecommerce-infrastructure/cmd/seeder
+	./ecommerce-infrastructure/cmd/zitadel-seed
 	./ecommerce-product-query-service
 	./ecommerce-product-query-service-api
 	./ecommerce-tenant-service

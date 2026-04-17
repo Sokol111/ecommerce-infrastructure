@@ -8,7 +8,7 @@ image:
 
 ingress:
   enabled: true
-  host: "*.admin.sokolshop.com"
+  host: admin.sokolshop.com
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
@@ -53,8 +53,32 @@ env:
     value: "http://ecommerce-catalog-service:8080"
   - name: NUXT_IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
-  - name: NUXT_AUTH_API_URL
-    value: "http://ecommerce-auth-service:8080"
+  - name: NUXT_OIDC_PROVIDERS_ZITADEL_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: zitadel-s2s
+        key: client-id
+  - name: NUXT_OIDC_PROVIDERS_ZITADEL_BASE_URL
+    value: "https://auth.sokolshop.com"
+  - name: NUXT_OIDC_PROVIDERS_ZITADEL_REDIRECT_URI
+    value: "https://admin.sokolshop.com/auth/zitadel/callback"
+  - name: NUXT_OIDC_PROVIDERS_ZITADEL_LOGOUT_REDIRECT_URI
+    value: "https://admin.sokolshop.com"
+  - name: NUXT_OIDC_PROVIDERS_ZITADEL_AUDIENCE
+    valueFrom:
+      secretKeyRef:
+        name: zitadel-s2s
+        key: client-id
+  - name: NUXT_OIDC_SESSION_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: admin-ui-oidc
+        key: session-secret
+  - name: NUXT_OIDC_AUTH_SESSION_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: admin-ui-oidc
+        key: auth-session-secret
   # API calls go through Nuxt SSR to internal k8s services
   - name: NUXT_PUBLIC_IMGPROXY_URL
     value: "https://sokolshop.com/img"

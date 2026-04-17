@@ -35,6 +35,7 @@ docker_compose(COMPOSE_DIR + '/mongo.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/storage.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/observability.yml', project_name='ecommerce')
+docker_compose(COMPOSE_DIR + '/zitadel.yml', project_name='ecommerce')
 
 # Organize compose resources in Tilt UI
 dc_resource('mongo', labels=['infrastructure'])
@@ -43,6 +44,12 @@ dc_resource('redpanda-console', labels=['infrastructure'], resource_deps=['redpa
 dc_resource('minio', labels=['infrastructure'])
 dc_resource('minio-init', labels=['infrastructure'], resource_deps=['minio'])
 dc_resource('imgproxy', labels=['infrastructure'], resource_deps=['minio'])
+dc_resource('zitadel-db', labels=['infrastructure'])
+dc_resource('zitadel-api', labels=['infrastructure'], resource_deps=['zitadel-db'])
+dc_resource('zitadel-login', labels=['infrastructure'], resource_deps=['zitadel-api'])
+dc_resource('zitadel-proxy', labels=['infrastructure'], resource_deps=['zitadel-api', 'zitadel-login'])
+dc_resource('zitadel-seed', labels=['infrastructure'], resource_deps=['zitadel-api', 'actions-webhook'])
+dc_resource('actions-webhook', labels=['infrastructure'])
 dc_resource('prometheus', labels=['observability'])
 dc_resource('tempo', labels=['observability'])
 dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 'tempo'])
@@ -72,11 +79,6 @@ GO_SERVICES = {
         'pprof_port': 6063,
         'api_deps': ['ecommerce-image-service-api', 'ecommerce-catalog-service-api'],
     },
-    'ecommerce-auth-service': {
-        'debug_port': 2351,
-        'pprof_port': 6064,
-        'api_deps': ['ecommerce-auth-service-api'],
-    },
     'ecommerce-tenant-service': {
         'debug_port': 2352,
         'pprof_port': 6065,
@@ -94,12 +96,11 @@ UI_SERVICES = {
             'ecommerce-tenant-service',
             'ecommerce-catalog-service',
             'ecommerce-image-service',
-            'ecommerce-auth-service',
+            'zitadel-seed',
         ],
         'api_deps': [
             'ecommerce-catalog-service-api',
             'ecommerce-image-service-api',
-            'ecommerce-auth-service-api',
         ],
     },
     'ecommerce-ui': {
@@ -116,11 +117,10 @@ UI_SERVICES = {
     'ecommerce-platform-ui': {
         'resource_deps': [
             'ecommerce-tenant-service',
-            'ecommerce-auth-service',
+            'zitadel-seed',
         ],
         'api_deps': [
             'ecommerce-tenant-service-api',
-            'ecommerce-auth-service-api',
         ],
     },
 }
@@ -300,13 +300,13 @@ local_resource(
         link('http://ecommerce-product-query-service.127.0.0.1.nip.io', 'Product Query API'),
         link('http://ecommerce-category-query-service.127.0.0.1.nip.io', 'Category Query API'),
         link('http://ecommerce-image-service.127.0.0.1.nip.io', 'Image Service API'),
-        link('http://ecommerce-auth-service.127.0.0.1.nip.io', 'Auth Service API'),
         link('http://ecommerce-tenant-service.127.0.0.1.nip.io', 'Tenant Service API'),
         link('http://demo.admin.127.0.0.1.nip.io', 'Admin UI (demo tenant)'),
         link('http://demo.shop.127.0.0.1.nip.io', 'Shop UI (demo tenant)'),
         link('http://platform.127.0.0.1.nip.io', 'Platform UI'),
         link('http://localhost:9093', 'Redpanda Console'),
         link('http://localhost:9001', 'MinIO Console'),
+        link('http://localhost:8080/ui/console', 'Zitadel Console'),
         link('http://localhost:3000', 'Grafana'),
         link('http://localhost:9090', 'Prometheus'),
     ],

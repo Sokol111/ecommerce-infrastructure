@@ -19,6 +19,8 @@ docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@$(DC) -f "$(STORAGE_COMPOSE)" up -d
 	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
 	@$(DC) -f "$(OBSERVABILITY_COMPOSE)" up -d
+	@printf "  Starting Identity (Zitadel)...\n"
+	@$(DC) -f "$(ZITADEL_COMPOSE)" up -d
 	@printf "\033[32m✓ Docker infrastructure started\033[0m\n"
 	@printf "\n\033[36mServices:\033[0m\n"
 	@printf "  MongoDB:          mongodb://localhost:27017\n"
@@ -31,6 +33,7 @@ docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@printf "  Grafana:          $(GRAFANA_URL) (admin/admin)\n"
 	@printf "  Prometheus:       $(PROMETHEUS_URL)\n"
 	@printf "  Tempo:            $(TEMPO_URL)\n"
+	@printf "  Zitadel Console:  $(ZITADEL_URL)/ui/console (zitadel-admin@zitadel.localhost / Password1!)\n"
 	@printf "\n\033[33m⚠  Note: Services may take a few seconds to become ready\033[0m\n"
 
 .PHONY: docker-down
@@ -40,12 +43,13 @@ docker-down: ## Stop Docker infra (keeps volumes)
 	@$(DC) -f "$(KAFKA_COMPOSE)" down
 	@$(DC) -f "$(STORAGE_COMPOSE)" down
 	@$(DC) -f "$(OBSERVABILITY_COMPOSE)" down
+	@$(DC) -f "$(ZITADEL_COMPOSE)" down
 	@printf "\033[32m✓ Docker infrastructure stopped\033[0m\n"
 
 .PHONY: docker-logs
 docker-logs: ## Tail Docker infra logs (Ctrl+C to stop)
 	@printf "\033[36m→ Docker infrastructure logs (Ctrl+C to stop)\033[0m\n"
-	@$(DC) -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" logs -f
+	@$(DC) -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" -f "$(ZITADEL_COMPOSE)" logs -f
 
 .PHONY: docker-restart
 docker-restart: docker-down docker ## Restart Docker infra (keeps data)
@@ -57,6 +61,7 @@ docker-clean: ## Stop Docker infra and delete volumes
 	@$(DC) -f "$(KAFKA_COMPOSE)" down -v
 	@$(DC) -f "$(STORAGE_COMPOSE)" down -v
 	@$(DC) -f "$(OBSERVABILITY_COMPOSE)" down -v
+	@$(DC) -f "$(ZITADEL_COMPOSE)" down -v
 	@printf "\033[32m✓ Docker volumes removed\033[0m\n"
 
 .PHONY: docker-status
@@ -70,3 +75,5 @@ docker-status: ## Show Docker services status
 	@$(DC) -f "$(STORAGE_COMPOSE)" ps
 	@printf "\n\033[33mObservability:\033[0m\n"
 	@$(DC) -f "$(OBSERVABILITY_COMPOSE)" ps
+	@printf "\n\033[33mIdentity (Zitadel):\033[0m\n"
+	@$(DC) -f "$(ZITADEL_COMPOSE)" ps

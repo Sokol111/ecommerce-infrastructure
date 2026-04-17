@@ -1,0 +1,225 @@
+name: ecommerce
+
+services:
+  zitadel-db:
+    image: postgres:17.2-alpine
+    container_name: zitadel-db
+    environment:
+      POSTGRES_DB: zitadel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - zitadel-db-data:/var/lib/postgresql/data
+    networks:
+      - zitadel
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d zitadel -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  zitadel-proxy:
+    image: traefik:v3.6.8
+    container_name: zitadel-proxy
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=zitadel
+      - --entrypoints.web.address=:80
+      - --ping=true
+      - --ping.entrypoint=web
+      - --log.level=WARN
+      - --accesslog=false
+    ports:
+      - 8080:80
+    networks:
+      - zitadel
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      zitadel-api:
+        condition: service_healthy
+      zitadel-login:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  zitadel-api:
+    image: ghcr.io/zitadel/zitadel:v4.13.0
+    container_name: zitadel-api
+    user: "0"
+    command: start-from-init --masterkey "MasterkeyNeedsToHave32Characters"
+    environment:
+      ZITADEL_PORT: 8080
+      ZITADEL_EXTERNALDOMAIN: localhost
+      ZITADEL_EXTERNALPORT: 8080
+      ZITADEL_EXTERNALSECURE: "false"
+      ZITADEL_TLS_ENABLED: "false"
+
+      ZITADEL_DATABASE_POSTGRES_DSN: postgresql://postgres:postgres@zitadel-db:5432/zitadel?sslmode=disable
+
+      # First instance bootstrap
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORDCHANGEREQUIRED: "false"
+      ZITADEL_FIRSTINSTANCE_LOGINCLIENTPATPATH: /zitadel/bootstrap/login-client.pat
+      ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_MACHINE_USERNAME: login-client
+      ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_MACHINE_NAME: Login Client
+      ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_PAT_EXPIRATIONDATE: "2099-01-01T00:00:00Z"
+
+      # Service account for seeding (IAM_OWNER)
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_MACHINE_USERNAME: ecommerce-seed
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_MACHINE_NAME: Ecommerce Seed Service Account
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_MACHINEKEY_TYPE: 1
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_PAT_EXPIRATIONDATE: "2099-01-01T00:00:00Z"
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_PAT_SCOPES: ""
+      ZITADEL_FIRSTINSTANCE_PATPATH: /zitadel/bootstrap/seed.pat
+
+      # Login v2 (Next.js login app)
+      ZITADEL_DEFAULTINSTANCE_FEATURES_LOGINV2_REQUIRED: "true"
+      ZITADEL_DEFAULTINSTANCE_FEATURES_LOGINV2_BASEURI: http://localhost:8080/ui/v2/login/
+      ZITADEL_OIDC_DEFAULTLOGINURLV2: http://localhost:8080/ui/v2/login/login?authRequest=
+      ZITADEL_OIDC_DEFAULTLOGOUTURLV2: http://localhost:8080/ui/v2/login/logout?post_logout_redirect=
+      ZITADEL_SAML_DEFAULTLOGINURLV2: http://localhost:8080/ui/v2/login/login?samlRequest=
+
+      # Password & lockout policies (no API calls needed)
+      ZITADEL_DEFAULTINSTANCE_PASSWORDCOMPLEXITYPOLICY_MINLENGTH: "8"
+      ZITADEL_DEFAULTINSTANCE_PASSWORDCOMPLEXITYPOLICY_HASUPPERCASE: "true"
+      ZITADEL_DEFAULTINSTANCE_PASSWORDCOMPLEXITYPOLICY_HASLOWERCASE: "true"
+      ZITADEL_DEFAULTINSTANCE_PASSWORDCOMPLEXITYPOLICY_HASNUMBER: "true"
+      ZITADEL_DEFAULTINSTANCE_PASSWORDCOMPLEXITYPOLICY_HASSYMBOL: "false"
+      ZITADEL_DEFAULTINSTANCE_LOCKOUTPOLICY_MAXPASSWORDATTEMPTS: "5"
+
+      # Disable optional features for local dev
+      ZITADEL_LOGSTORE_ACCESS_STDOUT_ENABLED: "false"
+      ZITADEL_CACHES_CONNECTORS_REDIS_ENABLED: "false"
+      ZITADEL_CACHES_INSTANCE_CONNECTOR: ""
+      ZITADEL_CACHES_MILESTONES_CONNECTOR: ""
+      ZITADEL_CACHES_ORGANIZATION_CONNECTOR: ""
+      ZITADEL_INSTRUMENTATION_TRACE_EXPORTER_TYPE: none
+    healthcheck:
+      test: ["CMD", "/app/zitadel", "ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    volumes:
+      - zitadel-bootstrap:/zitadel/bootstrap:rw
+    networks:
+      - zitadel
+      - shared-network
+    depends_on:
+      zitadel-db:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=zitadel
+
+      # API service (h2c for gRPC/Connect-RPC support)
+      - traefik.http.services.zitadel-api.loadbalancer.server.port=8080
+      - traefik.http.services.zitadel-api.loadbalancer.server.scheme=h2c
+
+      # /api/* → strip prefix → zitadel-api
+      - traefik.http.middlewares.zitadel-strip-api.stripprefix.prefixes=/api
+      - traefik.http.middlewares.zitadel-strip-api.stripprefix.forceSlash=false
+      - traefik.http.routers.zitadel-api-alias.rule=Host(`localhost`) && PathPrefix(`/api`)
+      - traefik.http.routers.zitadel-api-alias.entrypoints=web
+      - traefik.http.routers.zitadel-api-alias.middlewares=zitadel-strip-api
+      - traefik.http.routers.zitadel-api-alias.service=zitadel-api
+      - traefik.http.routers.zitadel-api-alias.priority=200
+
+      # Catch-all for Console, OIDC endpoints, well-known, etc.
+      - traefik.http.routers.zitadel-canonical.rule=Host(`localhost`) && !PathPrefix(`/ui/v2/login`) && !PathPrefix(`/api`) && !Path(`/`)
+      - traefik.http.routers.zitadel-canonical.entrypoints=web
+      - traefik.http.routers.zitadel-canonical.service=zitadel-api
+      - traefik.http.routers.zitadel-canonical.priority=100
+    restart: unless-stopped
+
+  zitadel-login:
+    image: ghcr.io/zitadel/zitadel-login:v4.13.0
+    container_name: zitadel-login
+    user: "0"
+    environment:
+      ZITADEL_API_URL: http://zitadel-api:8080
+      NEXT_PUBLIC_BASE_PATH: /ui/v2/login
+      ZITADEL_SERVICE_USER_TOKEN_FILE: /zitadel/bootstrap/login-client.pat
+      CUSTOM_REQUEST_HEADERS: "Host:localhost,X-Forwarded-Proto:http"
+    healthcheck:
+      test: ["CMD", "/bin/sh", "-c", "node /app/healthcheck.mjs http://localhost:3000/ui/v2/login/healthy"]
+      interval: 10s
+      timeout: 30s
+      retries: 12
+      start_period: 20s
+    volumes:
+      - zitadel-bootstrap:/zitadel/bootstrap:ro
+    networks:
+      - zitadel
+    depends_on:
+      zitadel-api:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=zitadel
+      - traefik.http.services.zitadel-login.loadbalancer.server.port=3000
+
+      # Root path → rewrite to login
+      - traefik.http.middlewares.zitadel-root-rewrite.replacepath.path=/ui/v2/login/
+      - traefik.http.routers.zitadel-root.rule=Host(`localhost`) && Path(`/`)
+      - traefik.http.routers.zitadel-root.entrypoints=web
+      - traefik.http.routers.zitadel-root.middlewares=zitadel-root-rewrite
+      - traefik.http.routers.zitadel-root.service=zitadel-login
+      - traefik.http.routers.zitadel-root.priority=400
+
+      # /ui/v2/login/* → zitadel-login
+      - traefik.http.routers.zitadel-login.rule=Host(`localhost`) && PathPrefix(`/ui/v2/login`)
+      - traefik.http.routers.zitadel-login.entrypoints=web
+      - traefik.http.routers.zitadel-login.service=zitadel-login
+      - traefik.http.routers.zitadel-login.priority=250
+    restart: unless-stopped
+
+  zitadel-seed:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile.zitadel-seed
+    container_name: zitadel-seed
+    environment:
+      ZITADEL_URL: http://zitadel-api:8080
+      ZITADEL_DOMAIN: localhost
+      PAT_FILE: /zitadel/bootstrap/seed.pat
+      REDIRECT_URI: http://admin.127.0.0.1.nip.io/api/auth/zitadel/callback
+      LOGOUT_URI: http://admin.127.0.0.1.nip.io
+      DEV_MODE: "true"
+      WEBHOOK_URL: http://actions-webhook:8090
+    volumes:
+      - zitadel-bootstrap:/zitadel/bootstrap:ro
+    networks:
+      - zitadel
+    depends_on:
+      zitadel-api:
+        condition: service_healthy
+      actions-webhook:
+        condition: service_started
+    restart: "no"
+
+  actions-webhook:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile.actions-webhook
+    container_name: actions-webhook
+    networks:
+      - zitadel
+    restart: unless-stopped
+
+networks:
+  zitadel:
+    name: zitadel
+  shared-network:
+    external: true
+
+volumes:
+  zitadel-db-data:
+  zitadel-bootstrap:

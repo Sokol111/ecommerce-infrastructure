@@ -1,0 +1,70 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: sokol111/actions-webhook
+  tag: "0.0.1"
+  pullPolicy: IfNotPresent
+  digest: ""
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8090
+
+ingress:
+  enabled: false
+
+resources:
+  {}
+
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 2
+  periodSeconds: 3
+  timeoutSeconds: 2
+  failureThreshold: 5
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 2
+  periodSeconds: 10
+  timeoutSeconds: 2
+
+autoscaling:
+  enabled: false
+
+replicaCount: 1
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+volumes: []
+volumeMounts: []
+env: []

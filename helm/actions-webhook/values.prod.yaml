@@ -1,0 +1,21 @@
+fullnameOverride: actions-webhook
+
+image:
+  repository: ghcr.io/sokol111/actions-webhook
+  tag: "0.0.1"
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 50m
+    memory: 32Mi
+
+env:
+  - name: SIGNING_KEY
+    valueFrom:
+      secretKeyRef:
+        name: actions-webhook
+        key: signing-key

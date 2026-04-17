@@ -1,7 +1,0 @@
-{{ include "shared.notes" (dict
-  "Values" .Values
-  "Release" .Release
-  "Chart" .Chart
-  "fullname" (include "template.fullname" .)
-  "appName" (include "template.name" .)
-) }}

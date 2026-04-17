@@ -32,6 +32,7 @@ MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
 KAFKA_COMPOSE := $(COMPOSE_DIR)/kafka.yml
 OBSERVABILITY_COMPOSE := $(COMPOSE_DIR)/observability.yml
 STORAGE_COMPOSE := $(COMPOSE_DIR)/storage.yml
+ZITADEL_COMPOSE := $(COMPOSE_DIR)/zitadel.yml
 DOCKER_NETWORK := shared-network
 
 # Observability services (docker-compose)
@@ -112,6 +113,9 @@ urls: ## Show all service URLs available in browser
 	@printf "\n\033[1;33mStorage:\033[0m\n"
 	@printf "  \033[36m%-35s\033[0m %s (minioadmin/minioadmin123)\n" "MinIO Console:" "$(MINIO_CONSOLE_URL)"
 	@printf "  \033[36m%-35s\033[0m %s\n" "imgproxy:" "$(IMGPROXY_URL)"
+	@printf "\n\033[1;33mIdentity (Zitadel):\033[0m\n"
+	@printf "  \033[36m%-35s\033[0m %s (zitadel-admin@zitadel.localhost / Password1!)\n" "Zitadel Console:" "http://localhost:8080/ui/console"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Demo user:" "admin@demo.localhost / Password1!"
 	@printf "\n\033[1;33mObservability:\033[0m\n"
 	@printf "  \033[36m%-35s\033[0m %s (admin/admin)\n" "Grafana:" "$(GRAFANA_URL)"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Prometheus:" "$(PROMETHEUS_URL)"

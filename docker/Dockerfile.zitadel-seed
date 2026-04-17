@@ -1,0 +1,10 @@
+FROM golang:1.26-alpine AS build
+WORKDIR /src
+COPY cmd/zitadel-seed/go.mod cmd/zitadel-seed/go.sum ./
+RUN go mod download
+COPY cmd/zitadel-seed/*.go ./
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /seed .
+
+FROM alpine:3.21
+COPY --from=build /seed /seed
+ENTRYPOINT ["/seed"]

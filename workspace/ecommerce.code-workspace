@@ -49,14 +49,6 @@
 			"path": "ecommerce-image-service"
 		},
 		{
-			"name": "ecommerce-auth-service-api",
-			"path": "ecommerce-auth-service-api"
-		},
-		{
-			"name": "ecommerce-auth-service",
-			"path": "ecommerce-auth-service"
-		},
-		{
 			"name": "ecommerce-catalog-service-api",
 			"path": "ecommerce-catalog-service-api"
 		},
@@ -86,6 +78,7 @@
 		"go.toolsManagement.autoUpdate": true,
 		"go.toolsEnvVars": {
 			"CGO_ENABLED": "1",
+			"GOWORK": "/home/ihsokolo/projects/ecommerce/go.work",
 			"PATH": "/usr/local/go/bin:/home/ihsokolo/go/bin:/usr/bin:/bin",
 			"GOROOT": "/usr/local/go"
 		},
