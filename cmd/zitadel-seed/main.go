@@ -23,9 +23,9 @@ import (
 // What it creates:
 //   1. Project "ecommerce" with roles (super_admin, catalog_manager, viewer, service_account)
 //   2. OIDC Application "admin-ui" (Authorization Code + PKCE)
-//   3. Machine User "ecommerce-service" with Client Credentials (S2S auth)
-//   4. Actions v2 Target + Execution for permissions mapping webhook
-//   5. Demo admin user with super_admin role
+//   3. Machine User "ecommerce-service" for Go backend S2S auth (private_key_jwt)
+//   4. Machine User "platform-service" for platform-UI S2S auth (private_key_jwt)
+//   5. Actions v2 Target + Execution for permissions mapping webhook
 // =============================================================================
 
 type seeder struct {
@@ -60,9 +60,10 @@ func main() {
 	s.resolveOrgID()
 	s.setupProject()
 	s.setupAdminUIApp()
-	s.setupServiceAccount()
+	s.setupGoServiceAccount()
+	s.setupPlatformServiceAccount()
 	s.setupPermissionsAction()
-	s.setupDemoUser()
+	// s.setupDemoUser()
 
 	slog.Info("Seed complete",
 		"zitadel_console", s.cfg.ZitadelURL+"/ui/console",

@@ -9,70 +9,96 @@ import (
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
 )
 
-func (s *seeder) setupServiceAccount() {
-	slog.Info("Setting up S2S service account")
+// setupGoServiceAccount creates or finds the "ecommerce-service" machine user
+// used by Go backend services for S2S auth with private_key_jwt.
+// It registers the RSA public key so Go services can sign JWT client assertions
+// with the matching private key.
+func (s *seeder) setupGoServiceAccount() {
+	slog.Info("Setting up Go S2S service account (private_key_jwt)")
 
-	// Find or create machine user.
+	userID := s.findOrCreateMachineUser("ecommerce-service", "Ecommerce Service Account", s.cfg.S2SUserID)
+	s.registerPublicKey(userID)
+	s.grantProjectRole(userID)
+
+	slog.Info("Go S2S service account ready",
+		"S2S_CLIENT_ID", userID,
+		"auth_method", "private_key_jwt",
+	)
+}
+
+// setupPlatformServiceAccount creates or finds the "platform-service" machine user
+// used by platform-UI for S2S auth with private_key_jwt.
+func (s *seeder) setupPlatformServiceAccount() {
+	slog.Info("Setting up platform-UI S2S service account (private_key_jwt)")
+
+	userID := s.findOrCreateMachineUser("platform-service", "Platform Service Account", s.cfg.PlatformUserID)
+	s.registerPublicKey(userID)
+	s.grantProjectRole(userID)
+	s.grantOrgUserManager(userID)
+
+	slog.Info("Platform S2S service account ready",
+		"PLATFORM_CLIENT_ID", userID,
+		"auth_method", "private_key_jwt",
+	)
+}
+
+// findOrCreateMachineUser searches for an existing machine user by username,
+// and creates one if not found. If fixedID is set, it uses that as the UserId.
+func (s *seeder) findOrCreateMachineUser(username, displayName, fixedID string) string {
 	users, err := s.users.ListUsers(s.ctx, &userv2.ListUsersRequest{
 		Queries: []*userv2.SearchQuery{{
 			Query: &userv2.SearchQuery_UserNameQuery{
 				UserNameQuery: &userv2.UserNameQuery{
-					UserName: "ecommerce-service",
+					UserName: username,
 					Method:   objectv2.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS,
 				},
 			},
 		}},
 	})
 	if err != nil {
-		fatal("Failed to list users", "error", err)
+		fatal("Failed to list users", "username", username, "error", err)
 	}
 
-	var userID string
 	if len(users.GetResult()) > 0 {
-		userID = users.GetResult()[0].GetUserId()
-		slog.Info("Machine user already exists", "id", userID)
-	} else {
-		username := "ecommerce-service"
-		result, err := s.users.CreateUser(s.ctx, &userv2.CreateUserRequest{
-			Username: &username,
-			UserType: &userv2.CreateUserRequest_Machine_{
-				Machine: &userv2.CreateUserRequest_Machine{
-					Name:            "Ecommerce Service Account",
-					AccessTokenType: userv2.AccessTokenType_ACCESS_TOKEN_TYPE_JWT,
-				},
-			},
-		})
-		if err != nil {
-			fatal("Failed to create machine user", "error", err)
-		}
-		userID = result.GetId()
-		slog.Info("Created machine user", "id", userID)
-
-		// Generate client secret only for new users.
-		// Secret is visible only once — copy it from the logs.
-		secret, err := s.users.AddSecret(s.ctx, &userv2.AddSecretRequest{
-			UserId: userID,
-		})
-		if err != nil {
-			fatal("Failed to generate machine secret", "error", err)
-		}
-		slog.Info("S2S credentials generated — save these!",
-			"S2S_CLIENT_ID", userID,
-			"S2S_CLIENT_SECRET", secret.GetClientSecret(),
-		)
+		id := users.GetResult()[0].GetUserId()
+		slog.Info("Machine user already exists", "username", username, "id", id)
+		return id
 	}
 
-	// Grant service_account role (idempotent — CreateAuthorization is a no-op if exists).
+	req := &userv2.CreateUserRequest{
+		OrganizationId: s.orgID,
+		Username:       &username,
+		UserType: &userv2.CreateUserRequest_Machine_{
+			Machine: &userv2.CreateUserRequest_Machine{
+				Name:            displayName,
+				AccessTokenType: userv2.AccessTokenType_ACCESS_TOKEN_TYPE_JWT,
+			},
+		},
+	}
+	if fixedID != "" {
+		req.UserId = &fixedID
+	}
+
+	result, err := s.users.CreateUser(s.ctx, req)
+	if err != nil {
+		fatal("Failed to create machine user", "username", username, "error", err)
+	}
+	slog.Info("Created machine user", "username", username, "id", result.GetId())
+	return result.GetId()
+}
+
+// grantProjectRole grants the service_account project role to the given user.
+func (s *seeder) grantProjectRole(userID string) {
 	//nolint:errcheck // grant may already exist
 	s.auths.CreateAuthorization(s.ctx, &authorizationv2.CreateAuthorizationRequest{
 		UserId:    userID,
 		ProjectId: s.projectID,
 		RoleKeys:  []string{"service_account"},
 	})
-	slog.Info("Machine user granted service_account role")
+}
 
-	// Grant org-level administrator role so the service account can call
-	// Zitadel API (create users, grant roles).
+// grantOrgUserManager grants ORG_USER_MANAGER org administrator role to the given user.
+func (s *seeder) grantOrgUserManager(userID string) {
 	//nolint:errcheck // administrator may already exist
 	s.perms.CreateAdministrator(s.ctx, &permissionv2.CreateAdministratorRequest{
 		UserId: userID,
@@ -83,5 +109,19 @@ func (s *seeder) setupServiceAccount() {
 		},
 		Roles: []string{"ORG_USER_MANAGER"},
 	})
-	slog.Info("Machine user granted org administrator role")
+}
+
+// registerPublicKey registers the RSA public key for private_key_jwt auth.
+func (s *seeder) registerPublicKey(userID string) {
+	if s.cfg.S2SPublicKey == "" {
+		return
+	}
+	resp, err := s.users.AddKey(s.ctx, &userv2.AddKeyRequest{
+		UserId:    userID,
+		PublicKey: []byte(s.cfg.S2SPublicKey),
+	})
+	if err != nil {
+		fatal("Failed to register S2S public key", "user_id", userID, "error", err)
+	}
+	slog.Info("Registered S2S public key", "user_id", userID, "key_id", resp.GetKeyId())
 }

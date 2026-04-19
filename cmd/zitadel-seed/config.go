@@ -16,6 +16,16 @@ type config struct {
 	LogoutURI   string // Post-logout redirect URI
 	DevMode     bool   // Allow non-HTTPS redirect URIs
 	WebhookURL  string // Actions v2 webhook endpoint for permissions mapping
+
+	// Fixed resource IDs (optional — auto-generated if empty).
+	// Setting these makes credentials survive volume resets.
+	ProjectID      string // Fixed Zitadel project ID
+	AdminUIAppID   string // Fixed OIDC application ID for admin-ui
+	S2SUserID      string // Fixed machine user ID for Go service S2S (private_key_jwt)
+	PlatformUserID string // Fixed machine user ID for platform-UI S2S (private_key_jwt)
+
+	// S2S public key for machine users (private_key_jwt).
+	S2SPublicKey string // PEM-encoded RSA public key (from S2S_PUBLIC_KEY env var)
 }
 
 func loadConfig() config {
@@ -42,6 +52,13 @@ func loadConfig() config {
 		LogoutURI:   requireEnv("LOGOUT_URI"),
 		DevMode:     os.Getenv("DEV_MODE") == "true",
 		WebhookURL:  requireEnv("WEBHOOK_URL"),
+
+		ProjectID:      os.Getenv("PROJECT_ID"),
+		AdminUIAppID:   os.Getenv("ADMIN_UI_APP_ID"),
+		S2SUserID:      os.Getenv("S2S_USER_ID"),
+		PlatformUserID: os.Getenv("PLATFORM_USER_ID"),
+
+		S2SPublicKey: os.Getenv("S2S_PUBLIC_KEY"),
 	}
 }
 

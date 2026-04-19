@@ -42,8 +42,9 @@ func (s *seeder) setupAdminUIApp() {
 	}
 
 	result, err := s.apps.CreateApplication(s.ctx, &applicationv2.CreateApplicationRequest{
-		ProjectId: s.projectID,
-		Name:      "admin-ui",
+		ProjectId:     s.projectID,
+		ApplicationId: s.cfg.AdminUIAppID,
+		Name:          "admin-ui",
 		ApplicationType: &applicationv2.CreateApplicationRequest_OidcConfiguration{
 			OidcConfiguration: &applicationv2.CreateOIDCApplicationRequest{
 				RedirectUris:           []string{s.cfg.RedirectURI},

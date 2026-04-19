@@ -34,7 +34,8 @@ func (s *seeder) setupDemoUser() {
 	} else {
 		username := email
 		result, err := s.users.CreateUser(s.ctx, &userv2.CreateUserRequest{
-			Username: &username,
+			OrganizationId: s.orgID,
+			Username:       &username,
 			UserType: &userv2.CreateUserRequest_Human_{
 				Human: &userv2.CreateUserRequest_Human{
 					Profile: &userv2.SetHumanProfile{

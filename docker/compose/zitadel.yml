@@ -65,6 +65,12 @@ services:
       ZITADEL_DATABASE_POSTGRES_DSN: postgresql://postgres:postgres@zitadel-db:5432/zitadel?sslmode=disable
 
       # First instance bootstrap
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME: zitadel-admin@zitadel.localhost
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PROFILE_FIRSTNAME: Zitadel
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PROFILE_LASTNAME: Admin
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_EMAIL_ADDRESS: zitadel-admin@zitadel.localhost
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_EMAIL_ISVERIFIED: "true"
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD: "Password1!"
       ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORDCHANGEREQUIRED: "false"
       ZITADEL_FIRSTINSTANCE_LOGINCLIENTPATPATH: /zitadel/bootstrap/login-client.pat
       ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_MACHINE_USERNAME: login-client
@@ -194,6 +200,24 @@ services:
       LOGOUT_URI: http://admin.127.0.0.1.nip.io
       DEV_MODE: "true"
       WEBHOOK_URL: http://actions-webhook:8090
+
+      # Fixed resource IDs — survive volume resets.
+      PROJECT_ID: "846524149330004068"
+      ADMIN_UI_APP_ID: "245662072628464564"
+      S2S_USER_ID: "311056156296133365"
+      PLATFORM_USER_ID: "102946755703519365"
+
+      # RSA public key for S2S private_key_jwt
+      S2S_PUBLIC_KEY: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1KSHxnCFHekK1ku0I8s
+        j5LOmMoYBn2FwZ4EtlekSEzpJmhULLkFc8arjJgad1uxsNnW4VclZ2U6mKjBWBcJ
+        Pjf9ABDCHffl9x+eJaG0msn3dOzsL1tXTBkEeylCPLfzF6kfiU7YkQk0bEc1VZMW
+        o6M7qgE/OHiNt5B4D/BIdYPtno888RP0ANtCIiAU1B/Aq4L4wp+SVFM/2zyEBhag
+        G+EJc3T1c05L00a3Zu3Zn7tnIzNGsZnxMUWffSeTEyC9JqeYMTeIGF0ruucIwsDo
+        JIsJKJHWHkFI09sAD0Dnvl5kvdViIC1DXEisGwxHYhj1e7qK2PPMPfOxtnHABRP4
+        fQIDAQAB
+        -----END PUBLIC KEY-----
     volumes:
       - zitadel-bootstrap:/zitadel/bootstrap:ro
     networks:

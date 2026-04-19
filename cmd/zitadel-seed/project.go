@@ -28,10 +28,15 @@ func (s *seeder) setupProject() {
 		s.projectID = projects.GetProjects()[0].GetProjectId()
 		slog.Info("Project already exists", "id", s.projectID)
 	} else {
-		result, err := s.projects.CreateProject(s.ctx, &projectv2.CreateProjectRequest{
+		req := &projectv2.CreateProjectRequest{
+			OrganizationId:       s.orgID,
 			Name:                 "ecommerce",
 			ProjectRoleAssertion: true,
-		})
+		}
+		if s.cfg.ProjectID != "" {
+			req.ProjectId = &s.cfg.ProjectID
+		}
+		result, err := s.projects.CreateProject(s.ctx, req)
 		if err != nil {
 			fatal("Failed to create project", "error", err)
 		}
