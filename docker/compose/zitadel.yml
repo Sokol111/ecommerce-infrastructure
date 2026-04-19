@@ -200,6 +200,7 @@ services:
       LOGOUT_URI: http://admin.127.0.0.1.nip.io
       DEV_MODE: "true"
       WEBHOOK_URL: http://actions-webhook:8090
+      TRUSTED_DOMAINS: "zitadel-api"
 
       # Fixed resource IDs — survive volume resets.
       PROJECT_ID: "846524149330004068"

@@ -82,6 +82,7 @@ func (s *seeder) connect() {
 	s.actions = c.ActionServiceV2()
 	s.orgs = c.OrganizationServiceV2()
 	s.perms = c.InternalPermissionServiceV2()
+	s.instance = c.InstanceServiceV2()
 	slog.Info("Connected to Zitadel gRPC")
 }
 

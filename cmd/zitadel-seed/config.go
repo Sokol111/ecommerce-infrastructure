@@ -3,6 +3,7 @@ package main
 import (
 	"net/url"
 	"os"
+	"strings"
 )
 
 type config struct {
@@ -26,6 +27,12 @@ type config struct {
 
 	// S2S public key for machine users (private_key_jwt).
 	S2SPublicKey string // PEM-encoded RSA public key (from S2S_PUBLIC_KEY env var)
+
+	// TrustedDomains are additional domains Zitadel should accept requests from.
+	// In local dev, Go services in k3d reach Zitadel via "zitadel-api" hostname,
+	// but ZITADEL_EXTERNALDOMAIN is "localhost". Adding "zitadel-api" as a trusted
+	// domain makes Zitadel accept Host: zitadel-api.
+	TrustedDomains []string // Comma-separated (from TRUSTED_DOMAINS env var)
 }
 
 func loadConfig() config {
@@ -59,7 +66,22 @@ func loadConfig() config {
 		PlatformUserID: os.Getenv("PLATFORM_USER_ID"),
 
 		S2SPublicKey: os.Getenv("S2S_PUBLIC_KEY"),
+
+		TrustedDomains: parseTrustedDomains(os.Getenv("TRUSTED_DOMAINS")),
 	}
+}
+
+func parseTrustedDomains(raw string) []string {
+	if raw == "" {
+		return nil
+	}
+	var domains []string
+	for _, d := range strings.Split(raw, ",") {
+		if d = strings.TrimSpace(d); d != "" {
+			domains = append(domains, d)
+		}
+	}
+	return domains
 }
 
 func requireEnv(key string) string {
