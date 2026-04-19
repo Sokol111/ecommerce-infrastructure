@@ -7,7 +7,6 @@ import (
 	actionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/action/v2"
 	applicationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/application/v2"
 	authorizationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/authorization/v2"
-	instancev2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/instance/v2"
 	permissionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/internal_permission/v2"
 	orgv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/org/v2"
 	projectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/project/v2"
@@ -41,7 +40,6 @@ type seeder struct {
 	actions  actionv2.ActionServiceClient
 	orgs     orgv2.OrganizationServiceClient
 	perms    permissionv2.InternalPermissionServiceClient
-	instance instancev2.InstanceServiceClient
 
 	orgID           string
 	projectID       string
@@ -60,7 +58,7 @@ func main() {
 	s.readPAT()
 	s.connect()
 	s.resolveOrgID()
-	s.addTrustedDomains()
+	s.addCustomDomains()
 	s.setupProject()
 	s.setupAdminUIApp()
 	s.setupGoServiceAccount()

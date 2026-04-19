@@ -33,6 +33,14 @@ type config struct {
 	// but ZITADEL_EXTERNALDOMAIN is "localhost". Adding "zitadel-api" as a trusted
 	// domain makes Zitadel accept Host: zitadel-api.
 	TrustedDomains []string // Comma-separated (from TRUSTED_DOMAINS env var)
+
+	// SystemPrivateKey is a PEM-encoded RSA private key for System API JWT auth.
+	// Required only when TrustedDomains is set (AddCustomDomain needs system.domain.write).
+	SystemPrivateKey string // From SYSTEM_PRIVATE_KEY env var
+
+	// SystemUser is the key name matching ZITADEL_SYSTEMAPIUSERS config.
+	// Used as iss/sub in the System API JWT.
+	SystemUser string // From SYSTEM_USER env var (default: "ecommerce-seed")
 }
 
 func loadConfig() config {
@@ -68,7 +76,17 @@ func loadConfig() config {
 		S2SPublicKey: os.Getenv("S2S_PUBLIC_KEY"),
 
 		TrustedDomains: parseTrustedDomains(os.Getenv("TRUSTED_DOMAINS")),
+
+		SystemPrivateKey: os.Getenv("SYSTEM_PRIVATE_KEY"),
+		SystemUser:       defaultStr(os.Getenv("SYSTEM_USER"), "ecommerce-seed"),
 	}
+}
+
+func defaultStr(val, fallback string) string {
+	if val == "" {
+		return fallback
+	}
+	return val
 }
 
 func parseTrustedDomains(raw string) []string {
