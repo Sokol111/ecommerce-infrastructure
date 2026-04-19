@@ -30,12 +30,21 @@ var rolePermissions = map[string][]string{
 		"users:read", "products:read", "categories:read", "attributes:read",
 	},
 	"service_account": {
-		"tenants:read",
+		"tenants:read", "tenants:write",
 	},
 }
 
 type request struct {
-	UserGrants []grant `json:"user_grants"`
+	UserGrants []grant  `json:"user_grants"`
+	User       *reqUser `json:"user"`
+}
+
+type reqUser struct {
+	Machine *machine `json:"machine"`
+}
+
+type machine struct {
+	Name string `json:"name"`
 }
 
 type grant struct {
@@ -73,6 +82,8 @@ func main() {
 			return
 		}
 
+		slog.Info("Webhook called", "body", string(body), "grants", len(req.UserGrants))
+
 		resp := mapPermissions(req)
 
 		w.Header().Set("Content-Type", "application/json")
@@ -87,6 +98,16 @@ func main() {
 }
 
 func mapPermissions(req request) response {
+	// Machine users without user_grants: assign service_account role.
+	// Zitadel doesn't include user_grants in the webhook payload for
+	// machine-to-machine flows (client_credentials / jwt-bearer).
+	if len(req.UserGrants) == 0 && req.User != nil && req.User.Machine != nil {
+		return response{AppendClaims: []appendClaim{
+			{Key: "role", Value: "service_account"},
+			{Key: "permissions", Value: rolePermissions["service_account"]},
+		}}
+	}
+
 	seen := make(map[string]bool)
 	var permissions []string
 	var firstRole string

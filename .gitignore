@@ -21,6 +21,7 @@ k8s/*.generated.yaml
 # ========================
 # Environments & Secrets
 # ========================
+.secrets/
 environments/**/secrets/
 environments/**/*.secret.yaml
 **/.env

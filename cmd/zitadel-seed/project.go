@@ -33,9 +33,6 @@ func (s *seeder) setupProject() {
 			Name:                 "ecommerce",
 			ProjectRoleAssertion: true,
 		}
-		if s.cfg.ProjectID != "" {
-			req.ProjectId = &s.cfg.ProjectID
-		}
 		result, err := s.projects.CreateProject(s.ctx, req)
 		if err != nil {
 			fatal("Failed to create project", "error", err)
@@ -43,6 +40,7 @@ func (s *seeder) setupProject() {
 		s.projectID = result.GetProjectId()
 		slog.Info("Created project", "id", s.projectID)
 	}
+	writeSecretFile("project-id", s.projectID)
 
 	roles := []struct{ key, display string }{
 		{"super_admin", "Super Admin"},

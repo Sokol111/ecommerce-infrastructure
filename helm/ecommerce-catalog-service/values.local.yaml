@@ -20,3 +20,8 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['app.kubernetes.io/version']
+  - name: SECURITY__S2S__CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: zitadel-credentials
+        key: s2s-client-secret

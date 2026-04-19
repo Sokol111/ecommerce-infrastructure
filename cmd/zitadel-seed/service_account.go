@@ -2,51 +2,50 @@ package main
 
 import (
 	"log/slog"
-	"time"
+	"os"
+	"path/filepath"
 
 	authorizationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/authorization/v2"
 	permissionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/internal_permission/v2"
 	objectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/object/v2"
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // setupGoServiceAccount creates or finds the "ecommerce-service" machine user
-// used by Go backend services for S2S auth with private_key_jwt.
-// It registers the RSA public key so Go services can sign JWT client assertions
-// with the matching private key.
+// used by Go backend services for S2S auth with client_credentials.
 func (s *seeder) setupGoServiceAccount() {
-	slog.Info("Setting up Go S2S service account (private_key_jwt)")
+	slog.Info("Setting up Go S2S service account (client_credentials)")
 
-	userID := s.findOrCreateMachineUser("ecommerce-service", "Ecommerce Service Account", s.cfg.S2SUserID)
-	s.registerPublicKey(userID)
+	userID, created := s.findOrCreateMachineUser("ecommerce-service", "Ecommerce Service Account")
+	if created {
+		secret := s.createSecret(userID)
+		writeSecretFile("s2s-client-secret", secret)
+	}
 	s.grantProjectRole(userID)
 
-	slog.Info("Go S2S service account ready",
-		"S2S_CLIENT_ID", userID,
-		"auth_method", "private_key_jwt",
-	)
+	slog.Info("Go S2S service account ready", "S2S_CLIENT_ID", "ecommerce-service")
 }
 
 // setupPlatformServiceAccount creates or finds the "platform-service" machine user
-// used by platform-UI for S2S auth with private_key_jwt.
+// used by platform-UI for S2S auth with client_credentials.
 func (s *seeder) setupPlatformServiceAccount() {
-	slog.Info("Setting up platform-UI S2S service account (private_key_jwt)")
+	slog.Info("Setting up platform-UI S2S service account (client_credentials)")
 
-	userID := s.findOrCreateMachineUser("platform-service", "Platform Service Account", s.cfg.PlatformUserID)
-	s.registerPublicKey(userID)
+	userID, created := s.findOrCreateMachineUser("platform-service", "Platform Service Account")
+	if created {
+		secret := s.createSecret(userID)
+		writeSecretFile("platform-client-secret", secret)
+	}
 	s.grantProjectRole(userID)
 	s.grantOrgUserManager(userID)
 
-	slog.Info("Platform S2S service account ready",
-		"PLATFORM_CLIENT_ID", userID,
-		"auth_method", "private_key_jwt",
-	)
+	slog.Info("Platform S2S service account ready", "PLATFORM_CLIENT_ID", "platform-service")
 }
 
 // findOrCreateMachineUser searches for an existing machine user by username,
-// and creates one if not found. If fixedID is set, it uses that as the UserId.
-func (s *seeder) findOrCreateMachineUser(username, displayName, fixedID string) string {
+// and creates one if not found.
+// Returns the user ID and whether the user was created in this call.
+func (s *seeder) findOrCreateMachineUser(username, displayName string) (string, bool) {
 	users, err := s.users.ListUsers(s.ctx, &userv2.ListUsersRequest{
 		Queries: []*userv2.SearchQuery{{
 			Query: &userv2.SearchQuery_UserNameQuery{
@@ -64,7 +63,7 @@ func (s *seeder) findOrCreateMachineUser(username, displayName, fixedID string) 
 	if len(users.GetResult()) > 0 {
 		id := users.GetResult()[0].GetUserId()
 		slog.Info("Machine user already exists", "username", username, "id", id)
-		return id
+		return id, false
 	}
 
 	req := &userv2.CreateUserRequest{
@@ -77,16 +76,25 @@ func (s *seeder) findOrCreateMachineUser(username, displayName, fixedID string) 
 			},
 		},
 	}
-	if fixedID != "" {
-		req.UserId = &fixedID
-	}
 
 	result, err := s.users.CreateUser(s.ctx, req)
 	if err != nil {
 		fatal("Failed to create machine user", "username", username, "error", err)
 	}
 	slog.Info("Created machine user", "username", username, "id", result.GetId())
-	return result.GetId()
+	return result.GetId(), true
+}
+
+// createSecret generates a client_credentials secret for the machine user.
+// The secret is only returned once — store it securely.
+func (s *seeder) createSecret(userID string) string {
+	resp, err := s.users.AddSecret(s.ctx, &userv2.AddSecretRequest{
+		UserId: userID,
+	})
+	if err != nil {
+		fatal("Failed to create client secret", "user_id", userID, "error", err)
+	}
+	return resp.GetClientSecret()
 }
 
 // grantProjectRole grants the service_account project role to the given user.
@@ -113,18 +121,16 @@ func (s *seeder) grantOrgUserManager(userID string) {
 	})
 }
 
-// registerPublicKey registers the RSA public key for private_key_jwt auth.
-func (s *seeder) registerPublicKey(userID string) {
-	if s.cfg.S2SPublicKey == "" {
+// writeSecretFile writes a secret value to /output/<name>.
+// The /output directory is bind-mounted to the host so Tiltfile can create k8s secrets.
+func writeSecretFile(name, value string) {
+	dir := "/output"
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		slog.Warn("Cannot create output dir, skipping secret file", "dir", dir, "error", err)
 		return
 	}
-	resp, err := s.users.AddKey(s.ctx, &userv2.AddKeyRequest{
-		UserId:         userID,
-		PublicKey:      []byte(s.cfg.S2SPublicKey),
-		ExpirationDate: timestamppb.New(time.Date(2099, 1, 1, 0, 0, 0, 0, time.UTC)),
-	})
-	if err != nil {
-		fatal("Failed to register S2S public key", "user_id", userID, "error", err)
+	path := filepath.Join(dir, name)
+	if err := os.WriteFile(path, []byte(value), 0o644); err != nil {
+		slog.Warn("Cannot write secret file", "path", path, "error", err)
 	}
-	slog.Info("Registered S2S public key", "user_id", userID, "key_id", resp.GetKeyId())
 }

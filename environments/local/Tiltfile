@@ -19,10 +19,19 @@ HELM_PATH = INFRA_PATH + '/helm'
 # Kubernetes context and namespace
 allow_k8s_contexts('k3d-dev-cluster')
 
+# Ignore helm build artifacts to prevent Tiltfile reload loops
+watch_settings(ignore=[
+    '../../helm/*/charts',
+    '../../helm/*/tmpcharts-*',
+])
+
 # k3d registry is auto-detected by Tilt — no default_registry() needed.
 # Tilt pushes to localhost:5000 and rewrites k8s manifests to pull from k3d-dev-registry:5000.
 
 COMPOSE_DIR = INFRA_PATH + '/docker/compose'
+
+# Secrets directory — seed writes client secrets here, Tiltfile creates k8s Secret from them.
+SECRETS_DIR = INFRA_PATH + '/.secrets'
 
 # ============================================================================
 # Docker Compose Infrastructure
@@ -53,6 +62,45 @@ dc_resource('actions-webhook', labels=['infrastructure'])
 dc_resource('prometheus', labels=['observability'])
 dc_resource('tempo', labels=['observability'])
 dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 'tempo'])
+
+# Create k8s Secret from zitadel-seed output files.
+# Seed writes client secrets to SECRETS_DIR on first run; this resource
+# picks them up and creates a "zitadel-credentials" Secret in the dev namespace.
+local_resource(
+    'zitadel-credentials',
+    cmd='''
+        mkdir -p "{secrets}"
+        # Wait for seed container to finish (Tilt marks dc_resource ready on start, not exit)
+        echo "Waiting for zitadel-seed to complete..."
+        for i in $(seq 1 60); do
+            STATE=$(docker inspect -f '{{{{.State.Running}}}}' zitadel-seed 2>/dev/null)
+            if [ "$STATE" = "false" ]; then
+                break
+            fi
+            sleep 2
+        done
+        # Copy secret files from seed container (overwrites any stale ones)
+        docker cp zitadel-seed:/output/s2s-client-secret "{secrets}/s2s-client-secret" 2>/dev/null || true
+        docker cp zitadel-seed:/output/platform-client-secret "{secrets}/platform-client-secret" 2>/dev/null || true
+        docker cp zitadel-seed:/output/admin-ui-client-id "{secrets}/admin-ui-client-id" 2>/dev/null || true
+        docker cp zitadel-seed:/output/project-id "{secrets}/project-id" 2>/dev/null || true
+        docker cp zitadel-seed:/output/org-id "{secrets}/org-id" 2>/dev/null || true
+        if [ ! -f "{secrets}/s2s-client-secret" ]; then
+            echo "ERROR: No secrets found. Run: make docker-clean && make dev"
+            exit 1
+        fi
+        kubectl -n dev create secret generic zitadel-credentials \
+            --from-file=s2s-client-secret={secrets}/s2s-client-secret \
+            --from-file=platform-client-secret={secrets}/platform-client-secret \
+            --from-file=admin-ui-client-id={secrets}/admin-ui-client-id \
+            --from-file=project-id={secrets}/project-id \
+            --from-file=org-id={secrets}/org-id \
+            --dry-run=client -o yaml | kubectl apply -f -
+        echo "k8s Secret 'zitadel-credentials' created/updated in dev namespace"
+    '''.format(secrets=SECRETS_DIR),
+    labels=['infrastructure'],
+    resource_deps=['zitadel-seed'],
+)
 
 # ============================================================================
 # Go Services Configuration
@@ -96,7 +144,7 @@ UI_SERVICES = {
             'ecommerce-tenant-service',
             'ecommerce-catalog-service',
             'ecommerce-image-service',
-            'zitadel-seed',
+            'zitadel-credentials',
         ],
         'api_deps': [
             'ecommerce-catalog-service-api',
@@ -117,7 +165,7 @@ UI_SERVICES = {
     'ecommerce-platform-ui': {
         'resource_deps': [
             'ecommerce-tenant-service',
-            'zitadel-seed',
+            'zitadel-credentials',
         ],
         'api_deps': [
             'ecommerce-tenant-service-api',
@@ -131,7 +179,7 @@ UI_SERVICES = {
 
 def helm_with_deps(chart_path, **kwargs):
     """Run helm dependency build before templating"""
-    local('helm dependency build ' + chart_path + ' 2>/dev/null || true', quiet=True)
+    local('helm dependency build ' + chart_path + ' 2>/dev/null || true; rm -rf ' + chart_path + '/tmpcharts-*', quiet=True)
     return helm(chart_path, **kwargs)
 
 # ============================================================================
@@ -143,6 +191,14 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: dev
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: zitadel-credentials
+  namespace: dev
+type: Opaque
+data: {}
 """))
 
 # ============================================================================
@@ -201,7 +257,7 @@ for name, config in GO_SERVICES.items():
     
     # Resource configuration with port forwards
     # All services depend on tenant (except tenant itself)
-    svc_resource_deps = ['mongo', 'redpanda']
+    svc_resource_deps = ['mongo', 'redpanda', 'zitadel-credentials']
     if name != 'ecommerce-tenant-service':
         svc_resource_deps.append('ecommerce-tenant-service')
 

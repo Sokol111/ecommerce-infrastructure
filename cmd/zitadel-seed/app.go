@@ -37,14 +37,14 @@ func (s *seeder) setupAdminUIApp() {
 		if oidcCfg := apps.GetApplications()[0].GetOidcConfiguration(); oidcCfg != nil {
 			s.adminUIClientID = oidcCfg.GetClientId()
 		}
+		writeSecretFile("admin-ui-client-id", s.adminUIClientID)
 		slog.Info("OIDC app already exists", "client_id", s.adminUIClientID)
 		return
 	}
 
 	result, err := s.apps.CreateApplication(s.ctx, &applicationv2.CreateApplicationRequest{
-		ProjectId:     s.projectID,
-		ApplicationId: s.cfg.AdminUIAppID,
-		Name:          "admin-ui",
+		ProjectId: s.projectID,
+		Name:      "admin-ui",
 		ApplicationType: &applicationv2.CreateApplicationRequest_OidcConfiguration{
 			OidcConfiguration: &applicationv2.CreateOIDCApplicationRequest{
 				RedirectUris:           []string{s.cfg.RedirectURI},
@@ -72,5 +72,6 @@ func (s *seeder) setupAdminUIApp() {
 	if oidcCfg := result.GetOidcConfiguration(); oidcCfg != nil {
 		s.adminUIClientID = oidcCfg.GetClientId()
 	}
+	writeSecretFile("admin-ui-client-id", s.adminUIClientID)
 	slog.Info("Created OIDC app", "client_id", s.adminUIClientID)
 }

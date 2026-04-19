@@ -95,4 +95,5 @@ func (s *seeder) resolveOrgID() {
 	}
 	s.orgID = orgs.GetResult()[0].GetId()
 	slog.Info("Resolved organization", "id", s.orgID, "name", orgs.GetResult()[0].GetName())
+	writeSecretFile("org-id", s.orgID)
 }

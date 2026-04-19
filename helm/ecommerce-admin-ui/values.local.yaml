@@ -30,17 +30,28 @@ env:
     value: "http://ecommerce-catalog-service:8080"
   - name: NUXT_IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_CLIENT_ID
-    value: "369274050167439371"  # From zitadel-seed output
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_BASE_URL
-    value: "http://zitadel-api:8080"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_REDIRECT_URI
-    value: "http://admin.127.0.0.1.nip.io/auth/zitadel/callback"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_LOGOUT_REDIRECT_URI
+  - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: zitadel-credentials
+        key: admin-ui-client-id
+  - name: NUXT_OIDC_PROVIDERS_OIDC_AUTHORIZATION_URL
+    value: "http://localhost:8080/oauth/v2/authorize"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_TOKEN_URL
+    value: "http://zitadel-api:8080/oauth/v2/token"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_USERINFO_URL
+    value: "http://zitadel-api:8080/oidc/v1/userinfo"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_URL
+    value: "http://localhost:8080/oidc/v1/end_session"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_REDIRECT_URI
+    value: "http://admin.127.0.0.1.nip.io/auth/oidc/callback"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_REDIRECT_URI
     value: "http://admin.127.0.0.1.nip.io"
   - name: NUXT_OIDC_SESSION_SECRET
     value: "dev-session-secret-that-is-at-least-48-characters-long"
   - name: NUXT_OIDC_AUTH_SESSION_SECRET
     value: "dev-auth-session-secret-at-least-48-characters-long!"
+  - name: NUXT_OIDC_TOKEN_KEY
+    value: "data:;base64,yP5FfEi11aWdtRINAxBxwaIFjjm8/ATEQjoJKsQ5cvY="
   - name: NUXT_COOKIE_SECURE
     value: "false"
