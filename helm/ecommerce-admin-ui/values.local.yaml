@@ -31,15 +31,13 @@ env:
   - name: NUXT_IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
   - name: NUXT_OIDC_PROVIDERS_ZITADEL_CLIENT_ID
-    value: ""  # From zitadel-seed output
+    value: "369274050167439371"  # From zitadel-seed output
   - name: NUXT_OIDC_PROVIDERS_ZITADEL_BASE_URL
     value: "http://zitadel-api:8080"
   - name: NUXT_OIDC_PROVIDERS_ZITADEL_REDIRECT_URI
     value: "http://admin.127.0.0.1.nip.io/auth/zitadel/callback"
   - name: NUXT_OIDC_PROVIDERS_ZITADEL_LOGOUT_REDIRECT_URI
     value: "http://admin.127.0.0.1.nip.io"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_AUDIENCE
-    value: ""  # Same as client_id
   - name: NUXT_OIDC_SESSION_SECRET
     value: "dev-session-secret-that-is-at-least-48-characters-long"
   - name: NUXT_OIDC_AUTH_SESSION_SECRET

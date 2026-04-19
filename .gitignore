@@ -44,6 +44,7 @@ ehthumbs.db
 # ========================
 # Build artifacts
 # ========================
+zitadel-seed
 *.out
 *.bin
 *.tar

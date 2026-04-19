@@ -2,11 +2,13 @@ package main
 
 import (
 	"log/slog"
+	"time"
 
 	authorizationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/authorization/v2"
 	permissionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/internal_permission/v2"
 	objectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/object/v2"
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // setupGoServiceAccount creates or finds the "ecommerce-service" machine user
@@ -117,8 +119,9 @@ func (s *seeder) registerPublicKey(userID string) {
 		return
 	}
 	resp, err := s.users.AddKey(s.ctx, &userv2.AddKeyRequest{
-		UserId:    userID,
-		PublicKey: []byte(s.cfg.S2SPublicKey),
+		UserId:         userID,
+		PublicKey:      []byte(s.cfg.S2SPublicKey),
+		ExpirationDate: timestamppb.New(time.Date(2099, 1, 1, 0, 0, 0, 0, time.UTC)),
 	})
 	if err != nil {
 		fatal("Failed to register S2S public key", "user_id", userID, "error", err)
