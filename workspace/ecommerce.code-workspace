@@ -151,6 +151,16 @@
 		"search.exclude": {
 			"**/.next": true,
 			"**/node_modules": true
-		}
+		},
+		"window.zoomLevel": -0.3,
+		"editor.fontSize": 13,
+		"editor.fontFamily": "JetBrains Mono, Fira Code, monospace",
+		"editor.fontLigatures": true,
+		"editor.lineHeight": 1.6,
+		"editor.fontWeight": "400",
+		"editor.letterSpacing": 0.5,
+		"editor.renderWhitespace": "none",
+		"editor.cursorBlinking": "smooth",
+		"workbench.colorTheme": "Dark+"
 	}
 }
