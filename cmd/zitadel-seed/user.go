@@ -6,6 +6,8 @@ import (
 	authorizationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/authorization/v2"
 	objectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/object/v2"
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (s *seeder) setupDemoUser() {
@@ -28,7 +30,9 @@ func (s *seeder) setupDemoUser() {
 	}
 
 	var userID string
-	if len(users.GetResult()) > 0 {
+	if len(users.GetResult()) > 1 {
+		fatal("Expected at most one demo user, got multiple", "count", len(users.GetResult()))
+	} else if len(users.GetResult()) == 1 {
 		userID = users.GetResult()[0].GetUserId()
 		slog.Info("Demo user already exists", "id", userID)
 	} else {
@@ -65,11 +69,14 @@ func (s *seeder) setupDemoUser() {
 	}
 
 	// Grant super_admin role.
-	//nolint:errcheck // grant may already exist
-	s.client.AuthorizationServiceV2().CreateAuthorization(s.ctx, &authorizationv2.CreateAuthorizationRequest{
-		UserId:    userID,
-		ProjectId: s.projectID,
-		RoleKeys:  []string{"super_admin"},
+	_, err = s.client.AuthorizationServiceV2().CreateAuthorization(s.ctx, &authorizationv2.CreateAuthorizationRequest{
+		UserId:         userID,
+		OrganizationId: s.orgID,
+		ProjectId:      s.projectID,
+		RoleKeys:       []string{"super_admin"},
 	})
+	if err != nil && status.Code(err) != codes.AlreadyExists {
+		fatal("Failed to grant super_admin role", "error", err)
+	}
 	slog.Info("Demo user granted super_admin role")
 }

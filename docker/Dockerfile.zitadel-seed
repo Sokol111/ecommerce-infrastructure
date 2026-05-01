@@ -1,5 +1,12 @@
-FROM golang:1.26-alpine AS build
+FROM golang:1.26.2 AS build
 WORKDIR /src
+
+# Go proxy settings for corporate environments
+ENV GOSUMDB=off
+ENV GOPROXY=direct
+ENV GIT_SSL_NO_VERIFY=1
+ENV GOINSECURE=*
+
 COPY cmd/zitadel-seed/go.mod cmd/zitadel-seed/go.sum ./
 RUN go mod download
 COPY cmd/zitadel-seed/*.go ./

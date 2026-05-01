@@ -105,9 +105,10 @@ func (s *seeder) createSecret(userID string) string {
 // grantProjectRole grants the service_account project role to the given user.
 func (s *seeder) grantProjectRole(userID string) {
 	_, err := s.client.AuthorizationServiceV2().CreateAuthorization(s.ctx, &authorizationv2.CreateAuthorizationRequest{
-		UserId:    userID,
-		ProjectId: s.projectID,
-		RoleKeys:  []string{"service_account"},
+		UserId:         userID,
+		OrganizationId: s.orgID,
+		ProjectId:      s.projectID,
+		RoleKeys:       []string{"service_account"},
 	})
 	if err != nil {
 		if status.Code(err) == codes.AlreadyExists {
