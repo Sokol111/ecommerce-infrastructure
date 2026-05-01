@@ -3,7 +3,6 @@ package main
 import (
 	"net/url"
 	"os"
-	"strings"
 )
 
 type config struct {
@@ -18,19 +17,15 @@ type config struct {
 	DevMode     bool   // Allow non-HTTPS redirect URIs
 	WebhookURL  string // Actions v2 webhook endpoint for permissions mapping
 
-	// TrustedDomains are additional domains Zitadel should accept requests from.
-	// In local dev, Go services in k3d reach Zitadel via "zitadel-api" hostname,
-	// but ZITADEL_EXTERNALDOMAIN is "localhost". Adding "zitadel-api" as a trusted
-	// domain makes Zitadel accept Host: zitadel-api.
-	TrustedDomains []string // Comma-separated (from TRUSTED_DOMAINS env var)
+	// KubeNamespace and KubeSecretName control K8s secret creation.
+	// When both are set, seed creates/updates a K8s Secret directly.
+	// When empty, secrets are printed to stdout.
+	KubeNamespace  string // From KUBE_NAMESPACE env var
+	KubeSecretName string // From KUBE_SECRET_NAME env var
 
-	// SystemPrivateKey is a PEM-encoded RSA private key for System API JWT auth.
-	// Required only when TrustedDomains is set (AddCustomDomain needs system.domain.write).
-	SystemPrivateKey string // From SYSTEM_PRIVATE_KEY env var
-
-	// SystemUser is the key name matching ZITADEL_SYSTEMAPIUSERS config.
-	// Used as iss/sub in the System API JWT.
-	SystemUser string // From SYSTEM_USER env var (default: "ecommerce-seed")
+	// KubeAPIServer overrides the API server URL from kubeconfig.
+	// Useful when running in Docker where kubeconfig points to 0.0.0.0.
+	KubeAPIServer string // From KUBE_API_SERVER env var
 }
 
 func loadConfig() config {
@@ -58,31 +53,10 @@ func loadConfig() config {
 		DevMode:     os.Getenv("DEV_MODE") == "true",
 		WebhookURL:  requireEnv("WEBHOOK_URL"),
 
-		TrustedDomains: parseTrustedDomains(os.Getenv("TRUSTED_DOMAINS")),
-
-		SystemPrivateKey: os.Getenv("SYSTEM_PRIVATE_KEY"),
-		SystemUser:       defaultStr(os.Getenv("SYSTEM_USER"), "ecommerce-seed"),
+		KubeNamespace:  os.Getenv("KUBE_NAMESPACE"),
+		KubeSecretName: os.Getenv("KUBE_SECRET_NAME"),
+		KubeAPIServer:  os.Getenv("KUBE_API_SERVER"),
 	}
-}
-
-func defaultStr(val, fallback string) string {
-	if val == "" {
-		return fallback
-	}
-	return val
-}
-
-func parseTrustedDomains(raw string) []string {
-	if raw == "" {
-		return nil
-	}
-	var domains []string
-	for _, d := range strings.Split(raw, ",") {
-		if d = strings.TrimSpace(d); d != "" {
-			domains = append(domains, d)
-		}
-	}
-	return domains
 }
 
 func requireEnv(key string) string {

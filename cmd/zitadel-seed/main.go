@@ -4,13 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	actionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/action/v2"
-	applicationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/application/v2"
-	authorizationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/authorization/v2"
-	permissionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/internal_permission/v2"
-	orgv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/org/v2"
-	projectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/project/v2"
-	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
+	"github.com/zitadel/zitadel-go/v3/pkg/client"
 )
 
 // =============================================================================
@@ -29,17 +23,10 @@ import (
 // =============================================================================
 
 type seeder struct {
-	cfg config
-	pat string
-	ctx context.Context
-
-	projects projectv2.ProjectServiceClient
-	apps     applicationv2.ApplicationServiceClient
-	users    userv2.UserServiceClient
-	auths    authorizationv2.AuthorizationServiceClient
-	actions  actionv2.ActionServiceClient
-	orgs     orgv2.OrganizationServiceClient
-	perms    permissionv2.InternalPermissionServiceClient
+	cfg     config
+	ctx     context.Context
+	secrets *secretStore
+	client  *client.Client
 
 	orgID           string
 	projectID       string
@@ -48,8 +35,9 @@ type seeder struct {
 
 func main() {
 	s := &seeder{
-		cfg: loadConfig(),
-		ctx: context.Background(),
+		cfg:     loadConfig(),
+		ctx:     context.Background(),
+		secrets: newSecretStore(),
 	}
 
 	slog.Info("Starting Zitadel seed")
@@ -58,13 +46,14 @@ func main() {
 	s.readPAT()
 	s.connect()
 	s.resolveOrgID()
-	s.addCustomDomains()
 	s.setupProject()
 	s.setupAdminUIApp()
 	s.setupGoServiceAccount()
 	s.setupPlatformServiceAccount()
 	s.setupPermissionsAction()
 	// s.setupDemoUser()
+
+	s.secrets.publish(s.cfg)
 
 	slog.Info("Seed complete",
 		"zitadel_console", s.cfg.ZitadelURL+"/ui/console",

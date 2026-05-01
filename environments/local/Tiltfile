@@ -30,9 +30,6 @@ watch_settings(ignore=[
 
 COMPOSE_DIR = INFRA_PATH + '/docker/compose'
 
-# Secrets directory — seed writes client secrets here, Tiltfile creates k8s Secret from them.
-SECRETS_DIR = INFRA_PATH + '/.secrets'
-
 # ============================================================================
 # Docker Compose Infrastructure
 # ============================================================================
@@ -63,14 +60,11 @@ dc_resource('prometheus', labels=['observability'])
 dc_resource('tempo', labels=['observability'])
 dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 'tempo'])
 
-# Create k8s Secret from zitadel-seed output files.
-# Seed writes client secrets to SECRETS_DIR on first run; this resource
-# picks them up and creates a "zitadel-credentials" Secret in the dev namespace.
+# Wait for zitadel-seed to finish — it creates the "zitadel-credentials"
+# K8s Secret directly via client-go (KUBE_NAMESPACE + KUBE_SECRET_NAME env vars).
 local_resource(
     'zitadel-credentials',
     cmd='''
-        mkdir -p "{secrets}"
-        # Wait for seed container to finish (Tilt marks dc_resource ready on start, not exit)
         echo "Waiting for zitadel-seed to complete..."
         for i in $(seq 1 60); do
             STATE=$(docker inspect -f '{{{{.State.Running}}}}' zitadel-seed 2>/dev/null)
@@ -79,25 +73,13 @@ local_resource(
             fi
             sleep 2
         done
-        # Copy secret files from seed container (overwrites any stale ones)
-        docker cp zitadel-seed:/output/s2s-client-secret "{secrets}/s2s-client-secret" 2>/dev/null || true
-        docker cp zitadel-seed:/output/platform-client-secret "{secrets}/platform-client-secret" 2>/dev/null || true
-        docker cp zitadel-seed:/output/admin-ui-client-id "{secrets}/admin-ui-client-id" 2>/dev/null || true
-        docker cp zitadel-seed:/output/project-id "{secrets}/project-id" 2>/dev/null || true
-        docker cp zitadel-seed:/output/org-id "{secrets}/org-id" 2>/dev/null || true
-        if [ ! -f "{secrets}/s2s-client-secret" ]; then
-            echo "ERROR: No secrets found. Run: make docker-clean && make dev"
+        # Verify secret was created
+        kubectl -n dev get secret zitadel-credentials -o name || {
+            echo "ERROR: zitadel-credentials secret not found. Check zitadel-seed logs."
             exit 1
-        fi
-        kubectl -n dev create secret generic zitadel-credentials \
-            --from-file=s2s-client-secret={secrets}/s2s-client-secret \
-            --from-file=platform-client-secret={secrets}/platform-client-secret \
-            --from-file=admin-ui-client-id={secrets}/admin-ui-client-id \
-            --from-file=project-id={secrets}/project-id \
-            --from-file=org-id={secrets}/org-id \
-            --dry-run=client -o yaml | kubectl apply -f -
-        echo "k8s Secret 'zitadel-credentials' created/updated in dev namespace"
-    '''.format(secrets=SECRETS_DIR),
+        }
+        echo "zitadel-credentials secret ready"
+    ''',
     labels=['infrastructure'],
     resource_deps=['zitadel-seed'],
 )

@@ -3,6 +3,9 @@ package main
 import (
 	"log/slog"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	filterv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/filter/v2"
 	projectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/project/v2"
 )
@@ -10,7 +13,7 @@ import (
 func (s *seeder) setupProject() {
 	slog.Info("Setting up project")
 
-	projects, err := s.projects.ListProjects(s.ctx, &projectv2.ListProjectsRequest{
+	projects, err := s.client.ProjectServiceV2().ListProjects(s.ctx, &projectv2.ListProjectsRequest{
 		Filters: []*projectv2.ProjectSearchFilter{{
 			Filter: &projectv2.ProjectSearchFilter_ProjectNameFilter{
 				ProjectNameFilter: &projectv2.ProjectNameFilter{
@@ -24,7 +27,11 @@ func (s *seeder) setupProject() {
 		fatal("Failed to list projects", "error", err)
 	}
 
-	if len(projects.GetProjects()) > 0 {
+	if len(projects.GetProjects()) > 1 {
+		fatal("Multiple projects named 'ecommerce' found", "count", len(projects.GetProjects()))
+	}
+
+	if len(projects.GetProjects()) == 1 {
 		s.projectID = projects.GetProjects()[0].GetProjectId()
 		slog.Info("Project already exists", "id", s.projectID)
 	} else {
@@ -33,14 +40,14 @@ func (s *seeder) setupProject() {
 			Name:                 "ecommerce",
 			ProjectRoleAssertion: true,
 		}
-		result, err := s.projects.CreateProject(s.ctx, req)
+		result, err := s.client.ProjectServiceV2().CreateProject(s.ctx, req)
 		if err != nil {
 			fatal("Failed to create project", "error", err)
 		}
 		s.projectID = result.GetProjectId()
 		slog.Info("Created project", "id", s.projectID)
 	}
-	writeSecretFile("project-id", s.projectID)
+	s.secrets.set("project-id", s.projectID)
 
 	roles := []struct{ key, display string }{
 		{"super_admin", "Super Admin"},
@@ -50,13 +57,18 @@ func (s *seeder) setupProject() {
 	}
 	group := "ecommerce"
 	for _, r := range roles {
-		//nolint:errcheck // roles are idempotent — duplicates return "already exists"
-		s.projects.AddProjectRole(s.ctx, &projectv2.AddProjectRoleRequest{
+		_, err := s.client.ProjectServiceV2().AddProjectRole(s.ctx, &projectv2.AddProjectRoleRequest{
 			ProjectId:   s.projectID,
 			RoleKey:     r.key,
 			DisplayName: r.display,
 			Group:       &group,
 		})
+		if err != nil {
+			if status.Code(err) == codes.AlreadyExists {
+				continue
+			}
+			fatal("Failed to add project role", "role", r.key, "error", err)
+		}
 	}
 	slog.Info("Roles configured")
 }

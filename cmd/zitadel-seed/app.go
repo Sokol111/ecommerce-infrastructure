@@ -10,7 +10,7 @@ import (
 func (s *seeder) setupAdminUIApp() {
 	slog.Info("Setting up admin-ui OIDC application")
 
-	apps, err := s.apps.ListApplications(s.ctx, &applicationv2.ListApplicationsRequest{
+	apps, err := s.client.ApplicationServiceV2().ListApplications(s.ctx, &applicationv2.ListApplicationsRequest{
 		Filters: []*applicationv2.ApplicationSearchFilter{
 			{
 				Filter: &applicationv2.ApplicationSearchFilter_ProjectIdFilter{
@@ -33,16 +33,20 @@ func (s *seeder) setupAdminUIApp() {
 		fatal("Failed to list apps", "error", err)
 	}
 
-	if len(apps.GetApplications()) > 0 {
+	if len(apps.GetApplications()) > 1 {
+		fatal("Multiple apps named 'admin-ui' found", "count", len(apps.GetApplications()))
+	}
+
+	if len(apps.GetApplications()) == 1 {
 		if oidcCfg := apps.GetApplications()[0].GetOidcConfiguration(); oidcCfg != nil {
 			s.adminUIClientID = oidcCfg.GetClientId()
 		}
-		writeSecretFile("admin-ui-client-id", s.adminUIClientID)
+		s.secrets.set("admin-ui-client-id", s.adminUIClientID)
 		slog.Info("OIDC app already exists", "client_id", s.adminUIClientID)
 		return
 	}
 
-	result, err := s.apps.CreateApplication(s.ctx, &applicationv2.CreateApplicationRequest{
+	result, err := s.client.ApplicationServiceV2().CreateApplication(s.ctx, &applicationv2.CreateApplicationRequest{
 		ProjectId: s.projectID,
 		Name:      "admin-ui",
 		ApplicationType: &applicationv2.CreateApplicationRequest_OidcConfiguration{
@@ -72,6 +76,6 @@ func (s *seeder) setupAdminUIApp() {
 	if oidcCfg := result.GetOidcConfiguration(); oidcCfg != nil {
 		s.adminUIClientID = oidcCfg.GetClientId()
 	}
-	writeSecretFile("admin-ui-client-id", s.adminUIClientID)
+	s.secrets.set("admin-ui-client-id", s.adminUIClientID)
 	slog.Info("Created OIDC app", "client_id", s.adminUIClientID)
 }

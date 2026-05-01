@@ -2,8 +2,9 @@ package main
 
 import (
 	"log/slog"
-	"os"
-	"path/filepath"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	authorizationv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/authorization/v2"
 	permissionv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/internal_permission/v2"
@@ -19,7 +20,7 @@ func (s *seeder) setupGoServiceAccount() {
 	userID, created := s.findOrCreateMachineUser("ecommerce-service", "Ecommerce Service Account")
 	if created {
 		secret := s.createSecret(userID)
-		writeSecretFile("s2s-client-secret", secret)
+		s.secrets.set("s2s-client-secret", secret)
 	}
 	s.grantProjectRole(userID)
 
@@ -34,7 +35,7 @@ func (s *seeder) setupPlatformServiceAccount() {
 	userID, created := s.findOrCreateMachineUser("platform-service", "Platform Service Account")
 	if created {
 		secret := s.createSecret(userID)
-		writeSecretFile("platform-client-secret", secret)
+		s.secrets.set("platform-client-secret", secret)
 	}
 	s.grantProjectRole(userID)
 	s.grantOrgUserManager(userID)
@@ -46,7 +47,7 @@ func (s *seeder) setupPlatformServiceAccount() {
 // and creates one if not found.
 // Returns the user ID and whether the user was created in this call.
 func (s *seeder) findOrCreateMachineUser(username, displayName string) (string, bool) {
-	users, err := s.users.ListUsers(s.ctx, &userv2.ListUsersRequest{
+	users, err := s.client.UserServiceV2().ListUsers(s.ctx, &userv2.ListUsersRequest{
 		Queries: []*userv2.SearchQuery{{
 			Query: &userv2.SearchQuery_UserNameQuery{
 				UserNameQuery: &userv2.UserNameQuery{
@@ -60,7 +61,11 @@ func (s *seeder) findOrCreateMachineUser(username, displayName string) (string, 
 		fatal("Failed to list users", "username", username, "error", err)
 	}
 
-	if len(users.GetResult()) > 0 {
+	if len(users.GetResult()) > 1 {
+		fatal("Multiple users with same username found", "username", username, "count", len(users.GetResult()))
+	}
+
+	if len(users.GetResult()) == 1 {
 		id := users.GetResult()[0].GetUserId()
 		slog.Info("Machine user already exists", "username", username, "id", id)
 		return id, false
@@ -77,7 +82,7 @@ func (s *seeder) findOrCreateMachineUser(username, displayName string) (string, 
 		},
 	}
 
-	result, err := s.users.CreateUser(s.ctx, req)
+	result, err := s.client.UserServiceV2().CreateUser(s.ctx, req)
 	if err != nil {
 		fatal("Failed to create machine user", "username", username, "error", err)
 	}
@@ -88,7 +93,7 @@ func (s *seeder) findOrCreateMachineUser(username, displayName string) (string, 
 // createSecret generates a client_credentials secret for the machine user.
 // The secret is only returned once — store it securely.
 func (s *seeder) createSecret(userID string) string {
-	resp, err := s.users.AddSecret(s.ctx, &userv2.AddSecretRequest{
+	resp, err := s.client.UserServiceV2().AddSecret(s.ctx, &userv2.AddSecretRequest{
 		UserId: userID,
 	})
 	if err != nil {
@@ -99,18 +104,22 @@ func (s *seeder) createSecret(userID string) string {
 
 // grantProjectRole grants the service_account project role to the given user.
 func (s *seeder) grantProjectRole(userID string) {
-	//nolint:errcheck // grant may already exist
-	s.auths.CreateAuthorization(s.ctx, &authorizationv2.CreateAuthorizationRequest{
+	_, err := s.client.AuthorizationServiceV2().CreateAuthorization(s.ctx, &authorizationv2.CreateAuthorizationRequest{
 		UserId:    userID,
 		ProjectId: s.projectID,
 		RoleKeys:  []string{"service_account"},
 	})
+	if err != nil {
+		if status.Code(err) == codes.AlreadyExists {
+			return
+		}
+		fatal("Failed to grant project role", "user_id", userID, "error", err)
+	}
 }
 
 // grantOrgUserManager grants ORG_USER_MANAGER org administrator role to the given user.
 func (s *seeder) grantOrgUserManager(userID string) {
-	//nolint:errcheck // administrator may already exist
-	s.perms.CreateAdministrator(s.ctx, &permissionv2.CreateAdministratorRequest{
+	_, err := s.client.InternalPermissionServiceV2().CreateAdministrator(s.ctx, &permissionv2.CreateAdministratorRequest{
 		UserId: userID,
 		Resource: &permissionv2.ResourceType{
 			Resource: &permissionv2.ResourceType_OrganizationId{
@@ -119,18 +128,10 @@ func (s *seeder) grantOrgUserManager(userID string) {
 		},
 		Roles: []string{"ORG_USER_MANAGER"},
 	})
-}
-
-// writeSecretFile writes a secret value to /output/<name>.
-// The /output directory is bind-mounted to the host so Tiltfile can create k8s secrets.
-func writeSecretFile(name, value string) {
-	dir := "/output"
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		slog.Warn("Cannot create output dir, skipping secret file", "dir", dir, "error", err)
-		return
-	}
-	path := filepath.Join(dir, name)
-	if err := os.WriteFile(path, []byte(value), 0o644); err != nil {
-		slog.Warn("Cannot write secret file", "path", path, "error", err)
+	if err != nil {
+		if status.Code(err) == codes.AlreadyExists {
+			return
+		}
+		fatal("Failed to grant org user manager", "user_id", userID, "error", err)
 	}
 }

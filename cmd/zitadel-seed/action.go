@@ -14,7 +14,7 @@ func (s *seeder) setupPermissionsAction() {
 	slog.Info("Setting up permissions webhook (Actions v2)")
 
 	// Find or create Target pointing to the webhook handler.
-	targets, err := s.actions.ListTargets(s.ctx, &actionv2.ListTargetsRequest{
+	targets, err := s.client.ActionServiceV2().ListTargets(s.ctx, &actionv2.ListTargetsRequest{
 		Filters: []*actionv2.TargetSearchFilter{{
 			Filter: &actionv2.TargetSearchFilter_TargetNameFilter{
 				TargetNameFilter: &actionv2.TargetNameFilter{
@@ -29,11 +29,15 @@ func (s *seeder) setupPermissionsAction() {
 	}
 
 	var targetID string
-	if len(targets.GetTargets()) > 0 {
+	if len(targets.GetTargets()) > 1 {
+		fatal("Multiple targets named 'permissions-webhook' found", "count", len(targets.GetTargets()))
+	}
+
+	if len(targets.GetTargets()) == 1 {
 		targetID = targets.GetTargets()[0].GetId()
-		_, err := s.actions.UpdateTarget(s.ctx, &actionv2.UpdateTargetRequest{
+		_, err := s.client.ActionServiceV2().UpdateTarget(s.ctx, &actionv2.UpdateTargetRequest{
 			Id:   targetID,
-			Name: strPtr("permissions-webhook"),
+			Name: new("permissions-webhook"),
 			TargetType: &actionv2.UpdateTargetRequest_RestCall{
 				RestCall: &actionv2.RESTCall{InterruptOnError: true},
 			},
@@ -45,7 +49,7 @@ func (s *seeder) setupPermissionsAction() {
 		}
 		slog.Info("Target updated", "id", targetID)
 	} else {
-		result, err := s.actions.CreateTarget(s.ctx, &actionv2.CreateTargetRequest{
+		result, err := s.client.ActionServiceV2().CreateTarget(s.ctx, &actionv2.CreateTargetRequest{
 			Name: "permissions-webhook",
 			TargetType: &actionv2.CreateTargetRequest_RestCall{
 				RestCall: &actionv2.RESTCall{InterruptOnError: true},
@@ -61,7 +65,7 @@ func (s *seeder) setupPermissionsAction() {
 	}
 
 	// Bind target to preaccesstoken function.
-	_, err = s.actions.SetExecution(s.ctx, &actionv2.SetExecutionRequest{
+	_, err = s.client.ActionServiceV2().SetExecution(s.ctx, &actionv2.SetExecutionRequest{
 		Condition: &actionv2.Condition{
 			ConditionType: &actionv2.Condition_Function{
 				Function: &actionv2.FunctionExecution{Name: "preaccesstoken"},
@@ -75,7 +79,7 @@ func (s *seeder) setupPermissionsAction() {
 	slog.Info("Execution set for preaccesstoken")
 
 	// Bind target to preuserinfo function.
-	_, err = s.actions.SetExecution(s.ctx, &actionv2.SetExecutionRequest{
+	_, err = s.client.ActionServiceV2().SetExecution(s.ctx, &actionv2.SetExecutionRequest{
 		Condition: &actionv2.Condition{
 			ConditionType: &actionv2.Condition_Function{
 				Function: &actionv2.FunctionExecution{Name: "preuserinfo"},
@@ -88,5 +92,3 @@ func (s *seeder) setupPermissionsAction() {
 	}
 	slog.Info("Execution set for preuserinfo")
 }
-
-func strPtr(s string) *string { return &s }

@@ -36,14 +36,14 @@ func (s *seeder) waitReady() {
 func (s *seeder) readPAT() {
 	switch {
 	case s.cfg.PAT != "":
-		s.pat = s.cfg.PAT
+		// PAT provided directly via env var — use as-is.
 	case s.cfg.PATFile != "":
 		data, err := os.ReadFile(s.cfg.PATFile)
 		if err != nil {
 			fatal("PAT file not found", "path", s.cfg.PATFile)
 		}
-		s.pat = strings.TrimSpace(string(data))
-		if s.pat == "" {
+		s.cfg.PAT = strings.TrimSpace(string(data))
+		if s.cfg.PAT == "" {
 			fatal("PAT file is empty")
 		}
 	default:
@@ -55,7 +55,7 @@ func (s *seeder) connect() {
 	slog.Info("Connecting to Zitadel gRPC", "host", s.cfg.Host, "port", s.cfg.Port)
 
 	opts := []client.Option{
-		client.WithAuth(client.PAT(s.pat)),
+		client.WithAuth(client.PAT(s.cfg.PAT)),
 	}
 
 	// When gRPC host differs from Zitadel's external domain (e.g., Docker
@@ -75,25 +75,22 @@ func (s *seeder) connect() {
 		fatal("Failed to connect to Zitadel", "error", err)
 	}
 
-	s.projects = c.ProjectServiceV2()
-	s.apps = c.ApplicationServiceV2()
-	s.users = c.UserServiceV2()
-	s.auths = c.AuthorizationServiceV2()
-	s.actions = c.ActionServiceV2()
-	s.orgs = c.OrganizationServiceV2()
-	s.perms = c.InternalPermissionServiceV2()
+	s.client = c
 	slog.Info("Connected to Zitadel gRPC")
 }
 
 func (s *seeder) resolveOrgID() {
-	orgs, err := s.orgs.ListOrganizations(s.ctx, &orgv2.ListOrganizationsRequest{})
+	orgs, err := s.client.OrganizationServiceV2().ListOrganizations(s.ctx, &orgv2.ListOrganizationsRequest{})
 	if err != nil {
 		fatal("Failed to list organizations", "error", err)
 	}
 	if len(orgs.GetResult()) == 0 {
 		fatal("No organizations found")
 	}
+	if len(orgs.GetResult()) > 1 {
+		fatal("Multiple organizations found, expected exactly one", "count", len(orgs.GetResult()))
+	}
 	s.orgID = orgs.GetResult()[0].GetId()
 	slog.Info("Resolved organization", "id", s.orgID, "name", orgs.GetResult()[0].GetName())
-	writeSecretFile("org-id", s.orgID)
+	s.secrets.set("org-id", s.orgID)
 }
