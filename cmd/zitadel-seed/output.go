@@ -92,7 +92,13 @@ func (ss *secretStore) publishToK8s(cfg config) {
 	secretsClient := clientset.CoreV1().Secrets(cfg.KubeNamespace)
 	existing, err := secretsClient.Get(context.Background(), cfg.KubeSecretName, metav1.GetOptions{})
 	if err == nil {
-		existing.Data = data
+		// Merge new entries into existing data, preserving keys from previous runs.
+		if existing.Data == nil {
+			existing.Data = make(map[string][]byte)
+		}
+		for k, v := range data {
+			existing.Data[k] = v
+		}
 		if _, err := secretsClient.Update(context.Background(), existing, metav1.UpdateOptions{}); err != nil {
 			fatal("Failed to update K8s secret", "error", err)
 		}

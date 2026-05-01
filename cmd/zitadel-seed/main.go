@@ -17,8 +17,8 @@ import (
 // What it creates:
 //   1. Project "ecommerce" with roles (super_admin, catalog_manager, viewer, service_account)
 //   2. OIDC Application "admin-ui" (Authorization Code + PKCE)
-//   3. Machine User "ecommerce-service" for Go backend S2S auth (private_key_jwt)
-//   4. Machine User "platform-service" for platform-UI S2S auth (private_key_jwt)
+//   3. Machine User "ecommerce-service" for Go backend S2S auth (client_credentials)
+//   4. Machine User "platform-service" for platform-UI S2S auth (client_credentials)
 //   5. Actions v2 Target + Execution for permissions mapping webhook
 // =============================================================================
 
