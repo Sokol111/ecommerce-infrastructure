@@ -107,9 +107,6 @@ services:
       ZITADEL_CACHES_MILESTONES_CONNECTOR: ""
       ZITADEL_CACHES_ORGANIZATION_CONNECTOR: ""
       ZITADEL_INSTRUMENTATION_TRACE_EXPORTER_TYPE: none
-
-      # Trust additional domains so Zitadel accepts Host headers from internal services
-      ZITADEL_DEFAULTINSTANCE_TRUSTEDDOMAINS: '["zitadel-api"]'
     healthcheck:
       test: ["CMD", "/app/zitadel", "ready"]
       interval: 10s

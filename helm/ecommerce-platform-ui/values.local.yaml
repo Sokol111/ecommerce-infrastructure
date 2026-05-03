@@ -30,6 +30,8 @@ env:
     value: "http://ecommerce-tenant-service:8080"
   - name: NUXT_ZITADEL_URL
     value: "http://zitadel-api:8080"
+  - name: NUXT_ZITADEL_DOMAIN
+    value: "localhost"
   - name: NUXT_ZITADEL_CLIENT_ID
     value: "platform-service"
   - name: NUXT_ZITADEL_CLIENT_SECRET
