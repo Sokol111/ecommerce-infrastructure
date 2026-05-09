@@ -47,6 +47,16 @@ env:
     value: "http://logto:3001/oidc/jwks"
   - name: SECURITY__JWKS__AUDIENCE
     value: "https://api.sokolshop.com"
+  # Auth (Logto Management API — client_credentials)
+  - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_ID
+    value: "tenant-service-m2m"
+  - name: SECURITY__CLIENT_CREDENTIALS__TOKEN_URL
+    value: "http://logto:3001/oidc/token"
+  - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: tenant-m2m-client-secret
   # Kafka (Redpanda)
   - name: KAFKA__BROKERS
     value: "redpanda.prod.svc.cluster.local:9093"
