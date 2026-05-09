@@ -1,0 +1,87 @@
+{
+  "roles": [
+    {
+      "name": "super_admin",
+      "description": "Full access to all ecommerce resources",
+      "type": "User",
+      "scopes": [
+        "*"
+      ]
+    },
+    {
+      "name": "catalog_manager",
+      "description": "Manage products, categories, and attributes",
+      "type": "User",
+      "scopes": [
+        "products:read",
+        "products:write",
+        "products:delete",
+        "categories:read",
+        "categories:write",
+        "categories:delete",
+        "attributes:read",
+        "attributes:write",
+        "attributes:delete"
+      ]
+    },
+    {
+      "name": "viewer",
+      "description": "Read-only access to all resources",
+      "type": "User",
+      "scopes": [
+        "products:read",
+        "categories:read",
+        "attributes:read",
+        "users:read",
+        "tenants:read"
+      ]
+    },
+    {
+      "name": "service_account",
+      "description": "M2M service role for backend-to-backend calls",
+      "type": "MachineToMachine",
+      "scopes": [
+        "tenants:read"
+      ]
+    },
+    {
+      "name": "platform_service",
+      "description": "M2M role for platform-UI tenant registration",
+      "type": "MachineToMachine",
+      "scopes": [
+        "tenants:write"
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "name": "admin-ui",
+      "description": "Admin UI (Traditional Web)",
+      "type": "Traditional",
+      "secretPrefix": "admin-ui",
+      "redirectURI": "$ADMIN_UI_REDIRECT_URI",
+      "logoutURI": "$ADMIN_UI_LOGOUT_URI"
+    },
+    {
+      "name": "ecommerce-service",
+      "description": "Ecommerce Service",
+      "type": "MachineToMachine",
+      "role": "service_account",
+      "secretPrefix": "ecommerce-m2m"
+    },
+    {
+      "name": "platform-service",
+      "description": "Platform Service",
+      "type": "MachineToMachine",
+      "role": "platform_service",
+      "secretPrefix": "platform"
+    },
+    {
+      "name": "tenant-service-m2m",
+      "description": "Tenant Service M2M",
+      "type": "MachineToMachine",
+      "managementAPI": true,
+      "secretPrefix": "tenant-m2m"
+    }
+  ]
+}

@@ -1,5 +1,0 @@
-image:
-  repository: actions-webhook
-  tag: "latest"
-
-env: []

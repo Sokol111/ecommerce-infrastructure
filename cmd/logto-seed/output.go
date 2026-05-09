@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"os"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,52 +11,24 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func fatal(msg string, args ...any) {
-	slog.Error(msg, args...)
-	os.Exit(1)
-}
-
-// secretStore collects key-value pairs during the seed run and
-// publishes them at the end — either as a K8s Secret or to stdout.
-type secretStore struct {
-	entries map[string]string
-	order   []string // preserve insertion order for deterministic stdout
-}
-
-func newSecretStore() *secretStore {
-	return &secretStore{entries: make(map[string]string)}
-}
-
-func (ss *secretStore) set(name, value string) {
-	if _, exists := ss.entries[name]; !exists {
-		ss.order = append(ss.order, name)
-	}
-	ss.entries[name] = value
-}
-
-// publish writes the collected secrets. If kubeconfig/namespace/secret name
-// are configured it creates a K8s Secret; otherwise it prints to stdout.
-func (ss *secretStore) publish(cfg config) {
-	if len(ss.entries) == 0 {
+// publishSecrets writes collected secrets either as a K8s Secret or to stdout.
+func publishSecrets(secrets map[string]string, cfg config) {
+	if len(secrets) == 0 {
 		return
 	}
 
 	if cfg.KubeNamespace != "" && cfg.KubeSecretName != "" {
-		ss.publishToK8s(cfg)
+		publishToK8s(secrets, cfg)
 	} else {
-		ss.publishToStdout()
+		fmt.Println("--- logto-seed secrets ---")
+		for k, v := range secrets {
+			fmt.Printf("%s=%s\n", k, v)
+		}
+		fmt.Println("---")
 	}
 }
 
-func (ss *secretStore) publishToStdout() {
-	fmt.Println("--- zitadel-seed secrets ---")
-	for _, k := range ss.order {
-		fmt.Printf("%s=%s\n", k, ss.entries[k])
-	}
-	fmt.Println("---")
-}
-
-func (ss *secretStore) publishToK8s(cfg config) {
+func publishToK8s(secrets map[string]string, cfg config) {
 	slog.Info("Creating K8s secret", "namespace", cfg.KubeNamespace, "name", cfg.KubeSecretName)
 
 	rules := clientcmd.NewDefaultClientConfigLoadingRules()
@@ -76,8 +47,8 @@ func (ss *secretStore) publishToK8s(cfg config) {
 		fatal("Failed to create K8s client", "error", err)
 	}
 
-	data := make(map[string][]byte, len(ss.entries))
-	for k, v := range ss.entries {
+	data := make(map[string][]byte, len(secrets))
+	for k, v := range secrets {
 		data[k] = []byte(v)
 	}
 
@@ -92,7 +63,6 @@ func (ss *secretStore) publishToK8s(cfg config) {
 	secretsClient := clientset.CoreV1().Secrets(cfg.KubeNamespace)
 	existing, err := secretsClient.Get(context.Background(), cfg.KubeSecretName, metav1.GetOptions{})
 	if err == nil {
-		// Merge new entries into existing data, preserving keys from previous runs.
 		if existing.Data == nil {
 			existing.Data = make(map[string][]byte)
 		}
