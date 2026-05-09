@@ -62,6 +62,21 @@ env:
     value: "http://logto:3001/oidc/jwks"
   - name: SECURITY__JWKS__AUDIENCE
     value: "https://api.sokolshop.com"
+  # Auth (Client Credentials for S2S)
+  - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: ecommerce-m2m-client-id
+  - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: ecommerce-m2m-client-secret
+  - name: SECURITY__CLIENT_CREDENTIALS__TOKEN_URL
+    value: "http://logto:3001/oidc/token"
+  - name: SECURITY__CLIENT_CREDENTIALS__RESOURCE
+    value: "https://api.sokolshop.com"
   # Application
   - name: APPLICATION__JWT_SECRET
     valueFrom:
