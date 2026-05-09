@@ -189,87 +189,40 @@ deploy-observability: deploy-alloy ## Deploy observability stack
 ##@ Deploy Application Services
 # =============================================================================
 
+# Service lists
+BACKEND_SERVICES  := tenant-service catalog-service image-service product-query-service category-query-service
+FRONTEND_SERVICES := admin-ui ui
+ALL_SERVICES      := $(BACKEND_SERVICES) $(FRONTEND_SERVICES)
+
 .PHONY: deploy-logto
 deploy-logto: ## Deploy Logto OIDC identity provider
 	@printf "$(COLOR_BLUE)→ Deploying Logto...$(COLOR_RESET)\n"
 	kubectl apply -f $(K8S_DIR)/logto.yaml
 	@printf "$(COLOR_GREEN)✓ Logto deployed$(COLOR_RESET)\n"
 
-.PHONY: deploy-tenant
-deploy-tenant: ## Deploy tenant-service
-	@printf "$(COLOR_BLUE)→ Deploying tenant-service...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-tenant-service && helm dependency update
-	helm upgrade --install ecommerce-tenant-service $(HELM_DIR)/ecommerce-tenant-service \
+.PHONY: deploy-svc
+deploy-svc: ## Deploy a service (usage: make deploy-svc SVC=catalog-service)
+ifndef SVC
+	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
+	@printf "Usage: make deploy-svc SVC=<service-name>\n"
+	@printf "Available: $(ALL_SERVICES)\n"
+	@exit 1
+endif
+	@printf "$(COLOR_BLUE)→ Deploying ecommerce-$(SVC)...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update
+	helm upgrade --install ecommerce-$(SVC) $(HELM_DIR)/ecommerce-$(SVC) \
 		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-tenant-service/values.prod.yaml \
+		-f $(HELM_DIR)/ecommerce-$(SVC)/values.prod.yaml \
 		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ tenant-service deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-catalog
-deploy-catalog: ## Deploy catalog-service
-	@printf "$(COLOR_BLUE)→ Deploying catalog-service...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-catalog-service && helm dependency update
-	helm upgrade --install ecommerce-catalog-service $(HELM_DIR)/ecommerce-catalog-service \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-catalog-service/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ catalog-service deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-category-query
-deploy-category-query: ## Deploy category-query-service
-	@printf "$(COLOR_BLUE)→ Deploying category-query-service...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-category-query-service && helm dependency update
-	helm upgrade --install ecommerce-category-query-service $(HELM_DIR)/ecommerce-category-query-service \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-category-query-service/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ category-query-service deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-product-query
-deploy-product-query: ## Deploy product-query-service
-	@printf "$(COLOR_BLUE)→ Deploying product-query-service...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-product-query-service && helm dependency update
-	helm upgrade --install ecommerce-product-query-service $(HELM_DIR)/ecommerce-product-query-service \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-product-query-service/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ product-query-service deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-image-service
-deploy-image-service: ## Deploy image-service
-	@printf "$(COLOR_BLUE)→ Deploying image-service...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-image-service && helm dependency update
-	helm upgrade --install ecommerce-image-service $(HELM_DIR)/ecommerce-image-service \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-image-service/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ image-service deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-admin-ui
-deploy-admin-ui: ## Deploy admin-ui
-	@printf "$(COLOR_BLUE)→ Deploying admin-ui...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-admin-ui && helm dependency update
-	helm upgrade --install ecommerce-admin-ui $(HELM_DIR)/ecommerce-admin-ui \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-admin-ui/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ admin-ui deployed$(COLOR_RESET)\n"
-
-.PHONY: deploy-ecommerce-ui
-deploy-ecommerce-ui: ## Deploy ecommerce-ui
-	@printf "$(COLOR_BLUE)→ Deploying ecommerce-ui...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-ui && helm dependency update
-	helm upgrade --install ecommerce-ui $(HELM_DIR)/ecommerce-ui \
-		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-ui/values.prod.yaml \
-		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ ecommerce-ui deployed$(COLOR_RESET)\n"
+	@printf "$(COLOR_GREEN)✓ ecommerce-$(SVC) deployed$(COLOR_RESET)\n"
 
 .PHONY: deploy-backend
-deploy-backend: deploy-tenant deploy-catalog deploy-image-service deploy-product-query deploy-category-query ## Deploy all backend services
+deploy-backend: ## Deploy all backend services
+	@for svc in $(BACKEND_SERVICES); do $(MAKE) deploy-svc SVC=$$svc || exit 1; done
 
 .PHONY: deploy-frontend
-deploy-frontend: deploy-admin-ui deploy-ecommerce-ui ## Deploy all frontend UIs
+deploy-frontend: ## Deploy all frontend UIs
+	@for svc in $(FRONTEND_SERVICES); do $(MAKE) deploy-svc SVC=$$svc || exit 1; done
 
 .PHONY: deploy-services
 deploy-services: deploy-backend deploy-frontend ## Deploy all application services
