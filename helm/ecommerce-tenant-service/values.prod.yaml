@@ -43,9 +43,9 @@ env:
         name: mongodb-credentials
         key: connection-string
   # Auth (Logto JWKS)
-  - name: SECURITY__TOKEN__JWKS_URL
+  - name: SECURITY__JWKS__JWKS_URL
     value: "http://logto:3001/oidc/jwks"
-  - name: SECURITY__TOKEN__AUDIENCE
+  - name: SECURITY__JWKS__AUDIENCE
     value: "https://api.sokolshop.com"
   # Kafka (Redpanda)
   - name: KAFKA__BROKERS

@@ -20,7 +20,7 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['app.kubernetes.io/version']
-  - name: SECURITY__S2S__CLIENT_SECRET
+  - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_SECRET
     valueFrom:
       secretKeyRef:
         name: logto-credentials

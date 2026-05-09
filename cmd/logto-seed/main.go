@@ -13,8 +13,8 @@ import "log/slog"
 //   1. API Resource (https://api.sokolshop.com) with RBAC scopes
 //   2. Roles: super_admin, catalog_manager, viewer (User), service_account (M2M)
 //   3. OIDC Application "admin-ui" (Traditional Web, Authorization Code + PKCE)
-//   4. M2M Application "ecommerce-service" (S2S auth for Go backends)
-//   5. M2M Application "platform-service" (S2S auth for platform-UI)
+//   4. M2M Application "ecommerce-service" (M2M auth for Go backends)
+//   5. M2M Application "platform-service" (M2M auth for platform-UI)
 //   6. M2M Application "tenant-service-m2m" (Logto Management API access)
 //   7. Custom JWT claims configuration (role + tenant)
 //   8. K8s Secret "logto-credentials" with all client IDs/secrets
