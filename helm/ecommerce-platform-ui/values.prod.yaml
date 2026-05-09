@@ -51,23 +51,20 @@ readinessProbe:
 env:
   - name: NUXT_TENANT_API_URL
     value: "http://ecommerce-tenant-service:8080"
-  - name: NUXT_ZITADEL_URL
-    value: "https://auth.sokolshop.com"
-  - name: NUXT_ZITADEL_CLIENT_ID
+  - name: NUXT_LOGTO_URL
+    value: "http://logto:3001"
+  - name: NUXT_LOGTO_CLIENT_ID
     valueFrom:
       secretKeyRef:
-        name: zitadel-s2s
-        key: client-id
-  - name: NUXT_ZITADEL_CLIENT_SECRET
+        name: logto-credentials
+        key: platform-client-id
+  - name: NUXT_LOGTO_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
-        name: zitadel-s2s
-        key: client-secret
-  - name: NUXT_ZITADEL_PROJECT_ID
-    valueFrom:
-      secretKeyRef:
-        name: zitadel-s2s
-        key: project-id
+        name: logto-credentials
+        key: platform-client-secret
+  - name: NUXT_API_RESOURCE_INDICATOR
+    value: "https://api.sokolshop.com"
   - name: NUXT_COOKIE_SECURE
     value: "true"
   - name: NUXT_BASE_DOMAIN

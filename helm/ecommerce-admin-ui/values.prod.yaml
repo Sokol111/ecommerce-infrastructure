@@ -53,22 +53,28 @@ env:
     value: "http://ecommerce-catalog-service:8080"
   - name: NUXT_IMAGE_API_URL
     value: "http://ecommerce-image-service:8080"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_CLIENT_ID
+  - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_ID
     valueFrom:
       secretKeyRef:
-        name: zitadel-s2s
-        key: client-id
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_BASE_URL
-    value: "https://auth.sokolshop.com"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_REDIRECT_URI
-    value: "https://admin.sokolshop.com/auth/zitadel/callback"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_LOGOUT_REDIRECT_URI
+        name: logto-credentials
+        key: admin-ui-client-id
+  - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: admin-ui-client-secret
+  - name: NUXT_OIDC_PROVIDERS_OIDC_AUTHORIZATION_URL
+    value: "https://auth.sokolshop.com/oidc/auth"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_TOKEN_URL
+    value: "http://logto:3001/oidc/token"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_USERINFO_URL
+    value: "http://logto:3001/oidc/me"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_URL
+    value: "https://auth.sokolshop.com/oidc/session/end"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_REDIRECT_URI
+    value: "https://admin.sokolshop.com/auth/oidc/callback"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_REDIRECT_URI
     value: "https://admin.sokolshop.com"
-  - name: NUXT_OIDC_PROVIDERS_ZITADEL_AUDIENCE
-    valueFrom:
-      secretKeyRef:
-        name: zitadel-s2s
-        key: client-id
   - name: NUXT_OIDC_SESSION_SECRET
     valueFrom:
       secretKeyRef:

@@ -1,0 +1,99 @@
+name: ecommerce
+
+services:
+  logto-db:
+    image: postgres:17-alpine
+    container_name: logto-db
+    environment:
+      POSTGRES_DB: logto
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - logto-db-data:/var/lib/postgresql/data
+    networks:
+      - logto
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d logto -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  logto:
+    image: svhd/logto:latest
+    container_name: logto
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    environment:
+      TRUST_PROXY_HEADER: "1"
+      DB_URL: postgres://postgres:postgres@logto-db:5432/logto
+      ENDPOINT: http://localhost:3001
+      ADMIN_ENDPOINT: http://localhost:3002
+    ports:
+      - 3001:3001
+      - 3002:3002
+    networks:
+      - logto
+      - shared-network
+    depends_on:
+      logto-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:3001/oidc/.well-known/openid-configuration || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    restart: unless-stopped
+
+  logto-init:
+    image: postgres:17-alpine
+    container_name: logto-init
+    entrypoint: ["sh", "-c", "until pg_isready -h logto-db -U postgres; do sleep 1; done && sleep 5 && psql -f /scripts/logto-init.sql"]
+    environment:
+      PGHOST: logto-db
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: logto
+    volumes:
+      - ../../scripts/logto-init.sql:/scripts/logto-init.sql:ro
+    networks:
+      - logto
+    depends_on:
+      logto:
+        condition: service_healthy
+    restart: "no"
+
+  logto-seed:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile.logto-seed
+    container_name: logto-seed
+    environment:
+      LOGTO_URL: http://logto:3001
+      LOGTO_BOOTSTRAP_APP_ID: bootstrap-seed-app
+      LOGTO_BOOTSTRAP_APP_SECRET: bootstrap-seed-secret
+      API_RESOURCE_INDICATOR: https://api.sokolshop.com
+      ADMIN_UI_REDIRECT_URI: http://admin.127.0.0.1.nip.io/auth/oidc/callback
+      ADMIN_UI_LOGOUT_URI: http://admin.127.0.0.1.nip.io
+      KUBE_NAMESPACE: dev
+      KUBE_SECRET_NAME: logto-credentials
+      KUBE_API_SERVER: https://k3d-dev-cluster-server-0:6443
+    volumes:
+      - ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro
+    networks:
+      - logto
+      - shared-network
+    depends_on:
+      logto-init:
+        condition: service_completed_successfully
+    restart: "no"
+
+networks:
+  logto:
+    name: logto
+  shared-network:
+    external: true
+
+volumes:
+  logto-db-data:

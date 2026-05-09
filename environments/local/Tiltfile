@@ -41,7 +41,7 @@ docker_compose(COMPOSE_DIR + '/mongo.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/storage.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/observability.yml', project_name='ecommerce')
-docker_compose(COMPOSE_DIR + '/zitadel.yml', project_name='ecommerce')
+docker_compose(COMPOSE_DIR + '/logto.yml', project_name='ecommerce')
 
 # Organize compose resources in Tilt UI
 dc_resource('mongo', labels=['infrastructure'])
@@ -50,38 +50,36 @@ dc_resource('redpanda-console', labels=['infrastructure'], resource_deps=['redpa
 dc_resource('minio', labels=['infrastructure'])
 dc_resource('minio-init', labels=['infrastructure'], resource_deps=['minio'])
 dc_resource('imgproxy', labels=['infrastructure'], resource_deps=['minio'])
-dc_resource('zitadel-db', labels=['infrastructure'])
-dc_resource('zitadel-api', labels=['infrastructure'], resource_deps=['zitadel-db'])
-dc_resource('zitadel-login', labels=['infrastructure'], resource_deps=['zitadel-api'])
-dc_resource('zitadel-proxy', labels=['infrastructure'], resource_deps=['zitadel-api', 'zitadel-login'])
-dc_resource('zitadel-seed', labels=['infrastructure'], resource_deps=['zitadel-api', 'actions-webhook'])
-dc_resource('actions-webhook', labels=['infrastructure'])
+dc_resource('logto-db', labels=['infrastructure'])
+dc_resource('logto', labels=['infrastructure'], resource_deps=['logto-db'])
+dc_resource('logto-init', labels=['infrastructure'], resource_deps=['logto'])
+dc_resource('logto-seed', labels=['infrastructure'], resource_deps=['logto-init'])
 dc_resource('prometheus', labels=['observability'])
 dc_resource('tempo', labels=['observability'])
 dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 'tempo'])
 
-# Wait for zitadel-seed to finish — it creates the "zitadel-credentials"
+# Wait for logto-seed to finish — it creates the "logto-credentials"
 # K8s Secret directly via client-go (KUBE_NAMESPACE + KUBE_SECRET_NAME env vars).
 local_resource(
-    'zitadel-credentials',
+    'logto-credentials',
     cmd='''
-        echo "Waiting for zitadel-seed to complete..."
+        echo "Waiting for logto-seed to complete..."
         for i in $(seq 1 60); do
-            STATE=$(docker inspect -f '{{{{.State.Running}}}}' zitadel-seed 2>/dev/null)
+            STATE=$(docker inspect -f '{{{{.State.Running}}}}' logto-seed 2>/dev/null)
             if [ "$STATE" = "false" ] || [ -z "$STATE" ]; then
                 break
             fi
             sleep 2
         done
         # Verify secret was created
-        kubectl -n dev get secret zitadel-credentials -o name || {
-            echo "ERROR: zitadel-credentials secret not found. Check zitadel-seed logs."
+        kubectl -n dev get secret logto-credentials -o name || {
+            echo "ERROR: logto-credentials secret not found. Check logto-seed logs."
             exit 1
         }
-        echo "zitadel-credentials secret ready"
+        echo "logto-credentials secret ready"
     ''',
     labels=['infrastructure'],
-    resource_deps=['zitadel-seed'],
+    resource_deps=['logto-seed'],
 )
 
 # ============================================================================
@@ -126,7 +124,7 @@ UI_SERVICES = {
             'ecommerce-tenant-service',
             'ecommerce-catalog-service',
             'ecommerce-image-service',
-            'zitadel-credentials',
+            'logto-credentials',
         ],
         'api_deps': [
             'ecommerce-catalog-service-api',
@@ -147,7 +145,7 @@ UI_SERVICES = {
     'ecommerce-platform-ui': {
         'resource_deps': [
             'ecommerce-tenant-service',
-            'zitadel-credentials',
+            'logto-credentials',
         ],
         'api_deps': [
             'ecommerce-tenant-service-api',
@@ -231,7 +229,7 @@ for name, config in GO_SERVICES.items():
     
     # Resource configuration with port forwards
     # All services depend on tenant (except tenant itself)
-    svc_resource_deps = ['mongo', 'redpanda', 'zitadel-credentials']
+    svc_resource_deps = ['mongo', 'redpanda', 'logto-credentials']
     if name != 'ecommerce-tenant-service':
         svc_resource_deps.append('ecommerce-tenant-service')
 
@@ -336,7 +334,7 @@ local_resource(
         link('http://platform.127.0.0.1.nip.io', 'Platform UI'),
         link('http://localhost:9093', 'Redpanda Console'),
         link('http://localhost:9001', 'MinIO Console'),
-        link('http://localhost:8080/ui/console', 'Zitadel Console'),
+        link('http://localhost:3002', 'Logto Admin Console'),
         link('http://localhost:3000', 'Grafana'),
         link('http://localhost:9090', 'Prometheus'),
     ],

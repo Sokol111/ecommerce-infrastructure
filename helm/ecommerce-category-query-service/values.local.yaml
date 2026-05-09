@@ -23,5 +23,5 @@ env:
   - name: SECURITY__S2S__CLIENT_SECRET
     valueFrom:
       secretKeyRef:
-        name: zitadel-credentials
-        key: s2s-client-secret
+        name: logto-credentials
+        key: ecommerce-m2m-client-secret

@@ -58,17 +58,11 @@ env:
       secretKeyRef:
         name: mongodb-credentials
         key: connection-string
-  # Auth
-  - name: SECURITY__TOKEN__PUBLIC_KEY
-    valueFrom:
-      secretKeyRef:
-        name: auth-keys
-        key: public-key
-  - name: SECURITY__TOKEN__SERVICE_TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: category-query-service-token
-        key: service-token
+  # Auth (Logto JWKS)
+  - name: SECURITY__TOKEN__JWKS_URL
+    value: "http://logto:3001/oidc/jwks"
+  - name: SECURITY__TOKEN__AUDIENCE
+    value: "https://api.sokolshop.com"
   # Kafka (Redpanda)
   - name: KAFKA__BROKERS
     value: "redpanda.prod.svc.cluster.local:9093"

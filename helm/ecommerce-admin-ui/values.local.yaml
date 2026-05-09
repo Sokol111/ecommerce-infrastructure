@@ -33,16 +33,21 @@ env:
   - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_ID
     valueFrom:
       secretKeyRef:
-        name: zitadel-credentials
+        name: logto-credentials
         key: admin-ui-client-id
+  - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: admin-ui-client-secret
   - name: NUXT_OIDC_PROVIDERS_OIDC_AUTHORIZATION_URL
-    value: "http://localhost:8080/oauth/v2/authorize"
+    value: "http://localhost:3001/oidc/auth"
   - name: NUXT_OIDC_PROVIDERS_OIDC_TOKEN_URL
-    value: "http://zitadel-api:8080/oauth/v2/token"
+    value: "http://logto:3001/oidc/token"
   - name: NUXT_OIDC_PROVIDERS_OIDC_USERINFO_URL
-    value: "http://zitadel-api:8080/oidc/v1/userinfo"
+    value: "http://logto:3001/oidc/userinfo"
   - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_URL
-    value: "http://localhost:8080/oidc/v1/end_session"
+    value: "http://localhost:3001/oidc/session/end"
   - name: NUXT_OIDC_PROVIDERS_OIDC_REDIRECT_URI
     value: "http://admin.127.0.0.1.nip.io/auth/oidc/callback"
   - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_REDIRECT_URI

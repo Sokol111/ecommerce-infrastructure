@@ -57,17 +57,11 @@ env:
       secretKeyRef:
         name: mongodb-credentials
         key: connection-string
-  # Auth
-  - name: SECURITY__TOKEN__PUBLIC_KEY
-    valueFrom:
-      secretKeyRef:
-        name: auth-keys
-        key: public-key
-  - name: SECURITY__TOKEN__SERVICE_TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: image-service-token
-        key: service-token
+  # Auth (Logto JWKS)
+  - name: SECURITY__TOKEN__JWKS_URL
+    value: "http://logto:3001/oidc/jwks"
+  - name: SECURITY__TOKEN__AUDIENCE
+    value: "https://api.sokolshop.com"
   # Application
   - name: APPLICATION__JWT_SECRET
     valueFrom:

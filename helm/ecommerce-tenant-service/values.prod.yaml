@@ -1,9 +1,9 @@
-# Production values for ecommerce-product-query-service
-fullnameOverride: ecommerce-product-query-service
+# Production values for ecommerce-tenant-service
+fullnameOverride: ecommerce-tenant-service
 
 image:
-  repository: ghcr.io/sokol111/ecommerce-product-query-service
-  tag: "0.1.9"
+  repository: ghcr.io/sokol111/ecommerce-tenant-service
+  tag: "latest"
   pullPolicy: IfNotPresent
 
 ingress:
@@ -21,27 +21,11 @@ config: |
   logger:
     level: "debug"
   mongo:
-    database: product-query
+    database: tenant
     max-pool-size: 20
   kafka:
     schema-registry:
       auto-register-schemas: true
-    consumers-config:
-      default-group-id: "ecommerce-product-query-service"
-      default-auto-offset-reset: "earliest"
-      consumers:
-        - name: "catalog-events"
-          topic: "catalog.product.events"
-          max-retries: 5
-          initial-backoff: 2s
-          max-backoff: 30s
-          enable-dlq: true
-        - name: "catalog-attribute-events"
-          topic: "catalog.attribute.events"
-          max-retries: 5
-          initial-backoff: 2s
-          max-backoff: 30s
-          enable-dlq: true
   observability:
     tracing:
       enabled: true

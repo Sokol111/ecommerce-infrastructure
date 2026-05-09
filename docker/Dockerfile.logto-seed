@@ -1,0 +1,12 @@
+FROM golang:1.26.2 AS build
+WORKDIR /src
+
+COPY cmd/logto-seed/go.mod cmd/logto-seed/go.sum ./
+RUN go mod download
+COPY cmd/logto-seed/*.go ./
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /seed .
+
+FROM alpine:3.21
+RUN apk add --no-cache ca-certificates
+COPY --from=build /seed /seed
+ENTRYPOINT ["/seed"]

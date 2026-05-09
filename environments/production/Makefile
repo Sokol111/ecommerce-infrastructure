@@ -167,7 +167,7 @@ deploy-imgproxy: ## Deploy imgproxy (image processing)
 	@printf "$(COLOR_GREEN)✓ imgproxy deployed$(COLOR_RESET)\n"
 
 .PHONY: deploy-infra
-deploy-infra: deploy-redpanda deploy-imgproxy ## Deploy all infrastructure (Redpanda + imgproxy)
+deploy-infra: deploy-redpanda deploy-imgproxy deploy-logto ## Deploy all infrastructure (Redpanda + imgproxy + Logto)
 
 # =============================================================================
 ##@ Deploy Observability
@@ -189,15 +189,21 @@ deploy-observability: deploy-alloy ## Deploy observability stack
 ##@ Deploy Application Services
 # =============================================================================
 
-.PHONY: deploy-webhook
-deploy-webhook: ## Deploy actions-webhook (Zitadel → tenant-service bridge)
-	@printf "$(COLOR_BLUE)→ Deploying actions-webhook...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/actions-webhook && helm dependency update
-	helm upgrade --install actions-webhook $(HELM_DIR)/actions-webhook \
+.PHONY: deploy-logto
+deploy-logto: ## Deploy Logto OIDC identity provider
+	@printf "$(COLOR_BLUE)→ Deploying Logto...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/logto.yaml
+	@printf "$(COLOR_GREEN)✓ Logto deployed$(COLOR_RESET)\n"
+
+.PHONY: deploy-tenant
+deploy-tenant: ## Deploy tenant-service
+	@printf "$(COLOR_BLUE)→ Deploying tenant-service...$(COLOR_RESET)\n"
+	cd $(HELM_DIR)/ecommerce-tenant-service && helm dependency update
+	helm upgrade --install ecommerce-tenant-service $(HELM_DIR)/ecommerce-tenant-service \
 		-n $(NS_PROD) \
-		-f $(HELM_DIR)/actions-webhook/values.prod.yaml \
+		-f $(HELM_DIR)/ecommerce-tenant-service/values.prod.yaml \
 		--wait --timeout 3m
-	@printf "$(COLOR_GREEN)✓ actions-webhook deployed$(COLOR_RESET)\n"
+	@printf "$(COLOR_GREEN)✓ tenant-service deployed$(COLOR_RESET)\n"
 
 .PHONY: deploy-catalog
 deploy-catalog: ## Deploy catalog-service
@@ -260,7 +266,7 @@ deploy-ecommerce-ui: ## Deploy ecommerce-ui
 	@printf "$(COLOR_GREEN)✓ ecommerce-ui deployed$(COLOR_RESET)\n"
 
 .PHONY: deploy-backend
-deploy-backend: deploy-webhook deploy-catalog deploy-image-service deploy-product-query deploy-category-query ## Deploy all backend services
+deploy-backend: deploy-tenant deploy-catalog deploy-image-service deploy-product-query deploy-category-query ## Deploy all backend services
 
 .PHONY: deploy-frontend
 deploy-frontend: deploy-admin-ui deploy-ecommerce-ui ## Deploy all frontend UIs
@@ -412,26 +418,13 @@ seed: ## Run seeder against production (requires tunnel + .env.enc)
 	fi
 
 # =============================================================================
-##@ Zitadel Seed
+##@ Logto
 # =============================================================================
 
-ZITADEL_SEED_DIR := $(SEEDER_DIR)/../zitadel-seed
-
-.PHONY: zitadel-seed
-zitadel-seed: ## Seed production Zitadel instance (requires .env.enc with PAT)
-	@if [ ! -f .env.enc ]; then \
-		printf "$(COLOR_RED)Error: .env.enc not found$(COLOR_RESET)\n"; \
-		exit 1; \
-	fi
-	@printf "$(COLOR_BLUE)→ Loading Zitadel seed config from .env.enc...$(COLOR_RESET)\n"
-	$(eval ZITADEL_SEED_ENV := $(shell sops decrypt --input-type dotenv --output-type dotenv .env.enc 2>/dev/null | grep -E '^(ZITADEL_URL|ZITADEL_DOMAIN|PAT|REDIRECT_URI|LOGOUT_URI|WEBHOOK_URL)=' | tr '\n' ' '))
-	@if [ -z "$(ZITADEL_SEED_ENV)" ]; then \
-		printf "$(COLOR_RED)Error: Failed to decrypt seed env vars from .env.enc$(COLOR_RESET)\n"; \
-		exit 1; \
-	fi
-	@printf "$(COLOR_BLUE)→ Seeding Zitadel...$(COLOR_RESET)\n"
-	cd $(ZITADEL_SEED_DIR) && $(ZITADEL_SEED_ENV) go run .
-	@printf "$(COLOR_GREEN)✓ Zitadel seed complete$(COLOR_RESET)\n"
+.PHONY: logto-console
+logto-console: ## Port-forward Logto Admin Console (localhost:3002)
+	@printf "$(COLOR_BLUE)→ Forwarding Logto Admin Console to localhost:3002...$(COLOR_RESET)\n"
+	kubectl port-forward svc/logto 3002:3002 -n $(NS_PROD)
 
 # =============================================================================
 ##@ Cleanup
@@ -440,7 +433,8 @@ zitadel-seed: ## Seed production Zitadel instance (requires .env.enc with PAT)
 .PHONY: delete-services
 delete-services: ## Delete all application services (keeps infra)
 	@printf "$(COLOR_YELLOW)→ Deleting application services...$(COLOR_RESET)\n"
-	-helm uninstall actions-webhook -n $(NS_PROD)
+	-kubectl delete -f $(K8S_DIR)/logto.yaml
+	-helm uninstall ecommerce-tenant-service -n $(NS_PROD)
 	-helm uninstall ecommerce-catalog-service -n $(NS_PROD)
 	-helm uninstall ecommerce-image-service -n $(NS_PROD)
 	-helm uninstall ecommerce-product-query-service -n $(NS_PROD)
@@ -453,8 +447,9 @@ delete-services: ## Delete all application services (keeps infra)
 delete-all: ## Delete everything (⚠️ destructive!)
 	@printf "$(COLOR_RED)⚠️  WARNING: This will delete all deployments!$(COLOR_RESET)\n"
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
-	-helm uninstall actions-webhook ecommerce-catalog-service ecommerce-image-service ecommerce-product-query-service ecommerce-category-query-service ecommerce-admin-ui ecommerce-ui -n $(NS_PROD)
+	-helm uninstall ecommerce-tenant-service ecommerce-catalog-service ecommerce-image-service ecommerce-product-query-service ecommerce-category-query-service ecommerce-admin-ui ecommerce-ui -n $(NS_PROD)
 	-helm uninstall redpanda -n $(NS_PROD)
 	-helm uninstall alloy -n $(NS_OBS)
+	-kubectl delete -f $(K8S_DIR)/logto.yaml
 	-kubectl delete -f $(K8S_DIR)/imgproxy.yaml
 	@printf "$(COLOR_GREEN)✓ Everything deleted$(COLOR_RESET)\n"
