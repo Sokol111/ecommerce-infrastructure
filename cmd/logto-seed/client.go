@@ -199,8 +199,31 @@ func (c *client) createRole(name, description, roleType string) string {
 }
 
 func (c *client) assignScopesToRole(roleID string, scopeIDs []string) {
+	// Fetch already-assigned scopes to avoid 422.
+	var existing []struct {
+		ID string `json:"id"`
+	}
+	c.apiDo("GET", fmt.Sprintf("/roles/%s/scopes", roleID), nil, &existing)
+
+	assigned := make(map[string]bool, len(existing))
+	for _, s := range existing {
+		assigned[s.ID] = true
+	}
+
+	var missing []string
+	for _, id := range scopeIDs {
+		if !assigned[id] {
+			missing = append(missing, id)
+		}
+	}
+
+	if len(missing) == 0 {
+		slog.Info("All scopes already assigned to role, skipping", "roleID", roleID)
+		return
+	}
+
 	c.apiDo("POST", fmt.Sprintf("/roles/%s/scopes", roleID), map[string]any{
-		"scopeIds": scopeIDs,
+		"scopeIds": missing,
 	}, nil)
 }
 
@@ -240,8 +263,31 @@ func (c *client) createApp(p createAppParams) (id, secret string) {
 }
 
 func (c *client) assignRoleToApp(appID string, roleIDs []string) {
+	// Fetch already-assigned roles to avoid 422.
+	var existing []struct {
+		ID string `json:"id"`
+	}
+	c.apiDo("GET", fmt.Sprintf("/applications/%s/roles", appID), nil, &existing)
+
+	assigned := make(map[string]bool, len(existing))
+	for _, r := range existing {
+		assigned[r.ID] = true
+	}
+
+	var missing []string
+	for _, id := range roleIDs {
+		if !assigned[id] {
+			missing = append(missing, id)
+		}
+	}
+
+	if len(missing) == 0 {
+		slog.Info("All roles already assigned to app, skipping", "appID", appID)
+		return
+	}
+
 	c.apiDo("POST", fmt.Sprintf("/applications/%s/roles", appID), map[string]any{
-		"roleIds": roleIDs,
+		"roleIds": missing,
 	}, nil)
 }
 

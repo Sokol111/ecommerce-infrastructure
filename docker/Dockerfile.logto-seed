@@ -1,12 +1,18 @@
 FROM golang:1.26.2 AS build
 WORKDIR /src
 
+ENV GOSUMDB=off
+ENV GOPROXY=direct
+ENV GOINSECURE=*
+ENV GIT_SSL_NO_VERIFY=1
+
 COPY cmd/logto-seed/go.mod cmd/logto-seed/go.sum ./
 RUN go mod download
 COPY cmd/logto-seed/*.go ./
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /seed .
 
 FROM alpine:3.21
-RUN apk add --no-cache ca-certificates
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /seed /seed
+COPY cmd/logto-seed/seed.json /seed.json
 ENTRYPOINT ["/seed"]

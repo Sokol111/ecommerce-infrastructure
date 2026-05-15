@@ -156,6 +156,29 @@ func (s *seeder) configureJWTCustomizer() {
 	slog.Info("Configured M2M client credentials JWT customizer")
 }
 
+// configureSignInExperience enables email+password sign-in.
+func (s *seeder) configureSignInExperience() {
+	slog.Info("Configuring sign-in experience")
+	s.client.apiDo("PATCH", "/sign-in-exp", map[string]any{
+		"signIn": map[string]any{
+			"methods": []map[string]any{
+				{
+					"identifier":        "email",
+					"password":          true,
+					"verificationCode":  false,
+					"isPasswordPrimary": true,
+				},
+			},
+		},
+		"signUp": map[string]any{
+			"identifiers": []string{},
+			"password":    false,
+			"verify":      false,
+		},
+	}, nil)
+	slog.Info("Configured sign-in experience with email+password")
+}
+
 // cleanupBootstrapApp deletes the bootstrap M2M app after all setup is done.
 func (s *seeder) cleanupBootstrapApp() {
 	slog.Info("Cleaning up bootstrap M2M application")

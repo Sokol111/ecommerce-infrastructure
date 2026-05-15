@@ -39,30 +39,12 @@ services:
       logto-db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:3001/oidc/.well-known/openid-configuration || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3001/oidc/.well-known/openid-configuration || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 15
       start_period: 30s
     restart: unless-stopped
-
-  logto-init:
-    image: postgres:17-alpine
-    container_name: logto-init
-    entrypoint: ["sh", "-c", "until pg_isready -h logto-db -U postgres; do sleep 1; done && sleep 5 && psql -f /scripts/logto-init.sql"]
-    environment:
-      PGHOST: logto-db
-      PGUSER: postgres
-      PGPASSWORD: postgres
-      PGDATABASE: logto
-    volumes:
-      - ../../scripts/logto-init.sql:/scripts/logto-init.sql:ro
-    networks:
-      - logto
-    depends_on:
-      logto:
-        condition: service_healthy
-    restart: "no"
 
   logto-seed:
     build:
@@ -70,6 +52,7 @@ services:
       dockerfile: docker/Dockerfile.logto-seed
     container_name: logto-seed
     environment:
+      DB_URL: postgres://postgres:postgres@logto-db:5432/logto
       LOGTO_URL: http://logto:3001
       LOGTO_BOOTSTRAP_APP_ID: bootstrap-seed-app
       LOGTO_BOOTSTRAP_APP_SECRET: bootstrap-seed-secret
@@ -85,8 +68,8 @@ services:
       - logto
       - shared-network
     depends_on:
-      logto-init:
-        condition: service_completed_successfully
+      logto:
+        condition: service_healthy
     restart: "no"
 
 networks:

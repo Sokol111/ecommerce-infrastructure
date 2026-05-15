@@ -40,6 +40,8 @@ env:
       secretKeyRef:
         name: logto-credentials
         key: platform-client-secret
+  - name: NUXT_API_RESOURCE_INDICATOR
+    value: "https://api.sokolshop.com"
   - name: NUXT_COOKIE_SECURE
     value: "false"
   - name: NUXT_BASE_DOMAIN

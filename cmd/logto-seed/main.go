@@ -45,6 +45,7 @@ func main() {
 	s.createRoles()
 	s.createApplications()
 	s.configureJWTCustomizer()
+	s.configureSignInExperience()
 	s.cleanupBootstrapApp()
 
 	publishSecrets(s.secrets, s.cfg)

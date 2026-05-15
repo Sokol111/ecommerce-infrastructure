@@ -20,6 +20,11 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['app.kubernetes.io/version']
+  - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: ecommerce-m2m-client-id
   - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_SECRET
     valueFrom:
       secretKeyRef:

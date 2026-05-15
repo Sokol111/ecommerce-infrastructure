@@ -5,7 +5,15 @@
       "description": "Full access to all ecommerce resources",
       "type": "User",
       "scopes": [
-        "*"
+        "products:read",
+        "products:write",
+        "products:delete",
+        "categories:read",
+        "categories:write",
+        "categories:delete",
+        "attributes:read",
+        "attributes:write",
+        "attributes:delete"
       ]
     },
     {
@@ -31,9 +39,7 @@
       "scopes": [
         "products:read",
         "categories:read",
-        "attributes:read",
-        "users:read",
-        "tenants:read"
+        "attributes:read"
       ]
     },
     {

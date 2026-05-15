@@ -30,10 +30,19 @@ func createBootstrapApp(dbURL string) bootstrapResult {
 		fatal("Failed to ping Logto database", "error", err)
 	}
 
+	const tenantID = "default"
+
+	// Clean up any leftover bootstrap apps from previous failed runs.
+	res, err := db.Exec(`DELETE FROM applications WHERE tenant_id = $1 AND name = $2`, tenantID, "logto-seed-bootstrap")
+	if err != nil {
+		fatal("Failed to clean up old bootstrap apps", "error", err)
+	}
+	if n, _ := res.RowsAffected(); n > 0 {
+		slog.Info("Cleaned up orphaned bootstrap apps", "count", n)
+	}
+
 	appID := generateID(21)
 	appSecret := generateSecret(32) // 32 bytes → 64 hex chars
-
-	const tenantID = "default"
 
 	// Insert bootstrap M2M application.
 	_, err = db.Exec(`

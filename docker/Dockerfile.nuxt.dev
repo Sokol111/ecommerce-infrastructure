@@ -19,20 +19,20 @@ COPY ${SERVICE_DIR}/nuxt.config.ts ./
 # Install pnpm (version from package.json packageManager field, cached with package.json layer)
 RUN corepack install
 
-# Build local API dependencies and rewrite package.json to use link: protocol BEFORE pnpm install.
-# This avoids fetching @sokol111/* packages from GitHub registry (dev always uses local sources).
+# Copy local API dependencies and rewrite pnpm-workspace.yaml overrides to absolute paths.
+# If dist/ is missing (fresh clone), build it in place.
 COPY . /tmp/context/
 RUN set -e && \
     for api_dep in ${API_DEPS}; do \
         if [ -d "/tmp/context/${api_dep}/gen/typescript" ]; then \
-            echo "Building local API dependency: ${api_dep}"; \
             mkdir -p "/app/${api_dep}/gen/typescript"; \
             cp -r "/tmp/context/${api_dep}/gen/typescript/." "/app/${api_dep}/gen/typescript/"; \
-            cd "/app/${api_dep}/gen/typescript" && npm install && npm run build && cd /app; \
-            pkg_name=$(node -e "console.log(require('/app/${api_dep}/gen/typescript/package.json').name)"); \
-            sed -i "s|\"${pkg_name}\": \"[^\"]*\"|\"${pkg_name}\": \"link:/app/${api_dep}/gen/typescript\"|" /app/package.json; \
+            if [ ! -d "/app/${api_dep}/gen/typescript/dist" ]; then \
+                cd "/app/${api_dep}/gen/typescript" && npm install && cd /app; \
+            fi; \
+            sed -i "s|link:\.\./${api_dep}/gen/typescript|link:/app/${api_dep}/gen/typescript|g" /app/pnpm-workspace.yaml; \
         else \
-            echo "WARNING: API dependency not found: ${api_dep}/gen/typescript (skipping)"; \
+            echo "WARNING: ${api_dep}/gen/typescript not found (skipping)"; \
         fi; \
     done && \
     rm -rf /tmp/context
