@@ -24,6 +24,7 @@ ingressRoute:
     enabled: true
     entryPoints:
       - web
+    matchRule: "Host(`traefik.127.0.0.1.nip.io`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
 
 ingressClass:
   enabled: true
