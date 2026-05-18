@@ -23,6 +23,14 @@ config: |
   mongo:
     database: category-query
     max-pool-size: 20
+    write-concern:
+      w: "majority"
+      journal: true
+    read-concern:
+      level: "local"
+    read-preference:
+      mode: "secondaryPreferred"
+      max-staleness: 90s
   kafka:
     schema-registry:
       auto-register-schemas: true

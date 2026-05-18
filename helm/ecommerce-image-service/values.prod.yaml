@@ -23,6 +23,11 @@ config: |
   mongo:
     database: images
     max-pool-size: 20
+    write-concern:
+      w: "majority"
+      journal: true
+    read-concern:
+      level: "majority"
   kafka:
     schema-registry:
       auto-register-schemas: true
