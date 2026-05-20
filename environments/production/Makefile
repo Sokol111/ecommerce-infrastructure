@@ -338,29 +338,30 @@ endif
 
 SEED_CATALOG_PORT := 9081
 SEED_IMAGE_PORT   := 9084
+SEED_LOGTO_PORT   := 9085
 
 .PHONY: seed
-seed: ## Run seeder against production (requires tunnel + .env.enc)
-	@if [ ! -f .env.enc ]; then \
-		printf "$(COLOR_RED)Error: .env.enc not found. Encrypt your .env first: make secrets-encrypt-env$(COLOR_RESET)\n"; \
+seed: ## Run seeder against production (requires port-forwards + logto-credentials secret)
+	$(eval LOGTO_CLIENT_ID := $(shell kubectl -n $(NS_PROD) get secret logto-credentials -o jsonpath='{.data.ecommerce-m2m-client-id}' | base64 -d))
+	$(eval LOGTO_CLIENT_SECRET := $(shell kubectl -n $(NS_PROD) get secret logto-credentials -o jsonpath='{.data.ecommerce-m2m-client-secret}' | base64 -d))
+	@if [ -z "$(LOGTO_CLIENT_ID)" ] || [ -z "$(LOGTO_CLIENT_SECRET)" ]; then \
+		printf "$(COLOR_RED)Error: Failed to read Logto credentials from logto-credentials secret$(COLOR_RESET)\n"; \
 		exit 1; \
 	fi
-	$(eval SEEDER_TOKEN := $(shell sops decrypt --input-type dotenv --output-type dotenv .env.enc 2>/dev/null | grep '^SEEDER_TOKEN=' | cut -d= -f2-))
-	@if [ -z "$(SEEDER_TOKEN)" ]; then \
-		printf "$(COLOR_RED)Error: Failed to decrypt SEEDER_TOKEN from .env.enc$(COLOR_RESET)\n"; \
-		exit 1; \
-	fi
-	@trap 'kill $$PF1 $$PF2 2>/dev/null || true' EXIT; \
+	@trap 'kill $$PF1 $$PF2 $$PF3 2>/dev/null || true' EXIT; \
 	printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"; \
-	kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 & PF1=$$!; \
-	kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 & PF2=$$!; \
+	kubectl port-forward -n $(NS_PROD) svc/logto $(SEED_LOGTO_PORT):3001 & PF1=$$!; \
+	kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 & PF2=$$!; \
+	kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 & PF3=$$!; \
 	sleep 5; \
 	printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"; \
 	set +e; \
 	cd $(SEEDER_DIR) && go run . \
+		-logto-url http://localhost:$(SEED_LOGTO_PORT) \
 		-catalog-url http://localhost:$(SEED_CATALOG_PORT) \
 		-image-url http://localhost:$(SEED_IMAGE_PORT) \
-		-token "$(SEEDER_TOKEN)"; \
+		-client-id "$(LOGTO_CLIENT_ID)" \
+		-client-secret "$(LOGTO_CLIENT_SECRET)"; \
 	EXIT_CODE=$$?; \
 	set -e; \
 	if [ $$EXIT_CODE -eq 0 ]; then \

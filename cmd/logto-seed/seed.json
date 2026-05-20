@@ -47,7 +47,16 @@
       "description": "M2M service role for backend-to-backend calls",
       "type": "MachineToMachine",
       "scopes": [
-        "tenants:read"
+        "tenants:read",
+        "products:read",
+        "products:write",
+        "products:delete",
+        "categories:read",
+        "categories:write",
+        "categories:delete",
+        "attributes:read",
+        "attributes:write",
+        "attributes:delete"
       ]
     },
     {

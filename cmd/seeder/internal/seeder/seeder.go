@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/auth"
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/config"
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/data"
 
@@ -37,7 +38,15 @@ func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder
 		Timeout: 30 * time.Second,
 	}
 
-	catalogClient, err := catalogapi.NewClient(cfg.CatalogURL, tokenSecuritySource{token: cfg.Token}, catalogapi.WithClient(httpClient))
+	// Obtain access token from Logto via client_credentials flow
+	tp := auth.NewTokenProvider(cfg.LogtoURL, cfg.ClientID, cfg.ClientSecret, cfg.APIResource)
+	token, err := tp.FetchToken()
+	if err != nil {
+		return nil, fmt.Errorf("failed to obtain access token from Logto: %w", err)
+	}
+	log.Println("✓ Obtained access token from Logto")
+
+	catalogClient, err := catalogapi.NewClient(cfg.CatalogURL, tokenSecuritySource{token: token}, catalogapi.WithClient(httpClient))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create catalog client: %w", err)
 	}
