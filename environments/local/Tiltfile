@@ -242,6 +242,13 @@ for name, config in GO_SERVICES.items():
         resource_deps=svc_resource_deps,
     )
 
+# Seeder CronJob — shows Jobs and their logs in Tilt UI
+k8s_resource(
+    'ecommerce-tenant-service-seeder',
+    labels=['infrastructure'],
+    resource_deps=['ecommerce-tenant-service'],
+)
+
 # ============================================================================
 # UI Services (Nuxt) - Development Mode
 # ============================================================================
