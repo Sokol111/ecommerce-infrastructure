@@ -30,3 +30,13 @@ env:
       secretKeyRef:
         name: logto-credentials
         key: tenant-m2m-client-secret
+
+serviceAccount:
+  create: true
+
+seederJob:
+  enabled: true
+  image: ecommerce-seeder:latest
+  catalogURL: "http://ecommerce-catalog-service:8080"
+  imageURL: "http://ecommerce-image-service:8080"
+  logtoURL: "http://logto:3001"

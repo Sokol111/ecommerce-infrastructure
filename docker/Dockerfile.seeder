@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1.4
+
+FROM golang:1.26.3 AS build
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /seeder ./cmd/seeder
+
+FROM gcr.io/distroless/static-debian12
+
+WORKDIR /
+
+COPY --from=build /seeder /seeder
+COPY --from=build /app/cmd/seeder/data/ /data/
+COPY --from=build /app/cmd/seeder/assets/ /assets/
+
+ENTRYPOINT ["/seeder", "--data-dir=/data", "--assets-dir=/assets"]

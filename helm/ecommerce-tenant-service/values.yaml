@@ -78,4 +78,14 @@ affinity: {}
 volumes: []
 volumeMounts: []
 
+seederJob:
+  enabled: false
+  image: ""
+  serviceAccount: ""
+  catalogURL: ""
+  imageURL: ""
+  logtoURL: ""
+  apiResource: "https://api.sokolshop.com"
+  resources: {}
+
 env: []

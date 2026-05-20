@@ -13,6 +13,7 @@ type Config struct {
 	ClientID     string
 	ClientSecret string
 	APIResource  string
+	TenantSlug   string
 }
 
 // Args holds all CLI arguments.
@@ -34,6 +35,7 @@ func Parse() *Args {
 	flag.StringVar(&args.Config.ClientID, "client-id", envOr("LOGTO_CLIENT_ID", ""), "Logto M2M application client ID")
 	flag.StringVar(&args.Config.ClientSecret, "client-secret", envOr("LOGTO_CLIENT_SECRET", ""), "Logto M2M application client secret")
 	flag.StringVar(&args.Config.APIResource, "api-resource", envOr("API_RESOURCE_INDICATOR", "https://api.sokolshop.com"), "Logto API resource indicator")
+	flag.StringVar(&args.Config.TenantSlug, "tenant-slug", envOr("TENANT_SLUG", ""), "Tenant slug to seed data for (sets X-Tenant-Slug header)")
 	flag.StringVar(&args.DataDir, "data-dir", envOr("DATA_DIR", "data"), "Path to seed data directory")
 	flag.StringVar(&args.AssetsDir, "assets-dir", envOr("ASSETS_DIR", "assets"), "Path to assets directory")
 	flag.Parse()

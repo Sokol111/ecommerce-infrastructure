@@ -169,19 +169,27 @@ pprof-goroutine: ## Open goroutine profile in browser (SVC=catalog|product|categ
 # Demo Data Seeder
 # =============================================================================
 
-SEEDER_DIR := $(THIS_DIR)cmd/seeder
-SEEDER_BIN := $(SEEDER_DIR)/seeder
-
-.PHONY: seed-build
-seed-build: ## Build the demo data seeder
-	@printf "\033[36m→ Building seeder...\033[0m\n"
-	cd $(SEEDER_DIR) && go build -o seeder .
-	@printf "\033[32m✓ Seeder built successfully\033[0m\n"
+SEED_CRONJOB := ecommerce-tenant-service-seeder
+TENANT_SLUG ?=
 
 .PHONY: seed
-seed: seed-build ## Seed the database with demo data
-	@printf "\033[36m→ Reading Logto credentials from K8s secret...\033[0m\n"
-	$(eval LOGTO_CLIENT_ID := $(shell kubectl -n dev get secret logto-credentials -o jsonpath='{.data.ecommerce-m2m-client-id}' | base64 -d))
-	$(eval LOGTO_CLIENT_SECRET := $(shell kubectl -n dev get secret logto-credentials -o jsonpath='{.data.ecommerce-m2m-client-secret}' | base64 -d))
-	@printf "\033[36m→ Seeding demo data...\033[0m\n"
-	cd $(SEEDER_DIR) && LOGTO_CLIENT_ID="$(LOGTO_CLIENT_ID)" LOGTO_CLIENT_SECRET="$(LOGTO_CLIENT_SECRET)" ./seeder
+seed: ## Trigger seeder Job in cluster (TENANT_SLUG=acme for specific tenant)
+	@if [ -z "$(TENANT_SLUG)" ]; then \
+		printf "\033[31mError: TENANT_SLUG is required\033[0m\n"; \
+		printf "Usage: make seed TENANT_SLUG=<slug>\n"; \
+		exit 1; \
+	fi
+	@printf "\033[36m→ Creating seeder job for tenant '$(TENANT_SLUG)'...\033[0m\n"
+	kubectl create job -n dev \
+		--from=cronjob/$(SEED_CRONJOB) \
+		"seeder-$(TENANT_SLUG)-$$(date +%s)" \
+		-- --tenant-slug="$(TENANT_SLUG)"
+	@printf "\033[32m✓ Seeder job created\033[0m\n"
+
+.PHONY: seed-status
+seed-status: ## Show status of seeder jobs
+	@kubectl get jobs -n dev -l app.kubernetes.io/component=seeder --sort-by=.metadata.creationTimestamp
+
+.PHONY: seed-logs
+seed-logs: ## Show logs of latest seeder job (TENANT_SLUG=acme)
+	@kubectl logs -n dev -l app.kubernetes.io/component=seeder,tenant-slug=$(TENANT_SLUG) --tail=50

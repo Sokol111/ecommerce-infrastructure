@@ -1,0 +1,56 @@
+{{- if .Values.seederJob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "template.fullname" . }}-seeder
+  labels:
+    {{- include "template.labels" . | nindent 4 }}
+    app.kubernetes.io/component: seeder
+spec:
+  # Suspended — never triggers automatically. Used as a Job template.
+  suspend: true
+  schedule: "0 0 31 2 *"
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "template.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: seeder
+    spec:
+      backoffLimit: 3
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          labels:
+            {{- include "template.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: seeder
+        spec:
+          restartPolicy: Never
+          serviceAccountName: {{ .Values.seederJob.serviceAccount | default "default" }}
+          containers:
+            - name: seeder
+              image: {{ .Values.seederJob.image }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+              env:
+                - name: CATALOG_URL
+                  value: {{ .Values.seederJob.catalogURL | default "http://ecommerce-catalog-service:8080" }}
+                - name: IMAGE_URL
+                  value: {{ .Values.seederJob.imageURL | default "http://ecommerce-image-service:8080" }}
+                - name: LOGTO_URL
+                  value: {{ .Values.seederJob.logtoURL | default "http://logto:3001" }}
+                - name: API_RESOURCE_INDICATOR
+                  value: {{ .Values.seederJob.apiResource | default "https://api.sokolshop.com" }}
+                - name: LOGTO_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: logto-credentials
+                      key: ecommerce-service-client-id
+                - name: LOGTO_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: logto-credentials
+                      key: ecommerce-service-client-secret
+              {{- with .Values.seederJob.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+{{- end }}

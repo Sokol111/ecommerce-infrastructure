@@ -336,40 +336,35 @@ endif
 ##@ Seeder
 # =============================================================================
 
-SEED_CATALOG_PORT := 9081
-SEED_IMAGE_PORT   := 9084
-SEED_LOGTO_PORT   := 9085
+SEED_CRONJOB := ecommerce-tenant-service-seeder
+TENANT_SLUG  ?=
 
 .PHONY: seed
-seed: ## Run seeder against production (requires port-forwards + logto-credentials secret)
-	$(eval LOGTO_CLIENT_ID := $(shell kubectl -n $(NS_PROD) get secret logto-credentials -o jsonpath='{.data.ecommerce-m2m-client-id}' | base64 -d))
-	$(eval LOGTO_CLIENT_SECRET := $(shell kubectl -n $(NS_PROD) get secret logto-credentials -o jsonpath='{.data.ecommerce-m2m-client-secret}' | base64 -d))
-	@if [ -z "$(LOGTO_CLIENT_ID)" ] || [ -z "$(LOGTO_CLIENT_SECRET)" ]; then \
-		printf "$(COLOR_RED)Error: Failed to read Logto credentials from logto-credentials secret$(COLOR_RESET)\n"; \
+seed: ## Trigger seeder Job in cluster (TENANT_SLUG=acme for specific tenant)
+	@if [ -z "$(TENANT_SLUG)" ]; then \
+		printf "$(COLOR_RED)Error: TENANT_SLUG is required$(COLOR_RESET)\n"; \
+		printf "Usage: make seed TENANT_SLUG=<slug>\n"; \
 		exit 1; \
 	fi
-	@trap 'kill $$PF1 $$PF2 $$PF3 2>/dev/null || true' EXIT; \
-	printf "$(COLOR_BLUE)→ Starting port-forwards...$(COLOR_RESET)\n"; \
-	kubectl port-forward -n $(NS_PROD) svc/logto $(SEED_LOGTO_PORT):3001 & PF1=$$!; \
-	kubectl port-forward -n $(NS_PROD) svc/ecommerce-catalog-service $(SEED_CATALOG_PORT):8080 & PF2=$$!; \
-	kubectl port-forward -n $(NS_PROD) svc/ecommerce-image-service $(SEED_IMAGE_PORT):8080 & PF3=$$!; \
-	sleep 5; \
-	printf "$(COLOR_BLUE)→ Running seeder...$(COLOR_RESET)\n"; \
-	set +e; \
-	cd $(SEEDER_DIR) && go run . \
-		-logto-url http://localhost:$(SEED_LOGTO_PORT) \
-		-catalog-url http://localhost:$(SEED_CATALOG_PORT) \
-		-image-url http://localhost:$(SEED_IMAGE_PORT) \
-		-client-id "$(LOGTO_CLIENT_ID)" \
-		-client-secret "$(LOGTO_CLIENT_SECRET)"; \
-	EXIT_CODE=$$?; \
-	set -e; \
-	if [ $$EXIT_CODE -eq 0 ]; then \
-		printf "$(COLOR_GREEN)✓ Seeding completed$(COLOR_RESET)\n"; \
-	else \
-		printf "$(COLOR_RED)✗ Seeding failed$(COLOR_RESET)\n"; \
-		exit $$EXIT_CODE; \
+	@printf "$(COLOR_BLUE)→ Creating seeder job for tenant '$(TENANT_SLUG)'...$(COLOR_RESET)\n"
+	kubectl create job -n $(NS_PROD) \
+		--from=cronjob/$(SEED_CRONJOB) \
+		"seeder-$(TENANT_SLUG)-$$(date +%s)" \
+		-- --tenant-slug="$(TENANT_SLUG)"
+	@printf "$(COLOR_GREEN)✓ Seeder job created$(COLOR_RESET)\n"
+
+.PHONY: seed-status
+seed-status: ## Show status of seeder jobs
+	@kubectl get jobs -n $(NS_PROD) -l app.kubernetes.io/component=seeder --sort-by=.metadata.creationTimestamp
+
+.PHONY: seed-logs
+seed-logs: ## Show logs of seeder job (TENANT_SLUG=acme)
+	@if [ -z "$(TENANT_SLUG)" ]; then \
+		printf "$(COLOR_RED)Error: TENANT_SLUG is required$(COLOR_RESET)\n"; \
+		printf "Usage: make seed-logs TENANT_SLUG=<slug>\n"; \
+		exit 1; \
 	fi
+	@kubectl logs -n $(NS_PROD) -l app.kubernetes.io/component=seeder,tenant-slug=$(TENANT_SLUG) --tail=100
 
 # =============================================================================
 ##@ Logto

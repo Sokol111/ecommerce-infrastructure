@@ -24,6 +24,18 @@ func (s tokenSecuritySource) BearerAuth(ctx context.Context, operationName catal
 	return catalogapi.BearerAuth{Token: s.token}, nil
 }
 
+// tenantTransport injects the X-Tenant-Slug header into every outgoing request.
+type tenantTransport struct {
+	base       http.RoundTripper
+	tenantSlug string
+}
+
+func (t *tenantTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req = req.Clone(req.Context())
+	req.Header.Set("X-Tenant-Slug", t.tenantSlug)
+	return t.base.RoundTrip(req)
+}
+
 type Seeder struct {
 	data          *data.SeedData
 	httpClient    *http.Client
@@ -34,8 +46,15 @@ type Seeder struct {
 }
 
 func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder, error) {
+	transport := http.RoundTripper(http.DefaultTransport)
+	if cfg.TenantSlug != "" {
+		transport = &tenantTransport{base: transport, tenantSlug: cfg.TenantSlug}
+		log.Printf("Seeding for tenant: %s", cfg.TenantSlug)
+	}
+
 	httpClient := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout:   30 * time.Second,
+		Transport: transport,
 	}
 
 	// Obtain access token from Logto via client_credentials flow
