@@ -1,0 +1,29 @@
+name: ecommerce
+
+services:
+  athens:
+    image: gomods/athens:latest
+    container_name: athens
+    ports:
+      - 3010:3000
+    environment:
+      ATHENS_DISK_STORAGE_ROOT: /var/lib/athens
+      ATHENS_GONOSUM_PATTERNS: "*"
+      ATHENS_GO_BINARY_ENV_VARS: "GOPROXY=direct,GOINSECURE=*,GIT_SSL_NO_VERIFY=true,GONOSUMCHECK=*,GOSUMDB=off"
+    volumes:
+      - athens_data:/var/lib/athens
+    networks:
+      - shared-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  athens_data:
+
+networks:
+  shared-network:
+    external: true

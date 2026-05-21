@@ -42,8 +42,10 @@ docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/storage.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/observability.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/logto.yml', project_name='ecommerce')
+docker_compose(COMPOSE_DIR + '/goproxy.yml', project_name='ecommerce')
 
 # Organize compose resources in Tilt UI
+dc_resource('athens', labels=['infrastructure'])
 dc_resource('mongo', labels=['infrastructure'])
 dc_resource('redpanda', labels=['infrastructure'])
 dc_resource('redpanda-console', labels=['infrastructure'], resource_deps=['redpanda'])

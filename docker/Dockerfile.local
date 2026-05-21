@@ -10,11 +10,10 @@ FROM ${GO_IMAGE} AS base
 
 WORKDIR /src
 
-# Go proxy settings for corporate environments
+# Go modules via local Athens proxy (handles TLS/corporate issues internally)
+ENV GOPROXY=http://localhost:3010
+ENV GONOSUMCHECK=*
 ENV GOSUMDB=off
-ENV GOPROXY=direct
-ENV GIT_SSL_NO_VERIFY=1
-ENV GOINSECURE=*
 
 ARG COMMONS_DIR=ecommerce-commons
 
@@ -62,6 +61,18 @@ RUN set -e && \
     echo "Final go.work:" && cat go.work
 
 ############################
+# Delve stage (cached independently)
+############################
+FROM ${GO_IMAGE} AS delve
+
+ENV GOPROXY=http://localhost:3010
+ENV GONOSUMCHECK=*
+ENV GOSUMDB=off
+
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go install github.com/go-delve/delve/cmd/dlv@v1.26.3
+
+############################
 # Build stage
 ############################
 FROM deps AS builder
@@ -75,10 +86,6 @@ COPY ${SERVICE_DIR}/cmd ./svc/cmd
 COPY ${SERVICE_DIR}/internal ./svc/internal
 COPY ${SERVICE_DIR}/configs ./svc/configs
 COPY ${SERVICE_DIR}/db ./svc/db
-
-# Встановлення Delve debugger
-RUN --mount=type=cache,target=/go/pkg/mod \
-    go install github.com/go-delve/delve/cmd/dlv@v1.26.3
 
 # Збірка бінарника з debug символами
 WORKDIR /src/svc
@@ -94,7 +101,7 @@ FROM ${RUNTIME_IMAGE} AS release
 WORKDIR /
 
 # Копіюємо Delve debugger
-COPY --from=builder /go/bin/dlv /dlv
+COPY --from=delve /go/bin/dlv /dlv
 
 # Копіюємо бінарник сервісу та конфігурації
 COPY --from=builder /server /server
