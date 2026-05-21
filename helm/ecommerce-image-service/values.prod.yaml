@@ -28,8 +28,17 @@ config: |
       journal: true
     read-concern:
       level: "majority"
+  security:
+    jwks:
+      jwks-url: "http://logto:3001/oidc/jwks"
+      audience: "https://api.sokolshop.com"
+    client-credentials:
+      token-url: "http://logto:3001/oidc/token"
+      resource: "https://api.sokolshop.com"
   kafka:
+    brokers: "redpanda.prod.svc.cluster.local:9093"
     schema-registry:
+      url: "http://redpanda.prod.svc.cluster.local:8081"
       auto-register-schemas: true
     consumers-config:
       default-group-id: "ecommerce-image-service"
@@ -43,6 +52,8 @@ config: |
     large-width: 800
     quality: 85
   s3:
+    endpoint: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
+    public-endpoint: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
     bucket: "images"
     use-path-style: true
     region: "auto"
@@ -51,6 +62,7 @@ config: |
     public-base-url: "https://sokolshop.com/img"
     bucket: "images"
   observability:
+    otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:
       enabled: true
     metrics:
@@ -66,11 +78,6 @@ env:
       secretKeyRef:
         name: mongodb-credentials
         key: connection-string
-  # Auth (Logto JWKS)
-  - name: SECURITY__JWKS__JWKS_URL
-    value: "http://logto:3001/oidc/jwks"
-  - name: SECURITY__JWKS__AUDIENCE
-    value: "https://api.sokolshop.com"
   # Auth (Client Credentials for S2S)
   - name: SECURITY__CLIENT_CREDENTIALS__CLIENT_ID
     valueFrom:
@@ -82,26 +89,13 @@ env:
       secretKeyRef:
         name: logto-credentials
         key: ecommerce-m2m-client-secret
-  - name: SECURITY__CLIENT_CREDENTIALS__TOKEN_URL
-    value: "http://logto:3001/oidc/token"
-  - name: SECURITY__CLIENT_CREDENTIALS__RESOURCE
-    value: "https://api.sokolshop.com"
   # Application
   - name: UPLOAD_TOKEN__JWT_SECRET
     valueFrom:
       secretKeyRef:
         name: image-service-secrets
         key: jwt-secret
-  # Kafka (Redpanda)
-  - name: KAFKA__BROKERS
-    value: "redpanda.prod.svc.cluster.local:9093"
-  - name: KAFKA__SCHEMA_REGISTRY__URL
-    value: "http://redpanda.prod.svc.cluster.local:8081"
   # S3 (Cloudflare R2)
-  - name: S3__ENDPOINT
-    value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
-  - name: S3__PUBLIC_ENDPOINT
-    value: "https://5f0b37ed80145a53c4fbecedb6474a95.r2.cloudflarestorage.com"
   - name: S3__ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
@@ -123,9 +117,6 @@ env:
       secretKeyRef:
         name: imgproxy-keys
         key: salt
-  # Observability
-  - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
-    value: "alloy.observability.svc.cluster.local:4317"
   - name: APP_SERVICE_NAME
     valueFrom:
       fieldRef:

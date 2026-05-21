@@ -28,10 +28,19 @@ config: |
       journal: true
     read-concern:
       level: "majority"
+  security:
+    jwks:
+      jwks-url: "http://logto:3001/oidc/jwks"
+      audience: "https://api.sokolshop.com"
+  logto:
+    token-url: "http://logto:3001/oidc/token"
   kafka:
+    brokers: "redpanda.prod.svc.cluster.local:9093"
     schema-registry:
+      url: "http://redpanda.prod.svc.cluster.local:8081"
       auto-register-schemas: true
   observability:
+    otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:
       enabled: true
     metrics:
@@ -47,32 +56,17 @@ env:
       secretKeyRef:
         name: mongodb-credentials
         key: connection-string
-  # Auth (Logto JWKS)
-  - name: SECURITY__JWKS__JWKS_URL
-    value: "http://logto:3001/oidc/jwks"
-  - name: SECURITY__JWKS__AUDIENCE
-    value: "https://api.sokolshop.com"
   # Auth (Logto Management API — client_credentials)
   - name: LOGTO__CLIENT_ID
     valueFrom:
       secretKeyRef:
         name: logto-credentials
         key: tenant-m2m-client-id
-  - name: LOGTO__TOKEN_URL
-    value: "http://logto:3001/oidc/token"
   - name: LOGTO__CLIENT_SECRET
     valueFrom:
       secretKeyRef:
         name: logto-credentials
         key: tenant-m2m-client-secret
-  # Kafka (Redpanda)
-  - name: KAFKA__BROKERS
-    value: "redpanda.prod.svc.cluster.local:9093"
-  - name: KAFKA__SCHEMA_REGISTRY__URL
-    value: "http://redpanda.prod.svc.cluster.local:8081"
-  # Observability
-  - name: OBSERVABILITY__OTEL_COLLECTOR_ENDPOINT
-    value: "alloy.observability.svc.cluster.local:4317"
   - name: APP_SERVICE_NAME
     valueFrom:
       fieldRef:
