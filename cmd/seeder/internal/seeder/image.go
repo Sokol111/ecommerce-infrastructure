@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -98,12 +99,15 @@ func (s *Seeder) uploadToStorage(ctx context.Context, presign *imageapi.PresignR
 		return err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", presign.UploadUrl.String(), bytes.NewReader(content))
+	targetURL, hostHeader := s.resolveUploadURL(presign.UploadUrl)
+
+	req, err := http.NewRequestWithContext(ctx, "PUT", targetURL, bytes.NewReader(content))
 	if err != nil {
 		return fmt.Errorf("failed to create upload request: %w", err)
 	}
 	req.Header.Set("Content-Type", contentType)
 	req.ContentLength = int64(len(content))
+	req.Host = hostHeader
 
 	resp, err := s.httpClient.Do(req)
 	if err != nil {
@@ -117,6 +121,17 @@ func (s *Seeder) uploadToStorage(ctx context.Context, presign *imageapi.PresignR
 	}
 
 	return nil
+}
+
+// resolveUploadURL returns the actual URL to connect to and the Host header value.
+// When storageHostOverride is set, TCP goes to the override but Host header
+// preserves the original value so the S3 signature remains valid.
+func (s *Seeder) resolveUploadURL(u url.URL) (targetURL, hostHeader string) {
+	hostHeader = u.Host
+	if s.storageHostOverride != "" {
+		u.Host = s.storageHostOverride
+	}
+	return u.String(), hostHeader
 }
 
 func detectMimeType(filename string) (string, error) {

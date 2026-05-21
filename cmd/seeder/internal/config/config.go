@@ -7,13 +7,14 @@ import (
 
 // Config represents the seeder runtime configuration.
 type Config struct {
-	CatalogURL   string
-	ImageURL     string
-	LogtoURL     string
-	ClientID     string
-	ClientSecret string
-	APIResource  string
-	TenantSlug   string
+	CatalogURL          string
+	ImageURL            string
+	LogtoURL            string
+	ClientID            string
+	ClientSecret        string
+	APIResource         string
+	TenantSlug          string
+	StorageHostOverride string
 }
 
 // Args holds all CLI arguments.
@@ -36,6 +37,7 @@ func Parse() *Args {
 	flag.StringVar(&args.Config.ClientSecret, "client-secret", envOr("LOGTO_CLIENT_SECRET", ""), "Logto M2M application client secret")
 	flag.StringVar(&args.Config.APIResource, "api-resource", envOr("API_RESOURCE_INDICATOR", "https://api.sokolshop.com"), "Logto API resource indicator")
 	flag.StringVar(&args.Config.TenantSlug, "tenant-slug", envOr("TENANT_SLUG", ""), "Tenant slug to seed data for (sets X-Tenant-Slug header)")
+	flag.StringVar(&args.Config.StorageHostOverride, "storage-host-override", envOr("STORAGE_HOST_OVERRIDE", ""), "Override presigned URL host (e.g. minio:9000 for in-cluster access)")
 	flag.StringVar(&args.DataDir, "data-dir", envOr("DATA_DIR", "data"), "Path to seed data directory")
 	flag.StringVar(&args.AssetsDir, "assets-dir", envOr("ASSETS_DIR", "assets"), "Path to assets directory")
 	flag.Parse()

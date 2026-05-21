@@ -37,12 +37,13 @@ func (t *tenantTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 type Seeder struct {
-	data          *data.SeedData
-	httpClient    *http.Client
-	assetsDir     string
-	catalogClient *catalogapi.Client
-	imageClient   *imageapi.Client
-	imageCache    map[string]string // filename -> imageID
+	data                *data.SeedData
+	httpClient          *http.Client
+	assetsDir           string
+	storageHostOverride string
+	catalogClient       *catalogapi.Client
+	imageClient         *imageapi.Client
+	imageCache          map[string]string // filename -> imageID
 }
 
 func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder, error) {
@@ -76,12 +77,13 @@ func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder
 	}
 
 	return &Seeder{
-		data:          seedData,
-		httpClient:    httpClient,
-		assetsDir:     assetsDir,
-		catalogClient: catalogClient,
-		imageClient:   imageClient,
-		imageCache:    make(map[string]string),
+		data:                seedData,
+		httpClient:          httpClient,
+		assetsDir:           assetsDir,
+		storageHostOverride: cfg.StorageHostOverride,
+		catalogClient:       catalogClient,
+		imageClient:         imageClient,
+		imageCache:          make(map[string]string),
 	}, nil
 }
 

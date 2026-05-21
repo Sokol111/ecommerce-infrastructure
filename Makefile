@@ -180,10 +180,12 @@ seed: ## Trigger seeder Job in cluster (TENANT_SLUG=acme for specific tenant)
 		exit 1; \
 	fi
 	@printf "\033[36m→ Creating seeder job for tenant '$(TENANT_SLUG)'...\033[0m\n"
-	kubectl create job -n dev \
+	@kubectl create job -n $(NAMESPACE) \
 		--from=cronjob/$(SEED_CRONJOB) \
 		"seeder-$(TENANT_SLUG)-$$(date +%s)" \
-		-- --tenant-slug="$(TENANT_SLUG)"
+		--dry-run=client -o json | \
+		jq '.spec.template.spec.containers[0].env += [{"name":"TENANT_SLUG","value":"$(TENANT_SLUG)"}]' | \
+		kubectl apply -f -
 	@printf "\033[32m✓ Seeder job created\033[0m\n"
 
 .PHONY: seed-status

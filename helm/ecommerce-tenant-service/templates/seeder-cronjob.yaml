@@ -39,16 +39,20 @@ spec:
                   value: {{ .Values.seederJob.logtoURL | default "http://logto:3001" }}
                 - name: API_RESOURCE_INDICATOR
                   value: {{ .Values.seederJob.apiResource | default "https://api.sokolshop.com" }}
+                {{- if .Values.seederJob.storageHostOverride }}
+                - name: STORAGE_HOST_OVERRIDE
+                  value: {{ .Values.seederJob.storageHostOverride }}
+                {{- end }}
                 - name: LOGTO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
                       name: logto-credentials
-                      key: ecommerce-service-client-id
+                      key: ecommerce-m2m-client-id
                 - name: LOGTO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
                       name: logto-credentials
-                      key: ecommerce-service-client-secret
+                      key: ecommerce-m2m-client-secret
               {{- with .Values.seederJob.resources }}
               resources:
                 {{- toYaml . | nindent 16 }}
