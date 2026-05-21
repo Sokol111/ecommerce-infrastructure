@@ -211,6 +211,7 @@ for name, config in GO_SERVICES.items():
             'COMMONS_DIR': 'ecommerce-commons',
             'API_DEPS': ' '.join(api_deps),
         },
+        network='host',
         only=watch_paths,
         ignore=['**/__debug_bin*', '**/__debug_bin'],
     )
@@ -292,6 +293,7 @@ for name, config in UI_SERVICES.items():
             'SERVICE_DIR': name,
             'API_DEPS': ' '.join(api_deps),
         },
+        network='host',
         only=watch_paths,
         live_update=[
             # Sync source files directly to container for hot reload (Nuxt structure)
