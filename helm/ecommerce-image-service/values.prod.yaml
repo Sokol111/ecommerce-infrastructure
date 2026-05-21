@@ -38,14 +38,18 @@ config: |
         - name: "catalog-events"
           topic: "catalog.product.events"
   application:
-    presign-ttl: 15m
     max-upload-bytes: 5242880
-    promote:
-      small-width: 400
-      large-width: 800
-      quality: 85
+    small-width: 400
+    large-width: 800
+    quality: 85
   s3:
+    bucket: "images"
     use-path-style: true
+    region: "auto"
+    presign-ttl: 15m
+  imgproxy:
+    public-base-url: "https://sokolshop.com/img"
+    bucket: "images"
   observability:
     tracing:
       enabled: true
@@ -83,7 +87,7 @@ env:
   - name: SECURITY__CLIENT_CREDENTIALS__RESOURCE
     value: "https://api.sokolshop.com"
   # Application
-  - name: APPLICATION__JWT_SECRET
+  - name: UPLOAD_TOKEN__JWT_SECRET
     valueFrom:
       secretKeyRef:
         name: image-service-secrets
@@ -108,13 +112,7 @@ env:
       secretKeyRef:
         name: r2-credentials
         key: secret-key
-  - name: S3__BUCKET
-    value: "images"
-  - name: S3__REGION
-    value: "auto"
   # imgproxy
-  - name: IMGPROXY__PUBLIC_BASE_URL
-    value: "https://sokolshop.com/img"
   - name: IMGPROXY__KEY_HEX
     valueFrom:
       secretKeyRef:
