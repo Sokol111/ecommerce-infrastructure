@@ -37,15 +37,16 @@ COMPOSE_DIR = INFRA_PATH + '/docker/compose'
 # Ensure shared network exists before starting compose services
 local('docker network inspect shared-network >/dev/null 2>&1 || docker network create shared-network', quiet=True)
 
+# Copy host CA certificates to build context (corporate TLS proxy)
+local('mkdir -p ' + INFRA_PATH + '/docker/certs && cp /etc/ssl/certs/ca-certificates.crt ' + INFRA_PATH + '/docker/certs/ca-certificates.crt', quiet=True)
+
 docker_compose(COMPOSE_DIR + '/mongo.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/storage.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/observability.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/logto.yml', project_name='ecommerce')
-docker_compose(COMPOSE_DIR + '/goproxy.yml', project_name='ecommerce')
 
 # Organize compose resources in Tilt UI
-dc_resource('athens', labels=['infrastructure'])
 dc_resource('mongo', labels=['infrastructure'])
 dc_resource('redpanda', labels=['infrastructure'])
 dc_resource('redpanda-console', labels=['infrastructure'], resource_deps=['redpanda'])
@@ -195,6 +196,8 @@ for name, config in GO_SERVICES.items():
         'ecommerce-commons/pkg',
         'ecommerce-commons/go.mod',
         'ecommerce-commons/go.sum',
+        'ecommerce-infrastructure/docker/certs',
+        'ecommerce-infrastructure/docker/Dockerfile.local',
     ]
     
     # Add API dependencies

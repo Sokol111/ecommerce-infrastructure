@@ -6,10 +6,13 @@ services:
     container_name: athens
     ports:
       - 3010:3000
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
       ATHENS_DISK_STORAGE_ROOT: /var/lib/athens
       ATHENS_GONOSUM_PATTERNS: "*"
-      ATHENS_GO_BINARY_ENV_VARS: "GOPROXY=https://proxy.golang.org|direct,GONOSUMCHECK=*,GOSUMDB=off"
+      ATHENS_GO_BINARY_ENV_VARS: "GOPROXY=https://proxy.golang.org,GONOSUMCHECK=*,GOSUMDB=off"
     volumes:
       - athens_data:/var/lib/athens
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
