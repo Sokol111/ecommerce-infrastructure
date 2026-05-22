@@ -9,9 +9,10 @@ services:
     environment:
       ATHENS_DISK_STORAGE_ROOT: /var/lib/athens
       ATHENS_GONOSUM_PATTERNS: "*"
-      ATHENS_GO_BINARY_ENV_VARS: "GOPROXY=direct,GOINSECURE=*,GIT_SSL_NO_VERIFY=true,GONOSUMCHECK=*,GOSUMDB=off"
+      ATHENS_GO_BINARY_ENV_VARS: "GOPROXY=https://proxy.golang.org|direct,GONOSUMCHECK=*,GOSUMDB=off"
     volumes:
       - athens_data:/var/lib/athens
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
     networks:
       - shared-network
     healthcheck:
