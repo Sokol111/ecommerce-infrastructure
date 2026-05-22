@@ -12,15 +12,17 @@ WORKDIR /app
 
 RUN corepack enable
 
-# Copy package and config files needed before install
-COPY ${SERVICE_DIR}/package.json ${SERVICE_DIR}/pnpm-lock.yaml ${SERVICE_DIR}/pnpm-workspace.yaml ${SERVICE_DIR}/.npmrc ./
-COPY ${SERVICE_DIR}/nuxt.config.ts ./
+# Copy application code
+COPY ${SERVICE_DIR}/. .
 
-# Install pnpm (version from package.json packageManager field, cached with package.json layer)
+# Remove @sokol111/* deps (they'll be linked locally, no registry needed)
+RUN sed -i '/^[[:space:]]*"@sokol111\//d' package.json && \
+    sed -i '/@sokol111/d' pnpm-lock.yaml
+
+# Install pnpm
 RUN corepack install
 
-# Copy local API dependencies and rewrite pnpm-workspace.yaml overrides to absolute paths.
-# If dist/ is missing (fresh clone), build it in place.
+# Copy and build local API dependencies, then link them
 COPY . /tmp/context/
 RUN set -e && \
     for api_dep in ${API_DEPS}; do \
@@ -28,20 +30,20 @@ RUN set -e && \
             mkdir -p "/app/${api_dep}/gen/typescript"; \
             cp -r "/tmp/context/${api_dep}/gen/typescript/." "/app/${api_dep}/gen/typescript/"; \
             if [ ! -d "/app/${api_dep}/gen/typescript/dist" ]; then \
-                cd "/app/${api_dep}/gen/typescript" && npm install && cd /app; \
+                cd "/app/${api_dep}/gen/typescript" && npm install && npm run build && cd /app; \
             fi; \
-            sed -i "s|link:\.\./${api_dep}/gen/typescript|link:/app/${api_dep}/gen/typescript|g" /app/pnpm-workspace.yaml; \
-        else \
-            echo "WARNING: ${api_dep}/gen/typescript not found (skipping)"; \
         fi; \
     done && \
     rm -rf /tmp/context
 
-# Install dependencies — @sokol111/* packages resolved locally via link: protocol
-RUN pnpm install --no-frozen-lockfile
-
-# Copy application code
-COPY ${SERVICE_DIR}/. .
+# Install dependencies and link API packages (cache pnpm store between builds)
+RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
+    pnpm install --no-frozen-lockfile && \
+    for api_dep in ${API_DEPS}; do \
+        if [ -d "/app/${api_dep}/gen/typescript" ]; then \
+            pnpm link "/app/${api_dep}/gen/typescript"; \
+        fi; \
+    done
 
 ENV NODE_ENV=development
 ENV NUXT_TELEMETRY_DISABLED=1
