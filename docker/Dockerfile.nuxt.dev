@@ -38,7 +38,7 @@ RUN set -e && \
 
 # Install dependencies and link API packages (cache pnpm store between builds)
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --no-frozen-lockfile && \
+    pnpm install --prefer-frozen-lockfile && \
     for api_dep in ${API_DEPS}; do \
         if [ -d "/app/${api_dep}/gen/typescript" ]; then \
             pnpm link "/app/${api_dep}/gen/typescript"; \
