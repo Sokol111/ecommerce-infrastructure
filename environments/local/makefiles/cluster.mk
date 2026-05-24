@@ -38,10 +38,3 @@ cluster-start: ## Start stopped k3d cluster
 	@k3d cluster start "$(CLUSTER_NAME)"
 	@kubectl config use-context "$(K3D_CONTEXT)" 2>/dev/null || true
 	@printf "\033[32m✓ Cluster started\033[0m\n"
-
-.PHONY: cluster-restart
-cluster-restart: cluster-stop cluster-start ## Restart k3d cluster (keeps data)
-
-.PHONY: cluster-reset
-cluster-reset: cluster-delete cluster ## Recreate cluster from scratch
-	@printf "\033[32m✓ Cluster reset complete\033[0m\n"

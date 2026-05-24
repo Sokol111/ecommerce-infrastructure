@@ -35,9 +35,6 @@ VALUES_DIR = TILTFILE_DIR + '/values'
 # Docker Compose Infrastructure
 # ============================================================================
 
-# Ensure shared network exists before starting compose services
-local('docker network inspect shared-network >/dev/null 2>&1 || docker network create shared-network', quiet=True)
-
 # Copy host CA certificates to build context (corporate TLS proxy)
 local('mkdir -p ' + TILTFILE_DIR + '/certs && cp /etc/ssl/certs/ca-certificates.crt ' + TILTFILE_DIR + '/certs/ca-certificates.crt', quiet=True)
 

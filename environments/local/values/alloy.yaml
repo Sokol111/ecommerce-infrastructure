@@ -1,0 +1,151 @@
+# Grafana Alloy - Local development values
+# Chart: grafana/alloy from https://grafana.github.io/helm-charts
+# Replaces OTel Collector to match production setup
+
+alloy:
+  configMap:
+    content: |
+      // =========================================================================
+      // Grafana Alloy - Local Development Configuration
+      // Receives OTLP from Go/Nuxt services in k8s, exports to docker-compose
+      // Prometheus (metrics) and Tempo (traces)
+      // =========================================================================
+
+      // OTLP Receiver (metrics + traces from services)
+      otelcol.receiver.otlp "default" {
+        grpc {
+          endpoint = "0.0.0.0:4317"
+        }
+        http {
+          endpoint = "0.0.0.0:4318"
+        }
+        output {
+          metrics = [otelcol.processor.k8sattributes.default.input]
+          traces  = [otelcol.processor.k8sattributes.default.input]
+        }
+      }
+
+      // Kubernetes Attributes Processor — enrich telemetry with pod metadata
+      otelcol.processor.k8sattributes "default" {
+        extract {
+          metadata = [
+            "k8s.namespace.name",
+            "k8s.pod.name",
+            "k8s.deployment.name",
+          ]
+          label {
+            from      = "pod"
+            key_regex = "app\\.kubernetes\\.io/(name|version|environment)"
+            tag_name  = "$1"
+          }
+        }
+
+        pod_association {
+          source { from = "resource_attribute" name = "k8s.pod.ip" }
+        }
+        pod_association {
+          source { from = "resource_attribute" name = "k8s.pod.uid" }
+        }
+        pod_association {
+          source { from = "connection" }
+        }
+
+        output {
+          metrics = [otelcol.processor.transform.default.input]
+          traces  = [otelcol.processor.transform.default.input]
+        }
+      }
+
+      // Copy deployment name → service.name (if not set), then clean up k8s attrs
+      otelcol.processor.transform "default" {
+        error_mode = "ignore"
+
+        metric_statements {
+          context  = "resource"
+          statements = [
+            `set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil`,
+            `delete_key(attributes, "k8s.deployment.name")`,
+            `delete_key(attributes, "k8s.pod.uid")`,
+            `delete_key(attributes, "k8s.pod.start_time")`,
+            `delete_key(attributes, "k8s.node.name")`,
+          ]
+        }
+
+        trace_statements {
+          context  = "resource"
+          statements = [
+            `set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil`,
+            `delete_key(attributes, "k8s.deployment.name")`,
+            `delete_key(attributes, "k8s.pod.uid")`,
+            `delete_key(attributes, "k8s.pod.start_time")`,
+            `delete_key(attributes, "k8s.node.name")`,
+          ]
+        }
+
+        output {
+          metrics = [otelcol.processor.batch.default.input]
+          traces  = [otelcol.processor.batch.default.input]
+        }
+      }
+
+      // Batch Processor
+      otelcol.processor.batch "default" {
+        timeout             = "10s"
+        send_batch_size     = 1024
+        send_batch_max_size = 2048
+        output {
+          metrics = [otelcol.exporter.otlphttp.prometheus.input]
+          traces  = [otelcol.exporter.otlp.tempo.input]
+        }
+      }
+
+      // Traces → Tempo in docker-compose (via shared-network)
+      otelcol.exporter.otlp "tempo" {
+        client {
+          endpoint = "tempo:4317"
+          tls { insecure = true }
+        }
+      }
+
+      // Metrics → Prometheus in docker-compose (OTLP receiver)
+      otelcol.exporter.otlphttp "prometheus" {
+        client {
+          endpoint = "http://prometheus:9090/api/v1/otlp"
+          tls { insecure = true }
+        }
+      }
+
+      // Debug exporter for troubleshooting
+      otelcol.exporter.debug "default" {
+        verbosity           = "detailed"
+        sampling_initial    = 5
+        sampling_thereafter = 200
+      }
+
+  extraPorts:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+      protocol: TCP
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+      protocol: TCP
+
+controller:
+  type: daemonset
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# Access docker-compose services via shared-network
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
+
+serviceMonitor:
+  enabled: false

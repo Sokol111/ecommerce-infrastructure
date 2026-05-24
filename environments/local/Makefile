@@ -21,7 +21,7 @@ TRAEFIK_NS ?= traefik
 
 # Infrastructure Helm charts
 TRAEFIK_VALUES ?= $(THIS_DIR)values/traefik.yaml
-OTELCOL_VALUES ?= $(THIS_DIR)values/otelcol.yaml
+ALLOY_VALUES ?= $(THIS_DIR)values/alloy.yaml
 
 # Docker compose
 COMPOSE_DIR := $(THIS_DIR)compose

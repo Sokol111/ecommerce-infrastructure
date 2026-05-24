@@ -32,7 +32,7 @@ scrape_configs:
           service: 'tempo'
 
   # Note: Kubernetes metrics collection requires access to k3d cluster
-  # For local development, metrics are primarily collected via OTel Collector in k8s
+  # For local development, metrics are primarily collected via Grafana Alloy in k8s
   # which exports to Prometheus via remote_write from Tempo metrics generator
 
 # Remote write can be configured here if needed for long-term storage

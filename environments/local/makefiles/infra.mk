@@ -3,7 +3,7 @@
 # =============================================================================
 
 .PHONY: infra
-infra: infra-traefik infra-otel ## Install Traefik + OTel Collector
+infra: infra-traefik infra-alloy ## Install Traefik + Grafana Alloy
 	@printf "\033[32m✓ All infrastructure components installed\033[0m\n"
 
 .PHONY: infra-traefik
@@ -28,20 +28,19 @@ infra-traefik: cluster ## Install Traefik Ingress Controller
 		printf "\033[32m✓ Traefik installed\033[0m\n"; \
 	fi
 
-.PHONY: infra-otel
-infra-otel: cluster ## Install OpenTelemetry Collector
-	@if helm status otel-collector -n $(OBS_NS) >/dev/null 2>&1; then \
-		printf "\033[33m⊘ OpenTelemetry Collector already installed, skipping\033[0m\n"; \
+.PHONY: infra-alloy
+infra-alloy: cluster ## Install Grafana Alloy
+	@if helm status alloy -n $(OBS_NS) >/dev/null 2>&1; then \
+		printf "\033[33m⊘ Grafana Alloy already installed, skipping\033[0m\n"; \
 	else \
-		printf "\033[36m→ Installing OpenTelemetry Collector\033[0m\n"; \
-		helm upgrade --install otel-collector opentelemetry-collector \
-			--repo https://open-telemetry.github.io/opentelemetry-helm-charts \
-			--version 0.133.0 \
+		printf "\033[36m→ Installing Grafana Alloy\033[0m\n"; \
+		helm upgrade --install alloy alloy \
+			--repo https://grafana.github.io/helm-charts \
 			--namespace $(OBS_NS) \
 			--create-namespace \
-			--values $(OTELCOL_VALUES) \
+			--values $(ALLOY_VALUES) \
 			--wait; \
-		printf "\033[32m✓ OpenTelemetry Collector installed\033[0m\n"; \
+		printf "\033[32m✓ Grafana Alloy installed\033[0m\n"; \
 	fi
 
 .PHONY: infra-traefik-uninstall
@@ -51,12 +50,12 @@ infra-traefik-uninstall: ## Uninstall Traefik
 	@helm uninstall traefik-crds -n $(TRAEFIK_NS) 2>/dev/null || true
 	@printf "\033[32m✓ Traefik uninstalled\033[0m\n"
 
-.PHONY: infra-otel-uninstall
-infra-otel-uninstall: ## Uninstall OTel Collector
-	@printf "\033[33m→ Uninstalling OpenTelemetry Collector\033[0m\n"
-	@helm uninstall otel-collector -n $(OBS_NS) 2>/dev/null || true
-	@printf "\033[32m✓ OpenTelemetry Collector uninstalled\033[0m\n"
+.PHONY: infra-alloy-uninstall
+infra-alloy-uninstall: ## Uninstall Grafana Alloy
+	@printf "\033[33m→ Uninstalling Grafana Alloy\033[0m\n"
+	@helm uninstall alloy -n $(OBS_NS) 2>/dev/null || true
+	@printf "\033[32m✓ Grafana Alloy uninstalled\033[0m\n"
 
 .PHONY: infra-uninstall
-infra-uninstall: infra-traefik-uninstall infra-otel-uninstall ## Uninstall all infra components
+infra-uninstall: infra-traefik-uninstall infra-alloy-uninstall ## Uninstall all infra components
 	@printf "\033[32m✓ All infrastructure components uninstalled\033[0m\n"

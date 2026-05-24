@@ -51,9 +51,6 @@ docker-logs: ## Tail Docker infra logs (Ctrl+C to stop)
 	@printf "\033[36m→ Docker infrastructure logs (Ctrl+C to stop)\033[0m\n"
 	@$(DC) -f "$(MONGO_COMPOSE)" -f "$(KAFKA_COMPOSE)" -f "$(STORAGE_COMPOSE)" -f "$(OBSERVABILITY_COMPOSE)" -f "$(LOGTO_COMPOSE)" logs -f
 
-.PHONY: docker-restart
-docker-restart: docker-down docker ## Restart Docker infra (keeps data)
-
 .PHONY: docker-clean
 docker-clean: ## Stop Docker infra and delete volumes
 	@printf "\033[33m→ Cleaning Docker volumes\033[0m\n"
