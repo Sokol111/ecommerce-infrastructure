@@ -2,7 +2,7 @@ FROM golang:1.26.3 AS build
 WORKDIR /src
 
 # Corporate CA certificates (for TLS interception proxy)
-COPY docker/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY environments/local/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 ENV GOPROXY=https://proxy.golang.org,direct
 ENV GONOSUMCHECK=*

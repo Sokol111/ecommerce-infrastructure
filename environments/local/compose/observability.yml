@@ -7,7 +7,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./config/prometheus-config.yaml:/etc/prometheus/prometheus.yml
+      - ../config/prometheus-config.yaml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -33,7 +33,7 @@ services:
       - "4317:4317"   # OTLP gRPC
       - "4318:4318"   # OTLP HTTP
     volumes:
-      - ./config/tempo-config.yaml:/etc/tempo/config.yaml
+      - ../config/tempo-config.yaml:/etc/tempo/config.yaml
       - tempo-data:/var/tempo
     command: -config.file=/etc/tempo/config.yaml
     networks:
@@ -58,9 +58,9 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_LOG_LEVEL=info
     volumes:
-      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
-      - ./config/grafana-dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
-      - ./dashboards:/var/lib/grafana/dashboards
+      - ../config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ../config/grafana-dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ../dashboards:/var/lib/grafana/dashboards
       - grafana-data:/var/lib/grafana
     networks:
       - shared-network

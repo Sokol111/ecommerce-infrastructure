@@ -7,13 +7,10 @@ MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
 THIS_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-
-# Environment
-ENV ?= local
-ENV_DIR := $(THIS_DIR)environments/$(ENV)
+INFRA_ROOT := $(abspath $(THIS_DIR)/../..)
 
 # K3d
-K3D_CONFIG ?= $(ENV_DIR)/k3d-cluster.yaml
+K3D_CONFIG ?= $(THIS_DIR)k3d-cluster.yaml
 CLUSTER_NAME ?= dev-cluster
 K3D_CONTEXT := k3d-$(CLUSTER_NAME)
 
@@ -23,11 +20,11 @@ OBS_NS ?= observability
 TRAEFIK_NS ?= traefik
 
 # Infrastructure Helm charts
-TRAEFIK_VALUES ?= $(THIS_DIR)helm/values/infrastructure/traefik.yaml
-OTELCOL_VALUES ?= $(THIS_DIR)helm/values/observability/otelcol.yaml
+TRAEFIK_VALUES ?= $(THIS_DIR)values/traefik.yaml
+OTELCOL_VALUES ?= $(THIS_DIR)values/otelcol.yaml
 
 # Docker compose
-COMPOSE_DIR := $(THIS_DIR)docker/compose
+COMPOSE_DIR := $(THIS_DIR)compose
 MONGO_COMPOSE := $(COMPOSE_DIR)/mongo.yml
 KAFKA_COMPOSE := $(COMPOSE_DIR)/kafka.yml
 OBSERVABILITY_COMPOSE := $(COMPOSE_DIR)/observability.yml

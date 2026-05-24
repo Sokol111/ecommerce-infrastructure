@@ -11,7 +11,7 @@ FROM ${GO_IMAGE} AS base
 WORKDIR /src
 
 # Corporate CA certificates (for TLS interception proxy)
-COPY ecommerce-infrastructure/docker/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY ecommerce-infrastructure/environments/local/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 ENV GOPROXY=https://proxy.golang.org,direct
 ENV GONOSUMCHECK=*
@@ -68,7 +68,7 @@ RUN set -e && \
 FROM ${GO_IMAGE} AS delve
 
 # Corporate CA certificates
-COPY ecommerce-infrastructure/docker/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY ecommerce-infrastructure/environments/local/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 ENV GOPROXY=https://proxy.golang.org,direct
 ENV GONOSUMCHECK=*

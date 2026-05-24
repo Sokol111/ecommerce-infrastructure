@@ -53,7 +53,7 @@ jobs:
 
           helm upgrade --install "${SERVICE}" "$CHART_DIR" \
             -n prod \
-            -f "$CHART_DIR/values.prod.yaml" \
+            -f "environments/production/values/${SERVICE}.yaml" \
             --set image.tag=${IMAGE_TAG} \
             --wait --timeout 3m
 

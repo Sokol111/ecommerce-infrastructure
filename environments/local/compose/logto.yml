@@ -48,8 +48,8 @@ services:
 
   logto-seed:
     build:
-      context: ../..
-      dockerfile: docker/Dockerfile.logto-seed.local
+      context: ../../..
+      dockerfile: environments/local/docker/Dockerfile.logto-seed
       network: host
     container_name: logto-seed
     environment:

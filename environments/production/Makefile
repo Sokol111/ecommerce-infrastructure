@@ -156,7 +156,7 @@ deploy-redpanda: ## Deploy Redpanda (Kafka-compatible broker)
 	@printf "$(COLOR_BLUE)→ Deploying Redpanda...$(COLOR_RESET)\n"
 	helm upgrade --install redpanda redpanda/redpanda \
 		-n $(NS_PROD) \
-		-f $(VALUES_DIR)/redpanda-prod.yaml \
+		-f $(VALUES_DIR)/redpanda.yaml \
 		--wait --timeout 5m
 	@printf "$(COLOR_GREEN)✓ Redpanda deployed$(COLOR_RESET)\n"
 
@@ -178,7 +178,7 @@ deploy-alloy: ## Deploy Grafana Alloy (→ Grafana Cloud)
 	@printf "$(COLOR_BLUE)→ Deploying Grafana Alloy...$(COLOR_RESET)\n"
 	helm upgrade --install alloy grafana/alloy \
 		-n $(NS_OBS) \
-		-f $(VALUES_DIR)/alloy-prod.yaml \
+		-f $(VALUES_DIR)/alloy.yaml \
 		--wait --timeout 3m
 	@printf "$(COLOR_GREEN)✓ Grafana Alloy deployed$(COLOR_RESET)\n"
 
@@ -212,7 +212,7 @@ endif
 	cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update
 	helm upgrade --install ecommerce-$(SVC) $(HELM_DIR)/ecommerce-$(SVC) \
 		-n $(NS_PROD) \
-		-f $(HELM_DIR)/ecommerce-$(SVC)/values.prod.yaml \
+		-f $(VALUES_DIR)/ecommerce-$(SVC).yaml \
 		--wait --timeout 3m
 	@printf "$(COLOR_GREEN)✓ ecommerce-$(SVC) deployed$(COLOR_RESET)\n"
 

@@ -1,5 +1,5 @@
 # Debug configuration for ecommerce-image-service
-# Usage: skaffold dev or helm upgrade -f values.local.yaml -f values.debug.yaml
+# Usage: skaffold dev or helm upgrade -f environments/local/values/<service>.yaml -f values.debug.yaml
 
 debugPort: 2345
 command: ["/bin/sh"]

@@ -46,7 +46,7 @@ ehthumbs.db
 # Build artifacts
 # ========================
 /logto-seed
-docker/certs/
+environments/local/certs/
 *.out
 *.bin
 *.tar

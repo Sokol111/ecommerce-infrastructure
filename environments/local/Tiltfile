@@ -28,7 +28,8 @@ watch_settings(ignore=[
 # k3d registry is auto-detected by Tilt — no default_registry() needed.
 # Tilt pushes to localhost:5000 and rewrites k8s manifests to pull from k3d-dev-registry:5000.
 
-COMPOSE_DIR = INFRA_PATH + '/docker/compose'
+COMPOSE_DIR = TILTFILE_DIR + '/compose'
+VALUES_DIR = TILTFILE_DIR + '/values'
 
 # ============================================================================
 # Docker Compose Infrastructure
@@ -38,7 +39,7 @@ COMPOSE_DIR = INFRA_PATH + '/docker/compose'
 local('docker network inspect shared-network >/dev/null 2>&1 || docker network create shared-network', quiet=True)
 
 # Copy host CA certificates to build context (corporate TLS proxy)
-local('mkdir -p ' + INFRA_PATH + '/docker/certs && cp /etc/ssl/certs/ca-certificates.crt ' + INFRA_PATH + '/docker/certs/ca-certificates.crt', quiet=True)
+local('mkdir -p ' + TILTFILE_DIR + '/certs && cp /etc/ssl/certs/ca-certificates.crt ' + TILTFILE_DIR + '/certs/ca-certificates.crt', quiet=True)
 
 docker_compose(COMPOSE_DIR + '/mongo.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
@@ -196,8 +197,8 @@ for name, config in GO_SERVICES.items():
         'ecommerce-commons/pkg',
         'ecommerce-commons/go.mod',
         'ecommerce-commons/go.sum',
-        'ecommerce-infrastructure/docker/certs',
-        'ecommerce-infrastructure/docker/Dockerfile.local',
+        'ecommerce-infrastructure/environments/local/certs',
+        'ecommerce-infrastructure/environments/local/docker/Dockerfile.go',
     ]
     
     # Add API dependencies
@@ -210,7 +211,7 @@ for name, config in GO_SERVICES.items():
     docker_build(
         image,
         context=ROOT_PATH,
-        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.local',
+        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/environments/local/docker/Dockerfile.go',
         build_args={
             'SERVICE_DIR': name,
             'COMMONS_DIR': 'ecommerce-commons',
@@ -227,7 +228,7 @@ for name, config in GO_SERVICES.items():
         name=name,
         namespace='dev',
         values=[
-            HELM_PATH + '/' + name + '/values.local.yaml',
+            VALUES_DIR + '/' + name + '.yaml',
             HELM_PATH + '/' + name + '/values.debug.yaml',
         ],
     ))
@@ -252,7 +253,7 @@ for name, config in GO_SERVICES.items():
 docker_build(
     'ecommerce-seeder',
     context=INFRA_PATH,
-    dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.seeder.local',
+    dockerfile=ROOT_PATH + '/ecommerce-infrastructure/environments/local/docker/Dockerfile.seeder',
     network='host',
 )
 
@@ -294,7 +295,7 @@ for name, config in UI_SERVICES.items():
     docker_build(
         image,
         context=ROOT_PATH,
-        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.nuxt.dev',
+        dockerfile=ROOT_PATH + '/ecommerce-infrastructure/environments/local/docker/Dockerfile.nuxt',
         build_args={
             'SERVICE_DIR': name,
             'API_DEPS': ' '.join(api_deps),
@@ -317,7 +318,7 @@ for name, config in UI_SERVICES.items():
         name=name,
         namespace='dev',
         values=[
-            HELM_PATH + '/' + name + '/values.local.yaml',
+            VALUES_DIR + '/' + name + '.yaml',
         ],
     ))
     
