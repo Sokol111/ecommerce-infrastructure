@@ -28,6 +28,11 @@ watch_settings(ignore=[
 # k3d registry is auto-detected by Tilt — no default_registry() needed.
 # Tilt pushes to localhost:5000 and rewrites k8s manifests to pull from k3d-dev-registry:5000.
 
+# Prune old tilt-built images on startup to prevent disk exhaustion.
+# Removes images tagged with "tilt-" that are older than 24h, plus dangling images.
+local('docker images --filter "reference=localhost:5000/*:tilt-*" --format "{{.ID}} {{.CreatedAt}}" | awk -v cutoff="$(date -d "-24 hours" +%s)" \'{ cmd="date -d \""$2" "$3"\" +%s"; cmd | getline ts; close(cmd); if (ts < cutoff) print $1 }\' | sort -u | xargs -r docker rmi -f > /dev/null 2>&1 || true', quiet=True)
+local('docker image prune -f > /dev/null 2>&1 || true', quiet=True)
+
 COMPOSE_DIR = TILTFILE_DIR + '/compose'
 VALUES_DIR = TILTFILE_DIR + '/values'
 
