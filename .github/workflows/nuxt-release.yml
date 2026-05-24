@@ -66,18 +66,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image (local)
-        run: |
-          IMAGE="${{ steps.meta.outputs.image_name }}"
-          TAG="${{ steps.meta.outputs.image_tag }}"
-          
-          docker buildx build \
-            -f infra/docker/Dockerfile.nuxt \
-            --secret id=NODE_AUTH_TOKEN,env=NODE_AUTH_TOKEN \
-            -t "$IMAGE:$TAG" \
-            -t "$IMAGE:latest" \
-            --load .
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/Dockerfile.nuxt
+          tags: |
+            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}
+            ${{ steps.meta.outputs.image_name }}:latest
+          secrets: |
+            NODE_AUTH_TOKEN=${{ secrets.NPM_AUTH_TOKEN }}
+          load: true
+          push: false
 
       - name: Scan image for vulnerabilities
         uses: aquasecurity/trivy-action@0.35.0
@@ -90,11 +89,8 @@ jobs:
 
       - name: Push Docker image
         run: |
-          IMAGE="${{ steps.meta.outputs.image_name }}"
-          TAG="${{ steps.meta.outputs.image_tag }}"
-          
-          docker push "$IMAGE:$TAG"
-          docker push "$IMAGE:latest"
+          docker push "${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}"
+          docker push "${{ steps.meta.outputs.image_name }}:latest"
 
       - name: Create Git tag
         run: |

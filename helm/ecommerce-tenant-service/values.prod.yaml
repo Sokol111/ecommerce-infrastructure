@@ -75,3 +75,11 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['app.kubernetes.io/version']
+
+seederJob:
+  enabled: true
+  image: ghcr.io/sokol111/ecommerce-seeder:latest
+  catalogURL: "http://ecommerce-catalog-service:8080"
+  imageURL: "http://ecommerce-image-service:8080"
+  logtoURL: "http://logto:3001"
+  apiResource: "https://api.sokolshop.com"

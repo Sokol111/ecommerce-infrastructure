@@ -66,16 +66,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image (local)
-        run: |
-          IMAGE="${{ steps.meta.outputs.image_name }}"
-          TAG="${{ steps.meta.outputs.image_tag }}"
-          
-          docker buildx build \
-            -f infra/docker/Dockerfile.go \
-            --target ${{ inputs.docker_target }} \
-            -t "$IMAGE:$TAG" \
-            -t "$IMAGE:latest" \
-            --load .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/Dockerfile.go
+          target: ${{ inputs.docker_target }}
+          tags: |
+            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}
+            ${{ steps.meta.outputs.image_name }}:latest
+          load: true
+          push: false
 
       - name: Scan image for vulnerabilities
         uses: aquasecurity/trivy-action@0.35.0
@@ -88,11 +88,8 @@ jobs:
 
       - name: Push Docker image
         run: |
-          IMAGE="${{ steps.meta.outputs.image_name }}"
-          TAG="${{ steps.meta.outputs.image_tag }}"
-          
-          docker push "$IMAGE:$TAG"
-          docker push "$IMAGE:latest"
+          docker push "${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}"
+          docker push "${{ steps.meta.outputs.image_name }}:latest"
 
       - name: Create Git tag
         run: |

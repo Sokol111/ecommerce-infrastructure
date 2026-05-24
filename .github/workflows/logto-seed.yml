@@ -1,0 +1,82 @@
+name: Run Logto Seed
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        id: meta
+        run: |
+          IMAGE=ghcr.io/sokol111/ecommerce-logto-seed
+          TAG=$(git rev-parse --short HEAD)
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Build image (local)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.logto-seed
+          push: false
+          load: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.image }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: "${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}"
+          format: "table"
+          exit-code: "1"
+          severity: "HIGH,CRITICAL"
+          ignore-unfixed: true
+
+      - name: Push image
+        run: |
+          docker push ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
+          docker push ${{ steps.meta.outputs.image }}:latest
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Run logto-seed Job
+        run: |
+          export IMAGE="${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}"
+          envsubst < environments/production/k8s/logto-seed-job.yaml | kubectl create -f -
+
+      - name: Wait for Job completion
+        run: |
+          JOB=$(kubectl get jobs -n prod --sort-by=.metadata.creationTimestamp -o name | grep logto-seed | tail -1)
+          echo "Waiting for $JOB..."
+          kubectl wait --for=condition=complete -n prod "$JOB" --timeout=120s
+
+      - name: Show Job logs
+        if: always()
+        run: |
+          JOB=$(kubectl get jobs -n prod --sort-by=.metadata.creationTimestamp -o name | grep logto-seed | tail -1)
+          kubectl logs -n prod "$JOB" --all-containers

@@ -4,10 +4,17 @@ FROM golang:1.26.3 AS build
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+# Corporate CA certificates (for TLS interception proxy)
+COPY docker/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+ENV GOPROXY=https://proxy.golang.org,direct
+ENV GONOSUMCHECK=*
+ENV GOSUMDB=off
+
+COPY cmd/seeder/go.mod cmd/seeder/go.sum ./
 RUN go mod download && go mod verify
 
-COPY . .
+COPY cmd/seeder/ .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /seeder .
 

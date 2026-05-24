@@ -49,7 +49,8 @@ services:
   logto-seed:
     build:
       context: ../..
-      dockerfile: docker/Dockerfile.logto-seed
+      dockerfile: docker/Dockerfile.logto-seed.local
+      network: host
     container_name: logto-seed
     environment:
       DB_URL: postgres://postgres:postgres@logto-db:5432/logto

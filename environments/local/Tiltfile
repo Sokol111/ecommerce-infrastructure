@@ -251,8 +251,9 @@ for name, config in GO_SERVICES.items():
 # Seeder image build
 docker_build(
     'ecommerce-seeder',
-    context=ROOT_PATH + '/ecommerce-infrastructure/cmd/seeder',
-    dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.seeder',
+    context=INFRA_PATH,
+    dockerfile=ROOT_PATH + '/ecommerce-infrastructure/docker/Dockerfile.seeder.local',
+    network='host',
 )
 
 # Seeder CronJob — shows Jobs and their logs in Tilt UI

@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: logto-seed-
+  namespace: prod
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: logto-seed
+          image: ${IMAGE}
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: logto-db
+                  key: connection-string
+            - name: LOGTO_URL
+              value: "http://logto:3001"
+            - name: API_RESOURCE_INDICATOR
+              value: "https://api.sokolshop.com"
+            - name: ADMIN_UI_REDIRECT_URI
+              value: "https://admin.sokolshop.com/auth/oidc/callback"
+            - name: ADMIN_UI_LOGOUT_URI
+              value: "https://admin.sokolshop.com"
+            - name: KUBE_NAMESPACE
+              value: "prod"
+            - name: KUBE_SECRET_NAME
+              value: "logto-credentials"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi

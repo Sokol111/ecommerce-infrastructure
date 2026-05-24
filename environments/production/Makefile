@@ -370,6 +370,18 @@ seed-logs: ## Show logs of seeder job (TENANT_SLUG=acme)
 ##@ Logto
 # =============================================================================
 
+.PHONY: logto-seed
+logto-seed: ## Run logto-seed Job (one-time Logto configuration)
+	@printf "$(COLOR_BLUE)→ Running logto-seed...$(COLOR_RESET)\n"
+	export IMAGE=ghcr.io/sokol111/ecommerce-logto-seed:latest && \
+		envsubst < $(K8S_DIR)/logto-seed-job.yaml | kubectl create -f -
+	@printf "$(COLOR_GREEN)✓ logto-seed job created$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)→ Waiting for completion...$(COLOR_RESET)\n"
+	@JOB=$$(kubectl get jobs -n $(NS_PROD) --sort-by=.metadata.creationTimestamp -o name | grep logto-seed | tail -1) && \
+		kubectl wait --for=condition=complete -n $(NS_PROD) "$$JOB" --timeout=120s && \
+		printf "$(COLOR_GREEN)✓ logto-seed completed$(COLOR_RESET)\n" && \
+		kubectl logs -n $(NS_PROD) "$$JOB"
+
 .PHONY: logto-console
 logto-console: ## Port-forward Logto Admin Console (localhost:3002)
 	@printf "$(COLOR_BLUE)→ Forwarding Logto Admin Console to localhost:3002...$(COLOR_RESET)\n"
