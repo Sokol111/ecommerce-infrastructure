@@ -12,6 +12,11 @@ registries:
     host: "0.0.0.0"
     hostPort: "5000"
 
+volumes:
+  - volume: /usr/local/share/ca-certificates:/usr/local/share/ca-certificates
+    nodeFilters:
+      - all
+
 ports:
   - port: "80:80"
     nodeFilters:
