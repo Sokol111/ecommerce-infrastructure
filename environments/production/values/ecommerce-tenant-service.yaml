@@ -45,8 +45,9 @@ config: |
       enabled: true
     metrics:
       enabled: true
-  pyroscope:
-    enabled: true
+    profiling:
+      enabled: true
+      endpoint: "http://alloy.observability.svc.cluster.local:4040"
 
 env:
   - name: APP_ENV
@@ -77,22 +78,6 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['app.kubernetes.io/version']
-  # Pyroscope (Grafana Cloud Profiles)
-  - name: PYROSCOPE__ENDPOINT
-    valueFrom:
-      secretKeyRef:
-        name: grafana-cloud
-        key: pyroscope-url
-  - name: PYROSCOPE__BASIC_AUTH_USER
-    valueFrom:
-      secretKeyRef:
-        name: grafana-cloud
-        key: pyroscope-user
-  - name: PYROSCOPE__BASIC_AUTH_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: grafana-cloud
-        key: api-key
 
 seederJob:
   enabled: true

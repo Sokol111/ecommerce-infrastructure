@@ -54,7 +54,6 @@ services:
       - pyroscope-data:/data
     command:
       - '-config.file=/etc/pyroscope/config.yaml'
-      - '-store.path=/data'
     configs:
       - source: pyroscope-config
         target: /etc/pyroscope/config.yaml

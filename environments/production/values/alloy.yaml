@@ -178,6 +178,30 @@ alloy:
         }
       }
 
+      // =========================================================================
+      // Pyroscope Profiling
+      // =========================================================================
+
+      // Pyroscope Receiver — accepts profiles from services
+      pyroscope.receive_http "default" {
+        http {
+          listen_address = "0.0.0.0"
+          listen_port    = 4040
+        }
+        forward_to = [pyroscope.write.default.receiver]
+      }
+
+      // Pyroscope Writer — forwards to Grafana Cloud Profiles
+      pyroscope.write "default" {
+        endpoint {
+          url = env("GRAFANA_CLOUD_PYROSCOPE_URL")
+          basic_auth {
+            username = env("GRAFANA_CLOUD_PYROSCOPE_USER")
+            password = env("GRAFANA_CLOUD_API_KEY")
+          }
+        }
+      }
+
       // Self-monitoring
       prometheus.exporter.self "alloy" {}
       prometheus.scrape "alloy_self" {
@@ -223,6 +247,16 @@ alloy:
         secretKeyRef:
           name: grafana-cloud
           key: api-key
+    - name: GRAFANA_CLOUD_PYROSCOPE_URL
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: pyroscope-url
+    - name: GRAFANA_CLOUD_PYROSCOPE_USER
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: pyroscope-user
 
   extraPorts:
     - name: otlp-grpc
@@ -232,6 +266,10 @@ alloy:
     - name: otlp-http
       port: 4318
       targetPort: 4318
+      protocol: TCP
+    - name: pyroscope
+      port: 4040
+      targetPort: 4040
       protocol: TCP
 
 controller:

@@ -123,6 +123,26 @@ alloy:
         }
       }
 
+      // =========================================================================
+      // Pyroscope Profiling
+      // =========================================================================
+
+      // Pyroscope Receiver — accepts profiles from services
+      pyroscope.receive_http "default" {
+        http {
+          listen_address = "0.0.0.0"
+          listen_port    = 4040
+        }
+        forward_to = [pyroscope.write.default.receiver]
+      }
+
+      // Pyroscope Writer — forwards to Pyroscope in docker-compose
+      pyroscope.write "default" {
+        endpoint {
+          url = "http://pyroscope:4040"
+        }
+      }
+
   extraPorts:
     - name: otlp-grpc
       port: 4317
@@ -131,6 +151,10 @@ alloy:
     - name: otlp-http
       port: 4318
       targetPort: 4318
+      protocol: TCP
+    - name: pyroscope
+      port: 4040
+      targetPort: 4040
       protocol: TCP
 
 controller:
