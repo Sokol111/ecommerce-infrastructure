@@ -60,11 +60,6 @@ services:
     networks:
       - shared-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4040/ready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   grafana:
     image: grafana/grafana:11.3.0
@@ -91,8 +86,6 @@ services:
       prometheus:
         condition: service_healthy
       tempo:
-        condition: service_healthy
-      pyroscope:
         condition: service_healthy
 
 configs:
