@@ -41,13 +41,21 @@ alloy:
         }
 
         pod_association {
-          source { from = "resource_attribute" name = "k8s.pod.ip" }
+          source {
+            from = "resource_attribute"
+            name = "k8s.pod.ip"
+          }
         }
         pod_association {
-          source { from = "resource_attribute" name = "k8s.pod.uid" }
+          source {
+            from = "resource_attribute"
+            name = "k8s.pod.uid"
+          }
         }
         pod_association {
-          source { from = "connection" }
+          source {
+            from = "connection"
+          }
         }
 
         output {
@@ -113,13 +121,6 @@ alloy:
           endpoint = "http://prometheus:9090/api/v1/otlp"
           tls { insecure = true }
         }
-      }
-
-      // Debug exporter for troubleshooting
-      otelcol.exporter.debug "default" {
-        verbosity           = "detailed"
-        sampling_initial    = 5
-        sampling_thereafter = 200
       }
 
   extraPorts:

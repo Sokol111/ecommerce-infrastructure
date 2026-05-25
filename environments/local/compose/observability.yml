@@ -103,6 +103,7 @@ configs:
 networks:
   shared-network:
     name: shared-network
+    external: true
 
 volumes:
   prometheus-data:

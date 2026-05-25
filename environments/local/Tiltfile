@@ -43,6 +43,9 @@ VALUES_DIR = TILTFILE_DIR + '/values'
 # Copy host CA certificates to build context (corporate TLS proxy)
 local('mkdir -p ' + TILTFILE_DIR + '/certs && cp /etc/ssl/certs/ca-certificates.crt ' + TILTFILE_DIR + '/certs/ca-certificates.crt', quiet=True)
 
+# Create shared Docker network (external for all compose files)
+local('docker network inspect shared-network >/dev/null 2>&1 || docker network create shared-network', quiet=True)
+
 docker_compose(COMPOSE_DIR + '/mongo.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/kafka.yml', project_name='ecommerce')
 docker_compose(COMPOSE_DIR + '/storage.yml', project_name='ecommerce')

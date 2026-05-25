@@ -3,7 +3,7 @@
 # =============================================================================
 
 .PHONY: init
-init: tools-check cluster-create traefik-install alloy-install ## Bootstrap dev environment (cluster + infra)
+init: tools-check cluster-create cluster-inject-ca traefik-install alloy-install ## Bootstrap dev environment (cluster + infra)
 	@echo ""
 	@printf "\033[32m✓ Development environment ready!\033[0m\n"
 	@echo ""
@@ -16,7 +16,7 @@ clean: undeploy traefik-uninstall alloy-uninstall docker-clean cluster-delete ##
 	@printf "\033[32m✓ Complete cleanup finished\033[0m\n"
 
 .PHONY: up
-up: cluster-start traefik-install alloy-install ## Start cluster and K8s infrastructure
+up: cluster-start cluster-inject-ca traefik-install alloy-install ## Start cluster and K8s infrastructure
 	@echo ""
 	@printf "\033[32m✓ Cluster and infrastructure are up!\033[0m\n"
 	@echo ""

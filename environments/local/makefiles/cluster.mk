@@ -26,6 +26,17 @@ cluster-delete: ## Delete k3d cluster and kubectl context
 	@kubectl config delete-user "admin@$(K3D_CONTEXT)" 2>/dev/null || true
 	@printf "\033[32m✓ Cluster deleted\033[0m\n"
 
+.PHONY: cluster-inject-ca
+cluster-inject-ca: ## Inject corporate CA certificates into k3d nodes
+	@printf "\033[36m→ Injecting CA certificates into cluster nodes...\033[0m\n"
+	@for node in $$(k3d node list -o json | grep -o '"name":"[^"]*"' | cut -d'"' -f4 | grep "$(CLUSTER_NAME)"); do \
+		docker exec "$$node" sh -c \
+			'cat /usr/local/share/ca-certificates/*.crt >> /etc/ssl/certs/ca-certificates.crt 2>/dev/null' && \
+			printf "  \033[32m✓ $$node\033[0m\n" || \
+			printf "  \033[33m⚠ $$node (skipped)\033[0m\n"; \
+	done
+	@printf "\033[32m✓ CA certificates injected\033[0m\n"
+
 .PHONY: cluster-stop
 cluster-stop: ## Stop k3d cluster (keeps data)
 	@printf "\033[36m→ Stopping cluster '$(CLUSTER_NAME)'\033[0m\n"

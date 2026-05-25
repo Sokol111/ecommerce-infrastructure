@@ -78,6 +78,7 @@ networks:
     name: logto
   shared-network:
     name: shared-network
+    external: true
 
 volumes:
   logto-db-data:
