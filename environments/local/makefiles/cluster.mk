@@ -2,8 +2,8 @@
 # K3d Cluster Management
 # =============================================================================
 
-.PHONY: cluster
-cluster: tools-check ## Create k3d cluster (idempotent)
+.PHONY: cluster-create
+cluster-create: tools-check ## Create k3d cluster (idempotent)
 	@if [ ! -f "$(K3D_CONFIG)" ]; then \
 		printf "\033[31m✗ Missing config: $(K3D_CONFIG)\033[0m\n"; \
 		exit 1; \

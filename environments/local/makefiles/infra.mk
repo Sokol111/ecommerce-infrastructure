@@ -2,12 +2,8 @@
 # Infrastructure Components
 # =============================================================================
 
-.PHONY: infra
-infra: infra-traefik infra-alloy ## Install Traefik + Grafana Alloy
-	@printf "\033[32m✓ All infrastructure components installed\033[0m\n"
-
-.PHONY: infra-traefik
-infra-traefik: cluster ## Install Traefik Ingress Controller
+.PHONY: traefik-install
+traefik-install: ## Install Traefik Ingress Controller
 	@if helm status traefik -n $(TRAEFIK_NS) >/dev/null 2>&1; then \
 		printf "\033[33m⊘ Traefik already installed, skipping\033[0m\n"; \
 	else \
@@ -28,8 +24,8 @@ infra-traefik: cluster ## Install Traefik Ingress Controller
 		printf "\033[32m✓ Traefik installed\033[0m\n"; \
 	fi
 
-.PHONY: infra-alloy
-infra-alloy: cluster ## Install Grafana Alloy
+.PHONY: alloy-install
+alloy-install: ## Install Grafana Alloy
 	@if helm status alloy -n $(OBS_NS) >/dev/null 2>&1; then \
 		printf "\033[33m⊘ Grafana Alloy already installed, skipping\033[0m\n"; \
 	else \
@@ -43,19 +39,15 @@ infra-alloy: cluster ## Install Grafana Alloy
 		printf "\033[32m✓ Grafana Alloy installed\033[0m\n"; \
 	fi
 
-.PHONY: infra-traefik-uninstall
-infra-traefik-uninstall: ## Uninstall Traefik
+.PHONY: traefik-uninstall
+traefik-uninstall: ## Uninstall Traefik
 	@printf "\033[33m→ Uninstalling Traefik\033[0m\n"
 	@helm uninstall traefik -n $(TRAEFIK_NS) 2>/dev/null || true
 	@helm uninstall traefik-crds -n $(TRAEFIK_NS) 2>/dev/null || true
 	@printf "\033[32m✓ Traefik uninstalled\033[0m\n"
 
-.PHONY: infra-alloy-uninstall
-infra-alloy-uninstall: ## Uninstall Grafana Alloy
+.PHONY: alloy-uninstall
+alloy-uninstall: ## Uninstall Grafana Alloy
 	@printf "\033[33m→ Uninstalling Grafana Alloy\033[0m\n"
 	@helm uninstall alloy -n $(OBS_NS) 2>/dev/null || true
 	@printf "\033[32m✓ Grafana Alloy uninstalled\033[0m\n"
-
-.PHONY: infra-uninstall
-infra-uninstall: infra-traefik-uninstall infra-alloy-uninstall ## Uninstall all infra components
-	@printf "\033[32m✓ All infrastructure components uninstalled\033[0m\n"

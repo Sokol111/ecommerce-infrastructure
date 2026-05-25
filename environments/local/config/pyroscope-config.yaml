@@ -1,0 +1,14 @@
+storage:
+  backend: filesystem
+  filesystem:
+    dir: /data
+
+server:
+  http_listen_port: 4040
+  log_level: info
+
+limits:
+  max_query_lookback: 168h  # 7 days
+
+self_profiling:
+  disable_push: true

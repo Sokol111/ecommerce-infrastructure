@@ -117,6 +117,7 @@ urls: ## Show all service URLs available in browser
 	@printf "  \033[36m%-35s\033[0m %s (admin/admin)\n" "Grafana:" "$(GRAFANA_URL)"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Prometheus:" "$(PROMETHEUS_URL)"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Tempo:" "$(TEMPO_URL)"
+	@printf "  \033[36m%-35s\033[0m %s\n" "Pyroscope:" "http://localhost:4040"
 	@printf "\n\033[1;33mDirect Port Forwards (when Tilt is running):\033[0m\n"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Product Service:" "http://localhost:8081"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Category Service:" "http://localhost:8082"
@@ -125,70 +126,3 @@ urls: ## Show all service URLs available in browser
 	@printf "  \033[36m%-35s\033[0m %s\n" "Image Service:" "http://localhost:8085"
 	@printf "  \033[36m%-35s\033[0m %s\n" "Admin UI:" "http://localhost:3000"
 	@printf "\n"
-
-# =============================================================================
-# Profiling (pprof)
-# =============================================================================
-
-PPROF_UI_PORT ?= 8081
-
-# Pprof ports per service (must match Tiltfile pprof_port)
-PPROF_PORT_catalog   := 6060
-PPROF_PORT_product   := 6061
-PPROF_PORT_category  := 6062
-PPROF_PORT_image     := 6063
-PPROF_PORT_auth      := 6064
-
-.PHONY: pprof-heap pprof-cpu pprof-goroutine pprof-allocs pprof
-
-pprof: ## Show available pprof commands
-	@printf "\033[1mPprof profiling targets:\033[0m\n\n"
-	@printf "  \033[36mmake pprof-heap SVC=catalog\033[0m      — memory profile\n"
-	@printf "  \033[36mmake pprof-cpu SVC=catalog\033[0m       — CPU profile (30s)\n"
-	@printf "  \033[36mmake pprof-allocs SVC=catalog\033[0m    — allocations profile\n"
-	@printf "  \033[36mmake pprof-goroutine SVC=catalog\033[0m — goroutine profile\n"
-	@printf "\n  Available SVC values: catalog, product, category, image, auth\n"
-	@printf "  UI opens on: http://localhost:$(PPROF_UI_PORT)\n\n"
-
-pprof-heap: ## Open heap (memory) profile in browser (SVC=catalog|product|category|image|auth)
-	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/heap
-
-pprof-cpu: ## Open CPU profile in browser - records for 30s (SVC=catalog|product|category|image|auth)
-	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/profile?seconds=30
-
-pprof-allocs: ## Open allocations profile in browser (SVC=catalog|product|category|image|auth)
-	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/allocs
-
-pprof-goroutine: ## Open goroutine profile in browser (SVC=catalog|product|category|image|auth)
-	@go tool pprof -http=:$(PPROF_UI_PORT) http://localhost:$(PPROF_PORT_$(SVC))/debug/pprof/goroutine
-
-# =============================================================================
-# Demo Data Seeder
-# =============================================================================
-
-SEED_CRONJOB := ecommerce-tenant-service-seeder
-TENANT_SLUG ?=
-
-.PHONY: seed
-seed: ## Trigger seeder Job in cluster (TENANT_SLUG=acme for specific tenant)
-	@if [ -z "$(TENANT_SLUG)" ]; then \
-		printf "\033[31mError: TENANT_SLUG is required\033[0m\n"; \
-		printf "Usage: make seed TENANT_SLUG=<slug>\n"; \
-		exit 1; \
-	fi
-	@printf "\033[36m→ Creating seeder job for tenant '$(TENANT_SLUG)'...\033[0m\n"
-	@kubectl create job -n $(NAMESPACE) \
-		--from=cronjob/$(SEED_CRONJOB) \
-		"seeder-$(TENANT_SLUG)-$$(date +%s)" \
-		--dry-run=client -o json | \
-		jq '.spec.template.spec.containers[0].env += [{"name":"TENANT_SLUG","value":"$(TENANT_SLUG)"}]' | \
-		kubectl apply -f -
-	@printf "\033[32m✓ Seeder job created\033[0m\n"
-
-.PHONY: seed-status
-seed-status: ## Show status of seeder jobs
-	@kubectl get jobs -n dev -l app.kubernetes.io/component=seeder --sort-by=.metadata.creationTimestamp
-
-.PHONY: seed-logs
-seed-logs: ## Show logs of latest seeder job (TENANT_SLUG=acme)
-	@kubectl logs -n dev -l app.kubernetes.io/component=seeder,tenant-slug=$(TENANT_SLUG) --tail=50

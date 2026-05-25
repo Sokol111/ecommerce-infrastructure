@@ -3,7 +3,7 @@
 # =============================================================================
 
 .PHONY: dev
-dev: cluster infra ## Start Tilt dev mode with hot-reload
+dev: ## Start Tilt dev mode with hot-reload
 	@printf "\033[36m→ Starting Tilt development mode\033[0m\n"
 	@printf "\033[33m  Web UI: http://localhost:10350\033[0m\n"
 	@printf "\033[33m  Debug ports: 2345-2349 (product, category, product-query, category-query, image)\033[0m\n"

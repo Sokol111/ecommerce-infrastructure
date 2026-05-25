@@ -17,7 +17,7 @@ docker: tools-check ## Start Docker infra (Mongo, Kafka, Storage, Observability)
 	@$(DC) -f "$(KAFKA_COMPOSE)" up -d
 	@printf "  Starting Storage (MinIO, imgproxy)...\n"
 	@$(DC) -f "$(STORAGE_COMPOSE)" up -d
-	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo)...\n"
+	@printf "  Starting Observability stack (Grafana, Prometheus, Tempo, Pyroscope)...\n"
 	@$(DC) -f "$(OBSERVABILITY_COMPOSE)" up -d
 	@printf "  Starting Identity (Logto)...\n"
 	@$(DC) -f "$(LOGTO_COMPOSE)" up -d

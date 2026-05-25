@@ -32,10 +32,27 @@ datasources:
           - key: job
         spanStartTimeShift: '-1m'
         spanEndTimeShift: '1m'
+      tracesToProfiles:
+        # Tempo -> Pyroscope correlation
+        datasourceUid: pyroscope
+        profileTypeId: "process_cpu:cpu:nanoseconds:cpu:nanoseconds"
+        tags:
+          - key: service.name
+            value: service_name
       serviceMap:
         datasourceUid: prometheus
       search:
         hide: false
       nodeGraph:
         enabled: true
+    editable: true
+
+  - name: Pyroscope
+    type: grafana-pyroscope-datasource
+    uid: pyroscope
+    access: proxy
+    url: http://pyroscope:4040
+    isDefault: false
+    jsonData:
+      httpMethod: GET
     editable: true

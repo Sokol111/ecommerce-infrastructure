@@ -45,6 +45,28 @@ services:
       timeout: 5s
       retries: 5
 
+  pyroscope:
+    image: grafana/pyroscope:1.11.0
+    container_name: pyroscope
+    ports:
+      - "4040:4040"
+    volumes:
+      - pyroscope-data:/data
+    command:
+      - '-config.file=/etc/pyroscope/config.yaml'
+      - '-store.path=/data'
+    configs:
+      - source: pyroscope-config
+        target: /etc/pyroscope/config.yaml
+    networks:
+      - shared-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4040/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   grafana:
     image: grafana/grafana:11.3.0
     container_name: grafana
@@ -57,6 +79,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_LOG_LEVEL=info
+      - GF_FEATURE_TOGGLES_ENABLE=flameGraph
     volumes:
       - ../config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
       - ../config/grafana-dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
@@ -70,6 +93,12 @@ services:
         condition: service_healthy
       tempo:
         condition: service_healthy
+      pyroscope:
+        condition: service_healthy
+
+configs:
+  pyroscope-config:
+    file: ../config/pyroscope-config.yaml
 
 networks:
   shared-network:
@@ -78,4 +107,5 @@ networks:
 volumes:
   prometheus-data:
   tempo-data:
+  pyroscope-data:
   grafana-data:
