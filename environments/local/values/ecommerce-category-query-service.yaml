@@ -7,11 +7,72 @@ ingress:
   enabled: true
   host: ecommerce-category-query-service.127.0.0.1.nip.io
 
+config: |
+  logger:
+    level: "debug"
+    development: true
+  server:
+    port: 8080
+  mongo:
+    host: "mongo"
+    port: 27017
+    replica-set: rs0
+    database: "category-query"
+  kafka:
+    brokers: "redpanda:29092"
+    schema-registry:
+      url: "http://redpanda:8081"
+      auto-register-schemas: true
+    consumers-config:
+      default-group-id: "ecommerce-category-query-service"
+      default-auto-offset-reset: "earliest"
+      consumers:
+        - name: "category-events"
+          topic: "catalog.category.events"
+          max-retries: 5
+          initial-backoff: 2s
+          max-backoff: 30s
+          enable-dlq: true
+        - name: "attribute-events"
+          topic: "catalog.attribute.events"
+          max-retries: 5
+          initial-backoff: 2s
+          max-backoff: 30s
+          enable-dlq: true
+        - name: "tenant-events"
+          topic: "tenant.tenant.events"
+          max-retries: 5
+          initial-backoff: 2s
+          max-backoff: 30s
+          enable-dlq: true
+  security:
+    jwks:
+      jwks-url: "http://logto:3001/oidc/jwks"
+      audience: "https://api.sokolshop.com"
+    client-credentials:
+      token-url: "http://logto:3001/oidc/token"
+      resource: "https://api.sokolshop.com"
+      scopes:
+        - "openid"
+        - "tenants:read"
+  clients:
+    tenant-service:
+      base-url: "http://ecommerce-tenant-service:8080"
+  observability:
+    otel-collector-endpoint: "alloy.observability.svc:4317"
+    tracing:
+      enabled: true
+    metrics:
+      enabled: false
+    profiling:
+      enabled: true
+      endpoint: "http://alloy.observability.svc:4040"
+
 env:
   - name: APP_ENV
     value: "local"
   - name: CONFIG_FILE
-    value: "/configs/config.local.yaml"
+    value: "/configs/config.yaml"
   - name: APP_SERVICE_NAME
     valueFrom:
       fieldRef:

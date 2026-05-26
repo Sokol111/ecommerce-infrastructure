@@ -191,7 +191,6 @@ for name, config in GO_SERVICES.items():
     watch_paths = [
         name + '/cmd',
         name + '/internal', 
-        name + '/configs',
         name + '/db',
         name + '/go.mod',
         name + '/go.sum',
