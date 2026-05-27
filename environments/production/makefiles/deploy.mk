@@ -37,7 +37,7 @@ deploy-alloy: ## Deploy Grafana Alloy (→ Grafana Cloud)
 # =============================================================================
 
 # Service lists
-SERVICES := tenant-service catalog-service image-service product-query-service category-query-service admin-ui ui
+SERVICES := tenant-service catalog-service image-service product-query-service category-query-service platform-ui admin-ui ui
 
 .PHONY: deploy-svc
 deploy-svc: ## Deploy a service (usage: make deploy-svc SVC=catalog-service [TAG=0.1.9])
