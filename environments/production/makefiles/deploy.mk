@@ -40,17 +40,20 @@ deploy-alloy: ## Deploy Grafana Alloy (→ Grafana Cloud)
 SERVICES := tenant-service catalog-service image-service product-query-service category-query-service admin-ui ui
 
 .PHONY: deploy-svc
-deploy-svc: ## Deploy a service (usage: make deploy-svc SVC=catalog-service)
+deploy-svc: ## Deploy a service (usage: make deploy-svc SVC=catalog-service [TAG=0.1.9])
 ifndef SVC
 	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
-	@printf "Usage: make deploy-svc SVC=<service-name>\n"
+	@printf "Usage: make deploy-svc SVC=<service-name> [TAG=<version>]\n"
 	@printf "Available: $(SERVICES)\n"
 	@exit 1
 endif
 	@printf "$(COLOR_BLUE)→ Deploying ecommerce-$(SVC)...$(COLOR_RESET)\n"
 	cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update
+	$(eval HELM_SET := $(if $(TAG),--set image.tag=$(TAG)))
+	$(eval HELM_SET += $(if $(filter latest,$(TAG)),--set image.pullPolicy=Always))
 	helm upgrade --install ecommerce-$(SVC) $(HELM_DIR)/ecommerce-$(SVC) \
 		-n $(NS_PROD) \
 		-f $(VALUES_DIR)/ecommerce-$(SVC).yaml \
+		$(HELM_SET) \
 		--wait --timeout 3m
 	@printf "$(COLOR_GREEN)✓ ecommerce-$(SVC) deployed$(COLOR_RESET)\n"
