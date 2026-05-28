@@ -67,6 +67,9 @@ jobs:
       - name: Run logto-seed Job
         run: |
           export IMAGE="${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}"
+          # Apply RBAC (idempotent)
+          kubectl apply -f environments/production/k8s/logto-seed-rbac.yaml
+          # Create Job (uses generateName)
           envsubst < environments/production/k8s/logto-seed-job.yaml | kubectl create -f -
 
       - name: Wait for Job completion
