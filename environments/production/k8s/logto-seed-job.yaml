@@ -1,3 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: logto-seed
+  namespace: prod
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: logto-seed
+  namespace: prod
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "update", "patch", "get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: logto-seed
+  namespace: prod
+subjects:
+  - kind: ServiceAccount
+    name: logto-seed
+    namespace: prod
+roleRef:
+  kind: Role
+  name: logto-seed
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -8,6 +38,7 @@ spec:
   ttlSecondsAfterFinished: 600
   template:
     spec:
+      serviceAccountName: logto-seed
       restartPolicy: Never
       containers:
         - name: logto-seed
