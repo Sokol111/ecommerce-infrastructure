@@ -20,6 +20,9 @@ resources:
 config: |
   logger:
     level: "debug"
+  k8s:
+    namespace: "prod"
+    cronjob-name: "ecommerce-tenant-service-seeder"
   mongo:
     database: tenant
     max-pool-size: 20
