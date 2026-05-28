@@ -238,6 +238,10 @@ type createAppParams struct {
 func (c *client) createApp(p createAppParams) (id, secret string) {
 	if existing, found := c.findAppByName(p.Name); found {
 		slog.Info("Application already exists", "name", p.Name, "id", existing)
+		// Retrieve the primary secret for existing M2M/Traditional apps.
+		if s := c.getAppSecret(existing); s != "" {
+			return existing, s
+		}
 		return existing, ""
 	}
 
@@ -303,6 +307,17 @@ func (c *client) findAppByName(name string) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func (c *client) getAppSecret(appID string) string {
+	var secrets []struct {
+		Value string `json:"value"`
+	}
+	c.apiDo("GET", fmt.Sprintf("/applications/%s/secrets", appID), nil, &secrets)
+	if len(secrets) > 0 {
+		return secrets[0].Value
+	}
+	return ""
 }
 
 func (c *client) deleteApp(id string) bool {
