@@ -69,6 +69,7 @@ seed-logs: ## Show logs of seeder job (TENANT_SLUG=acme)
 .PHONY: logto-seed
 logto-seed: ## Run logto-seed Job (one-time Logto configuration)
 	@printf "$(COLOR_BLUE)→ Running logto-seed...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/logto-seed-rbac.yaml
 	export IMAGE=ghcr.io/sokol111/ecommerce-logto-seed:latest && \
 		envsubst < $(K8S_DIR)/logto-seed-job.yaml | kubectl create -f -
 	@printf "$(COLOR_GREEN)✓ logto-seed job created$(COLOR_RESET)\n"

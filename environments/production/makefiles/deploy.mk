@@ -17,6 +17,12 @@ deploy-imgproxy: ## Deploy imgproxy (image processing)
 	kubectl apply -f $(K8S_DIR)/imgproxy.yaml
 	@printf "$(COLOR_GREEN)✓ imgproxy deployed$(COLOR_RESET)\n"
 
+.PHONY: deploy-redirect
+deploy-redirect: ## Deploy sokolshop.com → platform redirect
+	@printf "$(COLOR_BLUE)→ Deploying sokolshop.com redirect...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/sokolshop-redirect.yaml
+	@printf "$(COLOR_GREEN)✓ Redirect deployed$(COLOR_RESET)\n"
+
 .PHONY: deploy-postgres
 deploy-postgres: ## Deploy PostgreSQL
 	@printf "$(COLOR_BLUE)→ Deploying PostgreSQL...$(COLOR_RESET)\n"
