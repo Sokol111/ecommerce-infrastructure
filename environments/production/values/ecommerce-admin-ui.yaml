@@ -86,7 +86,5 @@ env:
         name: admin-ui-oidc
         key: auth-session-secret
   # API calls go through Nuxt SSR to internal k8s services
-  - name: NUXT_PUBLIC_IMGPROXY_URL
-    value: "https://sokolshop.com/img"
   - name: NUXT_COOKIE_SECURE
     value: "true"
