@@ -17,6 +17,12 @@ deploy-imgproxy: ## Deploy imgproxy (image processing)
 	kubectl apply -f $(K8S_DIR)/imgproxy.yaml
 	@printf "$(COLOR_GREEN)✓ imgproxy deployed$(COLOR_RESET)\n"
 
+.PHONY: deploy-postgres
+deploy-postgres: ## Deploy PostgreSQL
+	@printf "$(COLOR_BLUE)→ Deploying PostgreSQL...$(COLOR_RESET)\n"
+	kubectl apply -f $(K8S_DIR)/postgres.yaml
+	@printf "$(COLOR_GREEN)✓ PostgreSQL deployed$(COLOR_RESET)\n"
+
 .PHONY: deploy-logto
 deploy-logto: ## Deploy Logto OIDC identity provider
 	@printf "$(COLOR_BLUE)→ Deploying Logto...$(COLOR_RESET)\n"
@@ -48,7 +54,7 @@ ifndef SVC
 	@exit 1
 endif
 	@printf "$(COLOR_BLUE)→ Deploying ecommerce-$(SVC)...$(COLOR_RESET)\n"
-	cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update
+	(cd $(HELM_DIR)/ecommerce-$(SVC) && helm dependency update)
 	$(eval HELM_SET := $(if $(TAG),--set image.tag=$(TAG)))
 	$(eval HELM_SET += $(if $(filter latest,$(TAG)),--set image.pullPolicy=Always))
 	helm upgrade --install ecommerce-$(SVC) $(HELM_DIR)/ecommerce-$(SVC) \

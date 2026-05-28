@@ -13,11 +13,13 @@ spec:
         - name: logto-seed
           image: ${IMAGE}
           env:
-            - name: DB_URL
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: logto-db
-                  key: connection-string
+                  name: postgres-credentials
+                  key: password
+            - name: DB_URL
+              value: "postgresql://logto:$(DB_PASSWORD)@postgres:5432/logto"
             - name: LOGTO_URL
               value: "http://logto:3001"
             - name: API_RESOURCE_INDICATOR
