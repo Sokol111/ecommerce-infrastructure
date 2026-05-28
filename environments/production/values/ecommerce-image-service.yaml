@@ -68,7 +68,7 @@ config: |
     region: "auto"
     presign-ttl: 15m
   imgproxy:
-    public-base-url: "https://sokolshop.com/img"
+    public-base-url: "https://img.sokolshop.com"
     bucket: "images"
   clients:
     tenant-service:
