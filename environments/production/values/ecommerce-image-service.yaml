@@ -35,6 +35,9 @@ config: |
     client-credentials:
       token-url: "http://logto:3001/oidc/token"
       resource: "https://api.sokolshop.com"
+      scopes:
+        - "openid"
+        - "tenants:read"
   kafka:
     brokers: "redpanda.prod.svc.cluster.local:9093"
     schema-registry:
@@ -46,6 +49,12 @@ config: |
       consumers:
         - name: "catalog-events"
           topic: "catalog.product.events"
+        - name: "tenant-events"
+          topic: "tenant.tenant.events"
+          max-retries: 5
+          initial-backoff: 2s
+          max-backoff: 30s
+          enable-dlq: true
   application:
     max-upload-bytes: 5242880
     small-width: 400
@@ -61,6 +70,9 @@ config: |
   imgproxy:
     public-base-url: "https://sokolshop.com/img"
     bucket: "images"
+  clients:
+    tenant-service:
+      base-url: "http://ecommerce-tenant-service:8080"
   observability:
     otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:

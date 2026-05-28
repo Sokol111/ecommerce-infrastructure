@@ -33,6 +33,7 @@ config: |
       jwks-url: "http://logto:3001/oidc/jwks"
       audience: "https://api.sokolshop.com"
   logto:
+    base-url: "http://logto:3001"
     token-url: "http://logto:3001/oidc/token"
   kafka:
     brokers: "redpanda.prod.svc.cluster.local:9093"

@@ -11,8 +11,6 @@ config: |
   logger:
     level: "debug"
     development: true
-  server:
-    port: 8080
   mongo:
     host: "mongo"
     port: 27017

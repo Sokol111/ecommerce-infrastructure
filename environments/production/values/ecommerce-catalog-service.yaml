@@ -35,11 +35,24 @@ config: |
     client-credentials:
       token-url: "http://logto:3001/oidc/token"
       resource: "https://api.sokolshop.com"
+      scopes:
+        - "openid"
+        - "tenants:read"
   kafka:
     brokers: "redpanda.prod.svc.cluster.local:9093"
     schema-registry:
       url: "http://redpanda.prod.svc.cluster.local:8081"
       auto-register-schemas: true
+    consumers-config:
+      default-group-id: "ecommerce-catalog-service"
+      default-auto-offset-reset: "earliest"
+      consumers:
+        - name: "tenant-events"
+          topic: "tenant.tenant.events"
+          max-retries: 5
+          initial-backoff: 2s
+          max-backoff: 30s
+          enable-dlq: true
   observability:
     otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:
@@ -49,6 +62,9 @@ config: |
     profiling:
       enabled: true
       endpoint: "http://alloy.observability.svc.cluster.local:4040"
+  clients:
+    tenant-service:
+      base-url: "http://ecommerce-tenant-service:8080"
 
 env:
   - name: APP_ENV
