@@ -28,7 +28,7 @@ kubectl get pods -n prod -w                        # watch в реальному
 ```bash
 kubectl describe pod <pod-name> -n prod
 kubectl describe pod <pod-name> -n prod | tail -20  # тільки events
-kubectl describe pod -n prod -l app.kubernetes.io/name=ecommerce-auth-service  # по лейблу (не треба знати ім'я)
+kubectl describe pod -n prod -l app.kubernetes.io/name=ecommerce-catalog-service  # по лейблу (не треба знати ім'я)
 ```
 
 ## Логи
@@ -44,7 +44,7 @@ kubectl logs <pod-name> -n prod -c <container>     # конкретний кон
 По лейблу (не треба знати ім'я пода):
 
 ```bash
-kubectl logs -n prod -l app.kubernetes.io/name=ecommerce-auth-service --tail=50
+kubectl logs -n prod -l app.kubernetes.io/name=ecommerce-catalog-service --tail=50
 ```
 
 ## Exec в контейнер

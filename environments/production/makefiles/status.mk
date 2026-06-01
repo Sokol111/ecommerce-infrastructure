@@ -32,7 +32,7 @@ ingresses: ## Show all ingress routes
 # =============================================================================
 
 .PHONY: logs
-logs: ## Follow logs for a service (usage: make logs SVC=auth-service)
+logs: ## Follow logs for a service (usage: make logs SVC=catalog-service)
 ifndef SVC
 	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
 	@printf "Usage: make logs SVC=<service-name>\n"
@@ -41,7 +41,7 @@ endif
 	kubectl logs -f -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC)
 
 .PHONY: logs-prev
-logs-prev: ## Show logs from crashed container (usage: make logs-prev SVC=auth-service)
+logs-prev: ## Show logs from crashed container (usage: make logs-prev SVC=catalog-service)
 ifndef SVC
 	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
 	@printf "Usage: make logs-prev SVC=<service-name>\n"
@@ -50,7 +50,7 @@ endif
 	kubectl logs -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC) -p --tail=50
 
 .PHONY: describe
-describe: ## Describe pod for a service (usage: make describe SVC=auth-service)
+describe: ## Describe pod for a service (usage: make describe SVC=catalog-service)
 ifndef SVC
 	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
 	@printf "Usage: make describe SVC=<service-name>\n"

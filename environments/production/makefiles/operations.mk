@@ -3,7 +3,7 @@
 # =============================================================================
 
 .PHONY: restart
-restart: ## Restart a service (usage: make restart SVC=auth-service)
+restart: ## Restart a service (usage: make restart SVC=catalog-service)
 ifndef SVC
 	@printf "$(COLOR_RED)Error: SVC is not set$(COLOR_RESET)\n"
 	@printf "Usage: make restart SVC=<service-name>\n"
