@@ -66,6 +66,15 @@
       "scopes": [
         "tenants:write"
       ]
+    },
+    {
+      "name": "platform_manager",
+      "description": "Full access to tenant management via Platform UI",
+      "type": "User",
+      "scopes": [
+        "tenants:read",
+        "tenants:write"
+      ]
     }
   ],
   "applications": [
@@ -92,11 +101,27 @@
       "secretPrefix": "platform"
     },
     {
+      "name": "platform-ui",
+      "description": "Platform UI (Traditional Web)",
+      "type": "Traditional",
+      "secretPrefix": "platform-ui",
+      "redirectURI": "$PLATFORM_UI_REDIRECT_URI",
+      "logoutURI": "$PLATFORM_UI_LOGOUT_URI"
+    },
+    {
       "name": "tenant-service-m2m",
       "description": "Tenant Service M2M",
       "type": "MachineToMachine",
       "managementAPI": true,
       "secretPrefix": "tenant-m2m"
+    }
+  ],
+  "users": [
+    {
+      "email": "$PLATFORM_ADMIN_EMAIL",
+      "password": "$PLATFORM_ADMIN_PASSWORD",
+      "name": "Platform Admin",
+      "roles": ["platform_manager"]
     }
   ]
 }

@@ -29,6 +29,20 @@ spec:
               value: "https://admin.sokolshop.com/auth/oidc/callback"
             - name: ADMIN_UI_LOGOUT_URI
               value: "https://admin.sokolshop.com"
+            - name: PLATFORM_UI_REDIRECT_URI
+              value: "https://platform.sokolshop.com/auth/oidc/callback"
+            - name: PLATFORM_UI_LOGOUT_URI
+              value: "https://platform.sokolshop.com"
+            - name: PLATFORM_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: platform-admin-credentials
+                  key: email
+            - name: PLATFORM_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: platform-admin-credentials
+                  key: password
             - name: KUBE_NAMESPACE
               value: "prod"
             - name: KUBE_SECRET_NAME

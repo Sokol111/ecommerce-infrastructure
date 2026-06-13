@@ -60,6 +60,10 @@ services:
       API_RESOURCE_INDICATOR: https://api.sokolshop.com
       ADMIN_UI_REDIRECT_URI: http://admin.127.0.0.1.nip.io/auth/oidc/callback
       ADMIN_UI_LOGOUT_URI: http://admin.127.0.0.1.nip.io
+      PLATFORM_UI_REDIRECT_URI: http://platform.127.0.0.1.nip.io/auth/oidc/callback
+      PLATFORM_UI_LOGOUT_URI: http://platform.127.0.0.1.nip.io
+      PLATFORM_ADMIN_PASSWORD: ChangeMe1!
+      PLATFORM_ADMIN_EMAIL: platform-admin@example.com
       KUBE_NAMESPACE: dev
       KUBE_SECRET_NAME: logto-credentials
       KUBE_API_SERVER: https://k3d-dev-cluster-server-0:6443

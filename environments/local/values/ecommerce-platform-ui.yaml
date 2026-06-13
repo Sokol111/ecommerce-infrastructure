@@ -44,6 +44,32 @@ env:
         key: platform-client-secret
   - name: NUXT_API_RESOURCE_INDICATOR
     value: "https://api.sokolshop.com"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: platform-ui-client-id
+  - name: NUXT_OIDC_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: logto-credentials
+        key: platform-ui-client-secret
+  - name: NUXT_OIDC_PROVIDERS_OIDC_AUTHORIZATION_URL
+    value: "http://localhost:3001/oidc/auth"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_TOKEN_URL
+    value: "http://logto:3001/oidc/token"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_USERINFO_URL
+    value: "http://logto:3001/oidc/userinfo"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_URL
+    value: "http://localhost:3001/oidc/session/end"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_REDIRECT_URI
+    value: "http://platform.127.0.0.1.nip.io/auth/oidc/callback"
+  - name: NUXT_OIDC_PROVIDERS_OIDC_LOGOUT_REDIRECT_URI
+    value: "http://platform.127.0.0.1.nip.io"
+  - name: NUXT_OIDC_SESSION_SECRET
+    value: "dev-session-secret-that-is-at-least-48-characters-long"
+  - name: NUXT_OIDC_AUTH_SESSION_SECRET
+    value: "dev-auth-session-secret-at-least-48-characters-long!"
   - name: NUXT_COOKIE_SECURE
     value: "false"
   - name: NUXT_BASE_DOMAIN

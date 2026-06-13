@@ -203,9 +203,7 @@ for name, config in GO_SERVICES.items():
     
     # Add API dependencies
     for api_dep in api_deps:
-        watch_paths.append(api_dep + '/gen')
-        watch_paths.append(api_dep + '/go.mod')
-        watch_paths.append(api_dep + '/go.sum')
+        watch_paths.append(api_dep + '/')
     
     # Build Docker image
     docker_build(

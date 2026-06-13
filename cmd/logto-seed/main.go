@@ -44,6 +44,7 @@ func main() {
 	s.createAPIResource()
 	s.createRoles()
 	s.createApplications()
+	s.createUsers()
 	s.configureJWTCustomizer()
 	s.configureSignInExperience()
 	s.cleanupBootstrapApp()

@@ -89,7 +89,6 @@ ARG SERVICE_DIR=service-dir
 # Копіюємо код сервісу
 COPY ${SERVICE_DIR}/cmd ./svc/cmd
 COPY ${SERVICE_DIR}/internal ./svc/internal
-COPY ${SERVICE_DIR}/configs ./svc/configs
 COPY ${SERVICE_DIR}/db ./svc/db
 
 # Збірка бінарника з debug символами
@@ -110,7 +109,6 @@ COPY --from=delve /go/bin/dlv /dlv
 
 # Копіюємо бінарник сервісу та конфігурації
 COPY --from=builder /server /server
-COPY --from=builder /src/svc/configs/ /configs/
 COPY --from=builder /src/svc/db/ /db/
 
 # Копіюємо вихідний код для debugging (щоб Delve міг мапити breakpoints)

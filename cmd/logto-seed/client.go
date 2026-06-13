@@ -358,6 +358,67 @@ func (c *client) findRoleByName(name string) (string, bool) {
 	return "", false
 }
 
+func (c *client) createUser(email, password, name string) string {
+	// Check if user already exists
+	if id, found := c.findUserByEmail(email); found {
+		slog.Info("User already exists", "email", email, "id", id)
+		return id
+	}
+	var res struct {
+		ID string `json:"id"`
+	}
+	c.apiDo("POST", "/users", map[string]any{
+		"primaryEmail": email,
+		"password":     password,
+		"name":         name,
+	}, &res)
+	slog.Info("Created user", "email", email, "id", res.ID)
+	return res.ID
+}
+
+func (c *client) findUserByEmail(email string) (string, bool) {
+	var users []struct {
+		ID           string `json:"id"`
+		PrimaryEmail string `json:"primaryEmail"`
+	}
+	c.apiDo("GET", fmt.Sprintf("/users?search=%s&mode=exact", url.QueryEscape(email)), nil, &users)
+	for _, u := range users {
+		if u.PrimaryEmail == email {
+			return u.ID, true
+		}
+	}
+	return "", false
+}
+
+func (c *client) assignRoleToUser(userID string, roleIDs []string) {
+	// Fetch already-assigned roles
+	var existing []struct {
+		ID string `json:"id"`
+	}
+	c.apiDo("GET", fmt.Sprintf("/users/%s/roles", userID), nil, &existing)
+
+	assigned := make(map[string]bool, len(existing))
+	for _, r := range existing {
+		assigned[r.ID] = true
+	}
+
+	var missing []string
+	for _, id := range roleIDs {
+		if !assigned[id] {
+			missing = append(missing, id)
+		}
+	}
+
+	if len(missing) == 0 {
+		slog.Info("All roles already assigned to user, skipping", "userID", userID)
+		return
+	}
+
+	c.apiDo("POST", fmt.Sprintf("/users/%s/roles", userID), map[string]any{
+		"roleIds": missing,
+	}, nil)
+}
+
 // waitReady polls the Logto OIDC discovery endpoint until it responds.
 func waitReady(cfg config) {
 	endpoint := cfg.LogtoURL + "/oidc/.well-known/openid-configuration"

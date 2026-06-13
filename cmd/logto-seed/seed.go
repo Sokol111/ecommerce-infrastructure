@@ -6,10 +6,11 @@ import (
 	"os"
 )
 
-// seedConfig holds roles and applications loaded from seed.json.
+// seedConfig holds roles, applications and users loaded from seed.json.
 type seedConfig struct {
 	Roles        []roleDefinition `json:"roles"`
 	Applications []appDefinition  `json:"applications"`
+	Users        []userDefinition `json:"users"`
 }
 
 // roleDefinition describes a role and its assigned scopes.
@@ -30,6 +31,14 @@ type appDefinition struct {
 	SecretPrefix  string `json:"secretPrefix"`            // prefix for K8s secret keys
 	RedirectURI   string `json:"redirectURI,omitempty"`   // OIDC redirect URI (supports $ENV_VAR)
 	LogoutURI     string `json:"logoutURI,omitempty"`     // OIDC post-logout redirect URI (supports $ENV_VAR)
+}
+
+// userDefinition describes a platform admin user to create.
+type userDefinition struct {
+	Email    string   `json:"email"`
+	Password string   `json:"password"` // supports $ENV_VAR for production
+	Name     string   `json:"name"`
+	Roles    []string `json:"roles"` // Logto role names to assign
 }
 
 // allScopes returns a deduplicated list of all scopes across all roles.
@@ -130,6 +139,26 @@ func (s *seeder) createApplications() {
 			}
 			s.client.assignRoleToApp(id, []string{roleID})
 			slog.Info("Assigned role to app", "app", app.Name, "role", app.Role)
+		}
+	}
+}
+
+// createUsers creates all platform admin users defined in seed.json.
+func (s *seeder) createUsers() {
+	for _, u := range s.seed.Users {
+		userID := s.client.createUser(u.Email, u.Password, u.Name)
+
+		var roleIDs []string
+		for _, roleName := range u.Roles {
+			roleID, found := s.client.findRoleByName(roleName)
+			if !found {
+				fatal("Role not found for user", "role", roleName, "user", u.Email)
+			}
+			roleIDs = append(roleIDs, roleID)
+		}
+		if len(roleIDs) > 0 {
+			s.client.assignRoleToUser(userID, roleIDs)
+			slog.Info("Assigned roles to user", "user", u.Email, "roles", u.Roles)
 		}
 	}
 }
