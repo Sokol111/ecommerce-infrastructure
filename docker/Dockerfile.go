@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # Dependencies Stage
-FROM golang:1.26.3 AS base-deps
+FROM golang:1.26.4 AS base-deps
 
 WORKDIR /app
 

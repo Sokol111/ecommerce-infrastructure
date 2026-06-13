@@ -1,6 +1,6 @@
 module github.com/Sokol111/ecommerce-infrastructure/cmd/seeder
 
-go 1.26.3
+go 1.26.4
 
 require (
 	github.com/Sokol111/ecommerce-catalog-service-api v1.2.1
