@@ -7,57 +7,35 @@ import (
 	"net/http"
 	"time"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
+
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/auth"
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/config"
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/data"
 
-	catalogapi "github.com/Sokol111/ecommerce-catalog-service-api/gen/httpapi"
-	imageapi "github.com/Sokol111/ecommerce-image-service-api/gen/httpapi"
+	catalogv1 "github.com/Sokol111/ecommerce-catalog-service-api/gen/connect/catalog/v1"
+	imagev1 "github.com/Sokol111/ecommerce-image-service-api/gen/connect/image/v1"
 )
-
-// tokenSecuritySource implements catalogapi.SecuritySource with a static bearer token.
-type tokenSecuritySource struct {
-	token string
-}
-
-func (s tokenSecuritySource) BearerAuth(ctx context.Context, operationName catalogapi.OperationName) (catalogapi.BearerAuth, error) {
-	return catalogapi.BearerAuth{Token: s.token}, nil
-}
-
-// tenantTransport injects the X-Tenant-Slug header into every outgoing request.
-type tenantTransport struct {
-	base       http.RoundTripper
-	tenantSlug string
-}
-
-func (t *tenantTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	req = req.Clone(req.Context())
-	req.Header.Set("X-Tenant-Slug", t.tenantSlug)
-	return t.base.RoundTrip(req)
-}
 
 type Seeder struct {
 	data                *data.SeedData
 	httpClient          *http.Client
 	assetsDir           string
 	storageHostOverride string
-	catalogClient       *catalogapi.Client
-	imageClient         *imageapi.Client
+	token               string
+	tenantSlug          string
+	catalogConn         *grpc.ClientConn
+	imageConn           *grpc.ClientConn
+	attributeClient     catalogv1.AttributeServiceClient
+	categoryClient      catalogv1.CategoryServiceClient
+	productClient       catalogv1.ProductServiceClient
+	imageClient         imagev1.ImageServiceClient
 	imageCache          map[string]string // filename -> imageID
 }
 
 func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder, error) {
-	transport := http.RoundTripper(http.DefaultTransport)
-	if cfg.TenantSlug != "" {
-		transport = &tenantTransport{base: transport, tenantSlug: cfg.TenantSlug}
-		log.Printf("Seeding for tenant: %s", cfg.TenantSlug)
-	}
-
-	httpClient := &http.Client{
-		Timeout:   30 * time.Second,
-		Transport: transport,
-	}
-
 	// Obtain access token from Logto via client_credentials flow
 	tp := auth.NewTokenProvider(cfg.LogtoURL, cfg.ClientID, cfg.ClientSecret, cfg.APIResource)
 	token, err := tp.FetchToken()
@@ -66,14 +44,19 @@ func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder
 	}
 	log.Println("✓ Obtained access token from Logto")
 
-	catalogClient, err := catalogapi.NewClient(cfg.CatalogURL, tokenSecuritySource{token: token}, catalogapi.WithClient(httpClient))
+	catalogConn, err := grpc.NewClient(cfg.CatalogGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, fmt.Errorf("failed to create catalog client: %w", err)
+		return nil, fmt.Errorf("failed to connect to catalog service: %w", err)
 	}
 
-	imageClient, err := imageapi.NewClient(cfg.ImageURL, imageapi.WithClient(httpClient))
+	imageConn, err := grpc.NewClient(cfg.ImageGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, fmt.Errorf("failed to create image client: %w", err)
+		catalogConn.Close()
+		return nil, fmt.Errorf("failed to connect to image service: %w", err)
+	}
+
+	httpClient := &http.Client{
+		Timeout: 30 * time.Second,
 	}
 
 	return &Seeder{
@@ -81,13 +64,37 @@ func New(cfg *config.Config, seedData *data.SeedData, assetsDir string) (*Seeder
 		httpClient:          httpClient,
 		assetsDir:           assetsDir,
 		storageHostOverride: cfg.StorageHostOverride,
-		catalogClient:       catalogClient,
-		imageClient:         imageClient,
+		token:               token,
+		tenantSlug:          cfg.TenantSlug,
+		catalogConn:         catalogConn,
+		imageConn:           imageConn,
+		attributeClient:     catalogv1.NewAttributeServiceClient(catalogConn),
+		categoryClient:      catalogv1.NewCategoryServiceClient(catalogConn),
+		productClient:       catalogv1.NewProductServiceClient(catalogConn),
+		imageClient:         imagev1.NewImageServiceClient(imageConn),
 		imageCache:          make(map[string]string),
 	}, nil
 }
 
+// outgoingCtx attaches the bearer token and tenant slug to outgoing gRPC metadata.
+func (s *Seeder) outgoingCtx(ctx context.Context) context.Context {
+	md := metadata.Pairs("authorization", "Bearer "+s.token)
+	if s.tenantSlug != "" {
+		md.Append("x-tenant-slug", s.tenantSlug)
+	}
+	return metadata.NewOutgoingContext(ctx, md)
+}
+
+func (s *Seeder) Close() {
+	s.catalogConn.Close()
+	s.imageConn.Close()
+}
+
 func (s *Seeder) Run(ctx context.Context) error {
+	if s.tenantSlug != "" {
+		log.Printf("Seeding for tenant: %s", s.tenantSlug)
+	}
+
 	log.Println("🚀 Starting demo data seeder...")
 
 	log.Println("\n🏷 Upserting attributes...")

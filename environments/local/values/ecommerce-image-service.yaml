@@ -77,7 +77,7 @@ config: |
     jwt-secret: "dev-secret-key-change-in-production-min-32-chars-long!"
   tenant:
     grpc:
-      address: "http://ecommerce-tenant-service:8080"
+      address: "ecommerce-tenant-service:8080"
 
 env:
   - name: APP_ENV

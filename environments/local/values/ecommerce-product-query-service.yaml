@@ -64,7 +64,7 @@ config: |
       endpoint: "http://alloy.observability.svc:4040"
   tenant:
     grpc:
-      address: "http://ecommerce-tenant-service:8080"
+      address: "ecommerce-tenant-service:8080"
 
 env:
   - name: APP_ENV

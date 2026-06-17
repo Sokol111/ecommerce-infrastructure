@@ -82,8 +82,8 @@ seederJob:
   enabled: false
   image: ""
   serviceAccount: ""
-  catalogURL: ""
-  imageURL: ""
+  catalogGRPCAddr: ""
+  imageGRPCAddr: ""
   logtoURL: ""
   apiResource: "https://api.sokolshop.com"
   resources: {}

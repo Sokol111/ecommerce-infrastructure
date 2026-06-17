@@ -31,10 +31,10 @@ spec:
               image: {{ .Values.seederJob.image }}
               imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
               env:
-                - name: CATALOG_URL
-                  value: {{ .Values.seederJob.catalogURL | default "http://ecommerce-catalog-service:8080" }}
-                - name: IMAGE_URL
-                  value: {{ .Values.seederJob.imageURL | default "http://ecommerce-image-service:8080" }}
+                - name: CATALOG_GRPC_ADDR
+                  value: {{ .Values.seederJob.catalogGRPCAddr | default "ecommerce-catalog-service:8080" }}
+                - name: IMAGE_GRPC_ADDR
+                  value: {{ .Values.seederJob.imageGRPCAddr | default "ecommerce-image-service:8080" }}
                 - name: LOGTO_URL
                   value: {{ .Values.seederJob.logtoURL | default "http://logto:3001" }}
                 - name: API_RESOURCE_INDICATOR

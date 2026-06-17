@@ -55,7 +55,7 @@ config: |
         - "tenants:read"
   tenant:
     grpc:
-      address: "http://ecommerce-tenant-service:8080"
+      address: "ecommerce-tenant-service:8080"
   observability:
     otel-collector-endpoint: "alloy.observability.svc:4317"
     tracing:

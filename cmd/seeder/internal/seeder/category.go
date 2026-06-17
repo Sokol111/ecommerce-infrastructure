@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
-	catalogapi "github.com/Sokol111/ecommerce-catalog-service-api/gen/httpapi"
+	catalogv1 "github.com/Sokol111/ecommerce-catalog-service-api/gen/connect/catalog/v1"
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/data"
 )
 
@@ -37,87 +38,78 @@ func (s *Seeder) upsertCategory(ctx context.Context, cat data.Category) error {
 }
 
 func (s *Seeder) createCategory(ctx context.Context, cat data.Category) error {
-	req := &catalogapi.CreateCategoryRequest{
+	req := &catalogv1.CreateCategoryRequest{
 		Name:       cat.Name,
 		Enabled:    cat.Enabled,
-		ID:         s.parseOptUUID(cat.ID),
 		Attributes: toCategoryAttributeInputs(cat.Attributes),
 	}
+	if cat.ID != "" {
+		req.Id = &cat.ID
+	}
 
-	resp, err := s.catalogClient.CreateCategory(ctx, req)
+	resp, err := s.categoryClient.CreateCategory(s.outgoingCtx(ctx), req)
 	if err != nil {
 		return fmt.Errorf("failed to create category %s: %w", cat.Name, err)
 	}
 
-	catResp, ok := resp.(*catalogapi.CategoryResponse)
-	if !ok {
-		return fmt.Errorf("unexpected response type %T for category %s", resp, cat.Name)
-	}
-
-	log.Printf("  ✓ Created category: %s (ID: %s)", cat.Name, catResp.ID)
+	log.Printf("  ✓ Created category: %s (ID: %s)", cat.Name, resp.Category.GetId())
 	return nil
 }
 
-func (s *Seeder) updateCategory(ctx context.Context, cat data.Category, version int) error {
-	catUUID, _ := uuid.Parse(cat.ID)
-
-	req := &catalogapi.UpdateCategoryRequest{
-		ID:         catUUID,
+func (s *Seeder) updateCategory(ctx context.Context, cat data.Category, version int32) error {
+	req := &catalogv1.UpdateCategoryRequest{
+		Id:         cat.ID,
 		Name:       cat.Name,
 		Enabled:    cat.Enabled,
 		Version:    version,
 		Attributes: toCategoryAttributeInputs(cat.Attributes),
 	}
 
-	resp, err := s.catalogClient.UpdateCategory(ctx, req)
+	resp, err := s.categoryClient.UpdateCategory(s.outgoingCtx(ctx), req)
 	if err != nil {
 		return fmt.Errorf("failed to update category %s: %w", cat.Name, err)
 	}
 
-	catResp, ok := resp.(*catalogapi.CategoryResponse)
-	if !ok {
-		return fmt.Errorf("unexpected response type %T for category %s", resp, cat.Name)
-	}
-
-	log.Printf("  ✏ Updated category: %s (ID: %s)", cat.Name, catResp.ID)
+	log.Printf("  ✏ Updated category: %s (ID: %s)", cat.Name, resp.Category.GetId())
 	return nil
 }
 
-func toCategoryAttributeInputs(attrs []data.CategoryAttribute) []catalogapi.CategoryAttributeInput {
-	result := make([]catalogapi.CategoryAttributeInput, 0, len(attrs))
+func (s *Seeder) getCategory(ctx context.Context, id string) (*catalogv1.Category, error) {
+	resp, err := s.categoryClient.GetCategoryById(s.outgoingCtx(ctx), &catalogv1.GetCategoryByIdRequest{Id: id})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return resp.Category, nil
+}
+
+func toCategoryAttributeInputs(attrs []data.CategoryAttribute) []*catalogv1.CategoryAttributeInput {
+	result := make([]*catalogv1.CategoryAttributeInput, 0, len(attrs))
 	for _, a := range attrs {
-		attrUUID, _ := uuid.Parse(a.AttributeID)
-		input := catalogapi.CategoryAttributeInput{
-			AttributeId: attrUUID,
-			Role:        catalogapi.CategoryAttributeInputRole(a.Role),
+		input := &catalogv1.CategoryAttributeInput{
+			AttributeId: a.AttributeID,
+			Role:        toCategoryAttributeRole(a.Role),
 			Filterable:  a.Filterable,
 			Searchable:  a.Searchable,
 		}
 		if a.SortOrder > 0 {
-			input.SortOrder = catalogapi.NewOptInt(a.SortOrder)
+			so := int32(a.SortOrder)
+			input.SortOrder = &so
 		}
 		result = append(result, input)
 	}
 	return result
 }
 
-func (s *Seeder) getCategory(ctx context.Context, id string) (*catalogapi.CategoryResponse, error) {
-	parsedUUID, err := uuid.Parse(id)
-	if err != nil {
-		return nil, fmt.Errorf("invalid UUID: %w", err)
-	}
-
-	resp, err := s.catalogClient.GetCategoryById(ctx, catalogapi.GetCategoryByIdParams{ID: parsedUUID})
-	if err != nil {
-		return nil, err
-	}
-
-	switch r := resp.(type) {
-	case *catalogapi.CategoryResponse:
-		return r, nil
-	case *catalogapi.GetCategoryByIdNotFound:
-		return nil, nil
+func toCategoryAttributeRole(role string) catalogv1.CategoryAttributeRole {
+	switch role {
+	case "VARIANT":
+		return catalogv1.CategoryAttributeRole_CATEGORY_ATTRIBUTE_ROLE_VARIANT
+	case "SPECIFICATION":
+		return catalogv1.CategoryAttributeRole_CATEGORY_ATTRIBUTE_ROLE_SPECIFICATION
 	default:
-		return nil, fmt.Errorf("unexpected response type: %T", resp)
+		return catalogv1.CategoryAttributeRole_CATEGORY_ATTRIBUTE_ROLE_UNSPECIFIED
 	}
 }

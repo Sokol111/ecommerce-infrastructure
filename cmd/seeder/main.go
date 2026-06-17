@@ -26,6 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create seeder: %v", err)
 	}
+	defer s.Close()
 
 	if err := s.Run(ctx); err != nil {
 		log.Fatalf("Seeding failed: %v", err)

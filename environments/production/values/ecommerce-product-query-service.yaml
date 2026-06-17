@@ -70,7 +70,7 @@ config: |
           enable-dlq: true
   tenant:
     grpc:
-      address: "http://ecommerce-tenant-service:8080"
+      address: "ecommerce-tenant-service:8080"
   observability:
     otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:

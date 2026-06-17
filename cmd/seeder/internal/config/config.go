@@ -7,8 +7,8 @@ import (
 
 // Config represents the seeder runtime configuration.
 type Config struct {
-	CatalogURL          string
-	ImageURL            string
+	CatalogGRPCAddr     string
+	ImageGRPCAddr       string
 	LogtoURL            string
 	ClientID            string
 	ClientSecret        string
@@ -30,8 +30,8 @@ func Parse() *Args {
 		Config: &Config{},
 	}
 
-	flag.StringVar(&args.Config.CatalogURL, "catalog-url", envOr("CATALOG_URL", "http://ecommerce-catalog-service.127.0.0.1.nip.io"), "Catalog service URL")
-	flag.StringVar(&args.Config.ImageURL, "image-url", envOr("IMAGE_URL", "http://ecommerce-image-service.127.0.0.1.nip.io"), "Image service URL")
+	flag.StringVar(&args.Config.CatalogGRPCAddr, "catalog-grpc-addr", envOr("CATALOG_GRPC_ADDR", "ecommerce-catalog-service.127.0.0.1.nip.io:8080"), "Catalog service gRPC address (host:port)")
+	flag.StringVar(&args.Config.ImageGRPCAddr, "image-grpc-addr", envOr("IMAGE_GRPC_ADDR", "ecommerce-image-service.127.0.0.1.nip.io:8080"), "Image service gRPC address (host:port)")
 	flag.StringVar(&args.Config.LogtoURL, "logto-url", envOr("LOGTO_URL", "http://localhost:3001"), "Logto OIDC issuer URL")
 	flag.StringVar(&args.Config.ClientID, "client-id", envOr("LOGTO_CLIENT_ID", ""), "Logto M2M application client ID")
 	flag.StringVar(&args.Config.ClientSecret, "client-secret", envOr("LOGTO_CLIENT_SECRET", ""), "Logto M2M application client secret")

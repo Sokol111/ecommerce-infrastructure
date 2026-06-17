@@ -70,7 +70,7 @@ serviceAccount:
 seederJob:
   enabled: true
   image: ecommerce-seeder:latest
-  catalogURL: "http://ecommerce-catalog-service:8080"
-  imageURL: "http://ecommerce-image-service:8080"
+  catalogGRPCAddr: "ecommerce-catalog-service:8080"
+  imageGRPCAddr: "ecommerce-image-service:8080"
   logtoURL: "http://logto:3001"
   storageHostOverride: "minio:9000"
