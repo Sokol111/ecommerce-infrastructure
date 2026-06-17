@@ -53,9 +53,9 @@ config: |
       scopes:
         - "openid"
         - "tenants:read"
-  clients:
-    tenant-service:
-      base-url: "http://ecommerce-tenant-service:8080"
+  tenant:
+    grpc:
+      address: "http://ecommerce-tenant-service:8080"
   observability:
     otel-collector-endpoint: "alloy.observability.svc:4317"
     tracing:

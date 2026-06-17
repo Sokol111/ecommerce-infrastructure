@@ -68,9 +68,9 @@ config: |
           initial-backoff: 2s
           max-backoff: 30s
           enable-dlq: true
-  clients:
-    tenant-service:
-      base-url: "http://ecommerce-tenant-service:8080"
+  tenant:
+    grpc:
+      address: "http://ecommerce-tenant-service:8080"
   observability:
     otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:

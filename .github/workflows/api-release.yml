@@ -31,7 +31,7 @@ jobs:
       - name: Extract version
         id: version
         run: |
-          VERSION=$(yq e '.info.version' openapi/openapi.yml)
+          VERSION=$(cat VERSION | tr -d '\n' | tr -d '\r')
           echo "version=v$VERSION" >> $GITHUB_OUTPUT
           echo "📦 Version: v$VERSION"
 
@@ -45,14 +45,6 @@ jobs:
       - name: Validate generated code exists
         run: |
           echo "🔍 Checking generated code..."
-          
-          # Check Go API
-          if [ ! -d "gen/httpapi" ] || [ -z "$(ls -A gen/httpapi/*.go 2>/dev/null)" ]; then
-            echo "❌ gen/httpapi/ is missing or empty"
-            echo "   Run: make openapi-generate"
-            exit 1
-          fi
-          echo "✓ gen/httpapi/ exists"
           
           # Check TypeScript client
           if [ ! -f "gen/typescript/package.json" ]; then
@@ -70,6 +62,16 @@ jobs:
               exit 1
             fi
             echo "✓ gen/events/ exists"
+          fi
+          
+          # Check Connect (if proto files exist)
+          if [ -n "$(find proto -name '*.proto' 2>/dev/null)" ]; then
+            if [ ! -d "gen/connect" ] || [ -z "$(ls -A gen/connect/**/*.go 2>/dev/null)" ]; then
+              echo "❌ gen/connect/ is missing but proto files exist"
+              echo "   Run: make connect-generate"
+              exit 1
+            fi
+            echo "✓ gen/connect/ exists"
           fi
           
           echo "✅ All generated code is present"

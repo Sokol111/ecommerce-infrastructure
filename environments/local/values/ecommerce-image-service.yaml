@@ -75,9 +75,9 @@ config: |
     salt-hex: "1111111111111111111111111111111111111111111111111111111111111111"
   upload-token:
     jwt-secret: "dev-secret-key-change-in-production-min-32-chars-long!"
-  clients:
-    tenant-service:
-      base-url: "http://ecommerce-tenant-service:8080"
+  tenant:
+    grpc:
+      address: "http://ecommerce-tenant-service:8080"
 
 env:
   - name: APP_ENV
