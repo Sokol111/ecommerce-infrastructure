@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 
-ARG GO_IMAGE=golang:1.26.3
+ARG GO_IMAGE=golang:1.26.4
 ARG RUNTIME_IMAGE=ubuntu:24.04
 
 ############################

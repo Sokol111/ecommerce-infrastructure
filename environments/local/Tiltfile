@@ -71,22 +71,7 @@ dc_resource('grafana', labels=['observability'], resource_deps=['prometheus', 't
 # K8s Secret directly via client-go (KUBE_NAMESPACE + KUBE_SECRET_NAME env vars).
 local_resource(
     'logto-credentials',
-    cmd='''
-        echo "Waiting for logto-seed to complete..."
-        for i in $(seq 1 60); do
-            STATE=$(docker inspect -f '{{{{.State.Running}}}}' logto-seed 2>/dev/null)
-            if [ "$STATE" = "false" ] || [ -z "$STATE" ]; then
-                break
-            fi
-            sleep 2
-        done
-        # Verify secret was created
-        kubectl -n dev get secret logto-credentials -o name || {
-            echo "ERROR: logto-credentials secret not found. Check logto-seed logs."
-            exit 1
-        }
-        echo "logto-credentials secret ready"
-    ''',
+    cmd='kubectl -n dev wait secret/logto-credentials --for=create --timeout=180s',
     labels=['infrastructure'],
     resource_deps=['logto-seed'],
 )
