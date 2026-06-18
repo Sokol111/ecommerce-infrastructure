@@ -73,7 +73,8 @@
       "type": "User",
       "scopes": [
         "tenants:read",
-        "tenants:write"
+        "tenants:write",
+        "tenants:delete"
       ]
     }
   ],
