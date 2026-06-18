@@ -28,10 +28,14 @@ cluster-delete: ## Delete k3d cluster and kubectl context
 
 .PHONY: cluster-inject-ca
 cluster-inject-ca: ## Inject corporate CA certificates into k3d nodes
+	@printf "\033[36m→ Generating CA bundle from host system certs...\033[0m\n"
+	@mkdir -p $(THIS_DIR)certs
+	@cp /etc/ssl/certs/ca-certificates.crt $(CA_BUNDLE)
 	@printf "\033[36m→ Injecting CA certificates into cluster nodes...\033[0m\n"
 	@for node in $$(k3d node list -o json | grep -o '"name":"[^"]*"' | cut -d'"' -f4 | grep "$(CLUSTER_NAME)"); do \
 		docker exec "$$node" sh -c \
-			'cat /usr/local/share/ca-certificates/*.crt >> /etc/ssl/certs/ca-certificates.crt 2>/dev/null' && \
+			'cat /usr/local/share/ca-certificates/*.crt >> /etc/ssl/certs/ca-certificates.crt 2>/dev/null && \
+			update-ca-certificates 2>/dev/null || true' && \
 			printf "  \033[32m✓ $$node\033[0m\n" || \
 			printf "  \033[33m⚠ $$node (skipped)\033[0m\n"; \
 	done

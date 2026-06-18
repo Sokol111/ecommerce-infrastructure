@@ -3,7 +3,7 @@ kind: Simple
 metadata:
   name: dev-cluster
 servers: 1
-agents: 2
+agents: 1
 network: "shared-network"
 
 registries:
@@ -11,9 +11,26 @@ registries:
     name: dev-registry
     host: "0.0.0.0"
     hostPort: "5000"
+  config: |
+    configs:
+      "registry-1.docker.io":
+        tls:
+          caFile: "/etc/ssl/certs/corp-ca-bundle.crt"
+      "production.cloudfront.docker.com":
+        tls:
+          caFile: "/etc/ssl/certs/corp-ca-bundle.crt"
+      "quay.io":
+        tls:
+          caFile: "/etc/ssl/certs/corp-ca-bundle.crt"
+      "ghcr.io":
+        tls:
+          caFile: "/etc/ssl/certs/corp-ca-bundle.crt"
 
 volumes:
   - volume: /usr/local/share/ca-certificates:/usr/local/share/ca-certificates
+    nodeFilters:
+      - all
+  - volume: /home/ihsokolo/projects/ecommerce/ecommerce-infrastructure/environments/local/certs/ca-certificates.crt:/etc/ssl/certs/corp-ca-bundle.crt
     nodeFilters:
       - all
 

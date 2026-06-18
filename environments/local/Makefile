@@ -22,6 +22,7 @@ TRAEFIK_NS ?= traefik
 # Infrastructure Helm charts
 TRAEFIK_VALUES ?= $(THIS_DIR)values/traefik.yaml
 ALLOY_VALUES ?= $(THIS_DIR)values/alloy.yaml
+CA_BUNDLE ?= $(THIS_DIR)certs/ca-certificates.crt
 
 # Docker compose
 COMPOSE_DIR := $(THIS_DIR)compose

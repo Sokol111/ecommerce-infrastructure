@@ -32,10 +32,12 @@ alloy-install: ## Install Grafana Alloy
 		printf "\033[36m→ Installing Grafana Alloy\033[0m\n"; \
 		helm upgrade --install alloy alloy \
 			--repo https://grafana.github.io/helm-charts \
+			--version 1.10.0 \
 			--namespace $(OBS_NS) \
 			--create-namespace \
 			--values $(ALLOY_VALUES) \
-			--wait; \
+			--wait \
+			--timeout 5m; \
 		printf "\033[32m✓ Grafana Alloy installed\033[0m\n"; \
 	fi
 
