@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -94,7 +95,7 @@ func (s *Seeder) getAttribute(ctx context.Context, id string) (*catalogv1.Attrib
 }
 
 func toAttributeType(t string) catalogv1.AttributeType {
-	switch t {
+	switch strings.ToUpper(t) {
 	case "SINGLE":
 		return catalogv1.AttributeType_ATTRIBUTE_TYPE_SINGLE
 	case "MULTIPLE":
