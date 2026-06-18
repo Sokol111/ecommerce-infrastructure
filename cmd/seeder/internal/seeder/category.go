@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -104,7 +105,7 @@ func toCategoryAttributeInputs(attrs []data.CategoryAttribute) []*catalogv1.Cate
 }
 
 func toCategoryAttributeRole(role string) catalogv1.CategoryAttributeRole {
-	switch role {
+	switch strings.ToUpper(role) {
 	case "VARIANT":
 		return catalogv1.CategoryAttributeRole_CATEGORY_ATTRIBUTE_ROLE_VARIANT
 	case "SPECIFICATION":
