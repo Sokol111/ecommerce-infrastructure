@@ -56,7 +56,10 @@
         "categories:delete",
         "attributes:read",
         "attributes:write",
-        "attributes:delete"
+        "attributes:delete",
+        "images:read",
+        "images:write",
+        "images:delete"
       ]
     },
     {
