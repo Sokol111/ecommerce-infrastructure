@@ -2,6 +2,11 @@ name: API Release
 
 on:
   workflow_call:
+    inputs:
+      skip_breaking:
+        description: 'Skip proto breaking change check'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -46,6 +51,7 @@ jobs:
         run: make connect-install-tools
 
       - name: Check proto breaking changes
+        if: ${{ !inputs.skip_breaking }}
         run: |
           git fetch origin main
           buf breaking --against '.git#ref=refs/remotes/origin/main'
