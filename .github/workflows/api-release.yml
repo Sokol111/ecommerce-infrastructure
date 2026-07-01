@@ -42,49 +42,20 @@ jobs:
             exit 1
           fi
 
-      - name: Validate generated code exists
+      - name: Install proto tools
+        run: make connect-install-tools
+
+      - name: Verify generated code is up to date
         run: |
-          echo "🔍 Checking generated code..."
-          
-          # Check TypeScript client
-          if [ ! -f "gen/typescript/package.json" ]; then
-            echo "❌ gen/typescript/package.json is missing"
-            echo "   Run: make openapi-ts-generate"
+          make generate
+          if ! git diff --exit-code gen/; then
+            echo "❌ Generated code is out of date. Run: make generate"
             exit 1
           fi
-          echo "✓ gen/typescript/ exists"
-          
-          # Check Events (if avro schemas exist)
-          if [ -n "$(ls -A avro/*.avsc 2>/dev/null)" ]; then
-            if [ ! -d "gen/events" ] || [ -z "$(ls -A gen/events/*.go 2>/dev/null)" ]; then
-              echo "❌ gen/events/ is missing but avro schemas exist"
-              echo "   Run: make events-generate"
-              exit 1
-            fi
-            echo "✓ gen/events/ exists"
-          fi
-          
-          # Check Connect (if proto files exist)
-          if [ -n "$(find proto -name '*.proto' 2>/dev/null)" ]; then
-            if [ ! -d "gen/connect" ] || [ -z "$(find gen/connect -name '*.go' 2>/dev/null)" ]; then
-              echo "❌ gen/connect/ is missing but proto files exist"
-              echo "   Run: make connect-generate"
-              exit 1
-            fi
-            echo "✓ gen/connect/ exists"
-          fi
-          
-          echo "✅ All generated code is present"
 
       # ============================================
-      # BUILD & PUBLISH NPM PACKAGE
+      # PUBLISH NPM PACKAGE
       # ============================================
-      - name: Build TypeScript client
-        working-directory: gen/typescript
-        run: |
-          npm install
-          npm run build
-
       - name: Publish to GitHub Packages
         working-directory: gen/typescript
         run: npm publish --access public
