@@ -47,9 +47,8 @@ jobs:
 
       - name: Check proto breaking changes
         run: |
-          if [ -n "$(find proto -name '*.proto' 2>/dev/null)" ]; then
-            make connect-breaking
-          fi
+          git fetch origin main
+          buf breaking --against '.git#ref=refs/remotes/origin/main'
 
       - name: Verify generated code is up to date
         run: |
