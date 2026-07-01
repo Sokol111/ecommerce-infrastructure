@@ -40,9 +40,6 @@ config: |
         - "tenants:read"
   kafka:
     brokers: "redpanda.prod.svc.cluster.local:9093"
-    schema-registry:
-      url: "http://redpanda.prod.svc.cluster.local:8081"
-      auto-register-schemas: true
     consumers-config:
       default-group-id: "ecommerce-catalog-service"
       default-auto-offset-reset: "earliest"

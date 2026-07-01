@@ -21,9 +21,6 @@ config: |
       audience: "https://api.sokolshop.com"
   kafka:
     brokers: "redpanda:29092"
-    schema-registry:
-      url: "http://redpanda:8081"
-      auto-register-schemas: true
   observability:
     otel-collector-endpoint: "alloy.observability.svc:4317"
     tracing:

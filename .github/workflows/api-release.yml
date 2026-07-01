@@ -45,6 +45,12 @@ jobs:
       - name: Install proto tools
         run: make connect-install-tools
 
+      - name: Check proto breaking changes
+        run: |
+          if [ -n "$(find proto -name '*.proto' 2>/dev/null)" ]; then
+            make connect-breaking
+          fi
+
       - name: Verify generated code is up to date
         run: |
           make generate

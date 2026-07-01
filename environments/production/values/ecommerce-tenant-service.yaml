@@ -40,9 +40,6 @@ config: |
     token-url: "http://logto:3001/oidc/token"
   kafka:
     brokers: "redpanda.prod.svc.cluster.local:9093"
-    schema-registry:
-      url: "http://redpanda.prod.svc.cluster.local:8081"
-      auto-register-schemas: true
   observability:
     otel-collector-endpoint: "alloy.observability.svc.cluster.local:4317"
     tracing:

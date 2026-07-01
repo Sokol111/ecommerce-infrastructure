@@ -18,9 +18,6 @@ config: |
     replica-set: rs0
   kafka:
     brokers: "redpanda:29092"
-    schema-registry:
-      url: "http://redpanda:8081"
-      auto-register-schemas: true
     consumers-config:
       default-group-id: "ecommerce-product-query-service"
       default-auto-offset-reset: "earliest"

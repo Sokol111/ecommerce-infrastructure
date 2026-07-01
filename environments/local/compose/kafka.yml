@@ -15,17 +15,10 @@ services:
       - --node-id=0
       - --kafka-addr=PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
       - --advertise-kafka-addr=PLAINTEXT://redpanda:29092,PLAINTEXT_HOST://localhost:9092
-      - --schema-registry-addr=0.0.0.0:8081
     ports:
       - 9092:9092   # Kafka API
-      - 8084:8081   # Schema Registry
     networks:
       - shared-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/subjects"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   redpanda-console:
     image: redpandadata/console:v2.8.0
@@ -34,8 +27,6 @@ services:
       - 9093:8080
     environment:
       KAFKA_BROKERS: redpanda:29092
-      KAFKA_SCHEMAREGISTRY_ENABLED: "true"
-      KAFKA_SCHEMAREGISTRY_URLS: http://redpanda:8081
     depends_on:
       - redpanda
     networks:

@@ -28,8 +28,7 @@ listeners:
   kafka:
     port: 9093
   schemaRegistry:
-    enabled: true
-    port: 8081
+    enabled: false
 
 console:
   enabled: false
