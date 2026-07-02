@@ -57,7 +57,7 @@ func (s *Seeder) createCategory(ctx context.Context, cat data.Category) error {
 	return nil
 }
 
-func (s *Seeder) updateCategory(ctx context.Context, cat data.Category, version int32) error {
+func (s *Seeder) updateCategory(ctx context.Context, cat data.Category, version int64) error {
 	req := &catalogv1.UpdateCategoryRequest{
 		Id:         cat.ID,
 		Name:       cat.Name,

@@ -62,7 +62,7 @@ func (s *Seeder) createAttribute(ctx context.Context, attr data.Attribute) error
 	return nil
 }
 
-func (s *Seeder) updateAttribute(ctx context.Context, attr data.Attribute, version int32) error {
+func (s *Seeder) updateAttribute(ctx context.Context, attr data.Attribute, version int64) error {
 	req := &catalogv1.UpdateAttributeRequest{
 		Id:      attr.ID,
 		Name:    attr.Name,

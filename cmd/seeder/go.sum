@@ -1,7 +1,7 @@
-github.com/Sokol111/ecommerce-catalog-service-api v1.2.5 h1:KLPw4GbFfQ/Lj61Uj70IG0HjFJiqcGXgTaZ6uHFj1TY=
-github.com/Sokol111/ecommerce-catalog-service-api v1.2.5/go.mod h1:UNEREBtI/AKlz7JRoWkBUECt9Q5hKk5HBh+4LV0FzWI=
-github.com/Sokol111/ecommerce-image-service-api v1.2.5 h1:hk5AYZ3CyimPoLy9rTWGrRc6qU9A6EPqR4JI2UszHeM=
-github.com/Sokol111/ecommerce-image-service-api v1.2.5/go.mod h1:WEwIyubKe9kQC5VRYCr/UfVMt/tmnGOZVosKIfF1uC4=
+github.com/Sokol111/ecommerce-catalog-service-api v1.2.9 h1:n+Zc90Q4uYh4JBICOE57inNS4ove/txdnFxpRMIrvUg=
+github.com/Sokol111/ecommerce-catalog-service-api v1.2.9/go.mod h1:sp/LkuHgloFDmvOmFaKJXjbIRsTwVPxKRGLzyWH5h4c=
+github.com/Sokol111/ecommerce-image-service-api v1.2.6 h1:m7IrgVN71hzzBoZssh0lvqY1NvO43Fn9eq0xka6XcH0=
+github.com/Sokol111/ecommerce-image-service-api v1.2.6/go.mod h1:on3euw/cc4afadBVVN2ZRp34Zrutmxqh0OvkDWX5DJk=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/go-logr/logr v1.4.3 h1:CjnDlHq8ikf6E492q6eKboGOC0T8CDaOvkHCIg8idEI=

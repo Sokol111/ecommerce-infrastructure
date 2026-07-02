@@ -76,7 +76,7 @@ func (s *Seeder) createProduct(ctx context.Context, prod data.Product) error {
 	return nil
 }
 
-func (s *Seeder) updateProduct(ctx context.Context, prod data.Product, version int32) error {
+func (s *Seeder) updateProduct(ctx context.Context, prod data.Product, version int64) error {
 	imageID := s.resolveProductImage(ctx, prod)
 	enabled := prod.Enabled
 	if enabled && imageID == "" {

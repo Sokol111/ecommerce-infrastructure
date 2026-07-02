@@ -3,8 +3,8 @@ module github.com/Sokol111/ecommerce-infrastructure/cmd/seeder
 go 1.26.4
 
 require (
-	github.com/Sokol111/ecommerce-catalog-service-api v1.2.5
-	github.com/Sokol111/ecommerce-image-service-api v1.2.5
+	github.com/Sokol111/ecommerce-catalog-service-api v1.2.9
+	github.com/Sokol111/ecommerce-image-service-api v1.2.6
 	google.golang.org/grpc v1.81.1
 )
 
