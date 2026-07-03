@@ -37,7 +37,7 @@ func (p *TokenProvider) FetchToken() (string, error) {
 		"client_id":     {p.clientID},
 		"client_secret": {p.clientSecret},
 		"resource":      {p.resource},
-		"scope":         {"products:read products:write categories:read categories:write attributes:read attributes:write, images:write"},
+		"scope":         {"products:read products:write categories:read categories:write attributes:read attributes:write images:write"},
 	}
 
 	resp, err := p.httpClient.PostForm(p.logtoURL+"/oidc/token", data)
