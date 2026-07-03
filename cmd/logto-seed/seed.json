@@ -13,7 +13,10 @@
         "categories:delete",
         "attributes:read",
         "attributes:write",
-        "attributes:delete"
+        "attributes:delete",
+        "images:read",
+        "images:write",
+        "images:delete"
       ]
     },
     {
@@ -29,7 +32,10 @@
         "categories:delete",
         "attributes:read",
         "attributes:write",
-        "attributes:delete"
+        "attributes:delete",
+        "images:read",
+        "images:write",
+        "images:delete"
       ]
     },
     {
@@ -39,7 +45,8 @@
       "scopes": [
         "products:read",
         "categories:read",
-        "attributes:read"
+        "attributes:read",
+        "images:read"
       ]
     },
     {
