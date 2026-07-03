@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	imagev1 "github.com/Sokol111/ecommerce-image-service-api/gen/connect/image/v1"
+	imagev1 "github.com/Sokol111/ecommerce-image-service-api/gen/go/image/v1"
 )
 
 func (s *Seeder) uploadImage(ctx context.Context, imageFile, altText string) (string, error) {

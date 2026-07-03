@@ -15,8 +15,8 @@ import (
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/config"
 	"github.com/Sokol111/ecommerce-infrastructure/cmd/seeder/internal/data"
 
-	catalogv1 "github.com/Sokol111/ecommerce-catalog-service-api/gen/connect/catalog/v1"
-	imagev1 "github.com/Sokol111/ecommerce-image-service-api/gen/connect/image/v1"
+	catalogv1 "github.com/Sokol111/ecommerce-catalog-service-api/gen/go/catalog/v1"
+	imagev1 "github.com/Sokol111/ecommerce-image-service-api/gen/go/image/v1"
 )
 
 type Seeder struct {
