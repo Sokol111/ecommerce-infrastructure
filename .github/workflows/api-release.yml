@@ -50,6 +50,9 @@ jobs:
       - name: Install proto tools
         run: make connect-install-tools
 
+      - name: Install protoc-gen-es
+        run: npm install -g @bufbuild/protoc-gen-es
+
       - name: Check proto breaking changes
         if: ${{ !inputs.skip_breaking }}
         run: |
