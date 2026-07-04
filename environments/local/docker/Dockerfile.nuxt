@@ -15,35 +15,45 @@ RUN corepack enable
 # Copy application code
 COPY ${SERVICE_DIR}/. .
 
-# Remove @sokol111/* deps (they'll be linked locally, no registry needed)
-RUN sed -i '/^[[:space:]]*"@sokol111\//d' package.json && \
-    sed -i '/@sokol111/d' pnpm-lock.yaml
+# Enable correct pnpm version from packageManager field
+RUN echo "==> Installing corepack package manager..." && corepack install
 
-# Install pnpm
-RUN corepack install
+# Remove @sokol111/* deps and their lockfile entries
+# (no registry auth in dev, so pnpm's supply-chain policy check would fail with 401)
+RUN echo "==> Removing @sokol111 from package.json and lockfile..." && \
+    sed -i '/^[[:space:]]*"@sokol111\//d' package.json && \
+    sed -i '/@sokol111/d' pnpm-lock.yaml && \
+    echo "   Done."
 
 # Copy and build local API dependencies, then link them
 COPY . /tmp/context/
-RUN set -e && \
+RUN echo "==> Building local API dependencies: ${API_DEPS}" && \
+    set -e && \
     for api_dep in ${API_DEPS}; do \
+        echo "   Building ${api_dep}..."; \
         if [ -d "/tmp/context/${api_dep}/gen/typescript" ]; then \
             mkdir -p "/app/${api_dep}/gen/typescript"; \
             cp -r "/tmp/context/${api_dep}/gen/typescript/." "/app/${api_dep}/gen/typescript/"; \
-            if [ ! -d "/app/${api_dep}/gen/typescript/dist" ]; then \
-                cd "/app/${api_dep}/gen/typescript" && npm install && npm run build && cd /app; \
-            fi; \
+            cd "/app/${api_dep}/gen/typescript" && npm install && npm run build && cd /app; \
+            echo "   ✓ ${api_dep} built"; \
+        else \
+            echo "   ✗ /tmp/context/${api_dep}/gen/typescript not found"; \
         fi; \
     done && \
     rm -rf /tmp/context
 
 # Install dependencies and link API packages (cache pnpm store between builds)
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --prefer-frozen-lockfile && \
+    echo "==> Installing dependencies..." && \
+    pnpm install --no-frozen-lockfile && \
+    echo "==> Linking local API packages..." && \
     for api_dep in ${API_DEPS}; do \
         if [ -d "/app/${api_dep}/gen/typescript" ]; then \
+            echo "   Linking ${api_dep}..."; \
             pnpm link "/app/${api_dep}/gen/typescript"; \
         fi; \
-    done
+    done && \
+    echo "==> Done."
 
 ENV NODE_ENV=development
 ENV NUXT_TELEMETRY_DISABLED=1
