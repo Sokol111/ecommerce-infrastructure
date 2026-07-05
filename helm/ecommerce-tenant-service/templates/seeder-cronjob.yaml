@@ -29,7 +29,7 @@ spec:
           containers:
             - name: seeder
               image: {{ .Values.seederJob.image }}
-              imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+              imagePullPolicy: {{ .Values.seederJob.imagePullPolicy | default "Always" }}
               env:
                 - name: CATALOG_GRPC_ADDR
                   value: {{ .Values.seederJob.catalogGRPCAddr | default "ecommerce-catalog-service:8080" }}
