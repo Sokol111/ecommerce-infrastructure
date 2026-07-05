@@ -5,7 +5,7 @@ config:
     auto_create_topics_enabled: true
     default_topic_replications: 1
     default_topic_partitions: 3
-    partition_autobalancing_mode: off
+    partition_autobalancing_mode: "off"
     core_balancing_continuous: false
 
 statefulset:
