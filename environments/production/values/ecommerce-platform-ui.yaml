@@ -3,7 +3,7 @@ fullnameOverride: ecommerce-platform-ui
 
 image:
   repository: ghcr.io/sokol111/ecommerce-platform-ui
-  tag: "0.1.0"
+  tag: "latest"
   pullPolicy: IfNotPresent
 
 ingress:
