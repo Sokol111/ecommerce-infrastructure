@@ -26,7 +26,7 @@
   {{- $replicaCount = .Values.replicaCount }}
 {{- end }}
 
-{{- $imagePullPolicy := "IfNotPresent" }}
+{{- $imagePullPolicy := "Always" }}
 {{- if and .Values.image .Values.image.pullPolicy }}
   {{- $imagePullPolicy = .Values.image.pullPolicy }}
 {{- else if and .Values.global (and .Values.global.image .Values.global.image.pullPolicy) }}
