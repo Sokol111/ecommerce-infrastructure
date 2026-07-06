@@ -33,7 +33,7 @@ listeners:
     enabled: false
 
 console:
-  enabled: false
+  enabled: true
 
 tls:
   enabled: false
