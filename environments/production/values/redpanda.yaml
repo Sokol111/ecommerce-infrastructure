@@ -34,6 +34,13 @@ listeners:
 
 console:
   enabled: true
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
 
 tls:
   enabled: false

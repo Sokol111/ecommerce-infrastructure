@@ -59,17 +59,10 @@ endif
 	kubectl describe pod -n $(NS_PROD) -l app.kubernetes.io/name=$(SVC)
 
 .PHONY: console
-console: ## Run Redpanda Console locally (port-forward + Docker)
-	@trap 'kill $$PF 2>/dev/null || true' EXIT; \
-	printf "$(COLOR_BLUE)→ Port-forwarding Redpanda...$(COLOR_RESET)\n"; \
-	kubectl port-forward -n $(NS_PROD) svc/redpanda 9093:9093 18081:8081 & PF=$$!; \
-	sleep 2; \
-	printf "$(COLOR_BLUE)→ Starting Redpanda Console on http://localhost:8080 ...$(COLOR_RESET)\n"; \
-	docker run --rm --network host \
-		--add-host=redpanda-0.redpanda.prod.svc.cluster.local:127.0.0.1 \
-		-v $(CURDIR)/console-config.yaml:/etc/redpanda/redpanda-console-config.yaml:ro \
-		-e CONFIG_FILEPATH=/etc/redpanda/redpanda-console-config.yaml \
-		docker.redpanda.com/redpandadata/console:latest
+console: ## Port-forward Redpanda Console (http://localhost:8080)
+	@printf "$(COLOR_BLUE)→ Opening port-forward to Redpanda Console...$(COLOR_RESET)\n"
+	@printf "$(COLOR_YELLOW)Press Ctrl+C to stop$(COLOR_RESET)\n"
+	kubectl port-forward -n $(NS_PROD) svc/redpanda-console 8080:8080
 
 .PHONY: logto-console
 logto-console: ## Port-forward Logto Admin Console (localhost:3002)
