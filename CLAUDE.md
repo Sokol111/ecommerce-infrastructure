@@ -134,15 +134,29 @@ Grafana Cloud via an Alloy DaemonSet); Redpanda, imgproxy, Logto, Postgres, Trae
 run in-cluster. Ops Makefile is split into `makefiles/*.mk` (connectivity / setup / deploy /
 status / operations). Run from `environments/production/`.
 
-**kubectl needs an SSH tunnel** — there is no public k3s API endpoint:
-```bash
-make kubeconfig   # once: fetch k3s.yaml → ~/.kube/config-hetzner
-make tunnel       # open SSH tunnel to :6443 (host alias "hetzner")
-make status | health | events | logs SVC=catalog-service
-make deploy-svc SVC=catalog-service [TAG=0.1.9]   # manual hotfix deploy (see CD note below)
-make seed TENANT_SLUG=<slug>                       # trigger seeder Job from the CronJob
-make logto-seed                                    # one-time Logto config Job
-```
+**kubectl needs an SSH tunnel** — there is no public k3s API endpoint. Two prerequisites, both
+one-time-ish: fetch the kubeconfig (`make kubeconfig` → `~/.kube/config-hetzner`) and open the
+tunnel (`make tunnel`, forwards local `:6443` → VPS `:6443` over the `hetzner` SSH host alias;
+`make tunnel-stop` closes it). Then there are **two ways to talk to the cluster**:
+
+- **Via the Makefile (recommended).** `environments/production/Makefile` does
+  `export KUBECONFIG := $(HOME)/.kube/config-hetzner`, so every ops target already points at the
+  prod kubeconfig — no env setup needed on your side:
+  ```bash
+  make kubeconfig   # once: fetch k3s.yaml → ~/.kube/config-hetzner
+  make tunnel       # open SSH tunnel to :6443 (host alias "hetzner")
+  make status | health | events | logs SVC=catalog-service
+  make deploy-svc SVC=catalog-service [TAG=0.1.9]   # manual hotfix deploy (see CD note below)
+  make seed TENANT_SLUG=<slug>                       # trigger seeder Job from the CronJob
+  make logto-seed                                    # one-time Logto config Job
+  ```
+- **Via raw `kubectl`/`helm`** (for ad-hoc commands the Makefile doesn't wrap): point
+  `KUBECONFIG` at the fetched file yourself. The tunnel must be up either way.
+  ```bash
+  export KUBECONFIG=~/.kube/config-hetzner   # or: kubectl --kubeconfig ~/.kube/config-hetzner ...
+  kubectl get pods -n prod
+  ```
+  This is the same file the Makefile exports, so both paths hit the same cluster identically.
 
 **Deploys are normally automated CD, not `make deploy-svc`.** A service release triggers the
 reusable `.github/workflows/deploy.yml` (`workflow_call`), which checks out *this* repo,
