@@ -81,7 +81,7 @@ There are two `Dockerfile.go` (and friends) and they are **not** the same:
 | `environments/local/docker/Dockerfile.go` | **Tilt** (local) | reconstructs a `go.work` inside the image | context = workspace root; bundles Delve; ubuntu runtime for debugging |
 
 The local `Dockerfile.go` is the one that implements the "reconstruct `go.work` from local
-sources" behavior described in the workspace `CLAUDE.md`: Tilt passes `API_DEPS` (a
+sources" behavior described in the workspace `AGENTS.md`: Tilt passes `API_DEPS` (a
 space-separated list from `GO_SERVICES[...]['api_deps']` in the `Tiltfile`), the Dockerfile
 copies each api module out of the build context and `go work use`s it, so **local api changes
 flow into the image with no release/tag/bump**. If you add an api dependency to a service,

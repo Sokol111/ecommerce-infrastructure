@@ -64,6 +64,12 @@ console: ## Port-forward Redpanda Console (http://localhost:8080)
 	@printf "$(COLOR_YELLOW)Press Ctrl+C to stop$(COLOR_RESET)\n"
 	kubectl port-forward -n $(NS_PROD) svc/redpanda-console 8080:8080
 
+.PHONY: redpanda-kafka
+redpanda-kafka: ## Port-forward Redpanda Kafka API (localhost:19092)
+	@printf "$(COLOR_BLUE)→ Opening port-forward to Redpanda Kafka API...$(COLOR_RESET)\n"
+	@printf "$(COLOR_YELLOW)Press Ctrl+C to stop$(COLOR_RESET)\n"
+	kubectl port-forward -n $(NS_PROD) svc/redpanda 19092:9093
+
 .PHONY: logto-console
 logto-console: ## Port-forward Logto Admin Console (localhost:3002)
 	@printf "$(COLOR_BLUE)→ Forwarding Logto Admin Console to localhost:3002...$(COLOR_RESET)\n"
