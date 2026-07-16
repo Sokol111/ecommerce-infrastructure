@@ -13,6 +13,7 @@ INFRA_ROOT := $(abspath $(THIS_DIR)/../..)
 K3D_CONFIG ?= $(THIS_DIR)k3d-cluster.yaml
 CLUSTER_NAME ?= dev-cluster
 K3D_CONTEXT := k3d-$(CLUSTER_NAME)
+MCP_KUBECONFIG ?= $(HOME)/.kube/mcp-local.kubeconfig
 
 # Namespaces
 NAMESPACE ?= dev

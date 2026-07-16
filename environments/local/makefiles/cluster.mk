@@ -16,6 +16,14 @@ cluster-create: tools-check ## Create k3d cluster (idempotent)
 		printf "\033[32m✓ Cluster created\033[0m\n"; \
 	fi
 	@kubectl config use-context "$(K3D_CONTEXT)" 2>/dev/null || true
+	@$(MAKE) --no-print-directory cluster-write-mcp-kubeconfig
+
+.PHONY: cluster-write-mcp-kubeconfig
+cluster-write-mcp-kubeconfig: ## Generate the local Kubernetes MCP kubeconfig
+	@mkdir -p "$(dir $(MCP_KUBECONFIG))"
+	@k3d kubeconfig get "$(CLUSTER_NAME)" > "$(MCP_KUBECONFIG)"
+	@chmod 600 "$(MCP_KUBECONFIG)"
+	@printf "\033[32m✓ Local MCP kubeconfig written to $(MCP_KUBECONFIG)\033[0m\n"
 
 .PHONY: cluster-delete
 cluster-delete: ## Delete k3d cluster and kubectl context
@@ -24,6 +32,7 @@ cluster-delete: ## Delete k3d cluster and kubectl context
 	@kubectl config delete-context "$(K3D_CONTEXT)" 2>/dev/null || true
 	@kubectl config delete-cluster "$(K3D_CONTEXT)" 2>/dev/null || true
 	@kubectl config delete-user "admin@$(K3D_CONTEXT)" 2>/dev/null || true
+	@rm -f "$(MCP_KUBECONFIG)"
 	@printf "\033[32m✓ Cluster deleted\033[0m\n"
 
 .PHONY: cluster-inject-ca
@@ -45,4 +54,5 @@ cluster-start: ## Start stopped k3d cluster
 	@printf "\033[36m→ Starting cluster '$(CLUSTER_NAME)'\033[0m\n"
 	@k3d cluster start "$(CLUSTER_NAME)"
 	@kubectl config use-context "$(K3D_CONTEXT)" 2>/dev/null || true
+	@$(MAKE) --no-print-directory cluster-write-mcp-kubeconfig
 	@printf "\033[32m✓ Cluster started\033[0m\n"
