@@ -32,6 +32,9 @@ K8S_PORT := 6443
 
 # Kubeconfig (uses SSH tunnel to reach k3s API)
 KUBECONFIG_FILE := $(HOME)/.kube/config-hetzner
+MCP_KUBECONFIG_FILE := $(HOME)/.kube/mcp-prod-viewer.kubeconfig
+MCP_NAMESPACE := mcp
+MCP_SERVICE_ACCOUNT := opencode-viewer
 export KUBECONFIG := $(KUBECONFIG_FILE)
 
 # Helm repos
