@@ -31,6 +31,7 @@ config: |
   security:
     jwks:
       jwks-url: "http://logto:3001/oidc/jwks"
+      issuer: "https://auth.sokolshop.com/oidc"
       audience: "https://api.sokolshop.com"
     client-credentials:
       token-url: "http://logto:3001/oidc/token"
